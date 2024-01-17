@@ -25,6 +25,10 @@ class AuthViewModel: ObservableObject {
         //viewModel이 init될 때 이미 존재하는 user가 있는지 확인한다.
         //이 기능은 Firebase에서 제공하는 기능으로 currentUser가 로그인을 했는지(한 상태인지)에 대한 정보를 디바이스에 캐시 데이터로 저장해 둔다.
         self.userSession = Auth.auth().currentUser
+        
+        Task {
+            await fetchUser()
+        }
     }
 
     func signIn(withEamil email: String, password: String) async throws {
@@ -64,6 +68,11 @@ class AuthViewModel: ObservableObject {
     }
 
     func fetchUser() async {
-
+        //현재 로그인중인 유저가 있다면 fetch가 진행된다. 로그인 유저가 없다면 해당 guard문을 통과하지 못하고 return된다.
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        guard let snapshot = try? await Firestore.firestore().collection("users").document(uid).getDocument() else { return }
+        //Firestore에서 받은 데이터를 User model에 맞는 형태로 변환하여 currentUser에 값을 부여한다.
+        self.currentUser = try? snapshot.data(as: User.self)
+        print("DEBUG: Current user is \(self.currentUser)")
     }
 }
