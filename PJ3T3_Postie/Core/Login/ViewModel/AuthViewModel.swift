@@ -9,6 +9,13 @@ import Foundation
 import FirebaseAuth
 import FirebaseFirestore
 
+//UI 업데이트는 꼭 메인 스레드에서 진행되어야 한다.
+//비동기 네트워킹은 기본적으로 메인이 아닌 다른 스레드에서 진행되므로
+//UI 업데이트를 하는 Publish가 만드시 메인 스레드에서 수행되도록 설정하기 위해 @MainActor를 선언해 주는 것이다.
+
+//Actor 내에서 구현이 실행중인 모든 작업은 항상 메인 큐에서 수행하게 된다.
+//Task 로 생성된 작업은 (메인 액터에서 생성되지 않는 한) 백그라운드 스레드에서 즉시 실행되며, await 키워드를 사용해서 완료된 값이 돌아올 때까지 기다릴 수 있다.
+@MainActor
 class AuthViewModel: ObservableObject {
     @Published var userSession: FirebaseAuth.User? //Firebase user object
     @Published var currentUser: User? //User Data Model
