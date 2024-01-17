@@ -15,7 +15,9 @@ class AuthViewModel: ObservableObject {
     static let shared = AuthViewModel()
     
     private init() {
-
+        //viewModel이 init될 때 이미 존재하는 user가 있는지 확인한다.
+        //이 기능은 Firebase에서 제공하는 기능으로 currentUser가 로그인을 했는지(한 상태인지)에 대한 정보를 디바이스에 캐시 데이터로 저장해 둔다.
+        self.userSession = Auth.auth().currentUser
     }
 
     func signIn(withEamil email: String, password: String) async throws {
