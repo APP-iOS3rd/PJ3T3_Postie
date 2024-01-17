@@ -52,7 +52,9 @@ struct LoginView: View {
 
                     //Sign in Button
                     Button {
-                        print(#function)
+                        Task {
+                            try await authViewModel.signIn(withEamil: email, password: password)
+                        }
                     } label: {
                         HStack {
                             Text("SIGN IN")

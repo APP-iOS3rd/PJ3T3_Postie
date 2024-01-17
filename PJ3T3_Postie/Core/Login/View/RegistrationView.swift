@@ -62,9 +62,11 @@ struct RegistrationView: View {
                 .padding(.horizontal)
                 .padding(.top, 12)
 
-                //Sign in Button
+                //Sign up Button
                 Button {
-                    print(#function)
+                    Task {
+                        try await authViewModel.createUser(withEamil: email, password: password, fullName: fullName)
+                    }
                 } label: {
                     HStack {
                         Text("SIGN UP")
