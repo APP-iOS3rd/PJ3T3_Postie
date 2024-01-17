@@ -68,6 +68,18 @@ struct AddLetterView: View {
                                             in: RoundedRectangle(cornerRadius: 10, style: .continuous)
                                         )
                                 }
+
+                                ForEach(0..<addLetterViewModel.images.count, id: \.self) { index in
+                                    Button {
+                                        // show letterImageView
+                                    } label: {
+                                        Image(uiImage: addLetterViewModel.images[index])
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: 100, height: 100)
+                                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                                    }
+                                }
                             }
                         }
                         .scrollIndicators(.never)
