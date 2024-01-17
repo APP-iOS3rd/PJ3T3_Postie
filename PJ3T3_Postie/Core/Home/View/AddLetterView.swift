@@ -142,7 +142,7 @@ struct AddLetterView: View {
                 LetterImageFullScreenView(images: addLetterViewModel.images)
             }
             .sheet(isPresented: $addLetterViewModel.showUIImagePicker, content: {
-                UIImagePicker(sourceType: addLetterViewModel.imagePickerSourceType, selectedImages: $addLetterViewModel.images)
+                UIImagePicker(sourceType: addLetterViewModel.imagePickerSourceType, selectedImages: $addLetterViewModel.images, text: $addLetterViewModel.text)
             })
             .confirmationDialog("편지 사진 가져오기", isPresented: $addLetterViewModel.showConfirmationDialog) {
                 Button("카메라") {

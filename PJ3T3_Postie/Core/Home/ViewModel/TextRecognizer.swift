@@ -22,7 +22,7 @@ class TextRecognizer {
 
         let requestHandler = VNImageRequestHandler(cgImage: cgImage)
 
-        let request = VNRecognizeTextRequest()
+        let request = VNRecognizeTextRequest(completionHandler: recognizeTextHandler)
         request.recognitionLanguages = ["ko-KR"]
         request.recognitionLevel = .accurate
         request.usesLanguageCorrection = true

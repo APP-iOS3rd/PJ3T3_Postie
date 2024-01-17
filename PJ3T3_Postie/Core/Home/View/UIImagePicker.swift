@@ -12,6 +12,7 @@ struct UIImagePicker: UIViewControllerRepresentable {
 
     @Environment(\.dismiss) var dismiss
     @Binding var selectedImages: [UIImage]
+    @Binding var text: String
 
     func makeUIViewController(context: Context) -> UIImagePickerController {
         let imagePicker = UIImagePickerController()
@@ -34,10 +35,14 @@ struct UIImagePicker: UIViewControllerRepresentable {
         }
 
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+
             if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-                // text 인식
+
+                let recognizer = TextRecognizer(selectedImage: image)
+                recognizer.recognizeText()
 
                 self.parent.selectedImages.append(image)
+                self.parent.text.append(" \(recognizer.recognizedText)")
             }
             parent.dismiss()
         }
