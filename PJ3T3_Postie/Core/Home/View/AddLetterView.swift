@@ -111,6 +111,9 @@ struct AddLetterView: View {
                     }
                 }
             }
+            .sheet(isPresented: $addLetterViewModel.showUIImagePicker, content: {
+                UIImagePicker(sourceType: addLetterViewModel.imagePickerSourceType, selectedImages: $addLetterViewModel.images)
+            })
             .confirmationDialog("편지 사진 가져오기", isPresented: $addLetterViewModel.showConfirmationDialog) {
                 Button("카메라") {
                     addLetterViewModel.imagePickerSourceType = .camera
