@@ -24,6 +24,7 @@ struct LoginView: View {
                 Rectangle()
                     .foregroundStyle(viewBackground)
                     .ignoresSafeArea()
+                
                 VStack {
                     //Image
                     Image(systemName: "archivebox")
@@ -54,6 +55,7 @@ struct LoginView: View {
                         HStack {
                             Text("SIGN IN")
                                 .fontWeight(.semibold)
+                            
                             Image(systemName: "arrow.right")
                         }
                         .foregroundColor(.white)
@@ -72,6 +74,7 @@ struct LoginView: View {
                     } label: {
                         HStack(spacing: 3) {
                             Text("Don't have an account?")
+                            
                             Text("Sign up")
                                 .fontWeight(.bold)
                         }
