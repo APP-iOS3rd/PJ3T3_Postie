@@ -8,14 +8,18 @@
 import SwiftUI
 
 struct ContentView: View {
+    //ViewModels
+    @ObservedObject var authViewModel = AuthViewModel.shared
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        Group {
+            if authViewModel.userSession != nil {
+                //userSession이 있으면 SettingView를 보여줌
+                SettingView()
+            } else {
+                LoginView()
+            }
         }
-        .padding()
     }
 }
 
