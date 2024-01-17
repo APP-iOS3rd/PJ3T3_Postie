@@ -14,6 +14,8 @@ struct LoginView: View {
     //버튼 width를 정하기 위해 screen size를 받아온다.
     @State private var screenWidth: CGFloat = 0
     private let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+    //ViewModels
+    @ObservedObject var authViewModel = AuthViewModel.shared
     //Colors
     private let viewBackground: Color = .white
     private let buttonColor: Color = Color(uiColor: .darkGray)

@@ -18,6 +18,8 @@ struct RegistrationView: View {
     private let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
     //뷰를 해제하는 기능 설정
     @Environment(\.dismiss) var dismiss
+    //ViewModels
+    @ObservedObject var authViewModel = AuthViewModel.shared
     //Colors
     private let viewBackground: Color = .white
     private let buttonColor: Color = Color(uiColor: .darkGray)
