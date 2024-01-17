@@ -113,16 +113,6 @@ struct AddLetterView: View {
                                     .stroke(Color(hex: 0x807E79), lineWidth: 1)
                             )
                             .focused($focusField, equals: .text)
-                            .toolbar {
-                                ToolbarItemGroup(placement: .keyboard) {
-                                    Spacer()
-                                    Button {
-                                        focusField = nil
-                                    } label: {
-                                        Image(systemName: "keyboard.chevron.compact.down")
-                                    }
-                                }
-                            }
                     }
                     .padding()
                 }
@@ -136,6 +126,15 @@ struct AddLetterView: View {
                         // 편지 저장하기
                     } label : {
                         Text("완료")
+                    }
+                }
+
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button {
+                        focusField = nil
+                    } label: {
+                        Image(systemName: "keyboard.chevron.compact.down")
                     }
                 }
             }
