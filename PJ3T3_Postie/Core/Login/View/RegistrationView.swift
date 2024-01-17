@@ -8,16 +8,16 @@
 import SwiftUI
 
 struct RegistrationView: View {
+    //Colors
+    private let viewBackground: Color = .white
+    private let buttonColor: Color = Color(uiColor: .darkGray)
+    //뷰를 해제하는 기능 설정
+    @Environment(\.dismiss) var dismiss
     //TextFields의 input값을 하위뷰에 넘겨준다.
     @State private var email = ""
     @State private var fullName = ""
     @State private var password = ""
     @State private var confirmPassword = ""
-    //뷰를 해제하는 기능 설정
-    @Environment(\.dismiss) var dismiss
-    //Colors
-    private let viewBackground: Color = .white
-    private let buttonColor: Color = Color(uiColor: .darkGray)
     
     var body: some View {
         ZStack {
@@ -35,24 +35,24 @@ struct RegistrationView: View {
 
                 //Form fields
                 VStack(spacing: 24) {
-                    LoginInputView(text: $email,
-                              title: "Email Address",
-                              placeholder: "name@example.com")
+                    LoginInputView(title: "Email Address",
+                                   placeholder: "name@example.com",
+                                   text: $email)
                     .textInputAutocapitalization(.never)
 
-                    LoginInputView(text: $fullName,
-                              title: "Full Name",
-                              placeholder: "Enter your name")
+                    LoginInputView(title: "Full Name",
+                                   placeholder: "Enter your name",
+                                   text: $fullName)
 
-                    LoginInputView(text: $password,
-                              title: "Password",
-                              placeholder: "Enter your password",
-                              isSecureField: true)
+                    LoginInputView(title: "Password",
+                                   placeholder: "Enter your password",
+                                   isSecureField: true,
+                                   text: $password)
 
-                    LoginInputView(text: $confirmPassword,
-                              title: "Confirm password",
-                              placeholder: "Confirm your password",
-                              isSecureField: true)
+                    LoginInputView(title: "Confirm password",
+                                   placeholder: "Confirm your password",
+                                   isSecureField: true,
+                                   text: $confirmPassword)
                 } //VStack
                 .padding(.horizontal)
                 .padding(.top, 12)

@@ -8,12 +8,12 @@
 import SwiftUI
 
 struct LoginView: View {
-    //TextFields의 input값을 하위뷰에 넘겨준다.
-    @State private var email = ""
-    @State private var password = ""
     //Colors
     private let viewBackground: Color = .white
     private let buttonColor: Color = Color(uiColor: .darkGray)
+    //TextFields의 input값을 하위뷰에 넘겨준다.
+    @State private var email = ""
+    @State private var password = ""
     
     var body: some View {
         NavigationStack {
@@ -32,15 +32,15 @@ struct LoginView: View {
 
                     //Form fields
                     VStack(spacing: 24) {
-                        LoginInputView(text: $email,
-                                  title: "Email Address",
-                                  placeholder: "name@example.com")
+                        LoginInputView(title: "Email Address",
+                                       placeholder: "name@example.com",
+                                       text: $email)
                         .textInputAutocapitalization(.never)
 
-                        LoginInputView(text: $password,
-                                  title: "Password",
-                                  placeholder: "Enter your password",
-                                  isSecureField: true)
+                        LoginInputView(title: "Password",
+                                       placeholder: "Enter your password",
+                                       isSecureField: true,
+                                       text: $password)
                     }
                     .padding(.horizontal)
                     .padding(.top, 12)
