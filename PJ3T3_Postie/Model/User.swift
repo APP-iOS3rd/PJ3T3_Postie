@@ -7,6 +7,8 @@
 
 import Foundation
 
+//Decoding: Raw data나 Raw json 데이터를 받아 data object로 map해준다.
+//Encoding: data object를 json data로 변환한다.
 struct User: Identifiable, Codable {
     let id: String
     let fullName: String
