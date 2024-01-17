@@ -13,9 +13,6 @@ struct RegistrationView: View {
     @State private var fullName = ""
     @State private var password = ""
     @State private var confirmPassword = ""
-    //버튼 width를 정하기 위해 screen size를 받아온다.
-    @State private var screenWidth: CGFloat = 0
-    private let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
     //뷰를 해제하는 기능 설정
     @Environment(\.dismiss) var dismiss
     //Colors
@@ -71,7 +68,8 @@ struct RegistrationView: View {
                         Image(systemName: "arrow.right")
                     }
                     .foregroundColor(.white)
-                    .frame(width: screenWidth - 32, height: 48)
+                    .frame(height: 48)
+                    .padding(32)
                 }
                 .background(buttonColor)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
@@ -91,9 +89,6 @@ struct RegistrationView: View {
                     .font(.system(size: 14))
                 }
             } //VStack
-            .onAppear {
-                screenWidth = windowScene?.screen.bounds.width ?? 1.0
-            }
         } //ZStack
     }
 }
