@@ -70,14 +70,30 @@ struct AddLetterView: View {
                                 }
 
                                 ForEach(0..<addLetterViewModel.images.count, id: \.self) { index in
-                                    Button {
-                                        // show letterImageView
-                                    } label: {
-                                        Image(uiImage: addLetterViewModel.images[index])
-                                            .resizable()
-                                            .scaledToFill()
-                                            .frame(width: 100, height: 100)
-                                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                                    ZStack {
+                                        Button {
+                                            // show letterImageView
+                                        } label: {
+                                            Image(uiImage: addLetterViewModel.images[index])
+                                                .resizable()
+                                                .scaledToFill()
+                                                .frame(width: 100, height: 100)
+                                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                                        }
+                                        VStack {
+                                            HStack {
+                                                Spacer()
+                                                Button {
+                                                    withAnimation {
+                                                        addLetterViewModel.removeImage(at: index)
+                                                    }
+                                                } label: {
+                                                    Image(systemName: "x.circle")
+                                                }
+                                                .padding(4)
+                                            }
+                                            Spacer()
+                                        }
                                     }
                                 }
                             }
