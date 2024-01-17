@@ -72,7 +72,7 @@ struct AddLetterView: View {
                                 ForEach(0..<addLetterViewModel.images.count, id: \.self) { index in
                                     ZStack {
                                         Button {
-                                            // show letterImageView
+                                            addLetterViewModel.showLetterImageFullScreenView = true
                                         } label: {
                                             Image(uiImage: addLetterViewModel.images[index])
                                                 .resizable()
@@ -138,6 +138,9 @@ struct AddLetterView: View {
                         Text("완료")
                     }
                 }
+            }
+            .fullScreenCover(isPresented: $addLetterViewModel.showLetterImageFullScreenView) {
+                LetterImageFullScreenView(images: addLetterViewModel.images)
             }
             .sheet(isPresented: $addLetterViewModel.showUIImagePicker, content: {
                 UIImagePicker(sourceType: addLetterViewModel.imagePickerSourceType, selectedImages: $addLetterViewModel.images)
