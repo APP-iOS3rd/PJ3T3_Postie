@@ -62,23 +62,19 @@ reviewers:
   lm-loki:
     name: “🍖 주원”
     color: “#998046”
-    description: “주원님이 리뷰하셔야 할 PR입니다.”
-
+    #description: “주원님이 리뷰하셔야 할 PR입니다.”
   hjsupernova:
     name: “🎄 현진”
     color: “#a2cca9”
-    description: “현진님이 리뷰하셔야 할 PR입니다.”
-
+    #description: “현진님이 리뷰하셔야 할 PR입니다.”
   wonny1012:
     name: “🐼 지원”
     color: “#81c16a”
-    description: “지원님이 리뷰하셔야 할 PR입니다.”
-  
+    #description: “지원님이 리뷰하셔야 할 PR입니다.”
   qlrmr111:
     name: “⭐️ 운기”
     color:  “#faf5c3”
-    description: “운기님이 리뷰하셔야 할 PR입니다.”
-
+    #description: “운기님이 리뷰하셔야 할 PR입니다.”
   Eunice0927:
     name: “🔮 은수”
     color: “#D884FB”
