@@ -17,9 +17,9 @@ import FirebaseFirestore
 //Task 로 생성된 작업은 (메인 액터에서 생성되지 않는 한) 백그라운드 스레드에서 즉시 실행되며, await 키워드를 사용해서 완료된 값이 돌아올 때까지 기다릴 수 있다.
 @MainActor
 class AuthViewModel: ObservableObject {
+    static let shared = AuthViewModel()
     @Published var userSession: FirebaseAuth.User? //Firebase user object
     @Published var currentUser: User? //User Data Model
-    static let shared = AuthViewModel()
     
     private init() {
         //viewModel이 init될 때 이미 존재하는 user가 있는지 확인한다.
@@ -63,8 +63,15 @@ class AuthViewModel: ObservableObject {
         }
     }
 
+    //로그인 화면으로 돌아가고, back-end에서 로그아웃 되어야 한다.
     func signOut() {
-
+        do {
+            try Auth.auth().signOut() //Signs out user on backend
+            self.userSession = nil //userSession의 데이터가 사라지며 ContentView에서 Login하기 전 화면을 보여주게 된다.
+            self.currentUser = nil //데이터 모델을 초기화시켜 현재 유저의 데이터를 지운다.
+        } catch {
+            print("DEBUG: Failed to sign out with error \(error.localizedDescription)")
+        }
     }
 
     func deleteAccount() {

@@ -54,7 +54,7 @@ struct SettingView: View {
                 
                 Section("Account") {
                     Button {
-                        print("Sign out...")
+                        authViewModel.signOut()
                     } label: {
                         SettingsRowView(imageName: "arrow.left.circle.fill", title: "Sign Out", tintColor: signOutIconColor)
                     }
