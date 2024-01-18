@@ -18,8 +18,12 @@ struct HomeView: View {
                 ZStack(alignment: .bottomTrailing) {
                     ScrollView {
                         VStack {
-                            sendLetterView(sender: "김OO", date: "2024.01.04", receiver: "어피치", isToggleOn: isToggleOn)
-                            receiveLetterView(sender: "라이언", date: "2024.01.04", receiver: "김OO",isToggleOn: isToggleOn)
+                            NavigationLink(destination: LetterDetailView()) {
+                                sendLetterView(sender: "김OO", date: "2024.01.04", receiver: "어피치", isToggleOn: isToggleOn)
+                            }
+                            NavigationLink(destination: LetterDetailView()) {
+                                receiveLetterView(sender: "라이언", date: "2024.01.04", receiver: "김OO",isToggleOn: isToggleOn)
+                            }
                         }
                         .padding()
                     }
