@@ -57,7 +57,7 @@ struct LoginView: View {
                         }
                         .foregroundColor(.white)
                         .frame(height: 48)
-                        .padding(32)
+                        .padding(.horizontal, 32)
                     }
                     .background(buttonColor)
                     .clipShape(RoundedRectangle(cornerRadius: 10))
