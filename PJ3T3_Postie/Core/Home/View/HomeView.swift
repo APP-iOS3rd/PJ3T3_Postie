@@ -8,15 +8,22 @@
 import SwiftUI
 
 struct HomeView: View {
+    @State private var search: String = ""
+    @State private var isToggleOn = false
+    
     var body: some View {
         ZStack {
             NavigationStack {
                 ZStack(alignment: .bottomTrailing) {
                     ScrollView {
                         VStack {
-                            
+                            sendLetterView(sender: "김OO", date: "2024.01.04", receiver: "어피치", isToggleOn: isToggleOn)
+                            receiveLetterView(sender: "라이언", date: "2024.01.04", receiver: "김OO",isToggleOn: isToggleOn)
                         }
+                        .padding()
                     }
+                    .searchable(text: $search)
+                    .background(isToggleOn ? Color(hex: 0x1E1E1E) : Color(hex: 0xF5F1E8))
                 }
             }
         }
