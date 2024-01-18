@@ -25,7 +25,7 @@ labels:
     ignore: false
   changesRequested:
     name: "📣 수정 요청"
-    color: "#AA2626"
+    color: "#FBCA04"
     description: "PR 올려준 내용에 수정이 필요한 부분이 있어요"
     ignore: false
   merged: 
@@ -36,13 +36,50 @@ labels:
 
 # A list of reviewers whose names should be added as tags to PRs, 
 # as long as their review is requested.
-#
-# user: GitHub username
-#   name: Title of label
-#   color: Color of label
+# Set User
+user: “lm-loki”
+  name: “🍖 주원”
+  color: “#998046”
 
-# Example
-# reviewers:
-#   userA:
-#     name: "User A"
-#     color: "#000000"
+user: "hjsupernova"
+  name: “🎄 현진”
+  color: “#a2cca9”
+
+user: “wonny1012”
+  name: “🐼 지원”
+  color: “#81c16a”
+
+user: “qlrmr111”
+  name: “⭐️ 운기”
+  color:  “#faf5c3”
+
+user: “Eunice0927”
+  name: “🔮 은수”
+  color: “#D884FB”
+
+# Set reviewer labels
+reviewers:
+  userA:
+    name: “🍖 주원”
+    color: “#998046”
+    description: “주원님이 리뷰하셔야 할 PR입니다.”
+
+  hjsupernova:
+    name: “🎄 현진”
+    color: “#a2cca9”
+    description: “현진님이 리뷰하셔야 할 PR입니다.”
+
+  wonny1012:
+    name: “🐼 지원”
+    color: “#81c16a”
+    description: “지원님이 리뷰하셔야 할 PR입니다.”
+  
+  qlrmr111:
+    name: “⭐️ 운기”
+    color:  “#faf5c3”
+    description: “운기님이 리뷰하셔야 할 PR입니다.”
+
+  Eunice0927:
+    name: “🔮 은수”
+    color: “#D884FB”
+    description: “은수님이 리뷰하셔야 할 PR입니다.”
