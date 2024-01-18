@@ -5,7 +5,7 @@ addWipLabel: true
 labels:
   wip:
     name: "🚥 작업 진행중"
-    color: "#c5def5"
+    color: "#C5DEF5"
     description: "아직 코드 수정중이어서 PR을 리뷰하거나 merge하지 말아주세요"
     ignore: false
   unreviewed: 
