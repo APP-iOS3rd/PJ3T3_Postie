@@ -78,6 +78,8 @@ struct RegistrationView: View {
                     .frame(width: screenWidth - 32, height: 48)
                 }
                 .background(buttonColor)
+                .disabled(!formIsValid)
+                .opacity(formIsValid ? 1.0 : 0.5)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
                 .padding(.top, 24)
 
@@ -99,6 +101,17 @@ struct RegistrationView: View {
                 screenWidth = windowScene?.screen.bounds.width ?? 1.0
             }
         } //ZStack
+    }
+}
+
+extension RegistrationView: AuthenticationProtocol {
+    var formIsValid: Bool {
+        return !email.isEmpty
+        && email.contains("@")
+        && !password.isEmpty
+        && password.count > 5
+        && password == confirmPassword
+        && !fullName.isEmpty
     }
 }
 
