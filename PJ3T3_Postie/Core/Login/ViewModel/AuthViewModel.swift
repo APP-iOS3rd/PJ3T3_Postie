@@ -32,7 +32,14 @@ class AuthViewModel: ObservableObject {
     }
 
     func signIn(withEamil email: String, password: String) async throws {
-        print(#function)
+        do {
+            let result = try await Auth.auth().signIn(withEmail: email, password: password)
+            self.userSession = result.user
+            //fetchUser가 uid로 firebase에서 데이터를 찾기 위해서는 반드시 signIn이 완료 된 다음 fetchUser 함수를 호출해야 한다.
+            await fetchUser()
+        } catch {
+            print("DEBUG: Failed to log in with error \(error.localizedDescription)")
+        }
     }
 
     func createUser(withEamil email: String, password: String, fullName: String) async throws {
