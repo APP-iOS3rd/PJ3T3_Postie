@@ -9,10 +9,15 @@ import SwiftUI
 
 struct LetterDetailView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack {
+            Color(hex: 0xF5F1E8)
+                .ignoresSafeArea()
+        }
     }
 }
 
 #Preview {
-    LetterDetailView()
+    NavigationStack {
+        LetterDetailView()
+    }
 }
