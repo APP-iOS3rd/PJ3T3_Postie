@@ -26,7 +26,6 @@ struct LoginView: View {
                     .ignoresSafeArea()
                 
                 VStack {
-                    //Image
                     Image(systemName: "archivebox")
                         .resizable()
                         .scaledToFill()
