@@ -59,7 +59,7 @@ user: “Eunice0927”
 
 # Set reviewer labels
 reviewers:
-  userA:
+  lm-loki:
     name: “🍖 주원”
     color: “#998046”
     description: “주원님이 리뷰하셔야 할 PR입니다.”
