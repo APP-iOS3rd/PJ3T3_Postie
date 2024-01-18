@@ -94,6 +94,15 @@ struct LoginView: View {
     }
 }
 
+extension LoginView: AuthenticationProtocol {
+    var formIsValid: Bool {
+        return !email.isEmpty
+        && email.contains("@")
+        && !password.isEmpty
+        && password.count > 5
+    }
+}
+
 #Preview {
     LoginView()
 }
