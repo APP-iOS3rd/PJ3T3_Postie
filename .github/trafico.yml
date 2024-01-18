@@ -4,32 +4,32 @@ addWipLabel: true
 # Configuration for labels, set ignore to true to skip adding label
 labels:
   wip:
-    name: "🚥 WIP"
+    name: "🚥 작업 진행중"
     color: "#c5def5"
     description: "Still work-in-progress, please don't review and don't merge"
     ignore: false
   unreviewed: 
-    name: "👀 Review Needed"
+    name: "👀 리뷰 요청"
     color: "#E075E4"
     description: "Pull Request is not reviewed yet"
     ignore: false
   approved: 
-    name: "👏 Merge Needed"
+    name: "👏 Merge 진행"
     color: "#A2D53F"
     description: "Pull Request has been approved and can be merged"
     ignore: false
   needsMoreApprovals: 
-    name: "🔍 Needs more Approvals"
+    name: "🔍 추가 승인 필요"
     color: "#334796"
     description: "Pull Request needs more approvals"
     ignore: false
   changesRequested:
-    name: "📣 Changes requested"
+    name: "📣 수정 요청"
     color: "#AA2626"
     description: "Pull Request needs changes before it can be reviewed again"
     ignore: false
   merged: 
-    name: "👍 Merged"
+    name: "👍 Merge 완료"
     color: "#6F42C1"
     description: "Pull Request has been merged successfully"
     ignore: false
