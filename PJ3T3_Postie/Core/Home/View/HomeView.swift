@@ -40,7 +40,9 @@ struct HomeView: View {
                     .imageScale(.large)
                     .padding()
                     .alert("편지 저장 하기", isPresented: $showAlert) {
-                        Button("편지 저장") {
+                        NavigationLink(destination: AddLetterView()) {
+                            Button("편지 저장") {
+                            }
                         }
                         Button("취소", role: .cancel) {
                         }
