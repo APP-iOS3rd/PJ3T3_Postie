@@ -9,7 +9,6 @@ import SwiftUI
 
 struct HomeView: View {
     @State private var search: String = ""
-    @State private var isToggleOn = false
     @State private var showAlert = false
     
     var body: some View {
@@ -19,28 +18,30 @@ struct HomeView: View {
                     ScrollView {
                         VStack {
                             NavigationLink(destination: LetterDetailView()) {
-                                sendLetterView(sender: "김OO", date: "2024.01.04", receiver: "어피치", isToggleOn: isToggleOn)
+                                sendLetterView(sender: "김OO", date: "2024.01.04", receiver: "어피치")
                             }
+                            
                             NavigationLink(destination: LetterDetailView()) {
-                                receiveLetterView(sender: "라이언", date: "2024.01.04", receiver: "김OO",isToggleOn: isToggleOn)
+                                receiveLetterView(sender: "라이언", date: "2024.01.04", receiver: "김OO")
                             }
                         }
                         .padding()
                     }
                     .searchable(text: $search)
-                    .background(isToggleOn ? Color(hex: 0x1E1E1E) : Color(hex: 0xF5F1E8))
+                    .background(Color(hex: 0xF5F1E8))
                     
                     Button(action: {
                         showAlert.toggle()
                     }, label: {
                         ZStack {
                             Circle()
-                                .foregroundStyle(isToggleOn ? Color(hex: 0xC9D1FF) : Color(hex: 0x979797))
+                                .foregroundStyle(Color(hex: 0x979797))
                                 .frame(width:70,height:70)
+                            
                             Image(systemName: "envelope")
                         }
                     })
-                    .foregroundStyle(Color.black)
+                    .foregroundStyle(Color(hex: 0x1E1E1E))
                     .imageScale(.large)
                     .padding()
                     .alert("편지 저장 하기", isPresented: $showAlert) {
@@ -48,19 +49,19 @@ struct HomeView: View {
                             Button("편지 저장") {
                             }
                         }
+                        
                         Button("취소", role: .cancel) {
                         }
                     }
                 }
-                .preferredColorScheme(isToggleOn ? .dark : .light)
                 .navigationBarTitle("Postie")
-                .foregroundStyle(isToggleOn ? Color(hex: 0xD5D5D5) : Color(hex: 0x1e1e1e))
+                .foregroundStyle(Color(hex: 0x1E1E1E))
             }
         }
     }
 }
 
-func receiveLetterView(sender: String, date: String, receiver: String, isToggleOn: Bool) -> some View {
+func receiveLetterView(sender: String, date: String, receiver: String) -> some View {
     HStack {
         HStack {
             VStack(alignment: .leading) {
@@ -69,18 +70,18 @@ func receiveLetterView(sender: String, date: String, receiver: String, isToggleO
                         .frame(width: 100, height: 35)
                         .overlay(
                             Text("보내는 사람")
-                                .foregroundStyle(Color(hex: 0x1e1e1e))
+                                .foregroundStyle(Color(hex: 0x1E1E1E))
                         )
                         .foregroundStyle(Color(hex: 0x979797))
                     
                     Text("\(sender)")
-                        .foregroundStyle(Color(hex: 0x1e1e1e))
+                        .foregroundStyle(Color(hex: 0x1E1E1E))
                     
                     Spacer()
                     
                     Image(systemName: "swift")
                         .font(.title)
-                        .foregroundStyle(Color(hex: 0x1e1e1e))
+                        .foregroundStyle(Color(hex: 0x1E1E1E))
                 }
                 
                 Text(" ")
@@ -88,7 +89,7 @@ func receiveLetterView(sender: String, date: String, receiver: String, isToggleO
                 HStack {
                     VStack (alignment: .leading) {
                         Text(date)
-                            .foregroundStyle(Color(hex: 0x1e1e1e))
+                            .foregroundStyle(Color(hex: 0x1E1E1E))
                     }
                     
                     Spacer()
@@ -102,7 +103,7 @@ func receiveLetterView(sender: String, date: String, receiver: String, isToggleO
                         .foregroundStyle(Color(hex: 0x979797))
                     
                     Text("\(receiver)")
-                        .foregroundStyle(Color(hex: 0x1e1e1e))
+                        .foregroundStyle(Color(hex: 0x1E1E1E))
                 }
             }
         }
@@ -116,7 +117,7 @@ func receiveLetterView(sender: String, date: String, receiver: String, isToggleO
     }
 }
 
-func sendLetterView(sender: String, date: String, receiver: String, isToggleOn: Bool) -> some View {
+func sendLetterView(sender: String, date: String, receiver: String) -> some View {
     HStack {
         Spacer()
         HStack {
@@ -131,12 +132,12 @@ func sendLetterView(sender: String, date: String, receiver: String, isToggleOn: 
                         .foregroundStyle(Color(hex: 0x979797))
                     
                     Text("\(sender)")
-                        .foregroundStyle(Color(hex: 0x1e1e1e))
+                        .foregroundStyle(Color(hex: 0x1E1E1E))
                     
                     Spacer()
                     
                     Image(systemName: "swift")
-                        .foregroundStyle(Color(hex: 0x1e1e1e))
+                        .foregroundStyle(Color(hex: 0x1E1E1E))
                         .font(.title)
                 }
                 
@@ -153,12 +154,12 @@ func sendLetterView(sender: String, date: String, receiver: String, isToggleOn: 
                         .frame(width: 90, height: 35)
                         .overlay(
                             Text("받는 사람")
-                                .foregroundColor(Color(hex: 0x1e1e1e))
+                                .foregroundColor(Color(hex: 0x1E1E1E))
                         )
                         .foregroundStyle(Color(hex: 0x979797))
                     
                     Text("\(receiver)")
-                        .foregroundStyle(Color(hex: 0x1e1e1e))
+                        .foregroundStyle(Color(hex: 0x1E1E1E))
                 }
             }
         }
