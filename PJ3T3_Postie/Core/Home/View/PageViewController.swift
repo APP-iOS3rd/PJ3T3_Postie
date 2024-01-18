@@ -85,23 +85,28 @@ struct Page: View {
                 Spacer()
             }
 
-            HStack {
-                Image(systemName: "quote.opening")
-                    .font(.title)
-                    .foregroundStyle(Color(hex: 0xC2AD7E))
-                Spacer()
+            Divider()
+
+            VStack(spacing: 16) {
+                HStack {
+                    Image(systemName: "quote.opening")
+                        .font(.title)
+                        .foregroundStyle(Color(hex: 0xC2AD7E))
+                    Spacer()
+                }
+
+
+                Text(text)
+                    .lineSpacing(10.0)
+
+                HStack {
+                    Spacer()
+                    Image(systemName: "quote.closing")
+                        .font(.title)
+                        .foregroundStyle(Color(hex: 0xC2AD7E))
+                }
             }
-
-
-            Text(text)
-                .lineSpacing(10.0)
-
-            HStack {
-                Spacer()
-                Image(systemName: "quote.closing")
-                    .font(.title)
-                    .foregroundStyle(Color(hex: 0xC2AD7E))
-            }
+            .padding(.vertical, 28)
 
             HStack {
                 Text(Date.now.formatted().description)
