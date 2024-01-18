@@ -66,7 +66,7 @@ struct RegistrationView: View {
                                     .fontWeight(.bold)
                                     .foregroundStyle(.green)
                             } else {
-                                Image(systemName: "xamrk.circle.fill")
+                                Image(systemName: "xmark.circle.fill")
                                     .imageScale(.large)
                                     .fontWeight(.bold)
                                     .foregroundStyle(.red)
