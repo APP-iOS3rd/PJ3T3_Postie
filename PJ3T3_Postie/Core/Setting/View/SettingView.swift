@@ -66,7 +66,9 @@ struct SettingView: View {
                     }
                 } //Section
             } //List
-        } //if
+        } else {
+            ProgressView()
+        } //if...else
     }
 }
 
