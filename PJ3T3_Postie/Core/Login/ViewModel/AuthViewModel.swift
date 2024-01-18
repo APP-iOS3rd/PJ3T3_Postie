@@ -53,6 +53,10 @@ class AuthViewModel: ObservableObject {
 
             //5. Upload data to Firestore
             try await Firestore.firestore().collection("users").document(user.id).setData(encodedUser)
+            
+            //회원가입을 하면 userSession이 업데이트 되며 Firestore에 데이터를 저장하는데,
+            //userSession이 업데이트 됨에 따라 자동으로 Login 된 유저 뷰로 Navigate 되면, 업로드 된 Firestore의 데이터를 fetch해준다.
+            await fetchUser()
         } catch {
             //if anything goes wrong:
             print("DEBUG: Failed to create user with error \(error.localizedDescription)")
