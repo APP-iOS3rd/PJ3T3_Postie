@@ -36,20 +36,3 @@ labels:
 
 # A list of reviewers whose names should be added as tags to PRs, 
 # as long as their review is requested.
-# Set reviewer labels
-reviewers:
-  lm-loki:
-    name: "🍖 주원"
-    color: "#998046"
-  hjsupernova:
-    name: "🎄 현진"
-    color: "#a2cca9"
-  wonny1012:
-    name: "🐼 지원"
-    color: "#81c16a"
-  qlrmr111:
-    name: "⭐️ 운기"
-    color:  "#faf5c3"
-  Eunice0927:
-    name: "🔮 은수"
-    color: "#D884FB"
