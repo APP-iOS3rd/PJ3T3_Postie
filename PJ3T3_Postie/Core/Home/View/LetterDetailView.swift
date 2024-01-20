@@ -10,6 +10,7 @@ import SwiftUI
 struct LetterDetailView: View {
     var controllers: [UIHostingController<Page>]
 
+    // TODO: 인풋 값, 편지 구조체로 변경 필요
     init(text: String) {
         controllers = text.chunks(size: 300).map { chunk in
             UIHostingController(rootView: Page(text: chunk))
@@ -27,6 +28,17 @@ struct LetterDetailView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 10.0))
             }
             .padding()
+        }
+        .navigationTitle("편지 정보")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItemGroup(placement: .topBarTrailing) {
+                Button {
+                    // show delete alert
+                } label: {
+                    Image(systemName: "trash")
+                }
+            }
         }
     }
 }
