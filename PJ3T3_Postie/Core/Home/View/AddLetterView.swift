@@ -68,13 +68,11 @@ struct AddLetterView: View {
             .confirmationDialog("편지 사진 가져오기", 
                                 isPresented: $addLetterViewModel.showConfirmationDialog) {
                 Button("카메라") {
-                    addLetterViewModel.imagePickerSourceType = .camera
-                    addLetterViewModel.showUIImagePicker = true
+                    addLetterViewModel.showUIImagePicker(sourceType: .camera)
                 }
 
                 Button("앨범") {
-                    addLetterViewModel.imagePickerSourceType = .photoLibrary
-                    addLetterViewModel.showUIImagePicker = true
+                    addLetterViewModel.showUIImagePicker(sourceType: .photoLibrary)
                 }
 
                 Button("스캐너") {

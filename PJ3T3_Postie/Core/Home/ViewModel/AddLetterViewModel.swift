@@ -23,4 +23,9 @@ class AddLetterViewModel: ObservableObject {
     func removeImage(at index: Int) {
         images.remove(at: index)
     }
+
+    func showUIImagePicker(sourceType: UIImagePickerController.SourceType) {
+        imagePickerSourceType = sourceType
+        showUIImagePicker = true 
+    }
 }
