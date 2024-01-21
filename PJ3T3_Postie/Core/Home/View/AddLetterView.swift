@@ -60,12 +60,20 @@ struct AddLetterView: View {
             .fullScreenCover(isPresented: $addLetterViewModel.showLetterImageFullScreenView) {
                 LetterImageFullScreenView(images: addLetterViewModel.images)
             }
-            .sheet(isPresented: $addLetterViewModel.showUIImagePicker, content: {
-                UIImagePicker(sourceType: addLetterViewModel.imagePickerSourceType,
-                              selectedImages: $addLetterViewModel.images,
-                              text: $addLetterViewModel.text)
-            })
-            .confirmationDialog("편지 사진 가져오기", 
+            .sheet(isPresented: $addLetterViewModel.showUIImagePicker) {
+                UIImagePicker(
+                    sourceType: addLetterViewModel.imagePickerSourceType,
+                    selectedImages: $addLetterViewModel.images,
+                    text: $addLetterViewModel.text,
+                    showTextRecognizerErrorAlert: $addLetterViewModel.showTextRecognizerErrorAlert
+                )
+            }
+            .alert("문자 인식 실패", isPresented: $addLetterViewModel.showTextRecognizerErrorAlert) {
+
+            } message: {
+                Text("문자 인식에 실패했습니다. 다시 시도해 주세요.")
+            }
+            .confirmationDialog("편지 사진 가져오기",
                                 isPresented: $addLetterViewModel.showConfirmationDialog) {
                 Button("카메라") {
                     addLetterViewModel.showUIImagePicker(sourceType: .camera)

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 import UIKit
 import Vision
 
@@ -19,7 +20,7 @@ class TextRecognizer {
     
     /// Vision 프레임워크를 사용해 사용자가 가져온 이미지에서 텍스트를 인식합니다.
     /// 인식이 끝나면 VNRecognizeTextRquest의 completionHandler가 호출됩니다.
-    func recognizeText() {
+    func recognizeText() throws {
         guard let cgImage = selectedImage.cgImage else { return }
 
         let requestHandler = VNImageRequestHandler(cgImage: cgImage)
@@ -29,11 +30,7 @@ class TextRecognizer {
         request.recognitionLevel = .accurate
         request.usesLanguageCorrection = true
 
-        do {
-            try requestHandler.perform([request])
-        } catch {
-
-        }
+        try requestHandler.perform([request])
     }
     
     /// 이미지에서 인식된 텍스트 값으로 TextRecognizer 인스턴스의 recognizedText 변수를 업데이트 합니다.

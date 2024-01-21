@@ -17,7 +17,8 @@ class AddLetterViewModel: ObservableObject {
     @Published var showUIImagePicker = false
     @Published var images: [UIImage] = []
     @Published var showLetterImageFullScreenView: Bool = false
-    
+    @Published var showTextRecognizerErrorAlert: Bool = false
+
     private(set) var imagePickerSourceType: UIImagePickerController.SourceType = .camera
 
     func removeImage(at index: Int) {

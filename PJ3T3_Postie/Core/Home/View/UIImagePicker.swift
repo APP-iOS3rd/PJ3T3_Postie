@@ -13,6 +13,7 @@ struct UIImagePicker: UIViewControllerRepresentable {
     @Environment(\.dismiss) var dismiss
     @Binding var selectedImages: [UIImage]
     @Binding var text: String
+    @Binding var showTextRecognizerErrorAlert: Bool
 
     func makeUIViewController(context: Context) -> UIImagePickerController {
         let imagePicker = UIImagePickerController()
@@ -38,15 +39,20 @@ struct UIImagePicker: UIViewControllerRepresentable {
         ) {
 
             if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+                self.parent.selectedImages.append(image)
 
                 let recognizer = TextRecognizer(selectedImage: image)
-                recognizer.recognizeText()
 
-                self.parent.selectedImages.append(image)
-                if self.parent.text == "사진을 등록하면 자동으로 편지 내용이 입력됩니다." {
-                    self.parent.text = recognizer.recognizedText
-                } else {
-                    self.parent.text.append(" \(recognizer.recognizedText)")
+                do {
+                    try recognizer.recognizeText()
+
+                    if self.parent.text == "사진을 등록하면 자동으로 편지 내용이 입력됩니다." {
+                        self.parent.text = recognizer.recognizedText
+                    } else {
+                        self.parent.text.append(" \(recognizer.recognizedText)")
+                    }
+                } catch {
+                    parent.showTextRecognizerErrorAlert = true
                 }
             }
             parent.dismiss()
