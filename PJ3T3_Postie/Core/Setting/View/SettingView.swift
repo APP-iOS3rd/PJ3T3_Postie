@@ -13,6 +13,7 @@ struct SettingView: View {
     private let signOutIconColor: Color = Color(uiColor: .lightGray)
     //ViewModels
     @ObservedObject var authViewModel = AuthViewModel.shared
+    @ObservedObject var firestoreViewModel = FirestoreViewModel.shared //테스트용으로 vm 임시 선언, 삭제 예정
     
     var body: some View {
         if let user = authViewModel.currentUser {
@@ -65,7 +66,37 @@ struct SettingView: View {
                         SettingsRowView(imageName: "xmark.circle.fill", title: "Delete Account", tintColor: signOutIconColor)
                     }
                 } //Section
+                
+                Section("Data Test") {
+                    Button {
+                        firestoreViewModel.addLetter(writer: "me", recipient: "you", summary: "hellooo", date: Date())
+                        firestoreViewModel.fetchAllLetters()
+                    } label: {
+                        Text("Add")
+                    }
+                } //Section: Home뷰에서 기능 되는 것 확인 후 삭제 예정
+                
+                ForEach(firestoreViewModel.letters, id: \.self) { letter in
+                    VStack {
+                        HStack {
+                            Text("To: \(letter.recipient)")
+                            
+                            Spacer()
+                        } //HStack
+                        
+                        Text("\(letter.summary)")
+                        
+                        HStack {
+                            Spacer()
+                            
+                            Text("From: \(letter.writer)")
+                        } //HStack
+                    } //VStack
+                } //ForEach: Home뷰에서 기능 되는 것 확인 후 삭제 예정
             } //List
+            .onAppear {
+                firestoreViewModel.fetchAllLetters()
+            } //Home뷰에서 기능 되는 것 확인 후 onAppear삭제 예정
         } else {
             ProgressView()
         } //if...else
