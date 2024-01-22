@@ -16,90 +16,93 @@ struct SettingView: View {
     @ObservedObject var firestoreViewModel = FirestoreViewModel.shared //테스트용으로 vm 임시 선언, 삭제 예정
     
     var body: some View {
-        if let user = authViewModel.currentUser {
-            List {
-                Section {
-                    HStack {
-                        Text(user.initials)
-                            .font(.title)
-                            .fontWeight(.semibold)
-                            .foregroundStyle(.white)
-                            .frame(width: 72, height: 72)
-                            .background(profileBackgroundColor)
-                            .clipShape(Circle())
-                        
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(user.fullName)
-                                .font(.subheadline)
+        NavigationStack {
+            if let user = authViewModel.currentUser {
+                List {
+                    Section {
+                        HStack {
+                            Text(user.initials)
+                                .font(.title)
                                 .fontWeight(.semibold)
-                                .padding(.top, 4)
+                                .foregroundStyle(.white)
+                                .frame(width: 72, height: 72)
+                                .background(profileBackgroundColor)
+                                .clipShape(Circle())
                             
-                            Text(user.email)
-                                .font(.footnote)
-                                .foregroundStyle(profileBackgroundColor)
-                        } //VStack
-                    } //HStack
-                } //Section
-                
-                Section("General") {
-                    HStack {
-                        SettingsRowView(imageName: "gear", title: "Version", tintColor: profileBackgroundColor)
-                        
-                        Spacer()
-                        
-                        Text("1.0.0")
-                            .font(.subheadline)
-                            .foregroundStyle(profileBackgroundColor)
-                    }
-                } //Section
-                
-                Section("Account") {
-                    Button {
-                        authViewModel.signOut()
-                    } label: {
-                        SettingsRowView(imageName: "arrow.left.circle.fill", title: "Sign Out", tintColor: signOutIconColor)
-                    }
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(user.fullName)
+                                    .font(.subheadline)
+                                    .fontWeight(.semibold)
+                                    .padding(.top, 4)
+                                
+                                Text(user.email)
+                                    .font(.footnote)
+                                    .foregroundStyle(profileBackgroundColor)
+                            } //VStack
+                        } //HStack
+                    } //Section
                     
-                    Button {
-                        print("Delete account")
-                    } label: {
-                        SettingsRowView(imageName: "xmark.circle.fill", title: "Delete Account", tintColor: signOutIconColor)
-                    }
-                } //Section
-                
-                Section("Data Test") {
-                    Button {
-                        firestoreViewModel.addLetter(writer: "me", recipient: "you", summary: "hellooo", date: Date())
-                        firestoreViewModel.fetchAllLetters()
-                    } label: {
-                        Text("Add")
-                    }
-                } //Section: Home뷰에서 기능 되는 것 확인 후 삭제 예정
-                
-                ForEach(firestoreViewModel.letters, id: \.self) { letter in
-                    VStack {
+                    Section("General") {
                         HStack {
-                            Text("To: \(letter.recipient)")
+                            SettingsRowView(imageName: "gear", title: "Version", tintColor: profileBackgroundColor)
                             
                             Spacer()
-                        } //HStack
-                        
-                        Text("\(letter.summary)")
-                        
-                        HStack {
-                            Spacer()
                             
-                            Text("From: \(letter.writer)")
-                        } //HStack
-                    } //VStack
-                } //ForEach: Home뷰에서 기능 되는 것 확인 후 삭제 예정
-            } //List
-            .onAppear {
-                firestoreViewModel.fetchAllLetters()
-            } //Home뷰에서 기능 되는 것 확인 후 onAppear삭제 예정
-        } else {
-            ProgressView()
-        } //if...else
+                            Text("1.0.0")
+                                .font(.subheadline)
+                                .foregroundStyle(profileBackgroundColor)
+                        }
+                    } //Section
+                    
+                    Section("Account") {
+                        Button {
+                            authViewModel.signOut()
+                        } label: {
+                            SettingsRowView(imageName: "arrow.left.circle.fill", title: "Sign Out", tintColor: signOutIconColor)
+                        }
+                        
+                        Button {
+                            print("Delete account")
+                        } label: {
+                            SettingsRowView(imageName: "xmark.circle.fill", title: "Delete Account", tintColor: signOutIconColor)
+                        }
+                    } //Section
+                    
+                    Section("Data Test") {
+                        Button {
+                            firestoreViewModel.addLetter(writer: "me", recipient: "you", summary: "hellooo", date: Date())
+                            firestoreViewModel.fetchAllLetters()
+                        } label: {
+                            Text("Add")
+                        }
+                    } //Section: Home뷰에서 기능 되는 것 확인 후 삭제 예정
+                    
+                    ForEach(firestoreViewModel.letters, id: \.self) { letter in
+                        VStack {
+                            HStack {
+                                Text("To: \(letter.recipient)")
+                                
+                                Spacer()
+                            } //HStack
+                            
+                            Text("\(letter.summary)")
+                            
+                            HStack {
+                                Spacer()
+                                
+                                Text("From: \(letter.writer)")
+                            } //HStack
+                        } //VStack
+                    } //ForEach: Home뷰에서 기능 되는 것 확인 후 삭제 예정
+                } //List
+                .navigationTitle("Setting")
+                .onAppear {
+                    firestoreViewModel.fetchAllLetters()
+                } //Home뷰에서 기능 되는 것 확인 후 onAppear삭제 예정
+            } else {
+                ProgressView()
+            } //if...else
+        } //NavigationStack
     }
 }
 
