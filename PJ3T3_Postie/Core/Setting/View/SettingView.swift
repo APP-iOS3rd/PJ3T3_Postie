@@ -19,6 +19,7 @@ struct SettingView: View {
     //ViewModels
     @ObservedObject var authViewModel = AuthViewModel.shared
     @ObservedObject var firestoreManager = FirestoreManager.shared //테스트용으로 vm 임시 선언, 삭제 예정
+    @ObservedObject var storageManager = StorageManager.shared
     
     var body: some View {
         NavigationStack {
