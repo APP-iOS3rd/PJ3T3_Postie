@@ -29,4 +29,13 @@ class AddLetterViewModel: ObservableObject {
         imagePickerSourceType = sourceType
         showUIImagePicker = true 
     }
+    
+    func saveImage(data: Data) {
+        Task {
+            let (path, name) = try await StorageManager.shared.saveImage(data: data)
+            print("SUCCESS")
+            print(path)
+            print(name)
+        }
+    }
 }
