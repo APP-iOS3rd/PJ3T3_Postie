@@ -88,6 +88,11 @@ struct SettingView: View {
                             Text("Select a photo")
                         } //Storage업로드 테스트를 위한 구현으로 삭제 예정
                     } //Section: Home뷰에서 기능 되는 것 확인 후 삭제 예정
+                    .onChange(of: selectedItem) { newValue in
+                        if let newValue {
+                            saveImage(item: newValue)
+                        }
+                    }
                     
                     ForEach(firestoreManager.letters, id: \.self) { letter in
                         VStack {
@@ -115,6 +120,17 @@ struct SettingView: View {
                 ProgressView()
             } //if...else
         } //NavigationStack
+    }
+    
+    //AddLetterView에서 생성된 AddLetterViewModel을 SettingView에서 받을 수 없어 임시로 FirestoreManager에 함수 생성
+    //SettingView에서 Image 저장 관련 기능 삭제할 때 해당 함수를 AddLetterViewModel로 옮길 예정
+    func saveImage(item: PhotosPickerItem) {
+        Task {
+            //지정한 타입의 인스턴스를 불러오려고 시도한다. 실패 action 구현 필요
+            guard let data = try await item.loadTransferable(type: Data.self) else { return }
+            let (_, _) = try await StorageManager.shared.saveImage(data: data)
+            print("SUCCESS") //path와 name을 print 했을 때 동일한 것으로 확인되었다.
+        }
     }
 }
 
