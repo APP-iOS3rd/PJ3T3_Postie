@@ -47,4 +47,31 @@ class FirestoreViewModel: ObservableObject {
             }
         }
     }
+    
+    //데이터 전체를 가지고 온다.
+    func fetchAllLetters() {
+        let docRef = colRef.document(userUid).collection("letters") //특정 user의 document의 letters라는 하위 컬렉션 가져옴
+        
+        docRef.getDocuments { snapshot, error in
+            guard error == nil else {
+                print(error?.localizedDescription ?? "Undefined error")
+                return
+            }
+            
+            //우선 전체 내용을 지우고 전체를 추가한다.
+            self.letters.removeAll()
+            
+            for document in snapshot!.documents {
+                let data = document.data()
+                print("Fetch success")
+                
+                //document의 data를 가지고 와서, data를 각 값에 넣어줌
+                self.letters.append(Letter(id: data["id"] as? String ?? "",
+                                           writer: data["writer"] as? String ?? "",
+                                           recipient: data["recipient"] as? String ?? "",
+                                           summary: data["summary"] as? String ?? "",
+                                           date: data["date"] as? Date ?? Date()))
+            }
+        }
+    }
 }
