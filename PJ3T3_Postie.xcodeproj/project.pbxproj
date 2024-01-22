@@ -34,6 +34,10 @@
 		9E9F6ADA2B576438003DFE83 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9F6AD92B576438003DFE83 /* User.swift */; };
 		9E9F6ADC2B57643F003DFE83 /* Letter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9F6ADB2B57643F003DFE83 /* Letter.swift */; };
 		9E9F6ADF2B5765DE003DFE83 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9F6ADE2B5765DD003DFE83 /* Color.swift */; };
+		CE7E50782B579D6800955F31 /* AddLetterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7E50772B579D6800955F31 /* AddLetterViewModel.swift */; };
+		CEF09E452B57B6C500BE67E4 /* UIImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF09E442B57B6C500BE67E4 /* UIImagePicker.swift */; };
+		CEF09E472B57BD8500BE67E4 /* LetterImageFullScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF09E462B57BD8500BE67E4 /* LetterImageFullScreenView.swift */; };
+		CEF09E492B57BFBF00BE67E4 /* TextRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF09E482B57BFBF00BE67E4 /* TextRecognizer.swift */; };
 		9E9F6AE12B576977003DFE83 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9E9F6AE02B576977003DFE83 /* GoogleService-Info.plist */; };
 		9E9F6AE42B5769AA003DFE83 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 9E9F6AE32B5769AA003DFE83 /* FirebaseAnalytics */; };
 		9E9F6AE62B5769AA003DFE83 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = 9E9F6AE52B5769AA003DFE83 /* FirebaseAnalyticsOnDeviceConversion */; };
@@ -92,6 +96,10 @@
 		9E9F6AD92B576438003DFE83 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		9E9F6ADB2B57643F003DFE83 /* Letter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Letter.swift; sourceTree = "<group>"; };
 		9E9F6ADE2B5765DD003DFE83 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		CE7E50772B579D6800955F31 /* AddLetterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLetterViewModel.swift; sourceTree = "<group>"; };
+		CEF09E442B57B6C500BE67E4 /* UIImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImagePicker.swift; sourceTree = "<group>"; };
+		CEF09E462B57BD8500BE67E4 /* LetterImageFullScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterImageFullScreenView.swift; sourceTree = "<group>"; };
+		CEF09E482B57BFBF00BE67E4 /* TextRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextRecognizer.swift; sourceTree = "<group>"; };
 		9E9F6AE02B576977003DFE83 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -259,6 +267,8 @@
 			children = (
 				9E9F6AB72B5762EF003DFE83 /* HomeViewModel.swift */,
 				9E9F6AD72B57642D003DFE83 /* FirestoreViewModel.swift */,
+				CE7E50772B579D6800955F31 /* AddLetterViewModel.swift */,
+				CEF09E482B57BFBF00BE67E4 /* TextRecognizer.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -269,6 +279,8 @@
 				9E9F6AB52B5762E5003DFE83 /* HomeView.swift */,
 				9E9F6AD32B576411003DFE83 /* LetterDetailView.swift */,
 				9E9F6AD52B576423003DFE83 /* AddLetterView.swift */,
+				CEF09E442B57B6C500BE67E4 /* UIImagePicker.swift */,
+				CEF09E462B57BD8500BE67E4 /* LetterImageFullScreenView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -463,6 +475,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE7E50782B579D6800955F31 /* AddLetterViewModel.swift in Sources */,
 				9E9F6AB62B5762E5003DFE83 /* HomeView.swift in Sources */,
 				9E0FA11E2B54D27A001CEEB9 /* ContentView.swift in Sources */,
 				9E9F6ADF2B5765DE003DFE83 /* Color.swift in Sources */,
@@ -473,9 +486,12 @@
 				9E9F6AD82B57642D003DFE83 /* FirestoreViewModel.swift in Sources */,
 				9E9F6AD62B576423003DFE83 /* AddLetterView.swift in Sources */,
 				9E9F6ACE2B5763CA003DFE83 /* AuthViewModel.swift in Sources */,
+				CEF09E472B57BD8500BE67E4 /* LetterImageFullScreenView.swift in Sources */,
 				9E9F6AC42B57639D003DFE83 /* ShopViewModel.swift in Sources */,
+				CEF09E452B57B6C500BE67E4 /* UIImagePicker.swift in Sources */,
 				9E9F6AC22B576393003DFE83 /* MapApi.swift in Sources */,
 				9E9F6AD42B576411003DFE83 /* LetterDetailView.swift in Sources */,
+				CEF09E492B57BFBF00BE67E4 /* TextRecognizer.swift in Sources */,
 				9E9F6ABE2B576358003DFE83 /* MapViewModel.swift in Sources */,
 				9E9F6AC82B5763AD003DFE83 /* SettingViewModel.swift in Sources */,
 				9E9F6AD22B5763F3003DFE83 /* SettingsRowView.swift in Sources */,
@@ -618,11 +634,13 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"PJ3T3_Postie/Preview Content\"";
-				DEVELOPMENT_TEAM = Y6QXM3Q994;
+				DEVELOPMENT_TEAM = C9D4D98Z8R;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Postie;
+				INFOPLIST_KEY_NSCameraUsageDescription = "편지 사진을 가져오기 위해 카메라 권한이 필요합니다.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -650,10 +668,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"PJ3T3_Postie/Preview Content\"";
-				DEVELOPMENT_TEAM = Y6QXM3Q994;
+				DEVELOPMENT_TEAM = C9D4D98Z8R;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Postie;
+				INFOPLIST_KEY_NSCameraUsageDescription = "편지 사진을 가져오기 위해 카메라 권한이 필요합니다.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

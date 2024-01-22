@@ -9,12 +9,13 @@ import SwiftUI
 
 //reusable component
 struct LoginInputView: View {
-    @Binding var text: String
+    //Colors
+    private let fontColor: Color = .black
+    //해당 뷰를 호출할 때 값을 채워주어야 하는 부분
     let title: String
     let placeholder: String
     var isSecureField = false
-    //Colors
-    private let fontColor: Color = .black
+    @Binding var text: String
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -35,5 +36,5 @@ struct LoginInputView: View {
 }
 
 #Preview {
-    LoginInputView(text: .constant(""), title: "Email Address", placeholder: "name@example.com")
+    LoginInputView(title: "Email Address", placeholder: "name@example.com", text: .constant(""))
 }

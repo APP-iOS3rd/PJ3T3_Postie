@@ -8,17 +8,14 @@
 import SwiftUI
 
 struct LoginView: View {
-    //TextFields의 input값을 하위뷰에 넘겨준다.
-    @State private var email = ""
-    @State private var password = ""
-    //버튼 width를 정하기 위해 screen size를 받아온다.
-    @State private var screenWidth: CGFloat = 0
-    private let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
-    //ViewModels
-    @ObservedObject var authViewModel = AuthViewModel.shared
     //Colors
     private let viewBackground: Color = .white
     private let buttonColor: Color = Color(uiColor: .darkGray)
+    //TextFields의 input값을 하위뷰에 넘겨준다.
+    @State private var email = ""
+    @State private var password = ""
+    //ViewModels
+    @ObservedObject var authViewModel = AuthViewModel.shared
     
     var body: some View {
         NavigationStack {
@@ -28,7 +25,6 @@ struct LoginView: View {
                     .ignoresSafeArea()
                 
                 VStack {
-                    //Image
                     Image(systemName: "archivebox")
                         .resizable()
                         .scaledToFill()
@@ -37,15 +33,15 @@ struct LoginView: View {
 
                     //Form fields
                     VStack(spacing: 24) {
-                        LoginInputView(text: $email,
-                                  title: "Email Address",
-                                  placeholder: "name@example.com")
+                        LoginInputView(title: "Email Address",
+                                       placeholder: "name@example.com",
+                                       text: $email)
                         .textInputAutocapitalization(.never)
 
-                        LoginInputView(text: $password,
-                                  title: "Password",
-                                  placeholder: "Enter your password",
-                                  isSecureField: true)
+                        LoginInputView(title: "Password",
+                                       placeholder: "Enter your password",
+                                       isSecureField: true,
+                                       text: $password)
                     }
                     .padding(.horizontal)
                     .padding(.top, 12)
@@ -63,8 +59,8 @@ struct LoginView: View {
                             Image(systemName: "arrow.right")
                         }
                         .foregroundColor(.white)
-                        .frame(width: screenWidth - 32,
-                               height: 48)
+                        .frame(height: 48)
+                        .padding(.horizontal, 32)
                     }
                     .background(buttonColor)
                     .disabled(!formIsValid)
@@ -90,9 +86,6 @@ struct LoginView: View {
                 } //VStack
             } //ZStack
         } //NavigationStack
-        .onAppear {
-            screenWidth = windowScene?.screen.bounds.width ?? 1.0
-        }
     }
 }
 
