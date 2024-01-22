@@ -128,7 +128,9 @@ struct SettingView: View {
         Task {
             //지정한 타입의 인스턴스를 불러오려고 시도한다. 실패 action 구현 필요
             guard let data = try await item.loadTransferable(type: Data.self) else { return }
-            let (_, _) = try await StorageManager.shared.saveImage(data: data)
+            //userUid를 AuthViewModel에서 가져오도록 리팩토링 필요
+            //리팩토링 하면서 파일 이름도 함께 변경 AuthViewModel -> AuthManager
+            let (_, _) = try await StorageManager.shared.saveImage(data: data, userId: firestoreManager.userUid)
             print("SUCCESS") //path와 name을 print 했을 때 동일한 것으로 확인되었다.
         }
     }
