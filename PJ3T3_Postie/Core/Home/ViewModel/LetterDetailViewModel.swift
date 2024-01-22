@@ -9,5 +9,5 @@ import Foundation
 
 class LetterDetailViewModel: ObservableObject {
     @Published var showLetterImageFullScreenView = false
-    
+    @Published var showDeleteAlert = false
 }

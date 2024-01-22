@@ -52,7 +52,7 @@ struct LetterDetailView: View {
         .toolbar {
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button {
-                    // show delete alert
+                    letterDetailViewModel.showDeleteAlert = true
                 } label: {
                     Text("삭제")
                 }
@@ -60,6 +60,21 @@ struct LetterDetailView: View {
         }
         .fullScreenCover(isPresented: $letterDetailViewModel.showLetterImageFullScreenView) {
             LetterImageFullScreenView(images: letter.images ?? [])
+        }
+        .alert("편지 삭제", isPresented: $letterDetailViewModel.showDeleteAlert) {
+            Button(role: .cancel) {
+
+            } label: {
+                Text("취소")
+            }
+
+            Button(role: .destructive) {
+                // Delete
+            } label: {
+                Text("삭제")
+            }
+        } message: {
+            Text("편지를 삭제하시겠습니까?")
         }
     }
 }
