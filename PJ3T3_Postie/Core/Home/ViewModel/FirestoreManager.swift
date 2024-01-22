@@ -9,8 +9,8 @@ import Foundation
 import FirebaseAuth
 import FirebaseFirestore
 
-class FirestoreViewModel: ObservableObject {
-    static let shared = FirestoreViewModel()
+class FirestoreManager: ObservableObject {
+    static let shared = FirestoreManager()
     var colRef = Firestore.firestore().collection("users") //user 컬렉션 전체를 가져온다.
     var userUid: String {
         //로그인된 유저가 있는지 확인해서 firebase에서 제공하는 userUid를 가지고온다.

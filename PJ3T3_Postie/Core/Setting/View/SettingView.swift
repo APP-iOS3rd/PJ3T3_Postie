@@ -13,7 +13,7 @@ struct SettingView: View {
     private let signOutIconColor: Color = Color(uiColor: .lightGray)
     //ViewModels
     @ObservedObject var authViewModel = AuthViewModel.shared
-    @ObservedObject var firestoreViewModel = FirestoreViewModel.shared //테스트용으로 vm 임시 선언, 삭제 예정
+    @ObservedObject var firestoreManager = FirestoreManager.shared //테스트용으로 vm 임시 선언, 삭제 예정
     
     var body: some View {
         NavigationStack {
@@ -70,14 +70,14 @@ struct SettingView: View {
                     
                     Section("Data Test") {
                         Button {
-                            firestoreViewModel.addLetter(writer: "me", recipient: "you", summary: "hellooo", date: Date())
-                            firestoreViewModel.fetchAllLetters()
+                            firestoreManager.addLetter(writer: "me", recipient: "you", summary: "hellooo", date: Date())
+                            firestoreManager.fetchAllLetters()
                         } label: {
                             Text("Add")
                         }
                     } //Section: Home뷰에서 기능 되는 것 확인 후 삭제 예정
                     
-                    ForEach(firestoreViewModel.letters, id: \.self) { letter in
+                    ForEach(firestoreManager.letters, id: \.self) { letter in
                         VStack {
                             HStack {
                                 Text("To: \(letter.recipient)")
@@ -97,7 +97,7 @@ struct SettingView: View {
                 } //List
                 .navigationTitle("Setting")
                 .onAppear {
-                    firestoreViewModel.fetchAllLetters()
+                    firestoreManager.fetchAllLetters()
                 } //Home뷰에서 기능 되는 것 확인 후 onAppear삭제 예정
             } else {
                 ProgressView()
