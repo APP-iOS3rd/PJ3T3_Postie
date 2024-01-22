@@ -85,7 +85,7 @@ struct Page: View {
 
         VStack(spacing: 16) {
             HStack {
-                Text("To. \(letter.receiver)")
+                Text("To. \(letter.recipient)")
                     .font(.headline)
                 Spacer()
             }
@@ -105,7 +105,7 @@ struct Page: View {
 
                 Spacer()
 
-                Text("From. \(letter.sender)")
+                Text("From. \(letter.writer)")
                     .font(.headline)
             }
         }
