@@ -8,15 +8,9 @@
 import SwiftUI
 
 struct LetterDetailView: View {
-    var controllers: [UIHostingController<Page>]
     var letter: Letter
 
-    init(letter: Letter) {
-        self.letter = letter
-        controllers = letter.text.chunks(size: 300).map { chunk in
-            UIHostingController(rootView: Page(letter: letter, chunk: chunk))
-        }
-    }
+    @StateObject private var letterDetailViewModel = LetterDetailViewModel()
 
     var body: some View {
         ZStack {
@@ -24,7 +18,8 @@ struct LetterDetailView: View {
                 .ignoresSafeArea()
             
             VStack {
-                PageViewController(controllers: controllers)
+                Page(letter: Letter.preview, text: letter.text)
+                    .background(Color(hex: 0xFFFBF2))
                     .clipShape(RoundedRectangle(cornerRadius: 10.0))
                     .padding(.bottom, 8)
 
@@ -34,7 +29,7 @@ struct LetterDetailView: View {
                             ForEach(0..<images.count, id: \.self) { index in
                                 ZStack {
                                     Button {
-    //                                    addLetterViewModel.showLetterImageFullScreenView = true
+                                        letterDetailViewModel.showLetterImageFullScreenView = true
                                     } label: {
                                         Image(uiImage: images[index])
                                             .resizable()
@@ -48,20 +43,23 @@ struct LetterDetailView: View {
                     }
                 }
                 .scrollIndicators(.never)
-
             }
             .padding()
         }
         .navigationTitle("편지 정보")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(Color(hex: 0xF5F1E8), for: .navigationBar)
         .toolbar {
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button {
                     // show delete alert
                 } label: {
-                    Image(systemName: "trash")
+                    Text("삭제")
                 }
             }
+        }
+        .fullScreenCover(isPresented: $letterDetailViewModel.showLetterImageFullScreenView) {
+            LetterImageFullScreenView(images: letter.images ?? [])
         }
     }
 }

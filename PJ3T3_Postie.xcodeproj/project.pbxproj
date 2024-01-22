@@ -34,10 +34,6 @@
 		9E9F6ADA2B576438003DFE83 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9F6AD92B576438003DFE83 /* User.swift */; };
 		9E9F6ADC2B57643F003DFE83 /* Letter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9F6ADB2B57643F003DFE83 /* Letter.swift */; };
 		9E9F6ADF2B5765DE003DFE83 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9F6ADE2B5765DD003DFE83 /* Color.swift */; };
-		CE7E50782B579D6800955F31 /* AddLetterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7E50772B579D6800955F31 /* AddLetterViewModel.swift */; };
-		CEF09E452B57B6C500BE67E4 /* UIImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF09E442B57B6C500BE67E4 /* UIImagePicker.swift */; };
-		CEF09E472B57BD8500BE67E4 /* LetterImageFullScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF09E462B57BD8500BE67E4 /* LetterImageFullScreenView.swift */; };
-		CEF09E492B57BFBF00BE67E4 /* TextRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF09E482B57BFBF00BE67E4 /* TextRecognizer.swift */; };
 		9E9F6AE12B576977003DFE83 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9E9F6AE02B576977003DFE83 /* GoogleService-Info.plist */; };
 		9E9F6AE42B5769AA003DFE83 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 9E9F6AE32B5769AA003DFE83 /* FirebaseAnalytics */; };
 		9E9F6AE62B5769AA003DFE83 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = 9E9F6AE52B5769AA003DFE83 /* FirebaseAnalyticsOnDeviceConversion */; };
@@ -67,6 +63,11 @@
 		9E9F6B162B5769AA003DFE83 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 9E9F6B152B5769AA003DFE83 /* FirebaseStorage */; };
 		CE67D55C2B58E9F700C0050B /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE67D55B2B58E9F700C0050B /* PageViewController.swift */; };
 		CE67D55E2B58FF8500C0050B /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE67D55D2B58FF8500C0050B /* String.swift */; };
+		CE6E08452B5E09D900CFBF2A /* LetterDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6E08442B5E09D800CFBF2A /* LetterDetailViewModel.swift */; };
+		CE7E50782B579D6800955F31 /* AddLetterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7E50772B579D6800955F31 /* AddLetterViewModel.swift */; };
+		CEF09E452B57B6C500BE67E4 /* UIImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF09E442B57B6C500BE67E4 /* UIImagePicker.swift */; };
+		CEF09E472B57BD8500BE67E4 /* LetterImageFullScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF09E462B57BD8500BE67E4 /* LetterImageFullScreenView.swift */; };
+		CEF09E492B57BFBF00BE67E4 /* TextRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF09E482B57BFBF00BE67E4 /* TextRecognizer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -98,13 +99,14 @@
 		9E9F6AD92B576438003DFE83 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		9E9F6ADB2B57643F003DFE83 /* Letter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Letter.swift; sourceTree = "<group>"; };
 		9E9F6ADE2B5765DD003DFE83 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		9E9F6AE02B576977003DFE83 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		CE67D55B2B58E9F700C0050B /* PageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewController.swift; sourceTree = "<group>"; };
+		CE67D55D2B58FF8500C0050B /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		CE6E08442B5E09D800CFBF2A /* LetterDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterDetailViewModel.swift; sourceTree = "<group>"; };
 		CE7E50772B579D6800955F31 /* AddLetterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLetterViewModel.swift; sourceTree = "<group>"; };
 		CEF09E442B57B6C500BE67E4 /* UIImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImagePicker.swift; sourceTree = "<group>"; };
 		CEF09E462B57BD8500BE67E4 /* LetterImageFullScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterImageFullScreenView.swift; sourceTree = "<group>"; };
 		CEF09E482B57BFBF00BE67E4 /* TextRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextRecognizer.swift; sourceTree = "<group>"; };
-		9E9F6AE02B576977003DFE83 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		CE67D55B2B58E9F700C0050B /* PageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewController.swift; sourceTree = "<group>"; };
-		CE67D55D2B58FF8500C0050B /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -273,6 +275,7 @@
 				9E9F6AD72B57642D003DFE83 /* FirestoreViewModel.swift */,
 				CE7E50772B579D6800955F31 /* AddLetterViewModel.swift */,
 				CEF09E482B57BFBF00BE67E4 /* TextRecognizer.swift */,
+				CE6E08442B5E09D800CFBF2A /* LetterDetailViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -482,6 +485,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CE7E50782B579D6800955F31 /* AddLetterViewModel.swift in Sources */,
+				CE6E08452B5E09D900CFBF2A /* LetterDetailViewModel.swift in Sources */,
 				9E9F6AB62B5762E5003DFE83 /* HomeView.swift in Sources */,
 				9E0FA11E2B54D27A001CEEB9 /* ContentView.swift in Sources */,
 				9E9F6ADF2B5765DE003DFE83 /* Color.swift in Sources */,
