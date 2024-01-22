@@ -80,34 +80,36 @@ struct Page: View {
 
     var body: some View {
         if !letter.summary.isEmpty {
-            Text(letter.summary)
+            Text("\"\(letter.summary)\"")
         }
 
         VStack(spacing: 16) {
-            HStack {
-                Text("To. \(letter.recipient)")
-                    .font(.headline)
-                Spacer()
-            }
-
-            Divider()
-
             ScrollView {
-                    Text(text)
-                        .lineSpacing(10.0)
+                HStack {
+                    Text("To. \(letter.recipient)")
+                        .font(.headline)
+                    Spacer()
+                }
+
+                Divider()
+
+                Text(letter.text)
+                    .lineSpacing(10.0)
 
                 Spacer()
+
+                Divider()
+
+                HStack {
+                    Text(letter.date.formatted())
+
+                    Spacer()
+
+                    Text("From. \(letter.writer)")
+                        .font(.headline)
+                }
             }
             .scrollIndicators(.never)
-
-            HStack {
-                Text(Date.now.formatted().description)
-
-                Spacer()
-
-                Text("From. \(letter.writer)")
-                    .font(.headline)
-            }
         }
         .padding()
         .background(Color(hex: 0xFFFBF2))
