@@ -7,6 +7,7 @@
 
 import Foundation
 import FirebaseStorage
+import UIKit
 
 final class StorageManager {
     static let shared = StorageManager()
@@ -32,5 +33,17 @@ final class StorageManager {
         }
         
         return (returnedPath, returnedName)
+    }
+    
+    //UIImage 타입을 받아 저장할 수 있다. 사용하지 않아 삭제 할 경우 UIKit import도 함께 삭제한다.
+    func saveImage(image: UIImage, userId: String) async throws -> (path: String, name: String) {
+        //compressionQuality: 1 => 100%를 의미해 압축 없음
+        //이미지가 너무 클 경우 직접 compress하거나 firebase extension 중 resize images(유료)를 사용해보자.
+        //이미지 타입이 png라면 data = image.png()
+        guard let data = image.jpegData(compressionQuality: 1) else {
+            throw URLError(.backgroundSessionWasDisconnected)
+        }
+        
+        return try await saveImage(data: data, userId: userId)
     }
 }
