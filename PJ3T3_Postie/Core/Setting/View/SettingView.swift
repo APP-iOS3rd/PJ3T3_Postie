@@ -74,7 +74,7 @@ struct SettingView: View {
                     
                     Section("Data Test") {
                         Button {
-                            firestoreManager.addLetter(writer: "me", recipient: "you", summary: "hellooo", date: Date())
+                            firestoreManager.addLetter(writer: "me", recipient: "you", summary: "ImageTest", date: Date(), imageName: selectedItemName!)
                             firestoreManager.fetchAllLetters()
                         } label: {
                             Text("Add")

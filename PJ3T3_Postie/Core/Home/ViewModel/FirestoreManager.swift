@@ -25,7 +25,7 @@ class FirestoreManager: ObservableObject {
     private init() { }
 
     //새로운 편지를 추가한다.
-    func addLetter(writer: String, recipient: String, summary: String, date: Date) {
+    func addLetter(writer: String, recipient: String, summary: String, date: Date, imageName: String) {
         let document = colRef.document(userUid).collection("letters").document() //새로운 document를 생성한다.
         let documentId = document.documentID //생성한 document의 id를 가져온다.
 
@@ -36,6 +36,7 @@ class FirestoreManager: ObservableObject {
             "recipient": recipient,
             "summary": summary,
             "date": date,
+            "imageName": imageName
         ]
 
         //생성한 데이터를 해당되는 경로에 새롭게 생성한다. 이때 overwrite 하지 않는다.
@@ -70,7 +71,8 @@ class FirestoreManager: ObservableObject {
                                            writer: data["writer"] as? String ?? "",
                                            recipient: data["recipient"] as? String ?? "",
                                            summary: data["summary"] as? String ?? "",
-                                           date: data["date"] as? Date ?? Date()))
+                                           date: data["date"] as? Date ?? Date(), 
+                                           imageName: data["imagePath"] as? String))
             }
         }
     }
