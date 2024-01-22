@@ -113,6 +113,7 @@ func receiveLetterView(sender: String, date: String, receiver: String) -> some V
             RoundedRectangle(cornerRadius: 10)
                 .foregroundStyle(Color(hex: 0xD1CEC7))
         )
+        
         Spacer()
     }
 }
@@ -120,6 +121,7 @@ func receiveLetterView(sender: String, date: String, receiver: String) -> some V
 func sendLetterView(sender: String, date: String, receiver: String) -> some View {
     HStack {
         Spacer()
+        
         HStack {
             VStack(alignment: .leading) {
                 HStack {
