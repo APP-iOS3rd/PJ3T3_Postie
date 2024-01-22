@@ -29,11 +29,22 @@ struct LetterDetailView: View {
         .toolbarBackground(Color(hex: 0xF5F1E8), for: .navigationBar)
         .toolbar {
             ToolbarItemGroup(placement: .topBarTrailing) {
-                Button {
-                    letterDetailViewModel.showDeleteAlert = true
+                Menu {
+                    Button {
+
+                    } label: {
+                        Text("수정")
+                    }
+
+                    Button(role: .destructive) {
+                        letterDetailViewModel.showDeleteAlert = true
+                    } label: {
+                        Text("삭제")
+                    }
                 } label: {
-                    Text("삭제")
+                    Image(systemName: "ellipsis")
                 }
+
             }
         }
         .fullScreenCover(isPresented: $letterDetailViewModel.showLetterImageFullScreenView) {
