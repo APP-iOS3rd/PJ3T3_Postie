@@ -6,11 +6,15 @@
 //
 
 import SwiftUI
+import PhotosUI //Storage test를 위한 import로 이후 삭제 예정
 
 struct SettingView: View {
     //Colors
     private let profileBackgroundColor: Color = .gray
     private let signOutIconColor: Color = Color(uiColor: .lightGray)
+    //Storage test를 위한 선언으로 삭제 예정
+    //PhotoPickerItem을 설정한다.
+    @State private var selectedItem: PhotosPickerItem? = nil
     //ViewModels
     @ObservedObject var authViewModel = AuthViewModel.shared
     @ObservedObject var firestoreManager = FirestoreManager.shared //테스트용으로 vm 임시 선언, 삭제 예정
@@ -74,7 +78,15 @@ struct SettingView: View {
                             firestoreManager.fetchAllLetters()
                         } label: {
                             Text("Add")
-                        }
+                        } //firestore 데이터 추가 테스트를 위한 버튼으로 삭제 예정
+                        
+                        //matching: 어떤 타입의 데이터와 매치하는가
+                        //photoLibrary: .shared() 보편적인 사진 앨범
+                        PhotosPicker(selection: $selectedItem,
+                                     matching: .images,
+                                     photoLibrary: .shared()) {
+                            Text("Select a photo")
+                        } //Storage업로드 테스트를 위한 구현으로 삭제 예정
                     } //Section: Home뷰에서 기능 되는 것 확인 후 삭제 예정
                     
                     ForEach(firestoreManager.letters, id: \.self) { letter in
