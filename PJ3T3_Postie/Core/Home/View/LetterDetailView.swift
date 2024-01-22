@@ -18,7 +18,7 @@ struct LetterDetailView: View {
                 .ignoresSafeArea()
             
             VStack {
-                Page(letter: letter, text: letter.text)
+                Page(letter: letter)
 
                 letterImageSection
             }
