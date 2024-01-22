@@ -10,4 +10,5 @@ import Foundation
 class LetterDetailViewModel: ObservableObject {
     @Published var showLetterImageFullScreenView = false
     @Published var showDeleteAlert = false
+    @Published var selectedIndex = 0
 }

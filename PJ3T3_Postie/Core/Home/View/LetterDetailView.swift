@@ -29,7 +29,9 @@ struct LetterDetailView: View {
                             ForEach(0..<images.count, id: \.self) { index in
                                 ZStack {
                                     Button {
+                                        letterDetailViewModel.selectedIndex = index
                                         letterDetailViewModel.showLetterImageFullScreenView = true
+
                                     } label: {
                                         Image(uiImage: images[index])
                                             .resizable()
@@ -59,7 +61,7 @@ struct LetterDetailView: View {
             }
         }
         .fullScreenCover(isPresented: $letterDetailViewModel.showLetterImageFullScreenView) {
-            LetterImageFullScreenView(images: letter.images ?? [])
+            LetterImageFullScreenView(images: letter.images ?? [], pageIndex: $letterDetailViewModel.selectedIndex)
         }
         .alert("편지 삭제", isPresented: $letterDetailViewModel.showDeleteAlert) {
             Button(role: .cancel) {
