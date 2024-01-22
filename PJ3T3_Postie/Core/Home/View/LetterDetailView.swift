@@ -19,32 +19,8 @@ struct LetterDetailView: View {
             
             VStack {
                 Page(letter: letter, text: letter.text)
-                    .background(Color(hex: 0xFFFBF2))
-                    .clipShape(RoundedRectangle(cornerRadius: 10.0))
-                    .padding(.bottom, 8)
 
-                ScrollView(.horizontal) {
-                    HStack(spacing: 8) {
-                        if let images = letter.images {
-                            ForEach(0..<images.count, id: \.self) { index in
-                                ZStack {
-                                    Button {
-                                        letterDetailViewModel.selectedIndex = index
-                                        letterDetailViewModel.showLetterImageFullScreenView = true
-
-                                    } label: {
-                                        Image(uiImage: images[index])
-                                            .resizable()
-                                            .scaledToFill()
-                                            .frame(width: 50, height: 50)
-                                            .clipShape(RoundedRectangle(cornerRadius: 10))
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                .scrollIndicators(.never)
+                letterImageSection
             }
             .padding()
         }
@@ -61,7 +37,10 @@ struct LetterDetailView: View {
             }
         }
         .fullScreenCover(isPresented: $letterDetailViewModel.showLetterImageFullScreenView) {
-            LetterImageFullScreenView(images: letter.images ?? [], pageIndex: $letterDetailViewModel.selectedIndex)
+            LetterImageFullScreenView(
+                images: letter.images ?? [],
+                pageIndex: $letterDetailViewModel.selectedIndex
+            )
         }
         .alert("편지 삭제", isPresented: $letterDetailViewModel.showDeleteAlert) {
             Button(role: .cancel) {
@@ -81,6 +60,34 @@ struct LetterDetailView: View {
     }
 }
 
+// MARK: - Computed Views
+
+extension LetterDetailView {
+    private var letterImageSection: some View {
+        ScrollView(.horizontal) {
+            HStack(spacing: 8) {
+                if let images = letter.images {
+                    ForEach(0..<images.count, id: \.self) { index in
+                        ZStack {
+                            Button {
+                                letterDetailViewModel.selectedIndex = index
+                                letterDetailViewModel.showLetterImageFullScreenView = true
+                            } label: {
+                                Image(uiImage: images[index])
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 50, height: 50)
+                                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .padding(.top, 8)
+        .scrollIndicators(.never)
+    }
+}
 #Preview {
     NavigationStack {
         LetterDetailView(letter: Letter.preview)

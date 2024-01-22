@@ -107,6 +107,8 @@ struct Page: View {
             }
         }
         .padding()
+        .background(Color(hex: 0xFFFBF2))
+        .clipShape(RoundedRectangle(cornerRadius: 10.0))
     }
 }
 

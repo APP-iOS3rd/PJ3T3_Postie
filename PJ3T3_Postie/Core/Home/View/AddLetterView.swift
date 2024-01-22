@@ -93,7 +93,7 @@ struct AddLetterView: View {
     }
 }
 
-// MARK: - Computed Properties
+// MARK: - Computed Views
 
 extension AddLetterView {
     @ViewBuilder
