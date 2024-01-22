@@ -81,6 +81,7 @@ struct SettingView: View {
                         } label: {
                             Text("Add")
                         } //firestore 데이터 추가 테스트를 위한 버튼으로 삭제 예정
+                        .disabled(selectedItemName == "" ? true : false)
                         
                         //matching: 어떤 타입의 데이터와 매치하는가
                         //photoLibrary: .shared() 보편적인 사진 앨범
@@ -97,21 +98,25 @@ struct SettingView: View {
                     }
                     
                     ForEach(firestoreManager.letters, id: \.self) { letter in
-                        VStack {
-                            HStack {
-                                Text("To: \(letter.recipient)")
+                        NavigationLink {
+                            selectedLetterView(letter: letter)
+                        } label: {
+                            VStack {
+                                HStack {
+                                    Text("To: \(letter.recipient)")
+                                    
+                                    Spacer()
+                                } //HStack
                                 
-                                Spacer()
-                            } //HStack
-                            
-                            Text("\(letter.summary)")
-                            
-                            HStack {
-                                Spacer()
+                                Text("\(letter.summary)")
                                 
-                                Text("From: \(letter.writer)")
-                            } //HStack
-                        } //VStack
+                                HStack {
+                                    Spacer()
+                                    
+                                    Text("From: \(letter.writer)")
+                                } //HStack
+                            } //VStack
+                        }
                     } //ForEach: Home뷰에서 기능 되는 것 확인 후 삭제 예정
                 } //List
                 .navigationTitle("Setting")
@@ -135,6 +140,29 @@ struct SettingView: View {
             let (_, name) = try await storageManager.saveImage(data: data, userId: firestoreManager.userUid)
             selectedItemName = name
 //            print("SUCCESS")
+        }
+    }
+}
+
+struct selectedLetterView: View {
+    var letter: Letter
+    @ObservedObject var storageManager = StorageManager.shared
+    @ObservedObject var firestoreManager = FirestoreManager.shared
+    
+    var body: some View {
+        VStack {
+            if let retrieveImage = storageManager.retrieveImage {
+                Image(uiImage: retrieveImage)
+                    .resizable()
+                    .frame(width: 100, height: 100)
+                    .scaledToFit()
+            } else {
+                Image(systemName: "questionmark.app.dashed")
+                    .frame(width: 100, height: 100)
+            }
+        }
+        .onAppear {
+            storageManager.fetchImage(userId: firestoreManager.userUid, imageName: letter.imageName ?? "")
         }
     }
 }
