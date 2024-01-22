@@ -18,7 +18,7 @@ struct LetterDetailView: View {
                 .ignoresSafeArea()
             
             VStack {
-                Page(letter: Letter.preview, text: letter.text)
+                Page(letter: letter, text: letter.text)
                     .background(Color(hex: 0xFFFBF2))
                     .clipShape(RoundedRectangle(cornerRadius: 10.0))
                     .padding(.bottom, 8)
