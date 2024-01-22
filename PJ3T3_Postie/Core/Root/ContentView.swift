@@ -20,15 +20,28 @@ struct ContentView: View {
                 TabView {
                     HomeView()
                         .tabItem {
-                            Image(systemName: "list.star")
-                            Text("Data List")
+                            Image(systemName: "house")
+                            Text("Home")
                         }
+                    
+                    ShopView()
+                        .tabItem {
+                            Image(systemName: "cart")
+                            Text("Letter Paper")
+                        }
+                    
+                    MapView()
+                        .tabItem {
+                            Image(systemName: "map")
+                            Text("Map")
+                        }
+                    
                     
                     //테스트용 뷰입니다. 추후 삭제 예정입니다.
                     SettingView()
                         .tabItem {
                             Image(systemName: "person")
-                            Text("Profile")
+                            Text("Setting")
                         }
                 }
             } else {
