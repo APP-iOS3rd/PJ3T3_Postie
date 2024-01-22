@@ -80,6 +80,7 @@ struct Page: View {
     var body: some View {
         if !letter.summary.isEmpty {
             Text("\"\(letter.summary)\"")
+                .font(.headline)
         }
 
         VStack(spacing: 16) {
