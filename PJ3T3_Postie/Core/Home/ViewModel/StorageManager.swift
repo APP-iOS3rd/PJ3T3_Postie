@@ -9,15 +9,32 @@ import Foundation
 import FirebaseStorage
 import UIKit
 
-final class StorageManager {
+final class StorageManager: ObservableObject {
     static let shared = StorageManager()
     private let storage = Storage.storage().reference() //db의 root reference location
+    @Published var retrieveImage: UIImage? = nil
+    
     private init() { }
     
     private func userReference(userId: String) -> StorageReference {
         //이미지를 추가할 때 storage에 users 폴더 > 폴더 내부에 해당 유저의 uuid를 이름으로 가지는 폴더를 함께 생성
         //폴더 depth에 letters의 documentId도 가지도록 리팩토링 예정
         storage.child("users").child(userId)
+    }
+ 
+    func fetchImage(userId: String, imageName: String) {
+        let imageReference = userReference(userId: userId).child(imageName)
+        
+        //다운로드 가능한 이미지 최대 용량: 100MB, 크기: 1024 * 1024
+        imageReference.getData(maxSize: 100 * 1024 * 1024) { data, error in
+            if let error = error {
+                print("error while downloading image\n\(error.localizedDescription)")
+                return
+            } else {
+                let uiImage = UIImage(data: data!)
+                self.retrieveImage = uiImage
+            }
+        }
     }
     
     func saveImage(data: Data, userId: String) async throws -> (path: String, name: String) {
