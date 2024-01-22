@@ -9,9 +9,11 @@ import SwiftUI
 
 struct LetterDetailView: View {
     var controllers: [UIHostingController<Page>]
+    var letter: Letter
 
     init(letter: Letter) {
-        controllers = letter.text.chunks(size: 400).map { chunk in
+        self.letter = letter
+        controllers = letter.text.chunks(size: 300).map { chunk in
             UIHostingController(rootView: Page(letter: letter, chunk: chunk))
         }
     }
@@ -24,6 +26,29 @@ struct LetterDetailView: View {
             VStack {
                 PageViewController(controllers: controllers)
                     .clipShape(RoundedRectangle(cornerRadius: 10.0))
+                    .padding(.bottom, 8)
+
+                ScrollView(.horizontal) {
+                    HStack(spacing: 8) {
+                        if let images = letter.images {
+                            ForEach(0..<images.count, id: \.self) { index in
+                                ZStack {
+                                    Button {
+    //                                    addLetterViewModel.showLetterImageFullScreenView = true
+                                    } label: {
+                                        Image(uiImage: images[index])
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: 50, height: 50)
+                                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                .scrollIndicators(.never)
+
             }
             .padding()
         }
