@@ -15,6 +15,7 @@ struct SettingView: View {
     //Storage test를 위한 선언으로 삭제 예정
     //PhotoPickerItem을 설정한다.
     @State private var selectedItem: PhotosPickerItem? = nil
+    @State private var selectedItemName: String? = nil
     //ViewModels
     @ObservedObject var authViewModel = AuthViewModel.shared
     @ObservedObject var firestoreManager = FirestoreManager.shared //테스트용으로 vm 임시 선언, 삭제 예정
@@ -130,8 +131,9 @@ struct SettingView: View {
             guard let data = try await item.loadTransferable(type: Data.self) else { return }
             //userUid를 AuthViewModel에서 가져오도록 리팩토링 필요
             //리팩토링 하면서 파일 이름도 함께 변경 AuthViewModel -> AuthManager
-            let (_, _) = try await StorageManager.shared.saveImage(data: data, userId: firestoreManager.userUid)
-            print("SUCCESS") //path와 name을 print 했을 때 동일한 것으로 확인되었다.
+            let (_, name) = try await storageManager.saveImage(data: data, userId: firestoreManager.userUid)
+            selectedItemName = name
+//            print("SUCCESS")
         }
     }
 }
