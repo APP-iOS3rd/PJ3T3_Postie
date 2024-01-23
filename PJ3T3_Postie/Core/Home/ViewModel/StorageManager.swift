@@ -28,19 +28,29 @@ final class StorageManager: ObservableObject {
         Storage.storage().reference().child("users").child(userId)
     }
     
-    func saveImage(data: Data, userId: String) async throws -> (path: String, name: String) {
+    func saveImage(data: Data, userId: String) async throws -> String? {
         //metadata없이도 data를 업로드 할 수 있지만, 그 경우 서버는 어떤 타입의 데이터를 저장하는지 알지 못해 오류를 발생시킬 수 있으므로 upload하는 metadata 타입을 명시 해 주는 편이 좋다.
         let meta = StorageMetadata()
         meta.contentType = "image/jpeg"
         
         let imageName = "\(UUID().uuidString).jpeg"
+        //putDataAsync에서 data를 받아 위에서 지정한 meta 타입으로 저장한다.
         let returnedMetaData = try await userReference(userId: userId).child(imageName).putDataAsync(data, metadata: meta)
         
-        guard let returnedPath = returnedMetaData.path, let returnedName = returnedMetaData.name else {
-            throw URLError(.badServerResponse)
+        do {
+            //저장한 이미지의 경로를 String으로 받아와 return한다.
+            let absoluteString = try await userReference(userId: userId).child(imageName).downloadURL().absoluteString
+            let absoluteUrl = try await userReference(userId: userId).child(imageName).downloadURL().absoluteURL
+            
+            print("\(#function) URL: \(absoluteUrl)")
+            print("\(#function) String: \(absoluteString)")
+            
+            return absoluteString
+        } catch {
+            print("\(#function): \(error.localizedDescription)")
         }
         
-        return (returnedPath, returnedName)
+        return nil
     }
     
     //UIImage 타입을 받아 저장할 수 있다. 사용하지 않아 삭제 할 경우 UIKit import도 함께 삭제한다.
