@@ -15,7 +15,7 @@ struct MapView: View {
     @StateObject var officeInfoServiceAPI = OfficeInfoServiceAPI.shared
     @StateObject var coordinator: Coordinator = Coordinator.shared
     
-//    @State private var selectedPostDivType: Int = 1 //Dafault 우체국(1)
+    //    @State private var selectedPostDivType: Int = 1 //Dafault 우체국(1)
     @State private var selectedButtonIndex: Int = 0
     @State private var name = ["우체국", "우체통"]
     
@@ -33,29 +33,28 @@ struct MapView: View {
                                 if selectedButtonIndex == index {
                                     
                                     Rectangle()
-                                            .foregroundColor(.clear)
-                                            .frame(width: 70, height: 30)
-                                            .background(Color(red: 1, green: 0.98, blue: 0.95))
-                                            .cornerRadius(20)
-                                            .shadow(color: .black.opacity(0.1), radius: 3, x: 2, y: 2)
-                                            .overlay(
-                                                RoundedRectangle(cornerRadius: 20)
-                                                    .inset(by: 0.5)
-                                                    .stroke(Color(red: 0.45, green: 0.45, blue: 0.45), lineWidth: 1)
-                                            )} else {
-                                    Rectangle()
                                         .foregroundColor(.clear)
                                         .frame(width: 70, height: 30)
-                                        .foregroundColor(Color(red: 1, green: 0.98, blue: 0.95))
-                                        .cornerRadius(20)
-                                        .shadow(color: .black.opacity(0.08), radius: 4, x: 3, y: 3)
+                                        .background(Color(red: 1, green: 0.98, blue: 0.95))
+                                        .cornerRadius(16)
                                         .overlay(
-                                            RoundedRectangle(cornerRadius: 20)
+                                            RoundedRectangle(cornerRadius: 16)
                                                 .inset(by: 0.5)
-                                                .stroke(Color(red: 1, green: 0.45, blue: 0.45), lineWidth: 2)
-                                        )
-                                }
-
+                                                .stroke(Color(red: 0.45, green: 0.45, blue: 0.45), lineWidth: 1)
+                                        )} else {
+                                            Rectangle()
+                                                .foregroundColor(.clear)
+                                                .frame(width: 72, height: 30)
+                                                .background(Color(red: 1, green: 0.98, blue: 0.95))
+                                                .cornerRadius(20)
+                                                .shadow(color: .black.opacity(0.1), radius: 3, x: 2, y: 2)
+//                                                .overlay(
+//                                                    RoundedRectangle(cornerRadius: 16)
+//                                                        .inset(by: 0.5)
+//                                                        .stroke(Color(red: 1, green: 0.45, blue: 0.45), lineWidth: 2)
+//                                                )
+                                        }
+                                
                                 Text(name[index])
                                     .font(Font.custom("SF Pro Text", size: 12))
                                     .multilineTextAlignment(.center)
@@ -80,10 +79,10 @@ struct MapView: View {
                     //
                     //                        }) {
                     //                            Text("우체국")
-//                                                    .font(Font.custom("SF Pro Text", size: 12))
-//                                                    .multilineTextAlignment(.center)
-//                                                    .foregroundColor(Color(red: 0.12, green: 0.12, blue: 0.12))
-//                                                    .frame(width: 60, alignment: .top)
+                    //                                                    .font(Font.custom("SF Pro Text", size: 12))
+                    //                                                    .multilineTextAlignment(.center)
+                    //                                                    .foregroundColor(Color(red: 0.12, green: 0.12, blue: 0.12))
+                    //                                                    .frame(width: 60, alignment: .top)
                     //                        }
                     //                    }
                     
