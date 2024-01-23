@@ -97,9 +97,10 @@ struct AddDataSectionView: View {
             
             //photoPicker에서 이미지를 선택할 때 마다 onchange로 감지하여 selectedImages에 UIImage가 append 된다.
             Button {
+                uploadLetter(uiImages: selectedImages)
                 selectedImages = [] //uploadLetter 작업을 수행 한 이후 잘못된 이미지가 업로드 되는 일이 없도록 배열을 초기화 해 준다.
             } label: {
-                Text("Add Letter")
+                Text("Save Letter")
             }
         }
         .onChange(of: selectedItem) { newValue in
@@ -127,6 +128,28 @@ struct AddDataSectionView: View {
                 print("\(#function): 이미지를 array에 추가하는데 실패했습니다.")
                 return
             }
+        }
+    }
+    
+    //userUid를 AuthViewModel에서 가져오도록 리팩토링 필요
+    //리팩토링 하면서 파일 이름도 함께 변경 AuthViewModel -> AuthManager
+    func uploadLetter(uiImages: [UIImage]) {
+        var selectedImageUrls: [String] = []
+        Task {
+            //함수가 호출되면 uiImages가 빈 배열이 아닌지 확인해 빈 배열이 아닐 경우 storage에 이미지를 업로드 하고
+            //이미지 업로드가 성공하면 urlString들이 저장된 배열을 return받아 selectedImageUrls에 저장한다.
+            if !uiImages.isEmpty {
+                selectedImageUrls = try await storageManager.saveUIImage(images: uiImages, userId: firestoreManager.userUid)
+            }
+            
+            //firestore에 document를 저장한다.
+            firestoreManager.addLetter(writer: "me",
+                                             recipient: "you",
+                                             summary: "ImagesTest",
+                                             date: Date(),
+                                             imageUrlStrings: selectedImageUrls,
+                                             text: "ㅜㅜ..")
+            firestoreManager.fetchAllLetters() //변경사항을 fetch한다.
         }
     }
 }
