@@ -154,6 +154,55 @@ struct AddDataSectionView: View {
     }
 }
 
+//Firestore에 저장된 데이터를 리스트로 보여주는 뷰: 기능 테스트 후 삭제 예정
+struct LetterDataListView: View {
+    @ObservedObject var firestoreManager = FirestoreManager.shared //테스트용으로 vm 임시 선언, 삭제 예정
+    
+    var body: some View {
+        ForEach(firestoreManager.letters, id: \.self) { letter in
+            if let imageUrlStrings = letter.imageUrlStrings {
+                if !imageUrlStrings.isEmpty {
+                    NavigationLink {
+                        
+                    } label: {
+                        VStack {
+                            HStack {
+                                Text("To: \(letter.recipient)")
+                                
+                                Spacer()
+                            } //HStack
+                            
+                            Text("\(letter.summary)")
+                            
+                            HStack {
+                                Spacer()
+                                
+                                Text("From: \(letter.writer)")
+                            } //HStack
+                        } //VStack
+                    } //NavigationLink
+                } //if
+            } else {
+                VStack {
+                    HStack {
+                        Text("To: \(letter.recipient)")
+                        
+                        Spacer()
+                    } //HStack
+                    
+                    Text("\(letter.summary)")
+                    
+                    HStack {
+                        Spacer()
+                        
+                        Text("From: \(letter.writer)")
+                    } //HStack
+                } //VStack
+            } //if...else
+        } //ForEach
+    }
+}
+
 #Preview {
     SettingView()
 }
