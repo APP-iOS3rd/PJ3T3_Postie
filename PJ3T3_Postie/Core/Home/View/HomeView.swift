@@ -142,9 +142,11 @@ struct SideMenuView: View {
                             .imageScale(.large)
                     }
                 }
+                
                 Text("Setting")
                     .font(.custom("SourceSerifPro-Black", size: 32))
                     .foregroundStyle(Color.black)
+                
                 HStack {
                     ZStack {
                         Circle()
@@ -154,61 +156,84 @@ struct SideMenuView: View {
                         Text("Postie")
                             .foregroundStyle(Color.black)
                     }
+                    
                     VStack(alignment: .leading) {
                         Text("Postie_test")
                         Text("postie@test.com")
                     }
+                    
                     Spacer()
+                    
                     Image(systemName: "greaterthan")
                         .foregroundStyle(Color.gray)
                 }
                 .padding(.bottom)
+                
                 Text("계정 관리")
+                
                 Rectangle()
                     .frame(height: 1)
                     .padding(.bottom)
+                
                 Text("로그아웃")
                     .padding(.bottom)
+                
                 Text("회원탈퇴")
                     .padding(.bottom)
+                
                 Text("테마 설정")
+                
                 Rectangle()
                     .frame(height: 1)
                 
                 Text("앱 설정")
+                
                 Rectangle()
                     .frame(height: 1)
                     .padding(.bottom)
+                
                 HStack {
                     Text("공지사항")
+                    
                     Spacer()
+                    
                     Image(systemName: "greaterthan")
                         .foregroundStyle(Color.gray)
                 }
                 .padding(.bottom)
+                
                 HStack {
                     Text("문의하기")
+                    
                     Spacer()
+                    
                     Image(systemName: "greaterthan")
                         .foregroundStyle(Color.gray)
                 }
                 .padding(.bottom)
+                
                 HStack {
                     Text("이용약관 및 개인정보 방침")
+                    
                         Spacer()
+                    
                     Image(systemName: "greaterthan")
                         .foregroundStyle(Color.gray)
                 }
                 .padding(.bottom)
+                
                 HStack {
                     Text("앱 정보")
+                    
                     Spacer()
+                    
                     Image(systemName: "greaterthan")
                         .foregroundStyle(Color.gray)
                 }
                 .padding(.bottom)
                 
                 Spacer()
+                
                 Text("COPYRIGHT 2024 ComeOn12 RIGHTS RESERVED")
                     .font(.caption2)
                     .foregroundStyle(Color.gray)
