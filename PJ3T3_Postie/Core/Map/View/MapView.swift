@@ -32,6 +32,7 @@ struct MapView: View {
                         Button(action: {
                             selectedPostDivType = 1
                             officeInfoServiceAPI.fetchData(postDivType: selectedPostDivType)
+                            
                         }) {
                             Text("우체국")
                                 .font(Font.custom("SF Pro Text", size: 12))
@@ -68,7 +69,10 @@ struct MapView: View {
             List {
                 ForEach(officeInfoServiceAPI.infos, id: \.self) { result in
                     VStack {
-                        Text(result.postNm)
+                        Button(result.postNm)
+                        {
+                            coordinator.fetchLocation(latitude: Double(result.postLat)!, longitude: Double(result.postLon)!, name: result.postNm)
+                        }
                     }
                 }
             }
@@ -80,6 +84,7 @@ struct MapView: View {
         .onAppear() {
             CLLocationManager().requestWhenInUseAuthorization()
         }
+        
         //iOS17버전
 //        .onChange(of: officeInfoServiceAPI.infos) {
 ////            $coordinator.removeAllMakers
@@ -87,6 +92,11 @@ struct MapView: View {
 //                coordinator.addMarkerAndInfoWindow(latitude: Double(result.postLat)!, longitude: Double(result.postLon)!, caption: result.postNm)
 //            }
 //        }
+        .onChange(of: officeInfoServiceAPI.infos) { newInfos in
+            for result in newInfos {
+                coordinator.addMarkerAndInfoWindow(latitude: Double(result.postLat)!, longitude: Double(result.postLon)!, caption: result.postNm)
+            }
+        }
         .zIndex(1)
     }
 }
