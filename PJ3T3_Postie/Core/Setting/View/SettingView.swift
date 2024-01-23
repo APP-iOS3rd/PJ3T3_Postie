@@ -163,7 +163,7 @@ struct LetterDataListView: View {
             if let imageUrlStrings = letter.imageUrlStrings {
                 if !imageUrlStrings.isEmpty {
                     NavigationLink {
-                        
+                        ImageAsyncView(imageUrlString: imageUrlStrings)
                     } label: {
                         VStack {
                             HStack {
@@ -200,6 +200,29 @@ struct LetterDataListView: View {
                 } //VStack
             } //if...else
         } //ForEach
+    }
+}
+
+//Firestore에 저장된 이미지가 있을 경우 이미지를 AsyncImage로 보여주는 뷰: 기능 테스트 후 삭제 예정
+struct ImageAsyncView: View {
+    var imageUrlString: [String]
+    let columns = Array(repeating: GridItem(.adaptive(minimum: 100)), count: 1)
+    
+    var body: some View {
+        ScrollView {
+            LazyVGrid(columns: columns) {
+                ForEach(imageUrlString, id: \.self) { urlString in
+                    AsyncImage(url: URL(string: urlString)) { image in
+                        image
+                            .resizable()
+                            .frame(width: 150, height: 150)
+                            .scaledToFit()
+                    } placeholder: {
+                        ProgressView()
+                    }
+                }
+            }
+        }
     }
 }
 
