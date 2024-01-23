@@ -79,20 +79,6 @@ struct SettingView: View {
             } //if...else
         } //NavigationStack
     }
-    
-    //AddLetterView에서 생성된 AddLetterViewModel을 SettingView에서 받을 수 없어 임시로 FirestoreManager에 함수 생성
-    //SettingView에서 Image 저장 관련 기능 삭제할 때 해당 함수를 AddLetterViewModel로 옮길 예정
-    func saveImage(item: PhotosPickerItem) {
-        Task {
-            //지정한 타입의 인스턴스를 불러오려고 시도한다. 실패 action 구현 필요
-            guard let data = try await item.loadTransferable(type: Data.self) else { return }
-            //userUid를 AuthViewModel에서 가져오도록 리팩토링 필요
-            //리팩토링 하면서 파일 이름도 함께 변경 AuthViewModel -> AuthManager
-            let (_, name) = try await storageManager.saveImage(data: data, userId: firestoreManager.userUid)
-            selectedItemName = name
-//            print("SUCCESS")
-        }
-    }
 }
 
 struct selectedLetterView: View {
