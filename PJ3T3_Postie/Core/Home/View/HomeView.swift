@@ -124,127 +124,137 @@ struct HomeView: View {
     }
 }
 
+// 임시 세팅뷰
 struct SideMenuView: View {
     @Binding var isSideMenuOpen: Bool
+    @State private var isToggleOn = false
     
     var body: some View {
-        HStack {
-            Spacer()
-            VStack(alignment: .leading) {
-                HStack {
-                    Spacer()
-                    Button(action: {
-                        withAnimation {
-                            self.isSideMenuOpen.toggle()
-                        }
-                    }) {
-                        Image(systemName: "xmark")
-                            .imageScale(.large)
-                    }
-                }
-                
-                Text("Setting")
-                    .font(.custom("SourceSerifPro-Black", size: 32))
-                    .foregroundStyle(Color.black)
-                
-                HStack {
-                    ZStack {
-                        Circle()
-                            .frame(width: 80,height: 80)
-                        .foregroundStyle(Color.init(hex: 0xD1CEC7))
-                        
-                        Text("Postie")
-                            .foregroundStyle(Color.black)
-                    }
-                    
-                    VStack(alignment: .leading) {
-                        Text("Postie_test")
-                        Text("postie@test.com")
-                    }
-                    
-                    Spacer()
-                    
-                    Image(systemName: "greaterthan")
-                        .foregroundStyle(Color.gray)
-                }
-                .padding(.bottom)
-                
-                Text("계정 관리")
-                
-                Rectangle()
-                    .frame(height: 1)
-                    .padding(.bottom)
-                
-                Text("로그아웃")
-                    .padding(.bottom)
-                
-                Text("회원탈퇴")
-                    .padding(.bottom)
-                
-                Text("테마 설정")
-                
-                Rectangle()
-                    .frame(height: 1)
-                
-                Text("앱 설정")
-                
-                Rectangle()
-                    .frame(height: 1)
-                    .padding(.bottom)
-                
-                HStack {
-                    Text("공지사항")
-                    
-                    Spacer()
-                    
-                    Image(systemName: "greaterthan")
-                        .foregroundStyle(Color.gray)
-                }
-                .padding(.bottom)
-                
-                HStack {
-                    Text("문의하기")
-                    
-                    Spacer()
-                    
-                    Image(systemName: "greaterthan")
-                        .foregroundStyle(Color.gray)
-                }
-                .padding(.bottom)
-                
-                HStack {
-                    Text("이용약관 및 개인정보 방침")
-                    
-                        Spacer()
-                    
-                    Image(systemName: "greaterthan")
-                        .foregroundStyle(Color.gray)
-                }
-                .padding(.bottom)
-                
-                HStack {
-                    Text("앱 정보")
-                    
-                    Spacer()
-                    
-                    Image(systemName: "greaterthan")
-                        .foregroundStyle(Color.gray)
-                }
-                .padding(.bottom)
-                
+            HStack {
                 Spacer()
+                VStack(alignment: .leading) {
+                    HStack {
+                        Spacer()
+                        Button(action: {
+                            withAnimation {
+                                self.isSideMenuOpen.toggle()
+                            }
+                        }) {
+                            Image(systemName: "xmark")
+                                .imageScale(.large)
+                        }
+                    }
+                    
+                    Text("Setting")
+                        .font(.custom("SourceSerifPro-Black", size: 32))
+                        .foregroundStyle(Color.black)
+                    
+                    Text("프로필 설정")
+                        .foregroundStyle(Color.gray)
+                    
+                    Rectangle()
+                        .foregroundStyle(Color.gray)
+                        .frame(height: 1)
+                        .padding(.bottom)
+                    
+                    NavigationLink(destination: ProfileView()) {
+                        HStack {
+                            ZStack {
+                                Circle()
+                                    .frame(width: 80,height: 80)
+                                .foregroundStyle(Color.init(hex: 0xD1CEC7))
+                                
+                                Text("Postie")
+                                    .foregroundStyle(Color.black)
+                            }
+                            
+                            VStack(alignment: .leading) {
+                                Text("Postie_test")
+                                Text("postie@test.com")
+                            }
+                            
+                            Spacer()
+                            
+                            Image(systemName: "greaterthan")
+                                .foregroundStyle(Color.gray)
+                        }
+                        .padding(.bottom)
+                    }
+                    
+                    Text("테마 설정")
+                        .foregroundStyle(Color.gray)
+                    
+                    Rectangle()
+                        .foregroundStyle(Color.gray)
+                        .frame(height: 1)
+                    
+                    Toggle("다크모드", isOn: $isToggleOn)
+                        .onChange(of: isToggleOn) { _ in
+                        }
+                        .padding(.bottom)
+                    
+                    Text("앱 설정")
+                        .foregroundStyle(Color.gray)
+                    
+                    Rectangle()
+                        .frame(height: 1)
+                        .foregroundStyle(Color.gray)
+                        .padding(.bottom)
+                    
+                    HStack {
+                        Text("공지사항")
+                        
+                        Spacer()
+                        
+                        Image(systemName: "greaterthan")
+                            .foregroundStyle(Color.gray)
+                    }
+                    .padding(.bottom)
+                    
+                    HStack {
+                        Text("문의하기")
+                        
+                        Spacer()
+                        
+                        Image(systemName: "greaterthan")
+                            .foregroundStyle(Color.gray)
+                    }
+                    .padding(.bottom)
+                    
+                    HStack {
+                        Text("이용약관 및 개인정보 방침")
+                        
+                            Spacer()
+                        
+                        Image(systemName: "greaterthan")
+                            .foregroundStyle(Color.gray)
+                    }
+                    .padding(.bottom)
+                    
+                    HStack {
+                        Text("앱 정보")
+                        
+                        Spacer()
+                        
+                        Image(systemName: "greaterthan")
+                            .foregroundStyle(Color.gray)
+                    }
+                    .padding(.bottom)
+                    
+                    Spacer()
+                    
+                    Text("COPYRIGHT 2024 ComeOn12 RIGHTS RESERVED")
+                        .font(.caption2)
+                        .foregroundStyle(Color.gray)
+                }
+                .padding()
+                .frame(width: UIScreen.main.bounds.width - 100 , alignment: .leading)
+                .foregroundStyle(Color(hex: 0x1e1e1e))
+                .background(Color(hex: 0xF5F1E8))
                 
-                Text("COPYRIGHT 2024 ComeOn12 RIGHTS RESERVED")
-                    .font(.caption2)
-                    .foregroundStyle(Color.gray)
             }
-            .padding()
-            .frame(width: UIScreen.main.bounds.width - 100 , alignment: .leading)
-            .foregroundStyle(Color(hex: 0x1e1e1e))
-            .background(Color(hex: 0xF5F1E8))
-            
         }
-    }
+    
 }
 
 func receiveLetterView(sender: String, date: String, summary: String) -> some View {
