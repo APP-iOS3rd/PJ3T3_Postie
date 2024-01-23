@@ -28,7 +28,6 @@ class FirestoreManager: ObservableObject {
     func addLetter(writer: String, recipient: String, summary: String, date: Date, imageName: String) {
         let document = colRef.document(userUid).collection("letters").document() //새로운 document를 생성한다.
         let documentId = document.documentID //생성한 document의 id를 가져온다.
-
         //Letter model에 맞는 모양으로 document data를 생성한다.
         let docData: [String: Any] = [
             "id": documentId,
@@ -62,7 +61,12 @@ class FirestoreManager: ObservableObject {
             //우선 전체 내용을 지우고 전체를 추가한다.
             self.letters.removeAll()
             
-            for document in snapshot!.documents {
+            guard let snapshot = snapshot else {
+                print("\(#function): \(error?.localizedDescription)")
+                return
+            }
+            
+            for document in snapshot.documents {
                 let data = document.data()
                 print("Fetch success")
                 

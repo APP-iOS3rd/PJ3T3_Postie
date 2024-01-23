@@ -58,7 +58,7 @@ struct AddLetterView: View {
                 }
             }
             .fullScreenCover(isPresented: $addLetterViewModel.showLetterImageFullScreenView) {
-                LetterImageFullScreenView(images: addLetterViewModel.images)
+                LetterImageFullScreenView(images: addLetterViewModel.images, pageIndex: $addLetterViewModel.selectedIndex)
             }
             .sheet(isPresented: $addLetterViewModel.showUIImagePicker) {
                 UIImagePicker(
@@ -93,7 +93,7 @@ struct AddLetterView: View {
     }
 }
 
-// MARK: - Computed Properties
+// MARK: - Computed Views
 
 extension AddLetterView {
     @ViewBuilder
@@ -146,6 +146,7 @@ extension AddLetterView {
                 ForEach(0..<addLetterViewModel.images.count, id: \.self) { index in
                     ZStack {
                         Button {
+                            addLetterViewModel.selectedIndex = index
                             addLetterViewModel.showLetterImageFullScreenView = true
                         } label: {
                             Image(uiImage: addLetterViewModel.images[index])
