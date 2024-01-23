@@ -12,6 +12,7 @@ import NMapsMap
 
 struct MapView: View {
     @StateObject var officeInfoServiceAPI = OfficeInfoServiceAPI.shared
+    @State private var selectedPostDivType: Int = 1 //Dafault 우체국(1)
     
     var body: some View {
         NavigationStack {
@@ -26,7 +27,8 @@ struct MapView: View {
                             .shadow(color: .black.opacity(0.1), radius: 3, x: 2, y: 2)
                         
                         Button(action: {
-                            //작업예정
+                            selectedPostDivType = 1
+                            officeInfoServiceAPI.fetchData(postDivType: selectedPostDivType)
                         }) {
                             Text("우체국")
                                 .font(Font.custom("SF Pro Text", size: 12))
@@ -45,7 +47,8 @@ struct MapView: View {
                             .shadow(color: .black.opacity(0.1), radius: 3, x: 2, y: 2)
                         
                         Button(action: {
-                            //작업예정
+                            selectedPostDivType = 2
+                            officeInfoServiceAPI.fetchData(postDivType: selectedPostDivType)
                         }) {
                             Text("우체통")
                                 .font(Font.custom("SF Pro Text", size: 12))
@@ -70,7 +73,7 @@ struct MapView: View {
 //                .ignoresSafeArea(.all, edges: .top)
         }
         .onAppear(){
-            officeInfoServiceAPI.fetchData()
+            officeInfoServiceAPI.fetchData(postDivType: 1)
         }
     }
 }
