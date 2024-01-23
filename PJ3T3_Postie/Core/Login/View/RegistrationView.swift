@@ -52,10 +52,10 @@ struct RegistrationView: View {
                                    text: $password)
 
                     ZStack(alignment: .trailing) {
-                        LoginInputView(text: $confirmPassword,
-                                  title: "Confirm password",
-                                  placeholder: "Confirm your password",
-                                  isSecureField: true)
+                        LoginInputView(title: "Confirm password",
+                                       placeholder: "Confirm your password",
+                                       isSecureField: true,
+                                       text: $confirmPassword)
                         if !password.isEmpty && !confirmPassword.isEmpty {
                             if password == confirmPassword {
                                 Image(systemName: "checkmark.circle.fill")

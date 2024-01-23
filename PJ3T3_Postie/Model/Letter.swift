@@ -6,3 +6,12 @@
 //
 
 import Foundation
+import FirebaseFirestore
+
+struct Letter: Codable, Hashable, Identifiable {
+    var id: String
+    var writer: String
+    var recipient: String
+    var summary: String
+    var date: Date
+}
