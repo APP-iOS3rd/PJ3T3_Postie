@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ProfileView: View {
+    @ObservedObject var authViewModel = AuthViewModel.shared
+    
     var body: some View {
         ZStack {
             Color(hex: 0xF5F1E8)
@@ -74,25 +76,31 @@ struct ProfileView: View {
                     .foregroundStyle(Color.gray)
                     .padding(.bottom)
                 
-                Text("로그아웃")
-                    .font(.title3)
-                    .padding(.bottom)
+                Button {
+                    authViewModel.signOut()
+                } label: {
+                    Text("로그아웃")
+                        .font(.title3)
+                        .padding(.bottom)
+                }
                 
                 Text("회원탈퇴")
                     .font(.title3)
                 
                 Spacer()
             }
-            .tint(Color.black)
+            .tint(Color(hex: 0x1E1E1E))
             .padding()
         }
-        .tint(Color.black)
+        .navigationTitle("프로필 설정")
+        .navigationBarTitleDisplayMode(.inline)
         .navigationBarItems(trailing: (
                 Button(action: {
                 }) {
                     Text("수정")
                 }
             ))
+        .tint(Color(hex: 0x1E1E1E))
     }
 }
 

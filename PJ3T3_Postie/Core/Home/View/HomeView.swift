@@ -34,12 +34,12 @@ struct HomeView: View {
                                 receiveLetterView(sender: "최웅", date: "2024.01.11", summary: "보고 싶었어 항상. 보고... 싶었어")
                             }
                             NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
-                                sendLetterView(sender: "최웅", date: "2024.01.09", summary: "웅아, 앞으로 잘 부탁해")
+                                sendLetterView(sender: "최웅", date: "2024.01.12", summary: "웅아, 앞으로 잘 부탁해")
                             }
                             
                             // ScrollView margin 임시
                             Rectangle()
-                                .frame(height: 80)
+                                .frame(height: 70)
                                 .foregroundStyle(Color.black.opacity(0))
                         }
                         .padding()
@@ -251,8 +251,8 @@ struct SideMenuView: View {
                 .frame(width: UIScreen.main.bounds.width - 100 , alignment: .leading)
                 .foregroundStyle(Color(hex: 0x1e1e1e))
                 .background(Color(hex: 0xF5F1E8))
-                
             }
+            .tint(Color(hex: 0x1E1E1E))
         }
     
 }
