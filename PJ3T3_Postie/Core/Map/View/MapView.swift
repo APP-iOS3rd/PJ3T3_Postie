@@ -72,6 +72,8 @@ struct MapView: View {
 //            NaverMap()
 //                .ignoresSafeArea(.all, edges: .top)
         }
+        .navigationBarTitle("Postie Map")
+        .foregroundStyle(Color(hex: 0x1E1E1E))
         .onAppear(){
             officeInfoServiceAPI.fetchData(postDivType: 1)
         }
