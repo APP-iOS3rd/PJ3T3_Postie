@@ -146,10 +146,16 @@ struct SideMenuView: View {
                     .font(.custom("SourceSerifPro-Black", size: 32))
                     .foregroundStyle(Color.black)
                 HStack {
-                    Circle()
-                        .frame(width: 80,height: 80)
+                    ZStack {
+                        Circle()
+                            .frame(width: 80,height: 80)
+                        .foregroundStyle(Color.init(hex: 0xD1CEC7))
+                        
+                        Text("Postie")
+                            .foregroundStyle(Color.black)
+                    }
                     VStack(alignment: .leading) {
-                        Text("테스트 계정")
+                        Text("Postie_test")
                         Text("postie@test.com")
                     }
                     Spacer()
