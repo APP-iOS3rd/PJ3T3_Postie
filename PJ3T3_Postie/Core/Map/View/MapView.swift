@@ -65,46 +65,6 @@ struct MapView: View {
                         }
                         
                     }
-                    //                    ZStack(alignment: .center) {
-                    //                        Rectangle()
-                    //                            .foregroundColor(.clear)
-                    //                            .frame(width: 72, height: 30)
-                    //                            .background(Color(red: 1, green: 0.98, blue: 0.95))
-                    //                            .cornerRadius(20)
-                    //                            .shadow(color: .black.opacity(0.1), radius: 3, x: 2, y: 2)
-                    //
-                    //                        Button(action: {
-                    //                            selectedPostDivType = 1
-                    //                            officeInfoServiceAPI.fetchData(postDivType: selectedPostDivType)
-                    //
-                    //                        }) {
-                    //                            Text("우체국")
-                    //                                                    .font(Font.custom("SF Pro Text", size: 12))
-                    //                                                    .multilineTextAlignment(.center)
-                    //                                                    .foregroundColor(Color(red: 0.12, green: 0.12, blue: 0.12))
-                    //                                                    .frame(width: 60, alignment: .top)
-                    //                        }
-                    //                    }
-                    
-                    //                    ZStack(alignment: .center) {
-                    //                        Rectangle()
-                    //                            .foregroundColor(.clear)
-                    //                            .frame(width: 72, height: 30)
-                    //                            .background(Color(red: 1, green: 0.98, blue: 0.95))
-                    //                            .cornerRadius(20)
-                    //                            .shadow(color: .black.opacity(0.1), radius: 3, x: 2, y: 2)
-                    //
-                    //                        Button(action: {
-                    //                            selectedPostDivType = 2
-                    //                            officeInfoServiceAPI.fetchData(postDivType: selectedPostDivType)
-                    //                        }) {
-                    //                            Text("우체통")
-                    //                                .font(Font.custom("SF Pro Text", size: 12))
-                    //                                .multilineTextAlignment(.center)
-                    //                                .foregroundColor(Color(red: 0.12, green: 0.12, blue: 0.12))
-                    //                                .frame(width: 60, alignment: .top)
-                    //                        }
-                    //                    }
                     Spacer()
                 }
                 .padding()
@@ -123,20 +83,22 @@ struct MapView: View {
             NaverMap()
                 .ignoresSafeArea(.all, edges: .top)
         }
-        .navigationBarTitle("Postie Map")
-        .foregroundStyle(Color(hex: 0x1E1E1E))
+//        .navigationBarTitle("Postie Map")
+//        .foregroundStyle(Color(hex: 0x1E1E1E))
         .onAppear() {
             CLLocationManager().requestWhenInUseAuthorization()
+            officeInfoServiceAPI.fetchData(postDivType: 1)
         }
         
         //iOS17버전
         //        .onChange(of: officeInfoServiceAPI.infos) {
-        ////            $coordinator.removeAllMakers
+        //            $coordinator.removeAllMakers
         //            for result in officeInfoServiceAPI.infos {
         //                coordinator.addMarkerAndInfoWindow(latitude: Double(result.postLat)!, longitude: Double(result.postLon)!, caption: result.postNm)
         //            }
         //        }
         .onChange(of: officeInfoServiceAPI.infos) { newInfos in
+            coordinator.removeAllMakers()
             for result in newInfos {
                 coordinator.addMarkerAndInfoWindow(latitude: Double(result.postLat)!, longitude: Double(result.postLon)!, caption: result.postNm)
             }

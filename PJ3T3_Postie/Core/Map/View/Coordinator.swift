@@ -98,15 +98,13 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate, NMFMapV
 //        //시간 설정, 나중에 구현 예정
 //        dataSource.title = time
 //        infoWindow.dataSource = dataSource
-        
-        func removeAllMakers() {
-            markers.forEach { marker in
-                marker.mapView = nil
-            }
-            
-            markers.removeAll()
+    }
+    
+    func removeAllMakers() {
+        markers.forEach { marker in
+            marker.mapView = nil
         }
-        
+        markers.removeAll()
     }
 }
 
