@@ -9,6 +9,10 @@ import SwiftUI
 import PhotosUI //Storage test를 위한 import로 이후 삭제 예정
 
 struct SettingView: View {
+    //ViewModels
+    @ObservedObject var authViewModel = AuthViewModel.shared
+    @ObservedObject var firestoreManager = FirestoreManager.shared //테스트용으로 vm 임시 선언, 삭제 예정
+    @ObservedObject var storageManager = StorageManager.shared
     //Colors
     private let profileBackgroundColor: Color = .gray
     private let signOutIconColor: Color = Color(uiColor: .lightGray)
