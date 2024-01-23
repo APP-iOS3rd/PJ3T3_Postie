@@ -11,6 +11,8 @@ struct LoginView: View {
     //Colors
     private let viewBackground: Color = .white
     private let buttonColor: Color = Color(uiColor: .darkGray)
+    //ViewModels
+    @ObservedObject var authViewModel = AuthViewModel.shared
     //TextFields의 input값을 하위뷰에 넘겨준다.
     @State private var email = ""
     @State private var password = ""
@@ -46,7 +48,9 @@ struct LoginView: View {
 
                     //Sign in Button
                     Button {
-                        print(#function)
+                        Task {
+                            try await authViewModel.signIn(withEamil: email, password: password)
+                        }
                     } label: {
                         HStack {
                             Text("SIGN IN")
@@ -59,6 +63,8 @@ struct LoginView: View {
                         .padding(.horizontal, 32)
                     }
                     .background(buttonColor)
+                    .disabled(!formIsValid)
+                    .opacity(formIsValid ? 1.0 : 0.5)
                     .clipShape(RoundedRectangle(cornerRadius: 10))
                     .padding(.top, 24)
 
@@ -80,6 +86,15 @@ struct LoginView: View {
                 } //VStack
             } //ZStack
         } //NavigationStack
+    }
+}
+
+extension LoginView: AuthenticationProtocol {
+    var formIsValid: Bool {
+        return !email.isEmpty
+        && email.contains("@")
+        && !password.isEmpty
+        && password.count > 5
     }
 }
 
