@@ -81,29 +81,52 @@ struct SettingView: View {
     }
 }
 
-struct selectedLetterView: View {
-    var letter: Letter
-    @ObservedObject var storageManager = StorageManager.shared
+//이미지를 선택해 Storage와 Firestore에 데이터를 추가하는 뷰: 기능 테스트 후 삭제 예정
+struct AddDataSectionView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
+    @ObservedObject var storageManager = StorageManager.shared
+    @State private var selectedItem: PhotosPickerItem? = nil
+    @State private var selectedImages: [UIImage] = []
     
     var body: some View {
-        VStack {
-            if let retrieveImage = storageManager.retrieveImage {
-                Image(uiImage: retrieveImage)
-                    .resizable()
-                    .frame(width: 100, height: 100)
-                    .scaledToFit()
-            } else {
-                ProgressView()
+        Section("Data Test") {
+            //matching: 어떤 타입의 데이터와 매치하는가, photoLibrary: .shared() 보편적인 사진 앨범
+            PhotosPicker(selection: $selectedItem, matching: .images, photoLibrary: .shared()) {
+                Text("Select a photo")
+            }
+            
+            //photoPicker에서 이미지를 선택할 때 마다 onchange로 감지하여 selectedImages에 UIImage가 append 된다.
+            Button {
+                selectedImages = [] //uploadLetter 작업을 수행 한 이후 잘못된 이미지가 업로드 되는 일이 없도록 배열을 초기화 해 준다.
+            } label: {
+                Text("Add Letter")
             }
         }
-        .onAppear {
-            storageManager.fetchImage(userId: firestoreManager.userUid, imageName: letter.imageName ?? "")
+        .onChange(of: selectedItem) { newValue in
+            if let newValue {
+                appendImages(item: newValue)
+            }
+            selectedItem = nil
         }
-        .onDisappear {
-            //뷰가 사라질 때 storageManager의 retrieveImage를 nil로 만든다.
-            //nil로 만들어주지 않으면 리스트의 다른 항목을 선택했을 때 이전에 retrieveImage에 저장되어 있던 이미지가 보여지는 이슈가 있다.
-            storageManager.dismissImage()
+        .onAppear {
+            firestoreManager.fetchAllLetters()
+        }
+    }
+    
+    /// SwiftUI의 PhotosUI를 사용해 이미지를 선택하고 UIImageArray에 추가한다.
+    /// - Parameter item: PhotosUI로 선택된 이미지
+    func appendImages(item: PhotosPickerItem) {
+        Task {
+            //지정한 타입의 인스턴스를 불러오려고 시도한다. 실패 action 구현 필요
+            guard let image = try await item.loadTransferable(type: Data.self) else { return }
+            if let uiImage = UIImage(data: image) {
+                selectedImages.append(uiImage)
+                print(selectedImages)
+            } else {
+                //alert 구현 필요
+                print("\(#function): 이미지를 array에 추가하는데 실패했습니다.")
+                return
+            }
         }
     }
 }
