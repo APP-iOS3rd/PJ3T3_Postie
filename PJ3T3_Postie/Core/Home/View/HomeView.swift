@@ -17,11 +17,11 @@ struct HomeView: View {
                 ZStack(alignment: .bottomTrailing) {
                     ScrollView {
                         VStack {
-                            NavigationLink(destination: LetterDetailView()) {
+                            NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
                                 sendLetterView(sender: "김OO", date: "2024.01.04", receiver: "어피치")
                             }
                             
-                            NavigationLink(destination: LetterDetailView()) {
+                            NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
                                 receiveLetterView(sender: "라이언", date: "2024.01.04", receiver: "김OO")
                             }
                         }

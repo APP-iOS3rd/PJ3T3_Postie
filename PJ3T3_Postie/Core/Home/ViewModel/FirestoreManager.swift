@@ -71,10 +71,11 @@ class FirestoreManager: ObservableObject {
                 
                 //document의 data를 가지고 와서, data를 각 값에 넣어줌
                 self.letters.append(Letter(id: data["id"] as? String ?? "",
-                                           writer: data["writer"] as? String ?? "",
-                                           recipient: data["recipient"] as? String ?? "",
-                                           summary: data["summary"] as? String ?? "",
-                                           date: data["date"] as? Date ?? Date()))
+                                                           writer: data["writer"] as? String ?? "",
+                                                           recipient: data["recipient"] as? String ?? "",
+                                                           summary: data["summary"] as? String ?? "",
+                                                           date: data["date"] as? Date ?? Date(),
+                                                           text: data["text"] as? String ?? ""))
             }
         }
     }
