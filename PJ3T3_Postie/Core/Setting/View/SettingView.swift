@@ -9,21 +9,11 @@ import SwiftUI
 import PhotosUI //Storage test를 위한 import로 이후 삭제 예정
 
 struct SettingView: View {
-    //ViewModels
     @ObservedObject var authViewModel = AuthViewModel.shared
-    @ObservedObject var firestoreManager = FirestoreManager.shared //테스트용으로 vm 임시 선언, 삭제 예정
     @ObservedObject var storageManager = StorageManager.shared
     //Colors
     private let profileBackgroundColor: Color = .gray
     private let signOutIconColor: Color = Color(uiColor: .lightGray)
-    //Storage test를 위한 선언으로 삭제 예정
-    //PhotoPickerItem을 설정한다.
-    @State private var selectedItem: PhotosPickerItem? = nil
-    @State private var selectedItemName: String? = nil
-    //ViewModels
-    @ObservedObject var authViewModel = AuthViewModel.shared
-    @ObservedObject var firestoreManager = FirestoreManager.shared //테스트용으로 vm 임시 선언, 삭제 예정
-    @ObservedObject var storageManager = StorageManager.shared
     
     var body: some View {
         NavigationStack {
@@ -78,60 +68,14 @@ struct SettingView: View {
                         }
                     } //Section
                     
-                    Section("Data Test") {
-                        //Add버튼은 하단의 PhotosPicker에서 이미지 저장이 완료되어 selectedItemName이 nil이 아니게 되면 활성화 된다.
-                        //addLetter 작업을 수행 한 이후 selectedItemName을 다시 nil로 바꾼다.
-                        Button {
-                            firestoreManager.addLetter(writer: "me", recipient: "you", summary: "ImageTest", date: Date(), imageName: selectedItemName!)
-                            firestoreManager.fetchAllLetters()
-                            selectedItemName = nil
-                        } label: {
-                            Text("Add")
-                        } //firestore 데이터 추가 테스트를 위한 버튼으로 삭제 예정
-                        .disabled(selectedItemName == nil ? true : false)
-                        
-                        //matching: 어떤 타입의 데이터와 매치하는가
-                        //photoLibrary: .shared() 보편적인 사진 앨범
-                        PhotosPicker(selection: $selectedItem,
-                                     matching: .images,
-                                     photoLibrary: .shared()) {
-                            Text("Select a photo")
-                        } //Storage업로드 테스트를 위한 구현으로 삭제 예정
-                    } //Section: Home뷰에서 기능 되는 것 확인 후 삭제 예정
-                    .onChange(of: selectedItem) { newValue in
-                        if let newValue {
-                            saveImage(item: newValue)
-                        }
-                    }
+                    AddDataSectionView()
                     
-                    ForEach(firestoreManager.letters, id: \.self) { letter in
-                        NavigationLink {
-                            selectedLetterView(letter: letter)
-                        } label: {
-                            VStack {
-                                HStack {
-                                    Text("To: \(letter.recipient)")
-                                    
-                                    Spacer()
-                                } //HStack
-                                
-                                Text("\(letter.summary)")
-                                
-                                HStack {
-                                    Spacer()
-                                    
-                                    Text("From: \(letter.writer)")
-                                } //HStack
-                            } //VStack
-                        }
-                    } //ForEach: Home뷰에서 기능 되는 것 확인 후 삭제 예정
+                    LetterDataListView()
+                    
                 } //List
                 .navigationTitle("Setting")
-                .onAppear {
-                    firestoreManager.fetchAllLetters()
-                } //Home뷰에서 기능 되는 것 확인 후 onAppear삭제 예정
             } else {
-                ProgressView()
+                ProgressView() //로그인 중
             } //if...else
         } //NavigationStack
     }
