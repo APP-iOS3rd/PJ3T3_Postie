@@ -61,7 +61,12 @@ class FirestoreManager: ObservableObject {
             //우선 전체 내용을 지우고 전체를 추가한다.
             self.letters.removeAll()
             
-            for document in snapshot!.documents {
+            guard let snapshot = snapshot else {
+                print("\(#function): \(error?.localizedDescription)")
+                return
+            }
+            
+            for document in snapshot.documents {
                 let data = document.data()
                 print("Fetch success")
                 
