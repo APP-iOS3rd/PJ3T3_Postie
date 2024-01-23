@@ -14,7 +14,8 @@ final class StorageManager: ObservableObject {
     
     private init() { }
     
-    /** db의 reference location을 지정한다.
+    /**
+     db의 reference location을 지정한다.
      이미지를 추가할 때 storage에 "users>유저의 uuid"를 이름으로 가지는 폴더를 함께 생성한다.
      
      root: Storage.storage().reference()
