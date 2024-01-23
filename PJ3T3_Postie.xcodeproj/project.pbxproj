@@ -37,6 +37,10 @@
 		9E9F6ADA2B576438003DFE83 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9F6AD92B576438003DFE83 /* User.swift */; };
 		9E9F6ADC2B57643F003DFE83 /* Letter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9F6ADB2B57643F003DFE83 /* Letter.swift */; };
 		9E9F6ADF2B5765DE003DFE83 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9F6ADE2B5765DD003DFE83 /* Color.swift */; };
+		CE7E50782B579D6800955F31 /* AddLetterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7E50772B579D6800955F31 /* AddLetterViewModel.swift */; };
+		CEF09E452B57B6C500BE67E4 /* UIImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF09E442B57B6C500BE67E4 /* UIImagePicker.swift */; };
+		CEF09E472B57BD8500BE67E4 /* LetterImageFullScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF09E462B57BD8500BE67E4 /* LetterImageFullScreenView.swift */; };
+		CEF09E492B57BFBF00BE67E4 /* TextRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF09E482B57BFBF00BE67E4 /* TextRecognizer.swift */; };
 		9E9F6AE12B576977003DFE83 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9E9F6AE02B576977003DFE83 /* GoogleService-Info.plist */; };
 		9E9F6AE42B5769AA003DFE83 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 9E9F6AE32B5769AA003DFE83 /* FirebaseAnalytics */; };
 		9E9F6AE62B5769AA003DFE83 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = 9E9F6AE52B5769AA003DFE83 /* FirebaseAnalyticsOnDeviceConversion */; };
@@ -68,6 +72,7 @@
 		CEF09E452B57B6C500BE67E4 /* UIImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF09E442B57B6C500BE67E4 /* UIImagePicker.swift */; };
 		CEF09E472B57BD8500BE67E4 /* LetterImageFullScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF09E462B57BD8500BE67E4 /* LetterImageFullScreenView.swift */; };
 		CEF09E492B57BFBF00BE67E4 /* TextRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF09E482B57BFBF00BE67E4 /* TextRecognizer.swift */; };
+		E3E02CA82B59003100CD3D4C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E3E02CA72B59003100CD3D4C /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -103,7 +108,7 @@
 		9E9F6AD92B576438003DFE83 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		9E9F6ADB2B57643F003DFE83 /* Letter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Letter.swift; sourceTree = "<group>"; };
 		9E9F6ADE2B5765DD003DFE83 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
-		9E9F6AE02B576977003DFE83 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		E3E02CA72B59003100CD3D4C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		CE7E50772B579D6800955F31 /* AddLetterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLetterViewModel.swift; sourceTree = "<group>"; };
 		CEF09E442B57B6C500BE67E4 /* UIImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImagePicker.swift; sourceTree = "<group>"; };
 		CEF09E462B57BD8500BE67E4 /* LetterImageFullScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterImageFullScreenView.swift; sourceTree = "<group>"; };
@@ -178,7 +183,7 @@
 				9E9F6AA22B5761CD003DFE83 /* Core */,
 				9E9F6AA12B5761C5003DFE83 /* Model */,
 				9E0FA11F2B54D27C001CEEB9 /* Assets.xcassets */,
-				9E9F6AE02B576977003DFE83 /* GoogleService-Info.plist */,
+				E3E02CA72B59003100CD3D4C /* GoogleService-Info.plist */,
 				9E0FA1212B54D27C001CEEB9 /* Preview Content */,
 			);
 			path = PJ3T3_Postie;
@@ -499,6 +504,7 @@
 				9E0FA12A2B54D2EF001CEEB9 /* README.md in Resources */,
 				9E0FA1232B54D27C001CEEB9 /* Preview Assets.xcassets in Resources */,
 				9E0FA1202B54D27C001CEEB9 /* Assets.xcassets in Resources */,
+				E3E02CA82B59003100CD3D4C /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -713,7 +719,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"PJ3T3_Postie/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = C9D4D98Z8R;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Postie;
@@ -729,7 +735,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.jes.e.0927.PJ3T3-Postie";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.qlrmr111.PJ3T3-Postie";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -746,7 +752,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"PJ3T3_Postie/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = C9D4D98Z8R;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Postie;
@@ -762,7 +768,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.jes.e.0927.PJ3T3-Postie";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.qlrmr111.PJ3T3-Postie";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
