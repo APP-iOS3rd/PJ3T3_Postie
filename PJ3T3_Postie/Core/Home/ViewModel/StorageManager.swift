@@ -29,6 +29,13 @@ final class StorageManager: ObservableObject {
         Storage.storage().reference().child("users").child(userId)
     }
     
+    /** 
+    입력받은 데이터를 image/image타입으로 Storage에 저장하고 저장에 성공하면 해당 데이터의 URL을 String으로 반환한다.
+    - Parameters:
+      - data: Storage에 저장하고싶은 데이터
+      - userId: 현재 로그인중인 유저의 uuid로 이미지를 업로드 할 경로를 생성하거나 찾는데 사용한다.
+    - Returns: 업로드 성공시 업로드한 데이터의 urlString, 실패시 nil
+     */
     func saveImage(data: Data, userId: String) async throws -> String? {
         //metadata없이도 data를 업로드 할 수 있지만, 그 경우 서버는 어떤 타입의 데이터를 저장하는지 알지 못해 오류를 발생시킬 수 있으므로 upload하는 metadata 타입을 명시 해 주는 편이 좋다.
         let meta = StorageMetadata()
