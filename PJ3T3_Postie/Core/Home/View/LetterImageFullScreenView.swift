@@ -10,15 +10,17 @@ import SwiftUI
 struct LetterImageFullScreenView: View {
     let images: [UIImage]
 
+    @Binding var pageIndex: Int
     @Environment(\.dismiss) var dismiss
 
     var body: some View {
         NavigationStack {
-            TabView {
+            TabView(selection: $pageIndex) {
                 ForEach(0..<images.count, id: \.self) { index in
                     Image(uiImage: images[index])
                         .resizable()
                         .scaledToFit()
+                        .tag(index)
                 }
             }
             .tabViewStyle(.page)
