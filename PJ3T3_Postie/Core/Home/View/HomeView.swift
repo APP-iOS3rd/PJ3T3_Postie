@@ -36,6 +36,11 @@ struct HomeView: View {
                             NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
                                 sendLetterView(sender: "최웅", date: "2024.01.09", summary: "웅아, 앞으로 잘 부탁해")
                             }
+                            
+                            // ScrollView margin 임시
+                            Rectangle()
+                                .frame(height: 80)
+                                .foregroundStyle(Color.black.opacity(0))
                         }
                         .padding()
                     }
@@ -47,13 +52,13 @@ struct HomeView: View {
                     }, label: {
                         ZStack {
                             Circle()
-                                .foregroundStyle(Color(hex: 0x979797))
+                                .foregroundStyle(Color(hex: 0xC2AD7E))
                                 .frame(width:70,height:70)
                             
                             ZStack {
                                 Image(systemName: "envelope")
                                     .font(.title2)
-                                    .offset(y: -5)
+                                    .offset(y: -3)
                                 
                                 Image(systemName: "plus.circle")
                                     .font(.footnote)
@@ -61,7 +66,7 @@ struct HomeView: View {
                             }
                         }
                     })
-                    .foregroundStyle(Color(hex: 0x1E1E1E))
+                    .foregroundStyle(Color(hex: 0xF7F7F7))
                     .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
                     .imageScale(.large)
                     .padding()
@@ -106,11 +111,108 @@ struct HomeView: View {
                     .edgesIgnoringSafeArea(.all)
             }
             
+            // 세팅 뷰
 //            SettingView()
 //                .offset(x: isSideMenuOpen ? 0 : UIScreen.main.bounds.width)
 //                .animation(.easeInOut)
+            // 임시 세팅뷰
+            SideMenuView(isSideMenuOpen: $isSideMenuOpen)
+                .offset(x: isSideMenuOpen ? 0 : UIScreen.main.bounds.width)
+                .animation(.easeInOut)
         }
         .tint(Color.init(hex: 0x1E1E1E))
+    }
+}
+
+struct SideMenuView: View {
+    @Binding var isSideMenuOpen: Bool
+    
+    var body: some View {
+        HStack {
+            Spacer()
+            VStack(alignment: .leading) {
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        withAnimation {
+                            self.isSideMenuOpen.toggle()
+                        }
+                    }) {
+                        Image(systemName: "xmark")
+                            .imageScale(.large)
+                    }
+                }
+                Text("Setting")
+                    .font(.custom("SourceSerifPro-Black", size: 32))
+                    .foregroundStyle(Color.black)
+                HStack {
+                    Circle()
+                        .frame(width: 80,height: 80)
+                    VStack(alignment: .leading) {
+                        Text("테스트 계정")
+                        Text("postie@test.com")
+                    }
+                    Spacer()
+                    Image(systemName: "greaterthan")
+                        .foregroundStyle(Color.gray)
+                }
+                .padding(.bottom)
+                Text("계정 관리")
+                Rectangle()
+                    .frame(height: 1)
+                    .padding(.bottom)
+                Text("로그아웃")
+                    .padding(.bottom)
+                Text("회원탈퇴")
+                    .padding(.bottom)
+                Text("테마 설정")
+                Rectangle()
+                    .frame(height: 1)
+                
+                Text("앱 설정")
+                Rectangle()
+                    .frame(height: 1)
+                    .padding(.bottom)
+                HStack {
+                    Text("공지사항")
+                    Spacer()
+                    Image(systemName: "greaterthan")
+                        .foregroundStyle(Color.gray)
+                }
+                .padding(.bottom)
+                HStack {
+                    Text("문의하기")
+                    Spacer()
+                    Image(systemName: "greaterthan")
+                        .foregroundStyle(Color.gray)
+                }
+                .padding(.bottom)
+                HStack {
+                    Text("이용약관 및 개인정보 방침")
+                        Spacer()
+                    Image(systemName: "greaterthan")
+                        .foregroundStyle(Color.gray)
+                }
+                .padding(.bottom)
+                HStack {
+                    Text("앱 정보")
+                    Spacer()
+                    Image(systemName: "greaterthan")
+                        .foregroundStyle(Color.gray)
+                }
+                .padding(.bottom)
+                
+                Spacer()
+                Text("COPYRIGHT 2024 ComeOn12 RIGHTS RESERVED")
+                    .font(.caption2)
+                    .foregroundStyle(Color.gray)
+            }
+            .padding()
+            .frame(width: UIScreen.main.bounds.width - 100 , alignment: .leading)
+            .foregroundStyle(Color(hex: 0x1e1e1e))
+            .background(Color(hex: 0xF5F1E8))
+            
+        }
     }
 }
 
