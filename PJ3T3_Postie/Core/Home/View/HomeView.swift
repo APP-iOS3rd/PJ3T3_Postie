@@ -19,7 +19,7 @@ struct HomeView: View {
                     ScrollView {
                         VStack {
                             NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
-                                receiveLetterView(sender: "최웅", date: "2024.01.08", summary: "이런 추운 겨울만 되면 항상 너가 생각나")
+                                receiveLetterView(sender: "최웅", date: "2024.01.08", summary: "너랑 헤어진 이후 내 머리속엔 항상 너로 가득했어.")
                             }
                             
                             NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
@@ -32,6 +32,9 @@ struct HomeView: View {
                             
                             NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
                                 receiveLetterView(sender: "최웅", date: "2024.01.11", summary: "보고 싶었어 항상. 보고... 싶었어")
+                            }
+                            NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
+                                sendLetterView(sender: "최웅", date: "2024.01.09", summary: "웅아, 앞으로 잘 부탁해")
                             }
                         }
                         .padding()
@@ -107,7 +110,7 @@ struct HomeView: View {
 //                .offset(x: isSideMenuOpen ? 0 : UIScreen.main.bounds.width)
 //                .animation(.easeInOut)
         }
-        .tint(Color.init(hex: 0x979797))
+        .tint(Color.init(hex: 0x1E1E1E))
     }
 }
 
