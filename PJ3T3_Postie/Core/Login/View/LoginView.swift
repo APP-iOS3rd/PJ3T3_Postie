@@ -11,11 +11,11 @@ struct LoginView: View {
     //Colors
     private let viewBackground: Color = .white
     private let buttonColor: Color = Color(uiColor: .darkGray)
+    //ViewModels
+    @ObservedObject var authViewModel = AuthViewModel.shared
     //TextFields의 input값을 하위뷰에 넘겨준다.
     @State private var email = ""
     @State private var password = ""
-    //ViewModels
-    @ObservedObject var authViewModel = AuthViewModel.shared
     
     var body: some View {
         NavigationStack {
