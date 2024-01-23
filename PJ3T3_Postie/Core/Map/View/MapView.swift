@@ -68,8 +68,8 @@ struct MapView: View {
                     Spacer()
                 }
                 .padding()
-                
             }
+            
             List {
                 ForEach(officeInfoServiceAPI.infos, id: \.self) { result in
                     VStack {
