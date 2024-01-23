@@ -16,7 +16,7 @@ struct Letter: Codable, Hashable, Identifiable {
     var recipient: String
     var summary: String
     var date: Date
-    var imageName: String? //이미지 경로 nil 가능여부 체크 필요, Test용 데이터
+    var imageUrlStrings: [String]? //이미지 경로 nil 가능여부 체크 필요, Test용 데이터
     let text: String
     let images: [UIImage]?
 
@@ -25,6 +25,7 @@ struct Letter: Codable, Hashable, Identifiable {
          recipient: String,
          summary: String,
          date: Date,
+         imageUrlStrings: [String]? = nil,
          text: String,
          images: [UIImage]? = nil)
     {
@@ -33,6 +34,7 @@ struct Letter: Codable, Hashable, Identifiable {
         self.recipient = recipient
         self.summary = summary
         self.date = date
+        self.imageUrlStrings = imageUrlStrings
         self.text = text
         self.images = images
     }
@@ -43,6 +45,7 @@ struct Letter: Codable, Hashable, Identifiable {
         case recipient = "recipient"
         case summary = "summary"
         case date = "date"
+        case imageUrlStrings = "imageUrlStrings"
         case text = "text"
         case images = "images"
     }
