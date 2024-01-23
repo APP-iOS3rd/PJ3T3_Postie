@@ -160,12 +160,16 @@ struct selectedLetterView: View {
                     .frame(width: 100, height: 100)
                     .scaledToFit()
             } else {
-                Image(systemName: "questionmark.app.dashed")
-                    .frame(width: 100, height: 100)
+                ProgressView()
             }
         }
         .onAppear {
             storageManager.fetchImage(userId: firestoreManager.userUid, imageName: letter.imageName ?? "")
+        }
+        .onDisappear {
+            //뷰가 사라질 때 storageManager의 retrieveImage를 nil로 만든다.
+            //nil로 만들어주지 않으면 리스트의 다른 항목을 선택했을 때 이전에 retrieveImage에 저장되어 있던 이미지가 보여지는 이슈가 있다.
+            storageManager.dismissImage()
         }
     }
 }
