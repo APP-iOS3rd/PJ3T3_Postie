@@ -10,6 +10,7 @@ import SwiftUI
 struct HomeView: View {
     @State private var search: String = ""
     @State private var showAlert = false
+    @State private var isSideMenuOpen = false
     
     var body: some View {
         ZStack {
@@ -26,7 +27,11 @@ struct HomeView: View {
                             }
                             
                             NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
-                                receiveLetterView(sender: "할머니", date: "2024.01.08", summary: "나 때문에 살지마, 연수야")
+                                receiveLetterView(sender: "할머니", date: "2024.01.09", summary: "나 때문에 살지마, 연수야")
+                            }
+                            
+                            NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
+                                receiveLetterView(sender: "최웅", date: "2024.01.11", summary: "보고 싶었어 항상. 보고... 싶었어")
                             }
                         }
                         .padding()
@@ -67,10 +72,42 @@ struct HomeView: View {
                         }
                     }
                 }
-                .navigationBarTitle("Postie")
                 .foregroundStyle(Color(hex: 0x1E1E1E))
+                .navigationBarItems(leading: (
+                    HStack {
+                        Text("Postie")
+                            .font(.custom("SourceSerifPro-Black", size: 40))
+                            .foregroundStyle(Color.black)
+                    }), trailing: (
+                        Button(action: {
+                            withAnimation {
+                                self.isSideMenuOpen.toggle()
+                            }
+                        }) {
+                            Image(systemName: "line.horizontal.3")
+                                .imageScale(.large)
+                        }
+                        
+                    ))
             }
+            .toolbarBackground(
+                Color(hex: 0xF5F1E8),
+                for: .tabBar)
+            if isSideMenuOpen {
+                Color.black.opacity(0.5)
+                    .onTapGesture {
+                        withAnimation {
+                            self.isSideMenuOpen.toggle()
+                        }
+                    }
+                    .edgesIgnoringSafeArea(.all)
+            }
+            
+//            SettingView()
+//                .offset(x: isSideMenuOpen ? 0 : UIScreen.main.bounds.width)
+//                .animation(.easeInOut)
         }
+        .tint(Color.init(hex: 0x979797))
     }
 }
 
@@ -102,7 +139,7 @@ func receiveLetterView(sender: String, date: String, summary: String) -> some Vi
                     .foregroundStyle(Color.init(hex: 0x979797))
                 }
                 
-                Text("")
+                Spacer()
                 
                 if summary != "" {
                     Text("\"\(summary)\"")
@@ -150,6 +187,8 @@ func sendLetterView(sender: String, date: String, summary: String) -> some View 
                     }
                     .foregroundStyle(Color.init(hex: 0x979797))
                 }
+                
+                Spacer()
                 
                 if summary != "" {
                     Text("\"\(summary)\"")
