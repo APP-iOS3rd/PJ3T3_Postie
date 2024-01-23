@@ -80,12 +80,13 @@ struct MapView: View {
         .onAppear() {
             CLLocationManager().requestWhenInUseAuthorization()
         }
-        .onChange(of: officeInfoServiceAPI.infos) {
-//            $coordinator.removeAllMakers
-            for result in officeInfoServiceAPI.infos {
-                coordinator.addMarkerAndInfoWindow(latitude: Double(result.postLat)!, longitude: Double(result.postLon)!, caption: result.postNm)
-            }
-        }
+        //iOS17버전
+//        .onChange(of: officeInfoServiceAPI.infos) {
+////            $coordinator.removeAllMakers
+//            for result in officeInfoServiceAPI.infos {
+//                coordinator.addMarkerAndInfoWindow(latitude: Double(result.postLat)!, longitude: Double(result.postLon)!, caption: result.postNm)
+//            }
+//        }
         .zIndex(1)
     }
 }
