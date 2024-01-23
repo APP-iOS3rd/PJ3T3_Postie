@@ -11,7 +11,10 @@ import CoreLocation
 import NMapsMap
 
 struct MapView: View {
+    @StateObject var naverGeocodeAPI = NaverGeocodeAPI.shared
     @StateObject var officeInfoServiceAPI = OfficeInfoServiceAPI.shared
+    @StateObject var coordinator: Coordinator = Coordinator.shared
+    
     @State private var selectedPostDivType: Int = 1 //Dafault 우체국(1)
     
     var body: some View {
@@ -69,14 +72,21 @@ struct MapView: View {
                     }
                 }
             }
-//            NaverMap()
-//                .ignoresSafeArea(.all, edges: .top)
+            NaverMap()
+                .ignoresSafeArea(.all, edges: .top)
         }
         .navigationBarTitle("Postie Map")
         .foregroundStyle(Color(hex: 0x1E1E1E))
-        .onAppear(){
-            officeInfoServiceAPI.fetchData(postDivType: 1)
+        .onAppear() {
+            CLLocationManager().requestWhenInUseAuthorization()
         }
+        .onChange(of: officeInfoServiceAPI.infos) {
+//            $coordinator.removeAllMakers
+            for result in officeInfoServiceAPI.infos {
+                coordinator.addMarkerAndInfoWindow(latitude: Double(result.postLat)!, longitude: Double(result.postLon)!, caption: result.postNm)
+            }
+        }
+        .zIndex(1)
     }
 }
 

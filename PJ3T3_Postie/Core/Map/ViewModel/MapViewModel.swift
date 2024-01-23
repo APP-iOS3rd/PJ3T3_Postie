@@ -57,6 +57,26 @@ struct PostItem: Codable, Hashable {
     let modDt: String
 }
 
+//NaverMap에서 만들어지는 구조체 / 주소를 위,경도로 바꾸는 값 포함
+struct GeocodeResponse: Decodable {
+    let status: String
+    let addresses: [Address]
+}
+
+struct Address: Decodable {
+    let roadAddress: String
+    let jibunAddress: String
+    let x: String
+    let y: String
+}
+
+//내가 정말 필요한 값 주소, 위도, 경도
+struct CombinedResult: Decodable, Hashable {
+    let latitude: String
+    let longitude: String
+    let address: String
+}
+
 class OfficeInfoServiceAPI: ObservableObject {
     static let shared = OfficeInfoServiceAPI()
     
