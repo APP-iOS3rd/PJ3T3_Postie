@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		02DCDCD8D590DE7D9E6F06F9 /* Pods_PJ3T3_Postie.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 19068E0481D2E4323D4AC3E2 /* Pods_PJ3T3_Postie.framework */; };
+		0E29F0D32B5ED136005B86FB /* MapApiKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0E29F0D22B5ED136005B86FB /* MapApiKeys.plist */; };
+		0E29F0D62B5EDC30005B86FB /* XMLCoder in Frameworks */ = {isa = PBXBuildFile; productRef = 0E29F0D52B5EDC30005B86FB /* XMLCoder */; };
 		9E0FA11C2B54D27A001CEEB9 /* PJ3T3_PostieApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0FA11B2B54D27A001CEEB9 /* PJ3T3_PostieApp.swift */; };
 		9E0FA11E2B54D27A001CEEB9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0FA11D2B54D27A001CEEB9 /* ContentView.swift */; };
 		9E0FA1202B54D27C001CEEB9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E0FA11F2B54D27C001CEEB9 /* Assets.xcassets */; };
@@ -69,6 +72,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0E29F0D22B5ED136005B86FB /* MapApiKeys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = MapApiKeys.plist; sourceTree = "<group>"; };
+		19068E0481D2E4323D4AC3E2 /* Pods_PJ3T3_Postie.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PJ3T3_Postie.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		23E14589945C36E243AAF134 /* Pods-PJ3T3_Postie.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PJ3T3_Postie.debug.xcconfig"; path = "Target Support Files/Pods-PJ3T3_Postie/Pods-PJ3T3_Postie.debug.xcconfig"; sourceTree = "<group>"; };
+		84267E897C35F8294DF9D1F2 /* Pods-PJ3T3_Postie.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PJ3T3_Postie.release.xcconfig"; path = "Target Support Files/Pods-PJ3T3_Postie/Pods-PJ3T3_Postie.release.xcconfig"; sourceTree = "<group>"; };
 		9E0FA1182B54D27A001CEEB9 /* PJ3T3_Postie.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PJ3T3_Postie.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E0FA11B2B54D27A001CEEB9 /* PJ3T3_PostieApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PJ3T3_PostieApp.swift; sourceTree = "<group>"; };
 		9E0FA11D2B54D27A001CEEB9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -111,6 +118,7 @@
 			files = (
 				9E9F6AF62B5769AA003DFE83 /* FirebaseDatabase in Frameworks */,
 				9E9F6B042B5769AA003DFE83 /* FirebaseFunctionsCombine-Community in Frameworks */,
+				0E29F0D62B5EDC30005B86FB /* XMLCoder in Frameworks */,
 				9E9F6AFC2B5769AA003DFE83 /* FirebaseFirestore in Frameworks */,
 				9E9F6AE82B5769AA003DFE83 /* FirebaseAnalyticsSwift in Frameworks */,
 				9E9F6AE42B5769AA003DFE83 /* FirebaseAnalytics in Frameworks */,
@@ -135,6 +143,7 @@
 				9E9F6AFE2B5769AA003DFE83 /* FirebaseFirestoreCombine-Community in Frameworks */,
 				9E9F6B0E2B5769AA003DFE83 /* FirebaseMessaging in Frameworks */,
 				9E9F6B0A2B5769AA003DFE83 /* FirebaseInstallations in Frameworks */,
+				02DCDCD8D590DE7D9E6F06F9 /* Pods_PJ3T3_Postie.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -148,6 +157,8 @@
 				9E0FA1292B54D2EF001CEEB9 /* README.md */,
 				9E0FA11A2B54D27A001CEEB9 /* PJ3T3_Postie */,
 				9E0FA1192B54D27A001CEEB9 /* Products */,
+				E937243A6A6DD327D5BF00F0 /* Pods */,
+				F1CEA9D893CC7E60535DB125 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -291,6 +302,7 @@
 			children = (
 				9E9F6AAE2B57624C003DFE83 /* View */,
 				9E9F6AAD2B576247003DFE83 /* ViewModel */,
+				0E29F0D22B5ED136005B86FB /* MapApiKeys.plist */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -372,6 +384,23 @@
 			path = Extenstions;
 			sourceTree = "<group>";
 		};
+		E937243A6A6DD327D5BF00F0 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				23E14589945C36E243AAF134 /* Pods-PJ3T3_Postie.debug.xcconfig */,
+				84267E897C35F8294DF9D1F2 /* Pods-PJ3T3_Postie.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		F1CEA9D893CC7E60535DB125 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				19068E0481D2E4323D4AC3E2 /* Pods_PJ3T3_Postie.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -379,9 +408,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9E0FA1262B54D27C001CEEB9 /* Build configuration list for PBXNativeTarget "PJ3T3_Postie" */;
 			buildPhases = (
+				F213A788878F14CC63E1567D /* [CP] Check Pods Manifest.lock */,
 				9E0FA1142B54D27A001CEEB9 /* Sources */,
 				9E0FA1152B54D27A001CEEB9 /* Frameworks */,
 				9E0FA1162B54D27A001CEEB9 /* Resources */,
+				520049332BADFDD576E4570A /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -415,6 +446,7 @@
 				9E9F6B112B5769AA003DFE83 /* FirebaseRemoteConfig */,
 				9E9F6B132B5769AA003DFE83 /* FirebaseRemoteConfigSwift */,
 				9E9F6B152B5769AA003DFE83 /* FirebaseStorage */,
+				0E29F0D52B5EDC30005B86FB /* XMLCoder */,
 			);
 			productName = PJ3T3_Postie;
 			productReference = 9E0FA1182B54D27A001CEEB9 /* PJ3T3_Postie.app */;
@@ -446,6 +478,7 @@
 			mainGroup = 9E0FA10F2B54D27A001CEEB9;
 			packageReferences = (
 				9E9F6AE22B5769AA003DFE83 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				0E29F0D42B5EDC30005B86FB /* XCRemoteSwiftPackageReference "XMLCoder" */,
 			);
 			productRefGroup = 9E0FA1192B54D27A001CEEB9 /* Products */;
 			projectDirPath = "";
@@ -461,7 +494,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E9F6AE12B576977003DFE83 /* GoogleService-Info.plist in Resources */,
 				9E0FA12C2B54D2FC001CEEB9 /* .gitignore in Resources */,
+				0E29F0D32B5ED136005B86FB /* MapApiKeys.plist in Resources */,
 				9E0FA12A2B54D2EF001CEEB9 /* README.md in Resources */,
 				9E0FA1232B54D27C001CEEB9 /* Preview Assets.xcassets in Resources */,
 				9E0FA1202B54D27C001CEEB9 /* Assets.xcassets in Resources */,
@@ -470,6 +505,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		520049332BADFDD576E4570A /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PJ3T3_Postie/Pods-PJ3T3_Postie-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PJ3T3_Postie/Pods-PJ3T3_Postie-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PJ3T3_Postie/Pods-PJ3T3_Postie-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F213A788878F14CC63E1567D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-PJ3T3_Postie-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		9E0FA1142B54D27A001CEEB9 /* Sources */ = {
@@ -546,7 +623,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -609,7 +686,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -630,6 +707,7 @@
 		};
 		9E0FA1272B54D27C001CEEB9 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 23E14589945C36E243AAF134 /* Pods-PJ3T3_Postie.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -663,6 +741,7 @@
 		};
 		9E0FA1282B54D27C001CEEB9 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 84267E897C35F8294DF9D1F2 /* Pods-PJ3T3_Postie.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -717,6 +796,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		0E29F0D42B5EDC30005B86FB /* XCRemoteSwiftPackageReference "XMLCoder" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/CoreOffice/XMLCoder";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.17.1;
+			};
+		};
 		9E9F6AE22B5769AA003DFE83 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -728,6 +815,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		0E29F0D52B5EDC30005B86FB /* XMLCoder */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0E29F0D42B5EDC30005B86FB /* XCRemoteSwiftPackageReference "XMLCoder" */;
+			productName = XMLCoder;
+		};
 		9E9F6AE32B5769AA003DFE83 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 9E9F6AE22B5769AA003DFE83 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
