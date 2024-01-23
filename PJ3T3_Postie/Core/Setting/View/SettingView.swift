@@ -75,13 +75,16 @@ struct SettingView: View {
                     } //Section
                     
                     Section("Data Test") {
+                        //Add버튼은 하단의 PhotosPicker에서 이미지 저장이 완료되어 selectedItemName이 nil이 아니게 되면 활성화 된다.
+                        //addLetter 작업을 수행 한 이후 selectedItemName을 다시 nil로 바꾼다.
                         Button {
                             firestoreManager.addLetter(writer: "me", recipient: "you", summary: "ImageTest", date: Date(), imageName: selectedItemName!)
                             firestoreManager.fetchAllLetters()
+                            selectedItemName = nil
                         } label: {
                             Text("Add")
                         } //firestore 데이터 추가 테스트를 위한 버튼으로 삭제 예정
-                        .disabled(selectedItemName == "" ? true : false)
+                        .disabled(selectedItemName == nil ? true : false)
                         
                         //matching: 어떤 타입의 데이터와 매치하는가
                         //photoLibrary: .shared() 보편적인 사진 앨범
