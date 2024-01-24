@@ -132,6 +132,7 @@ struct SideMenuView: View {
     var body: some View {
         HStack {
             Spacer()
+            
             VStack(alignment: .leading) {
                 HStack {
                     Spacer()
