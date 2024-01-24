@@ -23,18 +23,18 @@ struct HomeView: View {
                             }
                             
                             NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
-                                sendLetterView(sender: "최웅", date: "2024.01.09", summary: "넌 뭔데 그렇게 아무렇지 않게 구는건데?")
+                                sendLetterView(receiver: "최웅", date: "2024.01.09", summary: "넌 뭔데 그렇게 아무렇지 않게 구는건데?")
                             }
                             
                             NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
-                                receiveLetterView(sender: "할머니", date: "2024.01.09", summary: "나 때문에 살지마, 연수야")
+                                receiveLetterView(sender: "최웅", date: "2024.01.10", summary: "보고 싶었어 항상. 보고... 싶었어")
                             }
                             
                             NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
-                                receiveLetterView(sender: "최웅", date: "2024.01.11", summary: "보고 싶었어 항상. 보고... 싶었어")
+                                receiveLetterView(sender: "할머니", date: "2024.01.10", summary: "나 떄문에 살지마... 연수야")
                             }
                             NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
-                                sendLetterView(sender: "최웅", date: "2024.01.12", summary: "웅아, 앞으로 잘 부탁해")
+                                sendLetterView(receiver: "최웅", date: "2024.01.11", summary: "웅아, 앞으로 잘 부탁해")
                             }
                             
                             // ScrollView margin 임시
@@ -258,99 +258,103 @@ struct SideMenuView: View {
     
 }
 
-private func receiveLetterView(sender: String, date: String, summary: String) -> some View {
-    HStack {
-        HStack {
-            VStack(alignment: .leading) {
-                HStack {
-                    Text("From.")
-                        .font(.custom("SourceSerifPro-Black", size: 18))
-                        .foregroundColor(.black)
-                    
-                    Text("\(sender)")
-                        .foregroundStyle(Color(hex: 0x1E1E1E))
+extension HomeView {
+    private func receiveLetterView(sender: String, date: String, summary: String) -> some View {
+        return HStack {
+            HStack {
+                VStack(alignment: .leading) {
+                    HStack {
+                        Text("From.")
+                            .font(.custom("SourceSerifPro-Black", size: 18))
+                            .foregroundColor(.black)
+                        
+                        Text("\(sender)")
+                            .foregroundStyle(Color(hex: 0x1E1E1E))
+                        
+                        Spacer()
+                        
+                        Text(date)
+                            .font(.custom("SourceSerifPro-Light", size: 18))
+                            .foregroundStyle(Color(hex: 0x1E1E1E))
+                        
+                        ZStack {
+                            Image(systemName: "water.waves")
+                                .font(.headline)
+                                .offset(x:18)
+                            
+                            Image(systemName: "sleep.circle")
+                                .font(.largeTitle)
+                        }
+                        .foregroundStyle(Color.init(hex: 0x979797))
+                    }
                     
                     Spacer()
                     
-                    Text(date)
-                        .font(.custom("SourceSerifPro-Light", size: 18))
-                        .foregroundStyle(Color(hex: 0x1E1E1E))
-                    
-                    ZStack {
-                        Image(systemName: "water.waves")
-                            .font(.headline)
-                            .offset(x:18)
-                        
-                        Image(systemName: "sleep.circle")
-                            .font(.largeTitle)
+                    if summary != "" {
+                        Text("\"\(summary)\"")
                     }
-                    .foregroundStyle(Color.init(hex: 0x979797))
-                }
-                
-                Spacer()
-                
-                if summary != "" {
-                    Text("\"\(summary)\"")
                 }
             }
+            .padding()
+            .frame(width: 300, height: 130)
+            .background(
+                RoundedRectangle(cornerRadius: 10)
+                    .foregroundStyle(Color(hex: 0xD1CEC7).opacity(0.65))
+                    .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
+            )
+            
+            Spacer()
         }
-        .padding()
-        .frame(width: 300, height: 130)
-        .background(
-            RoundedRectangle(cornerRadius: 10)
-                .foregroundStyle(Color(hex: 0xD1CEC7).opacity(0.65))
-                .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
-        )
-        
-        Spacer()
     }
 }
 
-private func sendLetterView(sender: String, date: String, summary: String) -> some View {
-    HStack {
-        Spacer()
-        
-        HStack {
-            VStack(alignment: .leading) {
-                HStack {
-                    Text("To.")
-                        .font(.custom("SourceSerifPro-Black", size: 18))
-                        .foregroundColor(.black)
-                    
-                    Text("\(sender)")
-                        .foregroundStyle(Color(hex: 0x1E1E1E))
+extension HomeView {
+    private func sendLetterView(receiver: String, date: String, summary: String) -> some View {
+        return HStack {
+            Spacer()
+            
+            HStack {
+                VStack(alignment: .leading) {
+                    HStack {
+                        Text("To.")
+                            .font(.custom("SourceSerifPro-Black", size: 18))
+                            .foregroundColor(.black)
+                        
+                        Text("\(receiver)")
+                            .foregroundStyle(Color(hex: 0x1E1E1E))
+                        
+                        Spacer()
+                        
+                        Text(date)
+                            .font(.custom("SourceSerifPro-Light", size: 18))
+                            .foregroundStyle(Color(hex: 0x1E1E1E))
+                        
+                        ZStack {
+                            Image(systemName: "water.waves")
+                                .font(.headline)
+                                .offset(x:18)
+                            
+                            Image(systemName: "sleep.circle")
+                                .font(.largeTitle)
+                        }
+                        .foregroundStyle(Color.init(hex: 0x979797))
+                    }
                     
                     Spacer()
                     
-                    Text(date)
-                        .font(.custom("SourceSerifPro-Light", size: 18))
-                        .foregroundStyle(Color(hex: 0x1E1E1E))
-                    
-                    ZStack {
-                        Image(systemName: "water.waves")
-                            .font(.headline)
-                            .offset(x:18)
-                        
-                        Image(systemName: "sleep.circle")
-                            .font(.largeTitle)
+                    if summary != "" {
+                        Text("\"\(summary)\"")
                     }
-                    .foregroundStyle(Color.init(hex: 0x979797))
-                }
-                
-                Spacer()
-                
-                if summary != "" {
-                    Text("\"\(summary)\"")
                 }
             }
+            .padding()
+            .frame(width: 300, height: 130)
+            .background(
+                RoundedRectangle(cornerRadius: 10)
+                    .foregroundStyle(Color(hex: 0xF7F7F7).opacity(0.65))
+                    .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
+            )
         }
-        .padding()
-        .frame(width: 300, height: 130)
-        .background(
-            RoundedRectangle(cornerRadius: 10)
-                .foregroundStyle(Color(hex: 0xF7F7F7).opacity(0.65))
-                .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
-        )
     }
 }
 
