@@ -112,9 +112,9 @@ struct HomeView: View {
             }
             
             // 세팅 뷰
-//            SettingView()
-//                .offset(x: isSideMenuOpen ? 0 : UIScreen.main.bounds.width)
-//                .animation(.easeInOut)
+            //            SettingView()
+            //                .offset(x: isSideMenuOpen ? 0 : UIScreen.main.bounds.width)
+            //                .animation(.easeInOut)
             // 임시 세팅뷰
             SideMenuView(isSideMenuOpen: $isSideMenuOpen)
                 .offset(x: isSideMenuOpen ? 0 : UIScreen.main.bounds.width)
@@ -130,79 +130,48 @@ struct SideMenuView: View {
     @State private var isToggleOn = false
     
     var body: some View {
-            HStack {
-                Spacer()
-                VStack(alignment: .leading) {
-                    HStack {
-                        Spacer()
-                        Button(action: {
-                            withAnimation {
-                                self.isSideMenuOpen.toggle()
-                            }
-                        }) {
-                            Image(systemName: "xmark")
-                                .imageScale(.large)
+        HStack {
+            Spacer()
+            VStack(alignment: .leading) {
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        withAnimation {
+                            self.isSideMenuOpen.toggle()
                         }
+                    }) {
+                        Image(systemName: "xmark")
+                            .imageScale(.large)
                     }
-                    
-                    Text("Setting")
-                        .font(.custom("SourceSerifPro-Black", size: 32))
-                        .foregroundStyle(Color.black)
-                    
-                    Text("프로필 설정")
-                        .foregroundStyle(Color.gray)
-                    
-                    Rectangle()
-                        .foregroundStyle(Color.gray)
-                        .frame(height: 1)
-                        .padding(.bottom)
-                    
-                    NavigationLink(destination: ProfileView()) {
-                        HStack {
-                            ZStack {
-                                Circle()
-                                    .frame(width: 80,height: 80)
-                                .foregroundStyle(Color.init(hex: 0xD1CEC7))
-                                
-                                Text("Postie")
-                                    .foregroundStyle(Color.black)
-                            }
+                }
+                
+                Text("Setting")
+                    .font(.custom("SourceSerifPro-Black", size: 32))
+                    .foregroundStyle(Color.black)
+                
+                Text("프로필 설정")
+                    .foregroundStyle(Color.gray)
+                
+                Rectangle()
+                    .foregroundStyle(Color.gray)
+                    .frame(height: 1)
+                    .padding(.bottom)
+                
+                NavigationLink(destination: ProfileView()) {
+                    HStack {
+                        ZStack {
+                            Circle()
+                                .frame(width: 80,height: 80)
+                                .foregroundStyle(Color(hex: 0xD1CEC7))
                             
-                            VStack(alignment: .leading) {
-                                Text("Postie_test")
-                                Text("postie@test.com")
-                            }
-                            
-                            Spacer()
-                            
-                            Image(systemName: "greaterthan")
-                                .foregroundStyle(Color.gray)
+                            Text("Postie")
+                                .foregroundStyle(Color.black)
                         }
-                        .padding(.bottom)
-                    }
-                    
-                    Text("테마 설정")
-                        .foregroundStyle(Color.gray)
-                    
-                    Rectangle()
-                        .foregroundStyle(Color.gray)
-                        .frame(height: 1)
-                    
-                    Toggle("다크모드", isOn: $isToggleOn)
-                        .onChange(of: isToggleOn) { _ in
+                        
+                        VStack(alignment: .leading) {
+                            Text("Postie_test")
+                            Text("postie@test.com")
                         }
-                        .padding(.bottom)
-                    
-                    Text("앱 설정")
-                        .foregroundStyle(Color.gray)
-                    
-                    Rectangle()
-                        .frame(height: 1)
-                        .foregroundStyle(Color.gray)
-                        .padding(.bottom)
-                    
-                    HStack {
-                        Text("공지사항")
                         
                         Spacer()
                         
@@ -210,54 +179,85 @@ struct SideMenuView: View {
                             .foregroundStyle(Color.gray)
                     }
                     .padding(.bottom)
-                    
-                    HStack {
-                        Text("문의하기")
-                        
-                        Spacer()
-                        
-                        Image(systemName: "greaterthan")
-                            .foregroundStyle(Color.gray)
+                }
+                
+                Text("테마 설정")
+                    .foregroundStyle(Color.gray)
+                
+                Rectangle()
+                    .foregroundStyle(Color.gray)
+                    .frame(height: 1)
+                
+                Toggle("다크모드", isOn: $isToggleOn)
+                    .onChange(of: isToggleOn) { _ in
                     }
                     .padding(.bottom)
-                    
-                    HStack {
-                        Text("이용약관 및 개인정보 방침")
-                        
-                            Spacer()
-                        
-                        Image(systemName: "greaterthan")
-                            .foregroundStyle(Color.gray)
-                    }
+                
+                Text("앱 설정")
+                    .foregroundStyle(Color.gray)
+                
+                Rectangle()
+                    .frame(height: 1)
+                    .foregroundStyle(Color.gray)
                     .padding(.bottom)
-                    
-                    HStack {
-                        Text("앱 정보")
-                        
-                        Spacer()
-                        
-                        Image(systemName: "greaterthan")
-                            .foregroundStyle(Color.gray)
-                    }
-                    .padding(.bottom)
+                
+                HStack {
+                    Text("공지사항")
                     
                     Spacer()
                     
-                    Text("COPYRIGHT 2024 ComeOn12 RIGHTS RESERVED")
-                        .font(.caption2)
+                    Image(systemName: "greaterthan")
                         .foregroundStyle(Color.gray)
                 }
-                .padding()
-                .frame(width: UIScreen.main.bounds.width - 100 , alignment: .leading)
-                .foregroundStyle(Color(hex: 0x1e1e1e))
-                .background(Color(hex: 0xF5F1E8))
+                .padding(.bottom)
+                
+                HStack {
+                    Text("문의하기")
+                    
+                    Spacer()
+                    
+                    Image(systemName: "greaterthan")
+                        .foregroundStyle(Color.gray)
+                }
+                .padding(.bottom)
+                
+                HStack {
+                    Text("이용약관 및 개인정보 방침")
+                    
+                    Spacer()
+                    
+                    Image(systemName: "greaterthan")
+                        .foregroundStyle(Color.gray)
+                }
+                .padding(.bottom)
+                
+                HStack {
+                    Text("앱 정보")
+                    
+                    Spacer()
+                    
+                    Image(systemName: "greaterthan")
+                        .foregroundStyle(Color.gray)
+                }
+                .padding(.bottom)
+                
+                Spacer()
+                
+                Text("COPYRIGHT 2024 ComeOn12 RIGHTS RESERVED")
+                    .font(.caption2)
+                    .foregroundStyle(Color.gray)
             }
-            .tint(Color(hex: 0x1E1E1E))
+            .padding()
+            .frame(width: UIScreen.main.bounds.width - 100 , alignment: .leading)
+            .foregroundStyle(Color(hex: 0x1e1e1e))
+            .background(Color(hex: 0xF5F1E8))
         }
+        .tint(Color(hex: 0x1E1E1E))
+    }
     
 }
 
-func receiveLetterView(sender: String, date: String, summary: String) -> some View {
+private func receiveLetterView(sender: String, date: String, summary: String) -> some View {
     HStack {
         HStack {
             VStack(alignment: .leading) {
@@ -279,6 +279,7 @@ func receiveLetterView(sender: String, date: String, summary: String) -> some Vi
                         Image(systemName: "water.waves")
                             .font(.headline)
                             .offset(x:18)
+                        
                         Image(systemName: "sleep.circle")
                             .font(.largeTitle)
                     }
@@ -304,7 +305,7 @@ func receiveLetterView(sender: String, date: String, summary: String) -> some Vi
     }
 }
 
-func sendLetterView(sender: String, date: String, summary: String) -> some View {
+private func sendLetterView(sender: String, date: String, summary: String) -> some View {
     HStack {
         Spacer()
         
@@ -328,6 +329,7 @@ func sendLetterView(sender: String, date: String, summary: String) -> some View 
                         Image(systemName: "water.waves")
                             .font(.headline)
                             .offset(x:18)
+                        
                         Image(systemName: "sleep.circle")
                             .font(.largeTitle)
                     }
