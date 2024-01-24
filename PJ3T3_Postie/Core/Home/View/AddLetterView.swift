@@ -8,6 +8,13 @@
 import SwiftUI
 
 struct AddLetterView: View {
+    @StateObject private var addLetterViewModel = AddLetterViewModel()
+    
+    enum Field: Hashable {
+        case sender
+        case receiver
+        case text
+    }
 
     var isSendingLetter: Bool
     let dateFormatter: DateFormatter = {
@@ -16,22 +23,14 @@ struct AddLetterView: View {
          return formatter
      }()
 
+    @FocusState private var focusField: Field?
+
     init(isSendingLetter: Bool) {
         self.isSendingLetter = isSendingLetter
 
         // TextEditor 패딩
         UITextView.appearance().textContainerInset = UIEdgeInsets(top: 12, left: 8, bottom: 12, right: 8)
     }
-
-    enum Field: Hashable {
-        case sender
-        case receiver
-        case text
-    }
-
-    @StateObject private var addLetterViewModel = AddLetterViewModel()
-
-    @FocusState private var focusField: Field?
 
     var body: some View {
         NavigationStack {
