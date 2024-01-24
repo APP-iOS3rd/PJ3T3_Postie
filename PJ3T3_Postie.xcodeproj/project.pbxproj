@@ -74,6 +74,7 @@
 		E3EECAF02B5F957A00E639F2 /* SourceSerifPro-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = E3EECAEF2B5F957A00E639F2 /* SourceSerifPro-Black.otf */; };
 		E3EECAF22B5F958300E639F2 /* SourceSerifPro-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = E3EECAF12B5F958300E639F2 /* SourceSerifPro-Light.otf */; };
 		E3EECAF52B5FD2E100E639F2 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3EECAF42B5FD2E000E639F2 /* ProfileView.swift */; };
+		E3EECAFB2B60FB2400E639F2 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3EECAFA2B60FB2400E639F2 /* Date.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -121,6 +122,7 @@
 		E3EECAF12B5F958300E639F2 /* SourceSerifPro-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSerifPro-Light.otf"; sourceTree = "<group>"; };
 		E3EECAF32B5F958C00E639F2 /* PJ3T3-Postie-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "PJ3T3-Postie-Info.plist"; sourceTree = SOURCE_ROOT; };
 		E3EECAF42B5FD2E000E639F2 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		E3EECAFA2B60FB2400E639F2 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -398,6 +400,7 @@
 			children = (
 				9E9F6ADE2B5765DD003DFE83 /* Color.swift */,
 				CE67D55D2B58FF8500C0050B /* String.swift */,
+				E3EECAFA2B60FB2400E639F2 /* Date.swift */,
 			);
 			path = Extenstions;
 			sourceTree = "<group>";
@@ -584,6 +587,7 @@
 				CE7E50782B579D6800955F31 /* AddLetterViewModel.swift in Sources */,
 				CE6E08452B5E09D900CFBF2A /* LetterDetailViewModel.swift in Sources */,
 				9E9F6AB62B5762E5003DFE83 /* HomeView.swift in Sources */,
+				E3EECAFB2B60FB2400E639F2 /* Date.swift in Sources */,
 				9E0FA11E2B54D27A001CEEB9 /* ContentView.swift in Sources */,
 				9E9F6ADF2B5765DE003DFE83 /* Color.swift in Sources */,
 				9E9F6ABA2B5762FC003DFE83 /* MapView.swift in Sources */,

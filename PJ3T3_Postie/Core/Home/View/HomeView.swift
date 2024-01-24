@@ -19,22 +19,22 @@ struct HomeView: View {
                     ScrollView {
                         VStack {
                             NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
-                                receiveLetterView(sender: "최웅", date: "2024.01.08", summary: "너랑 헤어진 이후 내 머리속엔 항상 너로 가득했어.")
+                                ReceiveLetterView(letter: Letter.preview)
                             }
                             
                             NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
-                                sendLetterView(receiver: "최웅", date: "2024.01.09", summary: "넌 뭔데 그렇게 아무렇지 않게 구는건데?")
+                                SendLetterView(letter: Letter.preview)
                             }
                             
                             NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
-                                receiveLetterView(sender: "최웅", date: "2024.01.10", summary: "보고 싶었어 항상. 보고... 싶었어")
+                                ReceiveLetterView(letter: Letter.preview)
                             }
                             
                             NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
-                                receiveLetterView(sender: "할머니", date: "2024.01.10", summary: "나 떄문에 살지마... 연수야")
+                                ReceiveLetterView(letter: Letter.preview)
                             }
                             NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
-                                sendLetterView(receiver: "최웅", date: "2024.01.11", summary: "웅아, 앞으로 잘 부탁해")
+                                SendLetterView(letter: Letter.preview)
                             }
                             
                             // ScrollView margin 임시
@@ -258,9 +258,11 @@ struct SideMenuView: View {
     
 }
 
-extension HomeView {
-    private func receiveLetterView(sender: String, date: String, summary: String) -> some View {
-        return HStack {
+struct ReceiveLetterView: View {
+    let letter: Letter
+    
+    var body: some View {
+        HStack {
             HStack {
                 VStack(alignment: .leading) {
                     HStack {
@@ -268,12 +270,12 @@ extension HomeView {
                             .font(.custom("SourceSerifPro-Black", size: 18))
                             .foregroundColor(.black)
                         
-                        Text("\(sender)")
+                        Text("\(letter.writer)")
                             .foregroundStyle(Color(hex: 0x1E1E1E))
                         
                         Spacer()
                         
-                        Text(date)
+                        Text("\(letter.date.toString())")
                             .font(.custom("SourceSerifPro-Light", size: 18))
                             .foregroundStyle(Color(hex: 0x1E1E1E))
                         
@@ -285,13 +287,13 @@ extension HomeView {
                             Image(systemName: "sleep.circle")
                                 .font(.largeTitle)
                         }
-                        .foregroundStyle(Color.init(hex: 0x979797))
+                        .foregroundStyle(Color(hex: 0x979797))
                     }
                     
                     Spacer()
                     
-                    if summary != "" {
-                        Text("\"\(summary)\"")
+                    if letter.summary != "" {
+                        Text("\"\(letter.summary)\"")
                     }
                 }
             }
@@ -308,9 +310,11 @@ extension HomeView {
     }
 }
 
-extension HomeView {
-    private func sendLetterView(receiver: String, date: String, summary: String) -> some View {
-        return HStack {
+struct SendLetterView: View {
+    let letter: Letter
+    
+    var body: some View {
+        HStack {
             Spacer()
             
             HStack {
@@ -320,12 +324,12 @@ extension HomeView {
                             .font(.custom("SourceSerifPro-Black", size: 18))
                             .foregroundColor(.black)
                         
-                        Text("\(receiver)")
+                        Text("\(letter.writer)")
                             .foregroundStyle(Color(hex: 0x1E1E1E))
                         
                         Spacer()
                         
-                        Text(date)
+                        Text("\(letter.date.toString())")
                             .font(.custom("SourceSerifPro-Light", size: 18))
                             .foregroundStyle(Color(hex: 0x1E1E1E))
                         
@@ -337,13 +341,13 @@ extension HomeView {
                             Image(systemName: "sleep.circle")
                                 .font(.largeTitle)
                         }
-                        .foregroundStyle(Color.init(hex: 0x979797))
+                        .foregroundStyle(Color(hex: 0x979797))
                     }
                     
                     Spacer()
                     
-                    if summary != "" {
-                        Text("\"\(summary)\"")
+                    if letter.summary != "" {
+                        Text("\"\(letter.summary)\"")
                     }
                 }
             }
