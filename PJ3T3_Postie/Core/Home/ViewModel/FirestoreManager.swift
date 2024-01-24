@@ -74,7 +74,8 @@ class FirestoreManager: ObservableObject {
                                            writer: data["writer"] as? String ?? "",
                                            recipient: data["recipient"] as? String ?? "",
                                            summary: data["summary"] as? String ?? "",
-                                           date: data["date"] as? Date ?? Date()))
+                                           date: data["date"] as? Date ?? Date(),
+                                           text: data["text"] as? String ?? ""))
             }
         }
     }
