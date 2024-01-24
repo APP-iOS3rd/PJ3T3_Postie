@@ -10,6 +10,7 @@ import SwiftUI
 struct HomeView: View {
     @State private var search: String = ""
     @State private var showAlert = false
+    @State private var isSideMenuOpen = false
     
     var body: some View {
         ZStack {
@@ -17,13 +18,29 @@ struct HomeView: View {
                 ZStack(alignment: .bottomTrailing) {
                     ScrollView {
                         VStack {
-                            NavigationLink(destination: LetterDetailView()) {
-                                sendLetterView(sender: "김OO", date: "2024.01.04", receiver: "어피치")
+                            NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
+                                ReceiveLetterView(letter: Letter.preview)
                             }
                             
-                            NavigationLink(destination: LetterDetailView()) {
-                                receiveLetterView(sender: "라이언", date: "2024.01.04", receiver: "김OO")
+                            NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
+                                SendLetterView(letter: Letter.preview)
                             }
+                            
+                            NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
+                                ReceiveLetterView(letter: Letter.preview)
+                            }
+                            
+                            NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
+                                ReceiveLetterView(letter: Letter.preview)
+                            }
+                            NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
+                                SendLetterView(letter: Letter.preview)
+                            }
+                            
+                            // ScrollView margin 임시
+                            Rectangle()
+                                .frame(height: 70)
+                                .foregroundStyle(Color.black.opacity(0))
                         }
                         .padding()
                     }
@@ -35,13 +52,22 @@ struct HomeView: View {
                     }, label: {
                         ZStack {
                             Circle()
-                                .foregroundStyle(Color(hex: 0x979797))
+                                .foregroundStyle(Color(hex: 0xC2AD7E))
                                 .frame(width:70,height:70)
                             
-                            Image(systemName: "envelope")
+                            ZStack {
+                                Image(systemName: "envelope")
+                                    .font(.title2)
+                                    .offset(y: -3)
+                                
+                                Image(systemName: "plus.circle")
+                                    .font(.footnote)
+                                    .offset(x:15, y:9)
+                            }
                         }
                     })
-                    .foregroundStyle(Color(hex: 0x1E1E1E))
+                    .foregroundStyle(Color(hex: 0xF7F7F7))
+                    .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
                     .imageScale(.large)
                     .padding()
                     .alert("편지 저장 하기", isPresented: $showAlert) {
@@ -54,123 +80,285 @@ struct HomeView: View {
                         }
                     }
                 }
-                .navigationBarTitle("Postie")
                 .foregroundStyle(Color(hex: 0x1E1E1E))
+                .navigationBarItems(leading: (
+                    HStack {
+                        Text("Postie")
+                            .font(.custom("SourceSerifPro-Black", size: 40))
+                            .foregroundStyle(Color.black)
+                    }), trailing: (
+                        Button(action: {
+                            withAnimation {
+                                self.isSideMenuOpen.toggle()
+                            }
+                        }) {
+                            Image(systemName: "line.horizontal.3")
+                                .imageScale(.large)
+                        }
+                        
+                    ))
             }
+            .toolbarBackground(
+                Color(hex: 0xF5F1E8),
+                for: .tabBar)
+            if isSideMenuOpen {
+                Color.black.opacity(0.5)
+                    .onTapGesture {
+                        withAnimation {
+                            self.isSideMenuOpen.toggle()
+                        }
+                    }
+                    .edgesIgnoringSafeArea(.all)
+            }
+            
+            // 세팅 뷰
+            //            SettingView()
+            //                .offset(x: isSideMenuOpen ? 0 : UIScreen.main.bounds.width)
+            //                .animation(.easeInOut)
+            // 임시 세팅뷰
+            SideMenuView(isSideMenuOpen: $isSideMenuOpen)
+                .offset(x: isSideMenuOpen ? 0 : UIScreen.main.bounds.width)
+                .animation(.easeInOut)
         }
+        .tint(Color.init(hex: 0x1E1E1E))
     }
 }
 
-func receiveLetterView(sender: String, date: String, receiver: String) -> some View {
-    HStack {
+// 임시 세팅뷰
+struct SideMenuView: View {
+    @Binding var isSideMenuOpen: Bool
+    @State private var isToggleOn = false
+    
+    var body: some View {
         HStack {
+            Spacer()
+            
             VStack(alignment: .leading) {
                 HStack {
-                    RoundedRectangle(cornerRadius: 10)
-                        .frame(width: 100, height: 35)
-                        .overlay(
-                            Text("보내는 사람")
-                                .foregroundStyle(Color(hex: 0x1E1E1E))
-                        )
-                        .foregroundStyle(Color(hex: 0x979797))
-                    
-                    Text("\(sender)")
-                        .foregroundStyle(Color(hex: 0x1E1E1E))
+                    Spacer()
+                    Button(action: {
+                        withAnimation {
+                            self.isSideMenuOpen.toggle()
+                        }
+                    }) {
+                        Image(systemName: "xmark")
+                            .imageScale(.large)
+                    }
+                }
+                
+                Text("Setting")
+                    .font(.custom("SourceSerifPro-Black", size: 32))
+                    .foregroundStyle(Color.black)
+                
+                Text("프로필 설정")
+                    .foregroundStyle(Color.gray)
+                
+                Rectangle()
+                    .foregroundStyle(Color.gray)
+                    .frame(height: 1)
+                    .padding(.bottom)
+                
+                NavigationLink(destination: ProfileView()) {
+                    HStack {
+                        ZStack {
+                            Circle()
+                                .frame(width: 80,height: 80)
+                                .foregroundStyle(Color(hex: 0xD1CEC7))
+                            
+                            Text("Postie")
+                                .foregroundStyle(Color.black)
+                        }
+                        
+                        VStack(alignment: .leading) {
+                            Text("Postie_test")
+                            Text("postie@test.com")
+                        }
+                        
+                        Spacer()
+                        
+                        Image(systemName: "greaterthan")
+                            .foregroundStyle(Color.gray)
+                    }
+                    .padding(.bottom)
+                }
+                
+                Text("테마 설정")
+                    .foregroundStyle(Color.gray)
+                
+                Rectangle()
+                    .foregroundStyle(Color.gray)
+                    .frame(height: 1)
+                
+                Toggle("다크모드", isOn: $isToggleOn)
+                    .onChange(of: isToggleOn) { _ in
+                    }
+                    .padding(.bottom)
+                
+                Text("앱 설정")
+                    .foregroundStyle(Color.gray)
+                
+                Rectangle()
+                    .frame(height: 1)
+                    .foregroundStyle(Color.gray)
+                    .padding(.bottom)
+                
+                HStack {
+                    Text("공지사항")
                     
                     Spacer()
                     
-                    Image(systemName: "swift")
-                        .font(.title)
-                        .foregroundStyle(Color(hex: 0x1E1E1E))
+                    Image(systemName: "greaterthan")
+                        .foregroundStyle(Color.gray)
                 }
-                
-                Text(" ")
+                .padding(.bottom)
                 
                 HStack {
-                    VStack (alignment: .leading) {
-                        Text(date)
+                    Text("문의하기")
+                    
+                    Spacer()
+                    
+                    Image(systemName: "greaterthan")
+                        .foregroundStyle(Color.gray)
+                }
+                .padding(.bottom)
+                
+                HStack {
+                    Text("이용약관 및 개인정보 방침")
+                    
+                    Spacer()
+                    
+                    Image(systemName: "greaterthan")
+                        .foregroundStyle(Color.gray)
+                }
+                .padding(.bottom)
+                
+                HStack {
+                    Text("앱 정보")
+                    
+                    Spacer()
+                    
+                    Image(systemName: "greaterthan")
+                        .foregroundStyle(Color.gray)
+                }
+                .padding(.bottom)
+                
+                Spacer()
+                
+                Text("COPYRIGHT 2024 ComeOn12 RIGHTS RESERVED")
+                    .font(.caption2)
+                    .foregroundStyle(Color.gray)
+            }
+            .padding()
+            .frame(width: UIScreen.main.bounds.width - 100 , alignment: .leading)
+            .foregroundStyle(Color(hex: 0x1e1e1e))
+            .background(Color(hex: 0xF5F1E8))
+        }
+        .tint(Color(hex: 0x1E1E1E))
+    }
+    
+}
+
+struct ReceiveLetterView: View {
+    let letter: Letter
+    
+    var body: some View {
+        HStack {
+            HStack {
+                VStack(alignment: .leading) {
+                    HStack {
+                        Text("From.")
+                            .font(.custom("SourceSerifPro-Black", size: 18))
+                            .foregroundColor(.black)
+                        
+                        Text("\(letter.writer)")
                             .foregroundStyle(Color(hex: 0x1E1E1E))
+                        
+                        Spacer()
+                        
+                        Text("\(letter.date.toString())")
+                            .font(.custom("SourceSerifPro-Light", size: 18))
+                            .foregroundStyle(Color(hex: 0x1E1E1E))
+                        
+                        ZStack {
+                            Image(systemName: "water.waves")
+                                .font(.headline)
+                                .offset(x:18)
+                            
+                            Image(systemName: "sleep.circle")
+                                .font(.largeTitle)
+                        }
+                        .foregroundStyle(Color(hex: 0x979797))
                     }
                     
                     Spacer()
                     
-                    RoundedRectangle(cornerRadius: 10)
-                        .frame(width: 90, height: 35)
-                        .overlay(
-                            Text("받는 사람")
-                                .foregroundColor(.black)
-                        )
-                        .foregroundStyle(Color(hex: 0x979797))
-                    
-                    Text("\(receiver)")
-                        .foregroundStyle(Color(hex: 0x1E1E1E))
+                    if letter.summary != "" {
+                        Text("\"\(letter.summary)\"")
+                    }
                 }
             }
+            .padding()
+            .frame(width: 300, height: 130)
+            .background(
+                RoundedRectangle(cornerRadius: 10)
+                    .foregroundStyle(Color(hex: 0xD1CEC7).opacity(0.65))
+                    .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
+            )
+            
+            Spacer()
         }
-        .padding()
-        .frame(width: 300)
-        .background(
-            RoundedRectangle(cornerRadius: 10)
-                .foregroundStyle(Color(hex: 0xD1CEC7))
-        )
-        
-        Spacer()
     }
 }
 
-func sendLetterView(sender: String, date: String, receiver: String) -> some View {
-    HStack {
-        Spacer()
-        
+struct SendLetterView: View {
+    let letter: Letter
+    
+    var body: some View {
         HStack {
-            VStack(alignment: .leading) {
-                HStack {
-                    RoundedRectangle(cornerRadius: 10)
-                        .frame(width: 100, height: 35)
-                        .overlay(
-                            Text("보내는 사람")
-                                .foregroundColor(.black)
-                        )
+            Spacer()
+            
+            HStack {
+                VStack(alignment: .leading) {
+                    HStack {
+                        Text("To.")
+                            .font(.custom("SourceSerifPro-Black", size: 18))
+                            .foregroundColor(.black)
+                        
+                        Text("\(letter.writer)")
+                            .foregroundStyle(Color(hex: 0x1E1E1E))
+                        
+                        Spacer()
+                        
+                        Text("\(letter.date.toString())")
+                            .font(.custom("SourceSerifPro-Light", size: 18))
+                            .foregroundStyle(Color(hex: 0x1E1E1E))
+                        
+                        ZStack {
+                            Image(systemName: "water.waves")
+                                .font(.headline)
+                                .offset(x:18)
+                            
+                            Image(systemName: "sleep.circle")
+                                .font(.largeTitle)
+                        }
                         .foregroundStyle(Color(hex: 0x979797))
-                    
-                    Text("\(sender)")
-                        .foregroundStyle(Color(hex: 0x1E1E1E))
-                    
-                    Spacer()
-                    
-                    Image(systemName: "swift")
-                        .foregroundStyle(Color(hex: 0x1E1E1E))
-                        .font(.title)
-                }
-                
-                Text(" ")
-                
-                HStack {
-                    VStack (alignment: .leading) {
-                        Text(date)
                     }
                     
                     Spacer()
                     
-                    RoundedRectangle(cornerRadius: 10)
-                        .frame(width: 90, height: 35)
-                        .overlay(
-                            Text("받는 사람")
-                                .foregroundColor(Color(hex: 0x1E1E1E))
-                        )
-                        .foregroundStyle(Color(hex: 0x979797))
-                    
-                    Text("\(receiver)")
-                        .foregroundStyle(Color(hex: 0x1E1E1E))
+                    if letter.summary != "" {
+                        Text("\"\(letter.summary)\"")
+                    }
                 }
             }
+            .padding()
+            .frame(width: 300, height: 130)
+            .background(
+                RoundedRectangle(cornerRadius: 10)
+                    .foregroundStyle(Color(hex: 0xF7F7F7).opacity(0.65))
+                    .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
+            )
         }
-        .padding()
-        .frame(width: 300)
-        .background(
-            RoundedRectangle(cornerRadius: 10)
-                .foregroundStyle(Color(hex: 0xD1CEC7))
-        )
     }
 }
 
