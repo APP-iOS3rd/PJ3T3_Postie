@@ -10,6 +10,7 @@
 		02DCDCD8D590DE7D9E6F06F9 /* Pods_PJ3T3_Postie.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 19068E0481D2E4323D4AC3E2 /* Pods_PJ3T3_Postie.framework */; };
 		0E29F0D32B5ED136005B86FB /* MapApiKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0E29F0D22B5ED136005B86FB /* MapApiKeys.plist */; };
 		0E29F0D62B5EDC30005B86FB /* XMLCoder in Frameworks */ = {isa = PBXBuildFile; productRef = 0E29F0D52B5EDC30005B86FB /* XMLCoder */; };
+		0E29F0D82B5FA2FC005B86FB /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E29F0D72B5FA2FC005B86FB /* Button.swift */; };
 		9E0FA11C2B54D27A001CEEB9 /* PJ3T3_PostieApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0FA11B2B54D27A001CEEB9 /* PJ3T3_PostieApp.swift */; };
 		9E0FA11E2B54D27A001CEEB9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0FA11D2B54D27A001CEEB9 /* ContentView.swift */; };
 		9E0FA1202B54D27C001CEEB9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E0FA11F2B54D27C001CEEB9 /* Assets.xcassets */; };
@@ -80,6 +81,7 @@
 
 /* Begin PBXFileReference section */
 		0E29F0D22B5ED136005B86FB /* MapApiKeys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = MapApiKeys.plist; sourceTree = "<group>"; };
+		0E29F0D72B5FA2FC005B86FB /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		19068E0481D2E4323D4AC3E2 /* Pods_PJ3T3_Postie.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PJ3T3_Postie.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		23E14589945C36E243AAF134 /* Pods-PJ3T3_Postie.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PJ3T3_Postie.debug.xcconfig"; path = "Target Support Files/Pods-PJ3T3_Postie/Pods-PJ3T3_Postie.debug.xcconfig"; sourceTree = "<group>"; };
 		84267E897C35F8294DF9D1F2 /* Pods-PJ3T3_Postie.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PJ3T3_Postie.release.xcconfig"; path = "Target Support Files/Pods-PJ3T3_Postie/Pods-PJ3T3_Postie.release.xcconfig"; sourceTree = "<group>"; };
@@ -236,6 +238,7 @@
 		9E9F6AA32B5761D7003DFE83 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				0E29F0D72B5FA2FC005B86FB /* Button.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -594,6 +597,7 @@
 				9E0FA11E2B54D27A001CEEB9 /* ContentView.swift in Sources */,
 				9E7F8C782B5E69B000F1A6BF /* StorageManager.swift in Sources */,
 				9E9F6ADF2B5765DE003DFE83 /* Color.swift in Sources */,
+				0E29F0D82B5FA2FC005B86FB /* Button.swift in Sources */,
 				9E9F6ABA2B5762FC003DFE83 /* MapView.swift in Sources */,
 				9E9F6ACC2B5763C3003DFE83 /* RegistrationView.swift in Sources */,
 				9E9F6ABC2B576351003DFE83 /* MapCoordinator.swift in Sources */,
