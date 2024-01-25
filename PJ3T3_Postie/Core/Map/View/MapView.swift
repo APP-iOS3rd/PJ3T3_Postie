@@ -27,11 +27,9 @@ struct MapView: View {
                         Button(action: {
                             selectedButtonIndex = index
                             officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1)
-                            
                         }) {
                             ZStack {
                                 if selectedButtonIndex == index {
-                                    
                                     Rectangle()
                                         .foregroundColor(.clear)
                                         .frame(width: 70, height: 30)
@@ -48,11 +46,6 @@ struct MapView: View {
                                                 .background(Color(red: 1, green: 0.98, blue: 0.95))
                                                 .cornerRadius(20)
                                                 .shadow(color: .black.opacity(0.1), radius: 3, x: 2, y: 2)
-//                                                .overlay(
-//                                                    RoundedRectangle(cornerRadius: 16)
-//                                                        .inset(by: 0.5)
-//                                                        .stroke(Color(red: 1, green: 0.45, blue: 0.45), lineWidth: 2)
-//                                                )
                                         }
                                 
                                 Text(name[index])
@@ -60,16 +53,13 @@ struct MapView: View {
                                     .multilineTextAlignment(.center)
                                     .foregroundColor(Color(red: 0.12, green: 0.12, blue: 0.12))
                                     .frame(width: 60, alignment: .center)
-                                
                             }
                         }
-                        
                     }
                     Spacer()
                 }
                 .padding()
             }
-            
             List {
                 ForEach(officeInfoServiceAPI.infos, id: \.self) { result in
                     VStack {
@@ -83,13 +73,13 @@ struct MapView: View {
             NaverMap()
                 .ignoresSafeArea(.all, edges: .top)
         }
-//        .navigationBarTitle("Postie Map")
-//        .foregroundStyle(Color(hex: 0x1E1E1E))
+        //        .navigationBarTitle("Postie Map")
+        //        .foregroundStyle(Color(hex: 0x1E1E1E))
         .onAppear() {
             CLLocationManager().requestWhenInUseAuthorization()
             officeInfoServiceAPI.fetchData(postDivType: 1)
+            print(coordinator.userLocation.0)
         }
-        
         //iOS17버전
         //        .onChange(of: officeInfoServiceAPI.infos) {
         //            $coordinator.removeAllMakers

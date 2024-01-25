@@ -16,12 +16,12 @@ import NMapsMap
 
 class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate, NMFMapViewTouchDelegate, CLLocationManagerDelegate {
     
-    @Published var coord: (Double, Double) = (37.5626106, 126.9775524)
+    //    @Published var coord: (Double, Double) = (37.5626106, 126.9775524)
     @Published var userLocation: (Double, Double) = (37.5626106, 126.9775524)
     
     static let shared = Coordinator()
     
-    let startInfoWindow = NMFInfoWindow()
+    //    let startInfoWindow = NMFInfoWindow()
     let view = NMFNaverMapView(frame: .zero)
     
     var markers: [NMFMarker] = []
@@ -44,13 +44,12 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate, NMFMapV
         
         view.mapView.addCameraDelegate(delegate: self)
         view.mapView.touchDelegate = self
-        
     }
     
     func getNaverMapView() -> NMFNaverMapView {
         view
     }
-
+    
     func mapView(_ mapView: NMFMapView, cameraWillChangeByReason reason: Int, animated: Bool) {
         // 카메라 이동이 시작되기 전 호출되는 함수
     }
@@ -58,7 +57,7 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate, NMFMapV
     func mapView(_ mapView: NMFMapView, cameraIsChangingByReason reason: Int) {
         // 카메라의 위치가 변경되면 호출되는 함수
     }
-
+    
     func fetchLocation(latitude: Double, longitude: Double, name: String) {
         let marker = NMFMarker()
         
@@ -72,7 +71,7 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate, NMFMapV
         
         locationOverlay.hidden = true
         marker.position = NMGLatLng(lat: latitude, lng: longitude)
-
+        
         marker.captionText = name
         
         //다른 아이콘이 필요하다면 추가 할 것
@@ -80,7 +79,7 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate, NMFMapV
         locationOverlay.iconWidth = CGFloat(NMF_LOCATION_OVERLAY_SIZE_AUTO)
         locationOverlay.iconHeight = CGFloat(NMF_LOCATION_OVERLAY_SIZE_AUTO)
         locationOverlay.anchor = CGPoint(x: 0.5, y: 1)
-
+        
         marker.mapView = view.mapView
         view.mapView.moveCamera(cameraUpdate)
     }
@@ -93,11 +92,11 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate, NMFMapV
         marker.mapView = view.mapView
         markers.append(marker)
         
-//        let infoWindow = NMFInfoWindow()
-//        let dataSource = NMFInfoWindowDefaultTextSource.data()
-//        //시간 설정, 나중에 구현 예정
-//        dataSource.title = time
-//        infoWindow.dataSource = dataSource
+        //        let infoWindow = NMFInfoWindow()
+        //        let dataSource = NMFInfoWindowDefaultTextSource.data()
+        //        //시간 설정, 나중에 구현 예정
+        //        dataSource.title = time
+        //        infoWindow.dataSource = dataSource
     }
     
     func removeAllMakers() {
