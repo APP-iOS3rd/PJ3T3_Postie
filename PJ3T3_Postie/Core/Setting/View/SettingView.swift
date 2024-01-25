@@ -144,11 +144,11 @@ struct AddDataSectionView: View {
             
             //firestore에 document를 저장한다.
             firestoreManager.addLetter(writer: "me",
-                                             recipient: "you",
-                                             summary: "ImagesTest",
-                                             date: Date(),
-                                             imageUrlStrings: selectedImageUrls,
-                                             text: "ㅜㅜ..")
+                                       recipient: "you",
+                                       summary: "ImagesTest",
+                                       date: Date(),
+                                       imageUrlStrings: selectedImageUrls,
+                                       text: "ㅜㅜ..")
             firestoreManager.fetchAllLetters() //변경사항을 fetch한다.
         }
     }
