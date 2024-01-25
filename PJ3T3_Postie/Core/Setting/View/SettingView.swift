@@ -38,9 +38,9 @@ struct SettingView: View {
                                 Text(user.email)
                                     .font(.footnote)
                                     .foregroundStyle(profileBackgroundColor)
-                            } //VStack
-                        } //HStack
-                    } //Section
+                            }
+                        }
+                    }
                     
                     Section("General") {
                         HStack {
@@ -52,7 +52,7 @@ struct SettingView: View {
                                 .font(.subheadline)
                                 .foregroundStyle(profileBackgroundColor)
                         }
-                    } //Section
+                    }
                     
                     Section("Account") {
                         Button {
@@ -66,18 +66,18 @@ struct SettingView: View {
                         } label: {
                             SettingsRowView(imageName: "xmark.circle.fill", title: "Delete Account", tintColor: signOutIconColor)
                         }
-                    } //Section
+                    }
                     
                     AddDataSectionView()
                     
                     LetterDataListView()
                     
-                } //List
+                }
                 .navigationTitle("Setting")
             } else {
                 ProgressView() //로그인 중
-            } //if...else
-        } //NavigationStack
+            }
+        }
     }
 }
 
@@ -170,7 +170,7 @@ struct LetterDataListView: View {
                                 Text("To: \(letter.recipient)")
                                 
                                 Spacer()
-                            } //HStack
+                            }
                             
                             Text("\(letter.summary)")
                             
@@ -178,17 +178,17 @@ struct LetterDataListView: View {
                                 Spacer()
                                 
                                 Text("From: \(letter.writer)")
-                            } //HStack
-                        } //VStack
-                    } //NavigationLink
-                } //if
+                            }
+                        }
+                    }
+                }
             } else {
                 VStack {
                     HStack {
                         Text("To: \(letter.recipient)")
                         
                         Spacer()
-                    } //HStack
+                    }
                     
                     Text("\(letter.summary)")
                     
@@ -196,10 +196,10 @@ struct LetterDataListView: View {
                         Spacer()
                         
                         Text("From: \(letter.writer)")
-                    } //HStack
-                } //VStack
-            } //if...else
-        } //ForEach
+                    }
+                }
+            }
+        } 
     }
 }
 
