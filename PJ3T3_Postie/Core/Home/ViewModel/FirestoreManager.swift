@@ -39,7 +39,7 @@ class FirestoreManager: ObservableObject {
             "text": text
         ]
 
-        //생성한 데이터를 해당되는 경로에 새롭게 생성한다. 이때 overwrite 하지 않는다.
+        //생성한 데이터를 해당되는 경로에 새롭게 생성한다. merge false: overwrite a document or create it if it doesn't exist yet
         document.setData(docData, merge: false) { error in
             if let error = error {
                 print(error)
