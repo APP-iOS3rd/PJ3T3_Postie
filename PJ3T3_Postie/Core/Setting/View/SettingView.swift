@@ -109,9 +109,6 @@ struct AddDataSectionView: View {
             }
             selectedItem = nil
         }
-        .onAppear {
-            firestoreManager.fetchAllLetters()
-        }
     }
     
     /// SwiftUI의 PhotosUI를 사용해 이미지를 선택하고 UIImageArray에 추가한다.

@@ -23,7 +23,9 @@ class FirestoreManager: ObservableObject {
     @Published var letters: [Letter] = []
     @Published var docId: String = ""
     
-    private init() { }
+    private init() { 
+        fetchAllLetters()
+    }
 
     //새로운 편지를 추가한다.
     func addLetter(writer: String, recipient: String, summary: String, date: Date, text: String) {
