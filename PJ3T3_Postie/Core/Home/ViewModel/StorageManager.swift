@@ -91,7 +91,7 @@ final class StorageManager: ObservableObject {
                     Task {
                         let absoluteString = try await item.downloadURL().absoluteString
                         
-                        self.images.append(LetterPhoto(id: item.name, urlString: absoluteString, image: image))
+                        self.images.append(LetterPhoto(id: item.name, fullPath: item.fullPath, urlString: absoluteString, image: image))
                     }
 
                 }
