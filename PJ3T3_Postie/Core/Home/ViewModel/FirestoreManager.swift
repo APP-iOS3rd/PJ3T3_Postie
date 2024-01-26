@@ -49,7 +49,15 @@ class FirestoreManager: ObservableObject {
         }
     }
     
-    //기본적인 데이터 수정 함수
+    /// 데이터의 위치와 수정 후 데이터를 받아 firestore에 업데이트 한다.
+    /// - Parameters:
+    ///   - documentId: letter 구조체 안에 저장된 id를 가져옴
+    ///   - writer: 변경 된 보낸 사람
+    ///   - recipient: 변경 된 받는 사람
+    ///   - summary: 변경 된 한 줄 요약
+    ///   - date: 편지를 보내거나 받은 날짜
+    ///   - imageUrlStrings: 이미지 Url String
+    ///   - text: 변경 된 편지 본문
     func editLetter(documentId: String, writer: String, recipient: String, summary: String, date: Date, imageUrlStrings: [String], text: String) {
         let docRef = colRef.document(userUid).collection("letters").document(documentId)
         
