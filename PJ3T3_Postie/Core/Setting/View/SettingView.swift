@@ -135,7 +135,7 @@ struct AddDataSectionView: View {
         Task {
             //letter객체를 만들어 append한다면 id는 어떻게 하지?
             //firestore에 document를 저장한다.
-            firestoreManager.addLetter(writer: "me",
+            await firestoreManager.addLetter(writer: "me",
                                        recipient: "you",
                                        summary: "ImagesTest2",
                                        date: Date(),

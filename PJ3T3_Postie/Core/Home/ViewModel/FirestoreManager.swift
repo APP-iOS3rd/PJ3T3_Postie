@@ -9,6 +9,7 @@ import Foundation
 import FirebaseAuth
 import FirebaseFirestore
 
+@MainActor
 class FirestoreManager: ObservableObject {
     static let shared = FirestoreManager()
     var colRef = Firestore.firestore().collection("users") //user 컬렉션 전체를 가져온다.
@@ -28,10 +29,11 @@ class FirestoreManager: ObservableObject {
     }
 
     //새로운 편지를 추가한다.
-    func addLetter(writer: String, recipient: String, summary: String, date: Date, text: String) {
+    func addLetter(writer: String, recipient: String, summary: String, date: Date, text: String) async {
         let document = colRef.document(userUid).collection("letters").document() //새로운 document를 생성한다.
         let documentId = document.documentID //생성한 document의 id를 가져온다.
         docId = documentId
+        print(docId)
         //Letter model에 맞는 모양으로 document data를 생성한다.
         let docData: [String: Any] = [
             "id": documentId,
@@ -43,12 +45,11 @@ class FirestoreManager: ObservableObject {
         ]
 
         //생성한 데이터를 해당되는 경로에 새롭게 생성한다. merge false: overwrite a document or create it if it doesn't exist yet
-        document.setData(docData, merge: false) { error in
-            if let error = error {
-                print(error)
-            } else {
-                print("Success:", documentId)
-            }
+        do {
+            try await document.setData(docData, merge: false)
+            print("Success:", documentId)
+        } catch {
+            print("\(#function): \(error.localizedDescription)")
         }
     }
     
