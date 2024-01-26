@@ -5,9 +5,9 @@
 //  Created by Eunsu JEONG on 1/22/24.
 //
 
-import Foundation
-import FirebaseStorage
 import UIKit
+
+import FirebaseStorage
 
 @MainActor
 final class StorageManager: ObservableObject {

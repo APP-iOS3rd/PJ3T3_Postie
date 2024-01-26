@@ -117,6 +117,7 @@ struct AddDataSectionView: View {
         Task {
             //지정한 타입의 인스턴스를 불러오려고 시도한다. 실패 action 구현 필요
             guard let image = try await item.loadTransferable(type: Data.self) else { return }
+            
             if let uiImage = UIImage(data: image) {
                 selectedImages.append(uiImage)
                 print(selectedImages)
@@ -184,7 +185,6 @@ struct TestDetailView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
     @ObservedObject var storageManager = StorageManager.shared
     @Environment(\.dismiss) var dismiss
-    
     var letter: Letter
     @State var writer = ""
     @State var recipient = ""
@@ -264,7 +264,7 @@ struct TestImageView: View {
     var images: [LetterPhoto]
     
     var body: some View {
-        ScrollView {
+        ScrollView(.horizontal) {
             LazyHGrid(rows: rows) {
                 ForEach(images, id: \.self) { img in
                     //LetterPhoto의 UIImage 타입으로 저장된 변수를 사용할 수도 있다: Image(uiImage: img.image)
