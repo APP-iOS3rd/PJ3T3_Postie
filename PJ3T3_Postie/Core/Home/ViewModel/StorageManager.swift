@@ -9,6 +9,7 @@ import Foundation
 import FirebaseStorage
 import UIKit
 
+@MainActor
 final class StorageManager: ObservableObject {
     static let shared = StorageManager()
     @Published var images: [LetterPhoto] = []
