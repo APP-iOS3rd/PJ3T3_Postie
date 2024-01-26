@@ -59,9 +59,8 @@ class FirestoreManager: ObservableObject {
     ///   - recipient: 변경 된 받는 사람
     ///   - summary: 변경 된 한 줄 요약
     ///   - date: 편지를 보내거나 받은 날짜
-    ///   - imageUrlStrings: 이미지 Url String
     ///   - text: 변경 된 편지 본문
-    func editLetter(documentId: String, writer: String, recipient: String, summary: String, date: Date, imageUrlStrings: [String], text: String) {
+    func editLetter(documentId: String, writer: String, recipient: String, summary: String, date: Date, text: String) {
         let docRef = colRef.document(userUid).collection("letters").document(documentId)
         let docData: [String: Any] = [
             "id": documentId,
@@ -69,7 +68,6 @@ class FirestoreManager: ObservableObject {
             "recipient": recipient,
             "summary": summary,
             "date": date,
-            "imageUrlStrings": imageUrlStrings,
             "text": text
         ]
         
@@ -126,7 +124,6 @@ class FirestoreManager: ObservableObject {
                                            recipient: data["recipient"] as? String ?? "",
                                            summary: data["summary"] as? String ?? "",
                                            date: data["date"] as? Date ?? Date(),
-                                           imageUrlStrings: data["imageUrlStrings"] as? [String],
                                            text: data["text"] as? String ?? ""))
             }
         }
