@@ -230,7 +230,13 @@ struct TestDetailView: View {
             
             HStack {
                 Button {
-                    //업데이트 함수 호출
+                    firestoreManager.editLetter(documentId: letter.id, 
+                                                writer: writer,
+                                                recipient: recipient,
+                                                summary: summary,
+                                                date: Date(),
+                                                imageUrlStrings: letter.imageUrlStrings ?? [],
+                                                text: text)
                     firestoreManager.fetchAllLetters()
                     dismiss()
                 } label: {
@@ -239,7 +245,7 @@ struct TestDetailView: View {
                 .buttonStyle(.borderedProminent)
                 
                 Button {
-                    //삭제 함수 호출
+                    firestoreManager.deleteRestaurant(documentId: letter.id)
                     firestoreManager.fetchAllLetters()
                     dismiss()
                 } label: {
