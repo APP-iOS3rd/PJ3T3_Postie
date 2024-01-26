@@ -214,12 +214,6 @@ struct TestDetailView: View {
                 TextField("\(letter.text)", text: $text)
                     .textFieldStyle(.roundedBorder)
                 
-                if let imageUrlStrings = letter.imageUrlStrings {
-                    if !imageUrlStrings.isEmpty {
-                        ImageAsyncView(imageUrlString: imageUrlStrings)
-                    }
-                }
-                
                 if !storageManager.images.isEmpty {
                     TestImageView(images: storageManager.images)
                 }
