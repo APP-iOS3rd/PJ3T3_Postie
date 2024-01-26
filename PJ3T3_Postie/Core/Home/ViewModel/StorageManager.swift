@@ -65,6 +65,36 @@ final class StorageManager: ObservableObject {
         }
         
         print("업로드 종료")
-        return urlArray
+    }
+    
+    //Firebase의 listAll() 메서드를 사용하여 특정 경로에 포함된 모든 항목을 images 배열에 추가
+    func listAllFile(userId: String, docId: String) {
+        //이미지 폴더의 모든 파일을 나열
+        let folderRef = userReference(userId: userId).child(docId)
+        
+        folderRef.listAll { result, error in
+            guard let result = result, error == nil else {
+                print("Error while getting list of file: ", error ?? "Undefined error")
+                return
+            }
+            
+            //result.items == 지정한 경로에 포함된 모든 파일
+            for item in result.items {
+                item.getData(maxSize: 20 * 1024 * 1024) { data, error in
+                    //UIImage타입으로 데이터를 저장 할 필요가 없다면 error 부분 제외하고 모두 삭제 필요
+                    guard let data = data, let image = UIImage(data: data), error == nil else {
+                        print("\(#function): \(error?.localizedDescription)")
+                        return
+                    }
+                    
+                    Task {
+                        let absoluteString = try await item.downloadURL().absoluteString
+                        
+                        self.images.append(LetterPhoto(id: item.name, urlString: absoluteString, image: image))
+                    }
+
+                }
+            }
+        }
     }
 }
