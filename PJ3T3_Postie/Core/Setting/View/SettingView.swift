@@ -134,22 +134,21 @@ struct AddDataSectionView: View {
     //userUid를 AuthViewModel에서 가져오도록 리팩토링 필요
     //리팩토링 하면서 파일 이름도 함께 변경 AuthViewModel -> AuthManager
     func uploadLetter(uiImages: [UIImage]) {
-        var selectedImageUrls: [String] = []
         Task {
-            //함수가 호출되면 uiImages가 빈 배열이 아닌지 확인해 빈 배열이 아닐 경우 storage에 이미지를 업로드 하고
-            //이미지 업로드가 성공하면 urlString들이 저장된 배열을 return받아 selectedImageUrls에 저장한다.
-            if !uiImages.isEmpty {
-                selectedImageUrls = try await storageManager.saveUIImage(images: uiImages, userId: firestoreManager.userUid)
-            }
-            
+            //letter객체를 만들어 append한다면 id는 어떻게 하지?
             //firestore에 document를 저장한다.
             firestoreManager.addLetter(writer: "me",
                                        recipient: "you",
-                                       summary: "ImagesTest",
+                                       summary: "ImagesTest2",
                                        date: Date(),
-                                       imageUrlStrings: selectedImageUrls,
-                                       text: "ㅜㅜ..")
+                                       text: "?.?")
             firestoreManager.fetchAllLetters() //변경사항을 fetch한다.
+            //함수가 호출되면 uiImages가 빈 배열이 아닌지 확인해 빈 배열이 아닐 경우 storage에 이미지를 업로드 하고
+            //이미지 업로드가 성공하면 urlString들이 저장된 배열을 return받아 selectedImageUrls에 저장한다.
+            if !uiImages.isEmpty {
+                try await storageManager.saveUIImage(images: uiImages, userId: firestoreManager.userUid, docId: firestoreManager.docId)
+            }
+            firestoreManager.docId = ""
         }
     }
 }
