@@ -265,6 +265,7 @@ struct ImageAsyncView: View {
                             .resizable()
                             .frame(width: 150, height: 150)
                             .scaledToFit()
+                            .padding(10)
                     } placeholder: {
                         ProgressView()
                     }
