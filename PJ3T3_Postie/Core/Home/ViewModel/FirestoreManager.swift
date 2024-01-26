@@ -21,13 +21,15 @@ class FirestoreManager: ObservableObject {
         return ""
     }
     @Published var letters: [Letter] = []
+    @Published var docId: String = ""
     
     private init() { }
 
     //새로운 편지를 추가한다.
-    func addLetter(writer: String, recipient: String, summary: String, date: Date, imageUrlStrings: [String], text: String) {
+    func addLetter(writer: String, recipient: String, summary: String, date: Date, text: String) {
         let document = colRef.document(userUid).collection("letters").document() //새로운 document를 생성한다.
         let documentId = document.documentID //생성한 document의 id를 가져온다.
+        docId = documentId
         //Letter model에 맞는 모양으로 document data를 생성한다.
         let docData: [String: Any] = [
             "id": documentId,
@@ -35,7 +37,6 @@ class FirestoreManager: ObservableObject {
             "recipient": recipient,
             "summary": summary,
             "date": date,
-            "imageUrlStrings": imageUrlStrings,
             "text": text
         ]
 
