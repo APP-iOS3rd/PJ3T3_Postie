@@ -232,7 +232,6 @@ struct TestDetailView: View {
                                                 recipient: recipient,
                                                 summary: summary,
                                                 date: Date(),
-                                                imageUrlStrings: letter.imageUrlStrings ?? [],
                                                 text: text)
                     firestoreManager.fetchAllLetters()
                     dismiss()
@@ -290,8 +289,9 @@ struct ImageAsyncView: View {
 }
 
 struct TestImageView: View {
-    var images: [LetterPhoto]
+    @ObservedObject var storageManager = StorageManager.shared
     let rows = Array(repeating: GridItem(.adaptive(minimum: 100)), count: 1)
+    var images: [LetterPhoto]
     
     var body: some View {
         ScrollView {
@@ -299,11 +299,23 @@ struct TestImageView: View {
                 ForEach(images, id: \.self) { img in
                     //LetterPhoto의 UIImage 타입으로 저장된 변수를 사용할 수도 있다: Image(uiImage: img.image)
                     AsyncImage(url: URL(string: img.urlString)) { image in
-                        image
-                            .resizable()
-                            .frame(width: 150, height: 150)
-                            .scaledToFit()
-                            .padding(.leading, 10)
+                        ZStack(alignment: .topTrailing) {
+                            image
+                                .resizable()
+                                .frame(width: 150, height: 150)
+                                .scaledToFit()
+                                .padding(.leading, 10)
+                            
+                            Button {
+                                storageManager.deleteItem(fullPath: img.fullPath)
+                            } label: {
+                                Image(systemName: "xmark.circle.fill")
+                                    .foregroundStyle(.gray)
+                                    .frame(width: 20, height: 20)
+                                    .padding(5)
+                            }
+
+                        }
                     } placeholder: {
                         ProgressView()
                     }

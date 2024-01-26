@@ -98,4 +98,19 @@ final class StorageManager: ObservableObject {
             }
         }
     }
+    
+    func deleteItem(fullPath: String) {
+        let item = Storage.storage().reference().child(fullPath)
+        
+        item.delete { error in
+            guard error == nil else {
+                print("Error deleting item.", error)
+                return
+            }
+            
+            for (index, item) in self.images.enumerated() where fullPath == item.fullPath {
+                self.images.remove(at: index)
+            }
+        }
+    }
 }
