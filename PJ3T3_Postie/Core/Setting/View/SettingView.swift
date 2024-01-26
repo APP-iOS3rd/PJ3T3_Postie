@@ -219,12 +219,10 @@ struct TestDetailView: View {
                         ImageAsyncView(imageUrlString: imageUrlStrings)
                     }
                 }
-            }
-            .onAppear {
-                writer = letter.writer
-                recipient = letter.recipient
-                summary = letter.summary
-                text = letter.text
+                
+                if !storageManager.images.isEmpty {
+                    TestImageView(images: storageManager.images)
+                }
             }
             
             HStack {
@@ -282,6 +280,30 @@ struct ImageAsyncView: View {
                             .frame(width: 150, height: 150)
                             .scaledToFit()
                             .padding(10)
+                    } placeholder: {
+                        ProgressView()
+                    }
+                }
+            }
+        }
+    }
+}
+
+struct TestImageView: View {
+    var images: [LetterPhoto]
+    let rows = Array(repeating: GridItem(.adaptive(minimum: 100)), count: 1)
+    
+    var body: some View {
+        ScrollView {
+            LazyHGrid(rows: rows) {
+                ForEach(images, id: \.self) { img in
+                    //LetterPhoto의 UIImage 타입으로 저장된 변수를 사용할 수도 있다: Image(uiImage: img.image)
+                    AsyncImage(url: URL(string: img.urlString)) { image in
+                        image
+                            .resizable()
+                            .frame(width: 150, height: 150)
+                            .scaledToFit()
+                            .padding(.leading, 10)
                     } placeholder: {
                         ProgressView()
                     }
