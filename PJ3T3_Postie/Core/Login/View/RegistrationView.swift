@@ -19,7 +19,7 @@ struct RegistrationView: View {
     @State private var password = ""
     @State private var confirmPassword = ""
     //ViewModels
-    @ObservedObject var authViewModel = AuthViewModel.shared
+    @ObservedObject var authViewModel = AuthManager.shared
     
     var body: some View {
         ZStack {
