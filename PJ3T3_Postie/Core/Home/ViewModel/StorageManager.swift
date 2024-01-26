@@ -11,6 +11,7 @@ import UIKit
 
 final class StorageManager: ObservableObject {
     static let shared = StorageManager()
+    @Published var images: [LetterPhoto] = []
     
     private init() { }
     
