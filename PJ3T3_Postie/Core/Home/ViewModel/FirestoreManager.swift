@@ -49,6 +49,44 @@ class FirestoreManager: ObservableObject {
         }
     }
     
+    //기본적인 데이터 수정 함수
+    func editLetter(documentId: String, writer: String, recipient: String, summary: String, date: Date, imageUrlStrings: [String], text: String) {
+        let docRef = colRef.document(userUid).collection("letters").document(documentId)
+        
+        let docData: [String: Any] = [
+            "id": documentId,
+            "writer": writer,
+            "recipient": recipient,
+            "summary": summary,
+            "date": date,
+            "imageUrlStrings": imageUrlStrings,
+            "text": text
+        ]
+        
+        docRef.updateData(docData) { error in
+            if let error = error {
+                print("Error writing document: ", error)
+            } else {
+                print("\(documentId) merge success")
+                print(docData)
+            }
+        }
+    }
+    
+    //데이터 삭제
+    //Storage의 이미지도 같이 삭제하도록 설정해야 한다.
+    func deleteRestaurant(documentId: String) {
+        let docRef = colRef.document(userUid).collection("letters").document(documentId)
+        
+        docRef.delete() { error in
+            if let error = error {
+                print("Error writing document: ", error)
+            } else {
+                print("\(documentId) delete success")
+            }
+        }
+    }
+    
     //데이터 전체를 가지고 온다.
     func fetchAllLetters() {
         let docRef = colRef.document(userUid).collection("letters") //특정 user의 document의 letters라는 하위 컬렉션 가져옴
