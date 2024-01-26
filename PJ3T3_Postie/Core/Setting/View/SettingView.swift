@@ -156,7 +156,7 @@ struct AddDataSectionView: View {
 
 //Firestore에 저장된 데이터를 리스트로 보여주는 뷰: 기능 테스트 후 삭제 예정
 struct LetterDataListView: View {
-    @ObservedObject var firestoreManager = FirestoreManager.shared //테스트용으로 vm 임시 선언, 삭제 예정
+    @ObservedObject var firestoreManager = FirestoreManager.shared
     
     var body: some View {
         ForEach(firestoreManager.letters, id: \.self) { letter in
