@@ -182,7 +182,9 @@ struct LetterDataListView: View {
 
 struct TestDetailView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
+    @ObservedObject var storageManager = StorageManager.shared
     @Environment(\.dismiss) var dismiss
+    
     var letter: Letter
     @State var writer = ""
     @State var recipient = ""
@@ -250,6 +252,17 @@ struct TestDetailView: View {
                 }
                 .buttonStyle(.borderedProminent)
             }
+        }
+        .onAppear {
+            writer = letter.writer
+            recipient = letter.recipient
+            summary = letter.summary
+            text = letter.text
+            storageManager.listAllFile(userId: firestoreManager.userUid, docId: letter.id)
+        }
+        .onDisappear {
+            //뷰가 dismiss될 때 images 배열 초기화
+            storageManager.images.removeAll()
         }
     }
 }
