@@ -160,29 +160,9 @@ struct LetterDataListView: View {
     
     var body: some View {
         ForEach(firestoreManager.letters, id: \.self) { letter in
-            if let imageUrlStrings = letter.imageUrlStrings {
-                if !imageUrlStrings.isEmpty {
-                    NavigationLink {
-                        ImageAsyncView(imageUrlString: imageUrlStrings)
-                    } label: {
-                        VStack {
-                            HStack {
-                                Text("To: \(letter.recipient)")
-                                
-                                Spacer()
-                            }
-                            
-                            Text("\(letter.summary)")
-                            
-                            HStack {
-                                Spacer()
-                                
-                                Text("From: \(letter.writer)")
-                            }
-                        }
-                    }
-                }
-            } else {
+            NavigationLink {
+                TestDetailView(letter: letter)
+            } label: {
                 VStack {
                     HStack {
                         Text("To: \(letter.recipient)")
@@ -199,7 +179,75 @@ struct LetterDataListView: View {
                     }
                 }
             }
-        } 
+        }
+    }
+}
+
+struct TestDetailView: View {
+    @ObservedObject var firestoreManager = FirestoreManager.shared
+    @Environment(\.dismiss) var dismiss
+    var letter: Letter
+    @State var writer = ""
+    @State var recipient = ""
+    @State var summary = ""
+    @State var text = ""
+    
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading) {
+                Text("보낸 사람")
+                
+                TextField("\(letter.writer)", text: $writer)
+                    .textFieldStyle(.roundedBorder)
+                
+                Text("받는 사람")
+                
+                TextField("\(letter.recipient)", text: $recipient)
+                    .textFieldStyle(.roundedBorder)
+                
+                Text("한 줄 요약")
+                
+                TextField("\(letter.summary)", text: $summary)
+                    .textFieldStyle(.roundedBorder)
+                
+                Text("내용")
+                
+                TextField("\(letter.text)", text: $text)
+                    .textFieldStyle(.roundedBorder)
+                
+                if let imageUrlStrings = letter.imageUrlStrings {
+                    if !imageUrlStrings.isEmpty {
+                        ImageAsyncView(imageUrlString: imageUrlStrings)
+                    }
+                }
+            }
+            .onAppear {
+                writer = letter.writer
+                recipient = letter.recipient
+                summary = letter.summary
+                text = letter.text
+            }
+            
+            HStack {
+                Button {
+                    //업데이트 함수 호출
+                    firestoreManager.fetchAllLetters()
+                    dismiss()
+                } label: {
+                    Text("수정 완료")
+                }
+                .buttonStyle(.borderedProminent)
+                
+                Button {
+                    //삭제 함수 호출
+                    firestoreManager.fetchAllLetters()
+                    dismiss()
+                } label: {
+                    Text("삭제")
+                }
+                .buttonStyle(.borderedProminent)
+            }
+        }
     }
 }
 
