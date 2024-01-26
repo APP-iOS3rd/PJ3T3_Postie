@@ -63,7 +63,6 @@ class FirestoreManager: ObservableObject {
     ///   - text: 변경 된 편지 본문
     func editLetter(documentId: String, writer: String, recipient: String, summary: String, date: Date, imageUrlStrings: [String], text: String) {
         let docRef = colRef.document(userUid).collection("letters").document(documentId)
-        
         let docData: [String: Any] = [
             "id": documentId,
             "writer": writer,
@@ -118,6 +117,7 @@ class FirestoreManager: ObservableObject {
             
             for document in snapshot.documents {
                 let data = document.data()
+                
                 print("Fetch success")
                 
                 //document의 data를 가지고 와서, data를 각 값에 넣어줌

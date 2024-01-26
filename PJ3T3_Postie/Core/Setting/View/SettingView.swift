@@ -145,6 +145,7 @@ struct AddDataSectionView: View {
             if !uiImages.isEmpty {
                 try await storageManager.saveUIImage(images: uiImages, userId: firestoreManager.userUid, docId: firestoreManager.docId)
             }
+            
             firestoreManager.docId = ""
         }
     }
