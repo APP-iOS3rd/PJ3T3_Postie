@@ -38,9 +38,9 @@ struct SettingView: View {
                                 Text(user.email)
                                     .font(.footnote)
                                     .foregroundStyle(profileBackgroundColor)
-                            } //VStack
-                        } //HStack
-                    } //Section
+                            }
+                        }
+                    }
                     
                     Section("General") {
                         HStack {
@@ -52,7 +52,7 @@ struct SettingView: View {
                                 .font(.subheadline)
                                 .foregroundStyle(profileBackgroundColor)
                         }
-                    } //Section
+                    }
                     
                     Section("Account") {
                         Button {
@@ -66,18 +66,18 @@ struct SettingView: View {
                         } label: {
                             SettingsRowView(imageName: "xmark.circle.fill", title: "Delete Account", tintColor: signOutIconColor)
                         }
-                    } //Section
+                    }
                     
                     AddDataSectionView()
                     
                     LetterDataListView()
                     
-                } //List
+                }
                 .navigationTitle("Setting")
             } else {
                 ProgressView() //로그인 중
-            } //if...else
-        } //NavigationStack
+            }
+        }
     }
 }
 
@@ -144,11 +144,11 @@ struct AddDataSectionView: View {
             
             //firestore에 document를 저장한다.
             firestoreManager.addLetter(writer: "me",
-                                             recipient: "you",
-                                             summary: "ImagesTest",
-                                             date: Date(),
-                                             imageUrlStrings: selectedImageUrls,
-                                             text: "ㅜㅜ..")
+                                       recipient: "you",
+                                       summary: "ImagesTest",
+                                       date: Date(),
+                                       imageUrlStrings: selectedImageUrls,
+                                       text: "ㅜㅜ..")
             firestoreManager.fetchAllLetters() //변경사항을 fetch한다.
         }
     }
@@ -156,39 +156,19 @@ struct AddDataSectionView: View {
 
 //Firestore에 저장된 데이터를 리스트로 보여주는 뷰: 기능 테스트 후 삭제 예정
 struct LetterDataListView: View {
-    @ObservedObject var firestoreManager = FirestoreManager.shared //테스트용으로 vm 임시 선언, 삭제 예정
+    @ObservedObject var firestoreManager = FirestoreManager.shared
     
     var body: some View {
         ForEach(firestoreManager.letters, id: \.self) { letter in
-            if let imageUrlStrings = letter.imageUrlStrings {
-                if !imageUrlStrings.isEmpty {
-                    NavigationLink {
-                        ImageAsyncView(imageUrlString: imageUrlStrings)
-                    } label: {
-                        VStack {
-                            HStack {
-                                Text("To: \(letter.recipient)")
-                                
-                                Spacer()
-                            } //HStack
-                            
-                            Text("\(letter.summary)")
-                            
-                            HStack {
-                                Spacer()
-                                
-                                Text("From: \(letter.writer)")
-                            } //HStack
-                        } //VStack
-                    } //NavigationLink
-                } //if
-            } else {
+            NavigationLink {
+                TestDetailView(letter: letter)
+            } label: {
                 VStack {
                     HStack {
                         Text("To: \(letter.recipient)")
                         
                         Spacer()
-                    } //HStack
+                    }
                     
                     Text("\(letter.summary)")
                     
@@ -196,10 +176,84 @@ struct LetterDataListView: View {
                         Spacer()
                         
                         Text("From: \(letter.writer)")
-                    } //HStack
-                } //VStack
-            } //if...else
-        } //ForEach
+                    }
+                }
+            }
+        }
+    }
+}
+
+struct TestDetailView: View {
+    @ObservedObject var firestoreManager = FirestoreManager.shared
+    @Environment(\.dismiss) var dismiss
+    var letter: Letter
+    @State var writer = ""
+    @State var recipient = ""
+    @State var summary = ""
+    @State var text = ""
+    
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading) {
+                Text("보낸 사람")
+                
+                TextField("\(letter.writer)", text: $writer)
+                    .textFieldStyle(.roundedBorder)
+                
+                Text("받는 사람")
+                
+                TextField("\(letter.recipient)", text: $recipient)
+                    .textFieldStyle(.roundedBorder)
+                
+                Text("한 줄 요약")
+                
+                TextField("\(letter.summary)", text: $summary)
+                    .textFieldStyle(.roundedBorder)
+                
+                Text("내용")
+                
+                TextField("\(letter.text)", text: $text)
+                    .textFieldStyle(.roundedBorder)
+                
+                if let imageUrlStrings = letter.imageUrlStrings {
+                    if !imageUrlStrings.isEmpty {
+                        ImageAsyncView(imageUrlString: imageUrlStrings)
+                    }
+                }
+            }
+            .onAppear {
+                writer = letter.writer
+                recipient = letter.recipient
+                summary = letter.summary
+                text = letter.text
+            }
+            
+            HStack {
+                Button {
+                    firestoreManager.editLetter(documentId: letter.id, 
+                                                writer: writer,
+                                                recipient: recipient,
+                                                summary: summary,
+                                                date: Date(),
+                                                imageUrlStrings: letter.imageUrlStrings ?? [],
+                                                text: text)
+                    firestoreManager.fetchAllLetters()
+                    dismiss()
+                } label: {
+                    Text("수정 완료")
+                }
+                .buttonStyle(.borderedProminent)
+                
+                Button {
+                    firestoreManager.deleteRestaurant(documentId: letter.id)
+                    firestoreManager.fetchAllLetters()
+                    dismiss()
+                } label: {
+                    Text("삭제")
+                }
+                .buttonStyle(.borderedProminent)
+            }
+        }
     }
 }
 
@@ -217,6 +271,7 @@ struct ImageAsyncView: View {
                             .resizable()
                             .frame(width: 150, height: 150)
                             .scaledToFit()
+                            .padding(10)
                     } placeholder: {
                         ProgressView()
                     }

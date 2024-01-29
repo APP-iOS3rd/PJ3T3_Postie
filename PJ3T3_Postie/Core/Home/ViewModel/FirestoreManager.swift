@@ -39,12 +39,58 @@ class FirestoreManager: ObservableObject {
             "text": text
         ]
 
-        //생성한 데이터를 해당되는 경로에 새롭게 생성한다. 이때 overwrite 하지 않는다.
+        //생성한 데이터를 해당되는 경로에 새롭게 생성한다. merge false: overwrite a document or create it if it doesn't exist yet
         document.setData(docData, merge: false) { error in
             if let error = error {
                 print(error)
             } else {
                 print("Success:", documentId)
+            }
+        }
+    }
+    
+    /// 데이터의 위치와 수정 후 데이터를 받아 firestore에 업데이트 한다.
+    /// - Parameters:
+    ///   - documentId: letter 구조체 안에 저장된 id를 가져옴
+    ///   - writer: 변경 된 보낸 사람
+    ///   - recipient: 변경 된 받는 사람
+    ///   - summary: 변경 된 한 줄 요약
+    ///   - date: 편지를 보내거나 받은 날짜
+    ///   - imageUrlStrings: 이미지 Url String
+    ///   - text: 변경 된 편지 본문
+    func editLetter(documentId: String, writer: String, recipient: String, summary: String, date: Date, imageUrlStrings: [String], text: String) {
+        let docRef = colRef.document(userUid).collection("letters").document(documentId)
+        
+        let docData: [String: Any] = [
+            "id": documentId,
+            "writer": writer,
+            "recipient": recipient,
+            "summary": summary,
+            "date": date,
+            "imageUrlStrings": imageUrlStrings,
+            "text": text
+        ]
+        
+        docRef.updateData(docData) { error in
+            if let error = error {
+                print("Error writing document: ", error)
+            } else {
+                print("\(documentId) merge success")
+                print(docData)
+            }
+        }
+    }
+    
+    //데이터 삭제
+    //Storage의 이미지도 같이 삭제하도록 설정해야 한다.
+    func deleteRestaurant(documentId: String) {
+        let docRef = colRef.document(userUid).collection("letters").document(documentId)
+        
+        docRef.delete() { error in
+            if let error = error {
+                print("Error writing document: ", error)
+            } else {
+                print("\(documentId) delete success")
             }
         }
     }
