@@ -22,10 +22,12 @@ class FirestoreManager: ObservableObject {
         return ""
     }
     @Published var letters: [Letter] = []
+    @Published var shops: [Shop] = []
     @Published var docId: String = ""
     
     private init() { 
         fetchAllLetters()
+        fetchAllShops()
     }
 
     //새로운 편지를 추가한다.
@@ -126,6 +128,38 @@ class FirestoreManager: ObservableObject {
                                            summary: data["summary"] as? String ?? "",
                                            date: data["date"] as? Date ?? Date(),
                                            text: data["text"] as? String ?? ""))
+            }
+        }
+    }
+    
+    func fetchAllShops() {
+        let docRef = Firestore.firestore().collection("shops")
+        
+        docRef.getDocuments { snapshot, error in
+            guard error == nil else {
+                print(error?.localizedDescription ?? "Undefined error")
+                return
+            }
+            
+            //우선 전체 내용을 지우고 전체를 추가한다.
+            self.shops.removeAll()
+            
+            guard let snapshot = snapshot else {
+                print("\(#function): \(error?.localizedDescription)")
+                return
+            }
+            
+            for document in snapshot.documents {
+                let data = document.data()
+                
+                print("Shop Fetch success")
+                
+                //document의 data를 가지고 와서, data를 각 값에 넣어줌
+                self.shops.append(Shop(id: data["id"] as? String ?? "",
+                                       shopUrl: data["shopUrl"] as? String ?? "",
+                                       thumbUrl: data["thumbUrl"] as? String ?? "",
+                                       title: data["title"] as? String ?? "",
+                                       category: data["category"] as? String ?? ""))
             }
         }
     }
