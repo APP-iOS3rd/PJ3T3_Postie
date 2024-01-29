@@ -34,6 +34,7 @@ class FirestoreManager: ObservableObject {
     func addLetter(writer: String, recipient: String, summary: String, date: Date, text: String) async {
         let document = colRef.document(userUid).collection("letters").document() //새로운 document를 생성한다.
         let documentId = document.documentID //생성한 document의 id를 가져온다.
+        
         docId = documentId
         print(docId)
         //Letter model에 맞는 모양으로 document data를 생성한다.
