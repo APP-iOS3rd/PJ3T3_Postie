@@ -9,6 +9,7 @@ import Foundation
 import FirebaseAuth
 import FirebaseFirestore
 
+@MainActor
 class FirestoreManager: ObservableObject {
     static let shared = FirestoreManager()
     var colRef = Firestore.firestore().collection("users") //user 컬렉션 전체를 가져온다.
@@ -21,13 +22,18 @@ class FirestoreManager: ObservableObject {
         return ""
     }
     @Published var letters: [Letter] = []
+    @Published var docId: String = ""
     
-    private init() { }
+    private init() { 
+        fetchAllLetters()
+    }
 
     //새로운 편지를 추가한다.
-    func addLetter(writer: String, recipient: String, summary: String, date: Date, imageUrlStrings: [String], text: String) {
+    func addLetter(writer: String, recipient: String, summary: String, date: Date, text: String) async {
         let document = colRef.document(userUid).collection("letters").document() //새로운 document를 생성한다.
         let documentId = document.documentID //생성한 document의 id를 가져온다.
+        docId = documentId
+        print(docId)
         //Letter model에 맞는 모양으로 document data를 생성한다.
         let docData: [String: Any] = [
             "id": documentId,
@@ -35,17 +41,15 @@ class FirestoreManager: ObservableObject {
             "recipient": recipient,
             "summary": summary,
             "date": date,
-            "imageUrlStrings": imageUrlStrings,
             "text": text
         ]
 
         //생성한 데이터를 해당되는 경로에 새롭게 생성한다. merge false: overwrite a document or create it if it doesn't exist yet
-        document.setData(docData, merge: false) { error in
-            if let error = error {
-                print(error)
-            } else {
-                print("Success:", documentId)
-            }
+        do {
+            try await document.setData(docData, merge: false)
+            print("Success:", documentId)
+        } catch {
+            print("\(#function): \(error.localizedDescription)")
         }
     }
     
@@ -56,18 +60,15 @@ class FirestoreManager: ObservableObject {
     ///   - recipient: 변경 된 받는 사람
     ///   - summary: 변경 된 한 줄 요약
     ///   - date: 편지를 보내거나 받은 날짜
-    ///   - imageUrlStrings: 이미지 Url String
     ///   - text: 변경 된 편지 본문
-    func editLetter(documentId: String, writer: String, recipient: String, summary: String, date: Date, imageUrlStrings: [String], text: String) {
+    func editLetter(documentId: String, writer: String, recipient: String, summary: String, date: Date, text: String) {
         let docRef = colRef.document(userUid).collection("letters").document(documentId)
-        
         let docData: [String: Any] = [
             "id": documentId,
             "writer": writer,
             "recipient": recipient,
             "summary": summary,
             "date": date,
-            "imageUrlStrings": imageUrlStrings,
             "text": text
         ]
         
@@ -115,6 +116,7 @@ class FirestoreManager: ObservableObject {
             
             for document in snapshot.documents {
                 let data = document.data()
+                
                 print("Fetch success")
                 
                 //document의 data를 가지고 와서, data를 각 값에 넣어줌
@@ -123,7 +125,6 @@ class FirestoreManager: ObservableObject {
                                            recipient: data["recipient"] as? String ?? "",
                                            summary: data["summary"] as? String ?? "",
                                            date: data["date"] as? Date ?? Date(),
-                                           imageUrlStrings: data["imageUrlStrings"] as? [String],
                                            text: data["text"] as? String ?? ""))
             }
         }

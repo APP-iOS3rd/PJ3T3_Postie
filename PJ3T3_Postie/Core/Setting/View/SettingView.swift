@@ -9,7 +9,7 @@ import SwiftUI
 import PhotosUI //Storage test를 위한 import로 이후 삭제 예정
 
 struct SettingView: View {
-    @ObservedObject var authViewModel = AuthViewModel.shared
+    @ObservedObject var authViewModel = AuthManager.shared
     @ObservedObject var storageManager = StorageManager.shared
     //Colors
     private let profileBackgroundColor: Color = .gray
@@ -109,9 +109,6 @@ struct AddDataSectionView: View {
             }
             selectedItem = nil
         }
-        .onAppear {
-            firestoreManager.fetchAllLetters()
-        }
     }
     
     /// SwiftUI의 PhotosUI를 사용해 이미지를 선택하고 UIImageArray에 추가한다.
@@ -120,6 +117,7 @@ struct AddDataSectionView: View {
         Task {
             //지정한 타입의 인스턴스를 불러오려고 시도한다. 실패 action 구현 필요
             guard let image = try await item.loadTransferable(type: Data.self) else { return }
+            
             if let uiImage = UIImage(data: image) {
                 selectedImages.append(uiImage)
                 print(selectedImages)
@@ -134,22 +132,22 @@ struct AddDataSectionView: View {
     //userUid를 AuthViewModel에서 가져오도록 리팩토링 필요
     //리팩토링 하면서 파일 이름도 함께 변경 AuthViewModel -> AuthManager
     func uploadLetter(uiImages: [UIImage]) {
-        var selectedImageUrls: [String] = []
         Task {
+            //letter객체를 만들어 append한다면 id는 어떻게 하지?
+            //firestore에 document를 저장한다.
+            await firestoreManager.addLetter(writer: "me",
+                                       recipient: "you",
+                                       summary: "ImagesTest2",
+                                       date: Date(),
+                                       text: "?.?")
+            firestoreManager.fetchAllLetters() //변경사항을 fetch한다.
             //함수가 호출되면 uiImages가 빈 배열이 아닌지 확인해 빈 배열이 아닐 경우 storage에 이미지를 업로드 하고
             //이미지 업로드가 성공하면 urlString들이 저장된 배열을 return받아 selectedImageUrls에 저장한다.
             if !uiImages.isEmpty {
-                selectedImageUrls = try await storageManager.saveUIImage(images: uiImages, userId: firestoreManager.userUid)
+                try await storageManager.saveUIImage(images: uiImages, userId: firestoreManager.userUid, docId: firestoreManager.docId)
             }
             
-            //firestore에 document를 저장한다.
-            firestoreManager.addLetter(writer: "me",
-                                       recipient: "you",
-                                       summary: "ImagesTest",
-                                       date: Date(),
-                                       imageUrlStrings: selectedImageUrls,
-                                       text: "ㅜㅜ..")
-            firestoreManager.fetchAllLetters() //변경사항을 fetch한다.
+            firestoreManager.docId = ""
         }
     }
 }
@@ -185,6 +183,7 @@ struct LetterDataListView: View {
 
 struct TestDetailView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
+    @ObservedObject var storageManager = StorageManager.shared
     @Environment(\.dismiss) var dismiss
     var letter: Letter
     @State var writer = ""
@@ -215,17 +214,9 @@ struct TestDetailView: View {
                 TextField("\(letter.text)", text: $text)
                     .textFieldStyle(.roundedBorder)
                 
-                if let imageUrlStrings = letter.imageUrlStrings {
-                    if !imageUrlStrings.isEmpty {
-                        ImageAsyncView(imageUrlString: imageUrlStrings)
-                    }
+                if !storageManager.images.isEmpty {
+                    TestImageView(images: storageManager.images)
                 }
-            }
-            .onAppear {
-                writer = letter.writer
-                recipient = letter.recipient
-                summary = letter.summary
-                text = letter.text
             }
             
             HStack {
@@ -235,7 +226,6 @@ struct TestDetailView: View {
                                                 recipient: recipient,
                                                 summary: summary,
                                                 date: Date(),
-                                                imageUrlStrings: letter.imageUrlStrings ?? [],
                                                 text: text)
                     firestoreManager.fetchAllLetters()
                     dismiss()
@@ -254,24 +244,47 @@ struct TestDetailView: View {
                 .buttonStyle(.borderedProminent)
             }
         }
+        .onAppear {
+            writer = letter.writer
+            recipient = letter.recipient
+            summary = letter.summary
+            text = letter.text
+            storageManager.listAllFile(userId: firestoreManager.userUid, docId: letter.id)
+        }
+        .onDisappear {
+            //뷰가 dismiss될 때 images 배열 초기화
+            storageManager.images.removeAll()
+        }
     }
 }
 
-//Firestore에 저장된 이미지가 있을 경우 이미지를 AsyncImage로 보여주는 뷰: 기능 테스트 후 삭제 예정
-struct ImageAsyncView: View {
-    var imageUrlString: [String]
-    let columns = Array(repeating: GridItem(.adaptive(minimum: 100)), count: 1)
+struct TestImageView: View {
+    @ObservedObject var storageManager = StorageManager.shared
+    let rows = Array(repeating: GridItem(.adaptive(minimum: 100)), count: 1)
+    var images: [LetterPhoto]
     
     var body: some View {
-        ScrollView {
-            LazyVGrid(columns: columns) {
-                ForEach(imageUrlString, id: \.self) { urlString in
-                    AsyncImage(url: URL(string: urlString)) { image in
-                        image
-                            .resizable()
-                            .frame(width: 150, height: 150)
-                            .scaledToFit()
-                            .padding(10)
+        ScrollView(.horizontal) {
+            LazyHGrid(rows: rows) {
+                ForEach(images, id: \.self) { img in
+                    //LetterPhoto의 UIImage 타입으로 저장된 변수를 사용할 수도 있다: Image(uiImage: img.image)
+                    AsyncImage(url: URL(string: img.urlString)) { image in
+                        ZStack(alignment: .topTrailing) {
+                            image
+                                .resizable()
+                                .frame(width: 150, height: 150)
+                                .scaledToFit()
+                                .padding(.leading, 10)
+                            
+                            Button {
+                                storageManager.deleteItem(fullPath: img.fullPath)
+                            } label: {
+                                Image(systemName: "xmark.circle.fill")
+                                    .foregroundStyle(.gray)
+                                    .frame(width: 20, height: 20)
+                                    .padding(5)
+                            }
+                        }
                     } placeholder: {
                         ProgressView()
                     }
