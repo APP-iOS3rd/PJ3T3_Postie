@@ -314,9 +314,6 @@ struct ShopListView: View {
                 }
             }
         }
-//        .onAppear {
-//            firestoreManager.fetchAllShops()
-//        }
     }
 }
 
