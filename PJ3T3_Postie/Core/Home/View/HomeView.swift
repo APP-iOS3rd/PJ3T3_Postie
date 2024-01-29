@@ -11,6 +11,8 @@ struct HomeView: View {
     @State private var search: String = ""
     @State private var showAlert = false
     @State private var isSideMenuOpen = false
+    @ObservedObject var firestoreManager = FirestoreManager.shared
+    @ObservedObject var storageManager = StorageManager.shared
     
     var body: some View {
         ZStack {
@@ -37,6 +39,8 @@ struct HomeView: View {
                                 SendLetterView(letter: Letter.preview)
                             }
                             
+                            LetterDataListViewFB()
+                            
                             // ScrollView margin 임시
                             Rectangle()
                                 .frame(height: 70)
@@ -52,18 +56,12 @@ struct HomeView: View {
                     }, label: {
                         ZStack {
                             Circle()
-                                .foregroundStyle(Color(hex: 0xC2AD7E))
+                                .foregroundStyle(Color(hex: 0xFF5733))
                                 .frame(width:70,height:70)
                             
-                            ZStack {
-                                Image(systemName: "envelope")
-                                    .font(.title2)
-                                    .offset(y: -3)
-                                
-                                Image(systemName: "plus.circle")
-                                    .font(.footnote)
-                                    .offset(x:15, y:9)
-                            }
+                            Image(systemName: "envelope.open")
+                                .font(.title2)
+                                .offset(y: -3)
                         }
                     })
                     .foregroundStyle(Color(hex: 0xF7F7F7))
@@ -73,6 +71,14 @@ struct HomeView: View {
                     .alert("편지 저장 하기", isPresented: $showAlert) {
                         NavigationLink(destination: AddLetterView(isSendingLetter: true)) {
                             Button("편지 저장") {
+
+                        NavigationLink(destination: AddLetterView()) {
+                            Button("보낸 편지 저장") {
+                            }
+                        }
+                        
+                        NavigationLink(destination: AddLetterView()) {
+                            Button("받은 편지 저장") {
                             }
                         }
                         
@@ -85,7 +91,7 @@ struct HomeView: View {
                     HStack {
                         Text("Postie")
                             .font(.custom("SourceSerifPro-Black", size: 40))
-                            .foregroundStyle(Color.black)
+                            .foregroundStyle(Color(hex: 0xFF5733))
                     }), trailing: (
                         Button(action: {
                             withAnimation {
@@ -148,7 +154,7 @@ struct SideMenuView: View {
                 
                 Text("Setting")
                     .font(.custom("SourceSerifPro-Black", size: 32))
-                    .foregroundStyle(Color.black)
+                    .foregroundStyle(Color(hex: 0xFF5733))
                 
                 Text("프로필 설정")
                     .foregroundStyle(Color.gray)
@@ -301,11 +307,113 @@ struct ReceiveLetterView: View {
             .frame(width: 300, height: 130)
             .background(
                 RoundedRectangle(cornerRadius: 10)
-                    .foregroundStyle(Color(hex: 0xD1CEC7).opacity(0.65))
+                    .foregroundStyle(Color(hex: 0xFCFBF7))
                     .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
             )
             
             Spacer()
+        }
+    }
+}
+
+struct LetterDataListViewFB: View { // 파베 데이터 불러오기 용도, 임시 뷰, 에러나면 일단 전부 주석처리 해주세요
+    @ObservedObject var firestoreManager = FirestoreManager.shared
+    
+    var body: some View {
+        ForEach(firestoreManager.letters, id: \.self) { letter in
+            if let imageUrlStrings = letter.imageUrlStrings {
+                if !imageUrlStrings.isEmpty {
+                    NavigationLink {
+                        ImageAsyncView(imageUrlString: imageUrlStrings)
+                    } label: {
+                        HStack {
+                            Spacer()
+                            
+                            HStack {
+                                VStack(alignment: .leading) {
+                                    HStack {
+                                        Text("To.")
+                                            .font(.custom("SourceSerifPro-Black", size: 18))
+                                            .foregroundColor(.black)
+                                        
+                                        Text("\(letter.recipient)")
+                                        
+                                        Spacer()
+                                        
+                                        Text("\(letter.date.toString())")
+                                            .font(.custom("SourceSerifPro-Light", size: 18))
+                                            .foregroundStyle(Color(hex: 0x1E1E1E))
+                                        
+                                        ZStack {
+                                            Image(systemName: "water.waves")
+                                                .font(.headline)
+                                                .offset(x:18)
+                                            
+                                            Image(systemName: "sleep.circle")
+                                                .font(.largeTitle)
+                                        }
+                                        .foregroundStyle(Color(hex: 0x979797))
+                                    }
+                                    
+                                    Spacer()
+                                    
+                                    Text("\"\(letter.summary)\"")
+                                }
+                            }
+                            .padding()
+                            .frame(width: 300, height: 130)
+                            .background(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .foregroundStyle(Color(hex: 0xFFFFFF))
+                                    .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
+                            )
+                        }
+                    }
+                }
+            } else {
+                HStack {
+                    Spacer()
+                    
+                    HStack {
+                        VStack(alignment: .leading) {
+                            HStack {
+                                Text("To.")
+                                    .font(.custom("SourceSerifPro-Black", size: 18))
+                                    .foregroundColor(.black)
+                                
+                                Text("\(letter.recipient)")
+                                
+                                Spacer()
+                                
+                                Text("\(letter.date.toString())")
+                                    .font(.custom("SourceSerifPro-Light", size: 18))
+                                    .foregroundStyle(Color(hex: 0x1E1E1E))
+                                
+                                ZStack {
+                                    Image(systemName: "water.waves")
+                                        .font(.headline)
+                                        .offset(x:18)
+                                    
+                                    Image(systemName: "sleep.circle")
+                                        .font(.largeTitle)
+                                }
+                                .foregroundStyle(Color(hex: 0x979797))
+                            }
+                            
+                            Spacer()
+                            
+                            Text("\"\(letter.summary)\"")
+                        }
+                    }
+                    .padding()
+                    .frame(width: 300, height: 130)
+                    .background(
+                        RoundedRectangle(cornerRadius: 10)
+                            .foregroundStyle(Color(hex: 0xFFFFFF))
+                            .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
+                    )
+                }
+            }
         }
     }
 }
@@ -355,7 +463,7 @@ struct SendLetterView: View {
             .frame(width: 300, height: 130)
             .background(
                 RoundedRectangle(cornerRadius: 10)
-                    .foregroundStyle(Color(hex: 0xF7F7F7).opacity(0.65))
+                    .foregroundStyle(Color(hex: 0xFFFFFF))
                     .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
             )
         }
