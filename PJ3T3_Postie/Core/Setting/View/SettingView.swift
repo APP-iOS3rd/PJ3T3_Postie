@@ -284,7 +284,6 @@ struct TestImageView: View {
                                     .frame(width: 20, height: 20)
                                     .padding(5)
                             }
-
                         }
                     } placeholder: {
                         ProgressView()

@@ -93,7 +93,6 @@ final class StorageManager: ObservableObject {
                         
                         self.images.append(LetterPhoto(id: item.name, fullPath: item.fullPath, urlString: absoluteString, image: image))
                     }
-
                 }
             }
         }
