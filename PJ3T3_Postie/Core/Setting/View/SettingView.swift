@@ -72,6 +72,8 @@ struct SettingView: View {
                     
                     LetterDataListView()
                     
+                    ShopListView()
+                    
                 }
                 .navigationTitle("Setting")
             } else {
@@ -288,6 +290,26 @@ struct TestImageView: View {
                     } placeholder: {
                         ProgressView()
                     }
+                }
+            }
+        }
+    }
+}
+
+struct ShopListView: View {
+    @ObservedObject var firestoreManager = FirestoreManager.shared
+    
+    var body: some View {
+        ForEach(firestoreManager.shops, id: \.self) { shop in
+            HStack {
+                Text(shop.title)
+                
+                AsyncImage(url: URL(string: shop.thumbUrl)) { image in
+                    image
+                        .resizable()
+                        .frame(width: 100, height: 100)
+                } placeholder: {
+                    ProgressView()
                 }
             }
         }
