@@ -9,7 +9,6 @@ import UIKit
 
 import FirebaseStorage
 
-@MainActor
 final class StorageManager: ObservableObject {
     static let shared = StorageManager()
     @Published var images: [LetterPhoto] = []
@@ -91,7 +90,9 @@ final class StorageManager: ObservableObject {
                     Task {
                         let absoluteString = try await item.downloadURL().absoluteString
                         
-                        self.images.append(LetterPhoto(id: item.name, fullPath: item.fullPath, urlString: absoluteString, image: image))
+                        DispatchQueue.main.async {
+                            self.images.append(LetterPhoto(id: item.name, fullPath: item.fullPath, urlString: absoluteString, image: image))
+                        }
                     }
                 }
             }
