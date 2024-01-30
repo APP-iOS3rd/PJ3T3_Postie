@@ -225,15 +225,14 @@ struct TestDetailView: View {
             
             HStack {
                 Button {
-                        firestoreManager.editLetter(documentId: letter.id,
-                                                    writer: writer,
-                                                    recipient: recipient,
-                                                    summary: summary,
-                                                    date: Date(),
-                                                    text: text,
-                                                    isReceived: false,
-                                                    isFavorite: false)
-
+                    firestoreManager.editLetter(documentId: letter.id,
+                                                writer: writer,
+                                                recipient: recipient,
+                                                summary: summary,
+                                                date: Date(),
+                                                text: text,
+                                                isReceived: false,
+                                                isFavorite: false)
                     firestoreManager.fetchAllLetters()
                     dismiss()
                 } label: {
