@@ -10,7 +10,6 @@ import PhotosUI //Storage test를 위한 import로 이후 삭제 예정
 
 struct SettingView: View {
     @ObservedObject var authViewModel = AuthManager.shared
-    @ObservedObject var storageManager = StorageManager.shared
     //Colors
     private let profileBackgroundColor: Color = .gray
     private let signOutIconColor: Color = Color(uiColor: .lightGray)
