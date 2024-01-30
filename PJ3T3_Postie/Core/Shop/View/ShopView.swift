@@ -35,48 +35,51 @@ struct ShopView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                HStack(spacing: 10) {
-                    ForEach(0...4, id: \.self) { index in
-                        Button(action: {
-                            selectedButtonIndex = index
-                        }) {
-                            ZStack {
-                                if selectedButtonIndex == index {
-                                    Rectangle()
-                                        .frame(width: 70, height: 30)
-                                        .foregroundColor(.clear)
-                                        .font(.system(size: 13))
-                                        .background(Color(red: 1, green: 0.98, blue: 0.95))
-                                        .cornerRadius(20)
-                                        .shadow(color: .black.opacity(0.88), radius: 3, x: 2, y: 2)
-                                        .overlay(
-                                            RoundedRectangle(cornerRadius: 20)
-                                                .inset(by: 0.5)
-                                                .stroke(Color(red: 0.45, green: 0.45, blue: 0.45), lineWidth: 2)
-                                        )
-                                } else {
-                                    Rectangle()
-                                        .frame(width: 70, height: 30)
-                                        .foregroundColor(.clear)
-                                        .font(.system(size: 13))
-                                        .background(Color(red: 1, green: 0.98, blue: 0.95))
-                                        .cornerRadius(20)
-                                        .shadow(color: .black.opacity(0.1), radius: 4, x: 3, y: 3)
-                                        .overlay(
-                                            RoundedRectangle(cornerRadius: 20)
-                                                .inset(by: 0.5)
-                                                .stroke(Color(red: 0.45, green: 0.45, blue: 0.45), lineWidth: 1)
-                                        )
+                // 카테고리 버튼
+                ScrollView(.horizontal, showsIndicators: false, content: {
+                    HStack(spacing: 10) {
+                        ForEach(0...4, id: \.self) { index in
+                            Button(action: {
+                                selectedButtonIndex = index
+                            }) {
+                                ZStack {
+                                    if selectedButtonIndex == index {
+                                        Rectangle()
+                                            .frame(width: 70, height: 30)
+                                            .foregroundColor(.clear)
+                                            .font(.system(size: 13))
+                                            .background(Color(red: 1, green: 0.98, blue: 0.95))
+                                            .cornerRadius(20)
+                                            .shadow(color: .black.opacity(0.88), radius: 3, x: 2, y: 2)
+                                            .overlay(
+                                                RoundedRectangle(cornerRadius: 20)
+                                                    .inset(by: 0.5)
+                                                    .stroke(Color(red: 0.45, green: 0.45, blue: 0.45), lineWidth: 2)
+                                            )
+                                    } else {
+                                        Rectangle()
+                                            .frame(width: 70, height: 30)
+                                            .foregroundColor(.clear)
+                                            .font(.system(size: 13))
+                                            .background(Color(red: 1, green: 0.98, blue: 0.95))
+                                            .cornerRadius(20)
+                                            .shadow(color: .black.opacity(0.1), radius: 4, x: 3, y: 3)
+                                            .overlay(
+                                                RoundedRectangle(cornerRadius: 20)
+                                                    .inset(by: 0.5)
+                                                    .stroke(Color(red: 0.45, green: 0.45, blue: 0.45), lineWidth: 1)
+                                            )
+                                    }
+                                    Text(postDivision[index])
+                                        .font(Font.custom("SF Pro Text", size: 12))
+                                        .multilineTextAlignment(.center)
+                                        .foregroundColor(Color(red:  0.12, green: 0.12, blue: 0.12))
+                                        .frame(width: 70)
                                 }
-                                Text(postDivision[index])
-                                    .font(Font.custom("SF Pro Text", size: 12))
-                                    .multilineTextAlignment(.center)
-                                    .foregroundColor(Color(red:  0.12, green: 0.12, blue: 0.12))
-                                    .frame(width: 70)
                             }
                         }
                     }
-                }
+                })
                 .padding()
                 Spacer()
                 
@@ -88,8 +91,7 @@ struct ShopView: View {
                             }) {
                                 Image(character)
                                     .resizable()
-                                //이미지 비율 조정
-                                    .scaledToFit()
+                                    .scaledToFit()//이미지 비율 조정
                                     .frame(width: 157, height: 180)
                                     .padding()
                             }
