@@ -5,10 +5,11 @@
 //  Created by Eunsu JEONG on 1/17/24.
 //
 
-import CoreLocation
-import Foundation
-import NMapsMap
 import SwiftUI
+import Foundation
+
+import CoreLocation
+import NMapsMap
 import XMLCoder
 
 func getValueOfPlistFile(_ plistFilename: String, _ key: String) -> String? {
