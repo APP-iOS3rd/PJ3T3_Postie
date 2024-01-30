@@ -148,7 +148,7 @@ struct AddDataSectionView: View {
             //함수가 호출되면 uiImages가 빈 배열이 아닌지 확인해 빈 배열이 아닐 경우 storage에 이미지를 업로드 하고
             //이미지 업로드가 성공하면 urlString들이 저장된 배열을 return받아 selectedImageUrls에 저장한다.
             if !uiImages.isEmpty {
-                try await storageManager.saveUIImage(images: uiImages, userId: firestoreManager.userUid, docId: firestoreManager.docId)
+                try await storageManager.saveUIImage(images: uiImages, docId: firestoreManager.docId)
             }
             
             firestoreManager.docId = ""
@@ -255,7 +255,7 @@ struct TestDetailView: View {
             recipient = letter.recipient
             summary = letter.summary
             text = letter.text
-            storageManager.listAllFile(userId: firestoreManager.userUid, docId: letter.id)
+            storageManager.listAllFile(docId: letter.id)
         }
         .onDisappear {
             //뷰가 dismiss될 때 images 배열 초기화

@@ -5,25 +5,18 @@
 //  Created by Eunsu JEONG on 1/17/24.
 //
 
-import FirebaseAuth
 import FirebaseFirestore
 
 class FirestoreManager: ObservableObject {
     static let shared = FirestoreManager()
     var colRef = Firestore.firestore().collection("users") //user 컬렉션 전체를 가져온다.
-    var userUid: String {
-        //로그인된 유저가 있는지 확인해서 firebase에서 제공하는 userUid를 가지고온다.
-        if let uid = Auth.auth().currentUser?.uid {
-            return uid
-        }
-
-        return ""
-    }
+    var userUid: String = ""
     @Published var letters: [Letter] = []
     @Published var shops: [Shop] = []
     @Published var docId: String = ""
     
     private init() { 
+        self.userUid = AuthManager.shared.userUid
         fetchAllLetters()
         fetchAllShops()
     }
