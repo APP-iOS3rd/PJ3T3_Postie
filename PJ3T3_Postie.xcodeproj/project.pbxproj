@@ -72,6 +72,7 @@
 		CE6E08452B5E09D900CFBF2A /* LetterDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6E08442B5E09D800CFBF2A /* LetterDetailViewModel.swift */; };
 		CE7E50782B579D6800955F31 /* AddLetterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7E50772B579D6800955F31 /* AddLetterViewModel.swift */; };
 		CEDC0F3D2B68E87400E12EAB /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CEDC0F3C2B68E87400E12EAB /* Preview Assets.xcassets */; };
+		CEDC0F412B68EB5B00E12EAB /* PJ3T3-Postie-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CEDC0F402B68EB5B00E12EAB /* PJ3T3-Postie-Info.plist */; };
 		CEF09E452B57B6C500BE67E4 /* UIImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF09E442B57B6C500BE67E4 /* UIImagePicker.swift */; };
 		CEF09E472B57BD8500BE67E4 /* LetterImageFullScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF09E462B57BD8500BE67E4 /* LetterImageFullScreenView.swift */; };
 		CEF09E492B57BFBF00BE67E4 /* TextRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF09E482B57BFBF00BE67E4 /* TextRecognizer.swift */; };
@@ -124,13 +125,13 @@
 		CE6E08442B5E09D800CFBF2A /* LetterDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterDetailViewModel.swift; sourceTree = "<group>"; };
 		CE7E50772B579D6800955F31 /* AddLetterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLetterViewModel.swift; sourceTree = "<group>"; };
 		CEDC0F3C2B68E87400E12EAB /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		CEDC0F402B68EB5B00E12EAB /* PJ3T3-Postie-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "PJ3T3-Postie-Info.plist"; sourceTree = "<group>"; };
 		CEF09E442B57B6C500BE67E4 /* UIImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImagePicker.swift; sourceTree = "<group>"; };
 		CEF09E462B57BD8500BE67E4 /* LetterImageFullScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterImageFullScreenView.swift; sourceTree = "<group>"; };
 		CEF09E482B57BFBF00BE67E4 /* TextRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextRecognizer.swift; sourceTree = "<group>"; };
 		E3E02CA72B59003100CD3D4C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E3EECAEF2B5F957A00E639F2 /* SourceSerifPro-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSerifPro-Black.otf"; sourceTree = "<group>"; };
 		E3EECAF12B5F958300E639F2 /* SourceSerifPro-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSerifPro-Light.otf"; sourceTree = "<group>"; };
-		E3EECAF32B5F958C00E639F2 /* PJ3T3-Postie-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "PJ3T3-Postie-Info.plist"; sourceTree = SOURCE_ROOT; };
 		E3EECAF42B5FD2E000E639F2 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		E3EECAFA2B60FB2400E639F2 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -179,6 +180,7 @@
 			children = (
 				9E0FA12B2B54D2FC001CEEB9 /* .gitignore */,
 				9E0FA1292B54D2EF001CEEB9 /* README.md */,
+				CEDC0F402B68EB5B00E12EAB /* PJ3T3-Postie-Info.plist */,
 				9E0FA11A2B54D27A001CEEB9 /* PJ3T3_Postie */,
 				9E0FA1192B54D27A001CEEB9 /* Products */,
 				E937243A6A6DD327D5BF00F0 /* Pods */,
@@ -197,7 +199,6 @@
 		9E0FA11A2B54D27A001CEEB9 /* PJ3T3_Postie */ = {
 			isa = PBXGroup;
 			children = (
-				E3EECAF32B5F958C00E639F2 /* PJ3T3-Postie-Info.plist */,
 				CEDC0F3B2B68E87400E12EAB /* Preview Content */,
 				E3EECAEE2B5F956200E639F2 /* Font */,
 				9E9F6AA42B5761DE003DFE83 /* App */,
@@ -552,6 +553,7 @@
 				0E29F0D32B5ED136005B86FB /* MapApiKeys.plist in Resources */,
 				9E0FA12A2B54D2EF001CEEB9 /* README.md in Resources */,
 				E3EECAF02B5F957A00E639F2 /* SourceSerifPro-Black.otf in Resources */,
+				CEDC0F412B68EB5B00E12EAB /* PJ3T3-Postie-Info.plist in Resources */,
 				9E0FA1232B54D27C001CEEB9 /* Preview Assets.xcassets in Resources */,
 				9E0FA1202B54D27C001CEEB9 /* Assets.xcassets in Resources */,
 				E3E02CA82B59003100CD3D4C /* GoogleService-Info.plist in Resources */,

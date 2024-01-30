@@ -9,7 +9,9 @@ import SwiftUI
 
 struct AddLetterView: View {
     @StateObject private var addLetterViewModel = AddLetterViewModel()
-    
+    @ObservedObject var firestoreManager = FirestoreManager.shared
+    @ObservedObject var storageManager = StorageManager.shared
+
     enum Field: Hashable {
         case sender
         case receiver
@@ -24,12 +26,18 @@ struct AddLetterView: View {
      }()
 
     @FocusState private var focusField: Field?
+    @Environment(\.dismiss) var dismiss
 
     init(isSendingLetter: Bool) {
         self.isSendingLetter = isSendingLetter
 
         // TextEditor 패딩
-        UITextView.appearance().textContainerInset = UIEdgeInsets(top: 12, left: 8, bottom: 12, right: 8)
+        UITextView.appearance().textContainerInset = UIEdgeInsets(
+            top: 12,
+            left: 8,
+            bottom: 12,
+            right: 8
+        )
     }
 
     var body: some View {
@@ -55,11 +63,30 @@ struct AddLetterView: View {
             .toolbar {
                 ToolbarItemGroup(placement: .topBarTrailing) {
                     Button {
-                        // 편지 저장하기
-                        //if let으로 바인딩 saveImage(image: UIImage, userId: String)
-                        //saveImageUrl(data: Data, userId: String) -> String
-                        //위의 결과가 [String]으로 저장되고
-                        //addLetter(writer: String, recipient: String, summary: String, date: Date, imageUrlString: [String], text: String)
+                        Task {
+                            await firestoreManager.addLetter(
+                                writer: addLetterViewModel.sender,
+                                recipient: addLetterViewModel.receiver,
+                                summary: addLetterViewModel.summary,
+                                date: addLetterViewModel.date,
+                                text: addLetterViewModel.text
+                            )
+
+                            if !addLetterViewModel.images.isEmpty {
+                                do {
+                                    try await storageManager.saveUIImage(
+                                        images: addLetterViewModel.images,
+                                        userId: firestoreManager.userUid,
+                                        docId: firestoreManager.docId
+                                    )
+                                } catch {
+                                    // TODO: Error 처리 필요
+                                    print("DEBUG: Failed to save UIImages to Firestore: \(error)")
+                                }
+                            }
+
+                            dismiss()
+                        }
                     } label : {
                         Text("완료")
                     }
@@ -76,7 +103,10 @@ struct AddLetterView: View {
                 }
             }
             .fullScreenCover(isPresented: $addLetterViewModel.showLetterImageFullScreenView) {
-                LetterImageFullScreenView(images: addLetterViewModel.images, pageIndex: $addLetterViewModel.selectedIndex)
+                LetterImageFullScreenView(
+                    images: addLetterViewModel.images,
+                    pageIndex: $addLetterViewModel.selectedIndex
+                )
             }
             .sheet(isPresented: $addLetterViewModel.showUIImagePicker) {
                 UIImagePicker(
@@ -91,6 +121,9 @@ struct AddLetterView: View {
             } message: {
                 Text("문자 인식에 실패했습니다. 다시 시도해 주세요.")
             }
+            .alert("", isPresented: $addLetterViewModel.showTextRecognizerErrorAlert, actions: {
+                
+            })
             .confirmationDialog("편지 사진 가져오기",
                                 isPresented: $addLetterViewModel.showConfirmationDialog) {
                 Button("카메라") {
@@ -121,7 +154,9 @@ extension AddLetterView {
                 Text(isSendingLetter ? "받는 사람" : "보낸 사람")
                     .font(.headline)
 
-                TextField("", text: $addLetterViewModel.sender)
+                TextField("", 
+                          text: isSendingLetter ? 
+                          $addLetterViewModel.sender : $addLetterViewModel.receiver)
                     .textFieldStyle(.roundedBorder)
                     .focused($focusField, equals: .sender)
             }
@@ -229,7 +264,7 @@ extension AddLetterView {
             Text("한 줄 요약")
                 .font(.headline)
 
-            TextField("", text: $addLetterViewModel.receiver)
+            TextField("", text: $addLetterViewModel.summary)
                 .textFieldStyle(.roundedBorder)
                 .focused($focusField, equals: .receiver)
         }
@@ -238,6 +273,6 @@ extension AddLetterView {
 
 #Preview {
     NavigationStack {
-        AddLetterView(isSendingLetter: true)
+        AddLetterView(isSendingLetter: false)
     }
 }
