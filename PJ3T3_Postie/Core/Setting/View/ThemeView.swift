@@ -7,19 +7,17 @@
 
 import SwiftUI
 
-struct ThemeView<Content: View>: View {
+struct ThemeView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var selectedThemeButton: Bool = true
-    private let postieGroupTheme = ["PostieTheme_LetterGroup", "PostieTheme_LetterList"]
-    private let postieColorTheme = ["PostieTheme_PostieOrange", "PostieTheme_PostieYellow", "PostieTheme_PostieGreen", "PostieTheme_PostieBlue"]
-    @State private var currentColorIndex: Int = 0
-    @GestureState private var dragOffset: CGFloat = 0
-    
+    @State private var currentColorPage: Int = 0
+    @State private var currentGroupPage: Int = 0
     
     var body: some View {
         ZStack {
             Color(hex: 0xF5F1E8)
                 .ignoresSafeArea()
+            
             VStack {
                 HStack(spacing: 10) {
                     ZStack(alignment: .center) {
@@ -67,31 +65,48 @@ struct ThemeView<Content: View>: View {
                 .padding()
                 
                 if selectedThemeButton {
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack {
-                            ForEach(postieColorTheme, id: \.self) { theme in
-                                Image(theme)
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(height: 550)
-                                    .padding()
-                                    .shadow(color: .black.opacity(0.1), radius: 3)
-                            }
-                        }
+                    TabView(selection: $currentColorPage) {
+                        Image("PostieTheme_PostieOrange")
+                            .resizable()
+                            .modifier(CustomImageModifier())
+                            .tag(0)
+                        
+                        Image("PostieTheme_PostieYellow")
+                            .resizable()
+                            .modifier(CustomImageModifier())
+                            .tag(1)
+                        
+                        Image("PostieTheme_PostieGreen")
+                            .resizable()
+                            .modifier(CustomImageModifier())
+                            .tag(2)
+                        
+                        Image("PostieTheme_PostieBlue")
+                            .resizable()
+                            .modifier(CustomImageModifier())
+                            .tag(3)
+                        
+                        Image("PostieTheme_PostieBlack")
+                            .resizable()
+                            .modifier(CustomImageModifier())
+                            .tag(4)
                     }
+                    .tabViewStyle(PageTabViewStyle())
+                    .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
                 } else {
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack {
-                            ForEach(postieGroupTheme, id: \.self) { theme in
-                                Image(theme)
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(height: 550)
-                                    .padding()
-                                    .shadow(color: .black.opacity(0.1), radius: 3)
-                            }
-                        }
+                    TabView(selection: $currentGroupPage) {
+                        Image("PostieTheme_LetterGroup")
+                            .resizable()
+                            .modifier(CustomImageModifier())
+                            .tag(0)
+                        
+                        Image("PostieTheme_LetterList")
+                            .resizable()
+                            .modifier(CustomImageModifier())
+                            .tag(1)
                     }
+                    .tabViewStyle(PageTabViewStyle())
+                    .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
                 }
                 
                 Spacer()
@@ -100,16 +115,27 @@ struct ThemeView<Content: View>: View {
         .navigationTitle("테마 설정")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarItems(trailing: (
-                Button(action: {
-                    self.presentationMode.wrappedValue.dismiss()
-                }) {
-                    Text("완료")
-                }
-            ))
+            Button(action: {
+                currentColorPage = currentColorPage
+                self.presentationMode.wrappedValue.dismiss()
+            }) {
+                Text("완료")
+            }
+        ))
         .tint(Color(hex: 0x1E1E1E))
     }
 }
 
-//#Preview {
-//    ThemeView()
-//}
+struct CustomImageModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .scaledToFit()
+            .frame(height: 550)
+            .padding()
+            .shadow(color: Color.black.opacity(0.1), radius: 3)
+    }
+}
+
+#Preview {
+    ThemeView()
+}
