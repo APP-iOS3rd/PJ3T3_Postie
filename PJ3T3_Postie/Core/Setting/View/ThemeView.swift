@@ -66,44 +66,85 @@ struct ThemeView: View {
                 
                 if selectedThemeButton {
                     TabView(selection: $currentColorPage) {
-                        Image("PostieTheme_PostieOrange")
-                            .resizable()
-                            .modifier(CustomImageModifier())
-                            .tag(0)
+                        VStack {
+                            Text("포스티 오렌지 (기본)\n")
+                            
+                            Image("PostieTheme_PostieOrange")
+                                .resizable()
+                                .modifier(CustomImageModifier())
+                            
+                            Spacer()
+                        }
+                        .tag(0)
                         
-                        Image("PostieTheme_PostieYellow")
-                            .resizable()
-                            .modifier(CustomImageModifier())
-                            .tag(1)
+                        VStack {
+                            Text("포스티 옐로우\n")
+                            Image("PostieTheme_PostieYellow")
+                                .resizable()
+                                .modifier(CustomImageModifier())
+                            
+                            Spacer()
+                        }
+                        .tag(1)
                         
-                        Image("PostieTheme_PostieGreen")
-                            .resizable()
-                            .modifier(CustomImageModifier())
-                            .tag(2)
+                        VStack {
+                            Text("포스티 그린 \n")
+                            
+                            Image("PostieTheme_PostieGreen")
+                                .resizable()
+                                .modifier(CustomImageModifier())
+                            
+                            Spacer()
+                        }
+                        .tag(2)
                         
-                        Image("PostieTheme_PostieBlue")
-                            .resizable()
-                            .modifier(CustomImageModifier())
-                            .tag(3)
+                        VStack {
+                            Text("포스티 블루\n")
+                            
+                            Image("PostieTheme_PostieBlue")
+                                .resizable()
+                                .modifier(CustomImageModifier())
+                            
+                            Spacer()
+                        }
+                        .tag(3)
                         
-                        Image("PostieTheme_PostieBlack")
-                            .resizable()
-                            .modifier(CustomImageModifier())
-                            .tag(4)
+                        VStack {
+                            Text("포스티 블랙\n")
+                            
+                            Image("PostieTheme_PostieBlack")
+                                .resizable()
+                                .modifier(CustomImageModifier())
+                            
+                            Spacer()
+                        }
+                        .tag(4)
                     }
                     .tabViewStyle(PageTabViewStyle())
                     .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
                 } else {
                     TabView(selection: $currentGroupPage) {
-                        Image("PostieTheme_LetterGroup")
-                            .resizable()
-                            .modifier(CustomImageModifier())
-                            .tag(0)
+                        VStack {
+                            Text("편지 그룹\n")
+                            
+                            Image("PostieTheme_LetterGroup")
+                                .resizable()
+                                .modifier(CustomImageModifier())
+                            
+                            Spacer()
+                        }
+                        .tag(0)
                         
-                        Image("PostieTheme_LetterList")
-                            .resizable()
-                            .modifier(CustomImageModifier())
-                            .tag(1)
+                        VStack {
+                            Text("편지 리스트\n")
+                            
+                            Image("PostieTheme_LetterList")
+                                .resizable()
+                                .modifier(CustomImageModifier())
+                            
+                            Spacer()
+                        }
+                        .tag(1)
                     }
                     .tabViewStyle(PageTabViewStyle())
                     .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
@@ -131,7 +172,6 @@ struct CustomImageModifier: ViewModifier {
         content
             .scaledToFit()
             .frame(height: 550)
-            .padding()
             .shadow(color: Color.black.opacity(0.1), radius: 3)
     }
 }
