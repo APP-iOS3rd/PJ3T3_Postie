@@ -107,7 +107,7 @@ class FirestoreManager: ObservableObject {
             self.letters.removeAll()
             
             guard let snapshot = snapshot else {
-                print("\(#function): \(error?.localizedDescription)")
+                print("\(#function): No snapshot \(String(describing: error?.localizedDescription))")
                 return
             }
             
@@ -163,7 +163,7 @@ class FirestoreManager: ObservableObject {
             self.shops.removeAll()
             
             guard let snapshot = snapshot else {
-                print("\(#function): \(error?.localizedDescription)")
+                print("\(#function): No snapshot \(String(describing: error?.localizedDescription))")
                 return
             }
             

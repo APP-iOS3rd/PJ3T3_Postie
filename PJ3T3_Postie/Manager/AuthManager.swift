@@ -104,7 +104,7 @@ class AuthManager: ObservableObject {
         DispatchQueue.main.async {
             //Firestore에서 받은 데이터를 User model에 맞는 형태로 변환하여 currentUser에 값을 부여한다.
             self.currentUser = try? snapshot.data(as: User.self)
-            print("DEBUG: Current user is \(self.currentUser)")
+            print("DEBUG: Current user is \(String(describing: self.currentUser))")
         }
     }
 }

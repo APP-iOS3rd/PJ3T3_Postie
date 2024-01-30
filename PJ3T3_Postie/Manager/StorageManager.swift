@@ -72,7 +72,7 @@ final class StorageManager: ObservableObject {
                 item.getData(maxSize: 20 * 1024 * 1024) { data, error in
                     //UIImage타입으로 데이터를 저장 할 필요가 없다면 error 부분 제외하고 모두 삭제 필요
                     guard let data = data, let image = UIImage(data: data), error == nil else {
-                        print("\(#function): \(error?.localizedDescription)")
+                        print("\(#function): \(String(describing: error?.localizedDescription))")
                         return
                     }
                     
@@ -93,7 +93,7 @@ final class StorageManager: ObservableObject {
         
         item.delete { error in
             guard error == nil else {
-                print("Error deleting item.", error)
+                print("Error deleting item. \(String(describing: error?.localizedDescription))")
                 return
             }
             
