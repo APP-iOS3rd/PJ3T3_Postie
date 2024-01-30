@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct LetterDetailView: View {
-    var letter: Letter
-
     @StateObject private var letterDetailViewModel = LetterDetailViewModel()
+
+    var letter: Letter
 
     var body: some View {
         ZStack {
