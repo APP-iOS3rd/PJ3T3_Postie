@@ -56,6 +56,10 @@ struct AddLetterView: View {
                 ToolbarItemGroup(placement: .topBarTrailing) {
                     Button {
                         // 편지 저장하기
+                        //if let으로 바인딩 saveImage(image: UIImage, userId: String)
+                        //saveImageUrl(data: Data, userId: String) -> String
+                        //위의 결과가 [String]으로 저장되고
+                        //addLetter(writer: String, recipient: String, summary: String, date: Date, imageUrlString: [String], text: String)
                     } label : {
                         Text("완료")
                     }
