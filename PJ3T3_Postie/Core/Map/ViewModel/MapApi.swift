@@ -104,8 +104,7 @@ class NaverGeocodeAPI: ObservableObject {
             catch {
                 print("JSON 디코딩 에러: \(error.localizedDescription)")
             }
-        }
-        
+        }   
         task.resume()
     }
 }
