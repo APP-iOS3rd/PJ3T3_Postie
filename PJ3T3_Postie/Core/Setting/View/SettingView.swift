@@ -240,7 +240,7 @@ struct TestDetailView: View {
                 .buttonStyle(.borderedProminent)
                 
                 Button {
-                    firestoreManager.deleteRestaurant(documentId: letter.id)
+                    firestoreManager.deleteLetter(documentId: letter.id)
                     firestoreManager.fetchAllLetters()
                     dismiss()
                 } label: {
