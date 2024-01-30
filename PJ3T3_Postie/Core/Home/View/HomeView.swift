@@ -53,12 +53,14 @@ struct HomeView: View {
                     
                     Menu {
                         // 맨 밑 네비링크가 작동 안되는 버그가 있어서 임시로 만들어둠. 오류 수정하면 없앨 예정
-                        Button (action: {
-                        }) {
-                            HStack {
-                                Text("취소")
-                                
-                                Image(systemName: "x.square")
+                        NavigationLink(destination: AddLetterView(isSendingLetter: true)) {
+                            Button (action: {
+                            }) {
+                                HStack {
+                                    Text("취소")
+                                    
+                                    Image(systemName: "x.square")
+                                }
                             }
                         }
                         
@@ -218,11 +220,19 @@ struct SideMenuView: View {
                 Rectangle()
                     .foregroundStyle(Color.gray)
                     .frame(height: 1)
+                    .padding(.bottom)
                 
-                Toggle("다크모드", isOn: $isToggleOn)
-                    .onChange(of: isToggleOn) { _ in
+                NavigationLink(destination: ThemeView()) {
+                    HStack {
+                        Text("테마 설정 하기")
+                        
+                        Spacer()
+                        
+                        Image(systemName: "greaterthan")
+                            .foregroundStyle(Color.gray)
                     }
                     .padding(.bottom)
+                }
                 
                 Text("앱 설정")
                     .foregroundStyle(Color.gray)
