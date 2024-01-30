@@ -70,6 +70,7 @@ struct ShopView: View {
                                                     .stroke(Color(red: 0.45, green: 0.45, blue: 0.45), lineWidth: 1)
                                             )
                                     }
+                                    
                                     Text(postDivision[index])
                                         .font(Font.custom("SF Pro Text", size: 12))
                                         .multilineTextAlignment(.center)
@@ -78,7 +79,7 @@ struct ShopView: View {
                                 }
                             }
                         }
-                    }
+                    }.padding(EdgeInsets(top: 0, leading: 20, bottom: 10, trailing: 20)) // 스크롤에 대한 간격 넓히기
                 })
                 .padding()
                 Spacer()
@@ -98,7 +99,7 @@ struct ShopView: View {
                             .sheet(item: $safariURL) { url in
                                 if let url = URL(string: url) {
                                     SafariView(url: url)
-                                        .ignoresSafeArea()
+                                        .ignoresSafeArea()//외부링크가 화면에 맞게 조절
                                 }
                             }
                         }
@@ -108,6 +109,10 @@ struct ShopView: View {
             .navigationTitle("ShopView")
         }
     }
+}
+//sheet(item:onDismiss:content:)호출시 해당 타입은 Identifiable 프로토콜 채택
+extension String: Identifiable {
+    public var id: Self { self }
 }
 
 struct SafariView: UIViewControllerRepresentable {
