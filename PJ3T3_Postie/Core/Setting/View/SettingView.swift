@@ -138,10 +138,12 @@ struct AddDataSectionView: View {
             //letter객체를 만들어 append한다면 id는 어떻게 하지?
             //firestore에 document를 저장한다.
             await firestoreManager.addLetter(writer: "me",
-                                       recipient: "you",
-                                       summary: "ImagesTest2",
-                                       date: Date(),
-                                       text: "?.?")
+                                             recipient: "you",
+                                             summary: "refacrorTest",
+                                             date: Date(),
+                                             text: "?.?",
+                                             isReceived: false,
+                                             isFavorite: false)
             firestoreManager.fetchAllLetters() //변경사항을 fetch한다.
             //함수가 호출되면 uiImages가 빈 배열이 아닌지 확인해 빈 배열이 아닐 경우 storage에 이미지를 업로드 하고
             //이미지 업로드가 성공하면 urlString들이 저장된 배열을 return받아 selectedImageUrls에 저장한다.
@@ -223,12 +225,15 @@ struct TestDetailView: View {
             
             HStack {
                 Button {
-                    firestoreManager.editLetter(documentId: letter.id, 
-                                                writer: writer,
-                                                recipient: recipient,
-                                                summary: summary,
-                                                date: Date(),
-                                                text: text)
+                        firestoreManager.editLetter(documentId: letter.id,
+                                                    writer: writer,
+                                                    recipient: recipient,
+                                                    summary: summary,
+                                                    date: Date(),
+                                                    text: text,
+                                                    isReceived: false,
+                                                    isFavorite: false)
+
                     firestoreManager.fetchAllLetters()
                     dismiss()
                 } label: {

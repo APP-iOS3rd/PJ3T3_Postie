@@ -29,7 +29,7 @@ class FirestoreManager: ObservableObject {
     }
 
     //새로운 편지를 추가한다.
-    func addLetter(writer: String, recipient: String, summary: String, date: Date, text: String) async {
+    func addLetter(writer: String, recipient: String, summary: String, date: Date, text: String, isReceived: Bool, isFavorite: Bool) async {
         let document = colRef.document(userUid).collection("letters").document() //새로운 document를 생성한다.
         let documentId = document.documentID //생성한 document의 id를 가져온다.
         
@@ -44,7 +44,9 @@ class FirestoreManager: ObservableObject {
             "recipient": recipient,
             "summary": summary,
             "date": date,
-            "text": text
+            "text": text,
+            "isReceived": isReceived,
+            "isFavorite": isFavorite
         ]
 
         //생성한 데이터를 해당되는 경로에 새롭게 생성한다. merge false: overwrite a document or create it if it doesn't exist yet
@@ -64,7 +66,7 @@ class FirestoreManager: ObservableObject {
     ///   - summary: 변경 된 한 줄 요약
     ///   - date: 편지를 보내거나 받은 날짜
     ///   - text: 변경 된 편지 본문
-    func editLetter(documentId: String, writer: String, recipient: String, summary: String, date: Date, text: String) {
+    func editLetter(documentId: String, writer: String, recipient: String, summary: String, date: Date, text: String, isReceived: Bool, isFavorite: Bool) {
         let docRef = colRef.document(userUid).collection("letters").document(documentId)
         let docData: [String: Any] = [
             "id": documentId,
@@ -72,7 +74,9 @@ class FirestoreManager: ObservableObject {
             "recipient": recipient,
             "summary": summary,
             "date": date,
-            "text": text
+            "text": text,
+            "isReceived": isReceived,
+            "isFavorite": isFavorite
         ]
         
         docRef.updateData(docData) { error in
@@ -128,7 +132,9 @@ class FirestoreManager: ObservableObject {
                                            recipient: data["recipient"] as? String ?? "",
                                            summary: data["summary"] as? String ?? "",
                                            date: data["date"] as? Date ?? Date(),
-                                           text: data["text"] as? String ?? ""))
+                                           text: data["text"] as? String ?? "",
+                                           isReceived: data["isReceived"] as? Bool ?? true,
+                                           isFavorite: data["isFavorite"] as? Bool ?? false))
             }
         }
     }
@@ -150,16 +156,13 @@ class FirestoreManager: ObservableObject {
             }
             
             for document in snapshot.documents {
-                let data = document.data()
-                
-                print("Shop Fetch success")
-                
-                //document의 data를 가지고 와서, data를 각 값에 넣어줌
-                self.shops.append(Shop(id: data["id"] as? String ?? "",
-                                       shopUrl: data["shopUrl"] as? String ?? "",
-                                       thumbUrl: data["thumbUrl"] as? String ?? "",
-                                       title: data["title"] as? String ?? "",
-                                       category: data["category"] as? String ?? ""))
+                do {
+                    let data = try document.data(as: Shop.self)
+                    self.shops.append(data)
+                    print("Shop fetch success")
+                } catch {
+                    print(#function, error.localizedDescription)
+                }
             }
         }
     }
