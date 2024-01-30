@@ -8,7 +8,6 @@
 import FirebaseAuth
 import FirebaseFirestore
 
-@MainActor
 class FirestoreManager: ObservableObject {
     static let shared = FirestoreManager()
     var colRef = Firestore.firestore().collection("users") //user 컬렉션 전체를 가져온다.
@@ -34,8 +33,10 @@ class FirestoreManager: ObservableObject {
         let document = colRef.document(userUid).collection("letters").document() //새로운 document를 생성한다.
         let documentId = document.documentID //생성한 document의 id를 가져온다.
         
-        docId = documentId
-        print(docId)
+        DispatchQueue.main.async {
+            self.docId = documentId
+            print(self.docId)
+        }
         //Letter model에 맞는 모양으로 document data를 생성한다.
         let docData: [String: Any] = [
             "id": documentId,
