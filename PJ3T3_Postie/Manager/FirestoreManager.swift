@@ -142,7 +142,6 @@ class FirestoreManager: ObservableObject {
                 return
             }
             
-            //우선 전체 내용을 지우고 전체를 추가한다.
             self.shops.removeAll()
             
             guard let snapshot = snapshot else {
