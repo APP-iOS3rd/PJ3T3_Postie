@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ThemeView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    @State private var selectedThemeButton: Int = 1
+    @State private var selectedThemeButton: Bool = true
     
     var body: some View {
         ZStack {
@@ -21,17 +21,18 @@ struct ThemeView: View {
                         Rectangle()
                             .foregroundColor(.clear)
                             .frame(width: 72, height: 30)
-                            .background(Color(red: 1, green: 0.98, blue: 0.95))
+                            .background(selectedThemeButton ? Color(hex: 0xFF5733) : Color(hex: 0xFCFBF7))
                             .cornerRadius(20)
                             .shadow(color: .black.opacity(0.1), radius: 3, x: 2, y: 2)
                         
                         Button(action: {
-                            selectedThemeButton = 1
+                            selectedThemeButton = true
                         }) {
                             Text("테마 설정")
-                                .font(Font.custom("SF Pro Text", size: 12))
+                                .font(.caption)
+                                .bold(selectedThemeButton)
                                 .multilineTextAlignment(.center)
-                                .foregroundColor(Color(red: 0.12, green: 0.12, blue: 0.12))
+                                .foregroundColor(selectedThemeButton ? Color(hex: 0xFFFFFF) : Color(hex: 0x1E1E1E))
                                 .frame(width: 60, alignment: .top)
                         }
                     }
@@ -40,17 +41,18 @@ struct ThemeView: View {
                         Rectangle()
                             .foregroundColor(.clear)
                             .frame(width: 72, height: 30)
-                            .background(Color(red: 1, green: 0.98, blue: 0.95))
+                            .background(selectedThemeButton ? Color(hex: 0xFCFBF7) : Color(hex: 0xFF5733))
                             .cornerRadius(20)
                             .shadow(color: .black.opacity(0.1), radius: 3, x: 2, y: 2)
                         
                         Button(action: {
-                            selectedThemeButton = 2
+                            selectedThemeButton = false
                         }) {
                             Text("나열 변경")
-                                .font(Font.custom("SF Pro Text", size: 12))
+                                .font(.caption)
                                 .multilineTextAlignment(.center)
-                                .foregroundColor(Color(red: 0.12, green: 0.12, blue: 0.12))
+                                .bold(!selectedThemeButton)
+                                .foregroundColor(selectedThemeButton ? Color(hex: 0x1E1E1E) : Color(hex: 0xFFFFFF))
                                 .frame(width: 60, alignment: .top)
                         }
                     }
@@ -59,7 +61,7 @@ struct ThemeView: View {
                 }
                 .padding()
                 
-                if selectedThemeButton == 1 {
+                if selectedThemeButton {
                     Text("테마 설정")
                 } else {
                     Text("나열 변경")
