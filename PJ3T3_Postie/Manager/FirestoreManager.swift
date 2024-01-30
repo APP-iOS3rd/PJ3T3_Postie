@@ -9,21 +9,21 @@ import FirebaseFirestore
 
 class FirestoreManager: ObservableObject {
     static let shared = FirestoreManager()
-    var colRef = Firestore.firestore().collection("users") //user 컬렉션 전체를 가져온다.
-    var userUid: String = ""
+    var letterColRef: CollectionReference
     var docId: String = ""
     @Published var letters: [Letter] = []
     @Published var shops: [Shop] = []
     
     private init() { 
-        self.userUid = AuthManager.shared.userUid
+        let userUid = AuthManager.shared.userUid
+        self.letterColRef = Firestore.firestore().collection("users").document(userUid).collection("letters")
         fetchAllLetters()
         fetchAllShops()
     }
 
     //새로운 편지를 추가한다.
     func addLetter(writer: String, recipient: String, summary: String, date: Date, text: String, isReceived: Bool, isFavorite: Bool) async {
-        let document = colRef.document(userUid).collection("letters").document() //새로운 document를 생성한다.
+        let document = letterColRef.document() //새로운 document를 생성한다.
         let documentId = document.documentID //생성한 document의 id를 가져온다.
         self.docId = documentId
         print(self.docId)
@@ -58,7 +58,7 @@ class FirestoreManager: ObservableObject {
     ///   - date: 편지를 보내거나 받은 날짜
     ///   - text: 변경 된 편지 본문
     func editLetter(documentId: String, writer: String, recipient: String, summary: String, date: Date, text: String, isReceived: Bool, isFavorite: Bool) {
-        let docRef = colRef.document(userUid).collection("letters").document(documentId)
+        let docRef = letterColRef.document(documentId)
         let docData: [String: Any] = [
             "id": documentId,
             "writer": writer,
@@ -83,7 +83,7 @@ class FirestoreManager: ObservableObject {
     //데이터 삭제
     //Storage의 이미지도 같이 삭제하도록 설정해야 한다.
     func deleteRestaurant(documentId: String) {
-        let docRef = colRef.document(userUid).collection("letters").document(documentId)
+        let docRef = letterColRef.document(documentId)
         
         docRef.delete() { error in
             if let error = error {
@@ -96,9 +96,8 @@ class FirestoreManager: ObservableObject {
     
     //데이터 전체를 가지고 온다.
     func fetchAllLetters() {
-        let docRef = colRef.document(userUid).collection("letters") //특정 user의 document의 letters라는 하위 컬렉션 가져옴
-        
-        docRef.getDocuments { snapshot, error in
+        //letterColRef(특정 user의 document의 letters라는 하위 컬렉션)에 있는 모든 document를 가져옴
+        letterColRef.getDocuments { snapshot, error in
             guard error == nil else {
                 print(error?.localizedDescription ?? "Undefined error")
                 return
