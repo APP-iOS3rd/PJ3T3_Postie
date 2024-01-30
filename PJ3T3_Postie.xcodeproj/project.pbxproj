@@ -201,6 +201,7 @@
 				9E9F6ADD2B5765A3003DFE83 /* Extenstions */,
 				9E9F6AA32B5761D7003DFE83 /* Components */,
 				9E9F6AA22B5761CD003DFE83 /* Core */,
+				9EB8740B2B68C6350025C2DB /* Manager */,
 				9E9F6AA12B5761C5003DFE83 /* Model */,
 				9E0FA11F2B54D27C001CEEB9 /* Assets.xcassets */,
 				E3E02CA72B59003100CD3D4C /* GoogleService-Info.plist */,
@@ -277,7 +278,6 @@
 		9E9F6AA72B5761FF003DFE83 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				9E9F6ACD2B5763CA003DFE83 /* AuthManager.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -305,10 +305,8 @@
 			isa = PBXGroup;
 			children = (
 				9E9F6AB72B5762EF003DFE83 /* HomeViewModel.swift */,
-				9E9F6AD72B57642D003DFE83 /* FirestoreManager.swift */,
 				CE7E50772B579D6800955F31 /* AddLetterViewModel.swift */,
 				CEF09E482B57BFBF00BE67E4 /* TextRecognizer.swift */,
-				9E7F8C772B5E69B000F1A6BF /* StorageManager.swift */,
 				CE6E08442B5E09D800CFBF2A /* LetterDetailViewModel.swift */,
 			);
 			path = ViewModel;
@@ -415,6 +413,16 @@
 				E3EECAFA2B60FB2400E639F2 /* Date.swift */,
 			);
 			path = Extenstions;
+			sourceTree = "<group>";
+		};
+		9EB8740B2B68C6350025C2DB /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				9E9F6ACD2B5763CA003DFE83 /* AuthManager.swift */,
+				9E9F6AD72B57642D003DFE83 /* FirestoreManager.swift */,
+				9E7F8C772B5E69B000F1A6BF /* StorageManager.swift */,
+			);
+			path = Manager;
 			sourceTree = "<group>";
 		};
 		E3EECAEE2B5F956200E639F2 /* Font */ = {
