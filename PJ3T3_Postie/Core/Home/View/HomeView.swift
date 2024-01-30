@@ -52,6 +52,16 @@ struct HomeView: View {
                     .background(Color(hex: 0xF5F1E8))
                     
                     Menu {
+                        // 맨 밑 네비링크가 작동 안되는 버그가 있어서 임시로 만들어둠. 오류 수정하면 없앨 예정
+                        Button (action: {
+                        }) {
+                            HStack {
+                                Text("취소")
+                                
+                                Image(systemName: "x.square")
+                            }
+                        }
+                        
                         NavigationLink(destination: AddLetterView(isSendingLetter: true)) {
                             Button (action: {
                             }) {
@@ -74,7 +84,7 @@ struct HomeView: View {
                             }
                         }
                         
-                        NavigationLink(destination: AddLetterView(isSendingLetter: false)) {
+                        NavigationLink(destination: AddLetterView(isSendingLetter: true)) {
                             Button (action: {
                             }) {
                                 HStack {
@@ -334,56 +344,9 @@ struct LetterDataListViewFB: View { // 파베 데이터 불러오기 용도, 임
     
     var body: some View {
         ForEach(firestoreManager.letters, id: \.self) { letter in
-            if let imageUrlStrings = letter.imageUrlStrings {
-                if !imageUrlStrings.isEmpty {
-                    NavigationLink {
-                        //ImageAsyncView(imageUrlString: imageUrlStrings)
-                    } label: {
-                        HStack {
-                            Spacer()
-                            
-                            HStack {
-                                VStack(alignment: .leading) {
-                                    HStack {
-                                        Text("To.")
-                                            .font(.custom("SourceSerifPro-Black", size: 18))
-                                            .foregroundColor(.black)
-                                        
-                                        Text("\(letter.recipient)")
-                                        
-                                        Spacer()
-                                        
-                                        Text("\(letter.date.toString())")
-                                            .font(.custom("SourceSerifPro-Light", size: 18))
-                                            .foregroundStyle(Color(hex: 0x1E1E1E))
-                                        
-                                        ZStack {
-                                            Image(systemName: "water.waves")
-                                                .font(.headline)
-                                                .offset(x:18)
-                                            
-                                            Image(systemName: "sleep.circle")
-                                                .font(.largeTitle)
-                                        }
-                                        .foregroundStyle(Color(hex: 0x979797))
-                                    }
-                                    
-                                    Spacer()
-                                    
-                                    Text("\"\(letter.summary)\"")
-                                }
-                            }
-                            .padding()
-                            .frame(width: 300, height: 130)
-                            .background(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .foregroundStyle(Color(hex: 0xFFFFFF))
-                                    .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
-                            )
-                        }
-                    }
-                }
-            } else {
+            NavigationLink {
+                TestDetailView(letter: letter)
+            } label: {
                 HStack {
                     Spacer()
                     
