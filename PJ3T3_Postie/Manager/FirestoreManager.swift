@@ -114,7 +114,6 @@ class FirestoreManager: ObservableObject {
             for document in snapshot.documents {
                 let data = document.data()
                 
-                print("Fetch success")
                 //document의 data를 가지고 와서, data를 각 값에 넣어줌
                 self.letters.append(Letter(id: data["id"] as? String ?? "",
                                            writer: data["writer"] as? String ?? "",
@@ -147,6 +146,8 @@ class FirestoreManager: ObservableObject {
 //                    print("error: ", error)
 //                }
             }
+            
+            print("Letter fetch success")
         }
     }
     
@@ -171,11 +172,12 @@ class FirestoreManager: ObservableObject {
                     let data = try document.data(as: Shop.self)
                     
                     self.shops.append(data)
-                    print("Shop fetch success")
                 } catch {
                     print(#function, error.localizedDescription)
                 }
             }
+            
+            print("Shop fetch success")
         }
     }
 }
