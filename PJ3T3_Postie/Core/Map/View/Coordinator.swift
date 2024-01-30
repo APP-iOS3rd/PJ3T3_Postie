@@ -31,7 +31,6 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate, NMFMapV
         super.init()
         
         view.mapView.positionMode = .direction
-        view.showZoomControls = false
         
         view.mapView.zoomLevel = 15 // 기본 맵이 표시될때 줌 레벨
         view.mapView.minZoomLevel = 10 // 최소 줌 레벨
