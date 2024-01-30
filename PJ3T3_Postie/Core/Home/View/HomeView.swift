@@ -51,40 +51,55 @@ struct HomeView: View {
                     .searchable(text: $search)
                     .background(Color(hex: 0xF5F1E8))
                     
-                    Button(action: {
-                        showAlert.toggle()
-                    }, label: {
+                    Menu {
+                        NavigationLink(destination: AddLetterView(isSendingLetter: true)) {
+                            Button (action: {
+                            }) {
+                                HStack {
+                                    Text("나의 느린 우체통")
+                                    
+                                    Image(systemName: "envelope.open.badge.clock")
+                                }
+                            }
+                        }
+                        
+                        NavigationLink(destination: AddLetterView(isSendingLetter: false)) {
+                            Button (action: {
+                            }) {
+                                HStack {
+                                    Text("받은 편지 저장")
+                                    
+                                    Image(systemName: "envelope.open")
+                                }
+                            }
+                        }
+                        
+                        NavigationLink(destination: AddLetterView(isSendingLetter: false)) {
+                            Button (action: {
+                            }) {
+                                HStack {
+                                    Text("보낸 편지 저장")
+                                    
+                                    Image(systemName: "paperplane")
+                                }
+                            }
+                        }
+                    } label: {
                         ZStack {
                             Circle()
                                 .foregroundStyle(Color(hex: 0xFF5733))
                                 .frame(width:70,height:70)
                             
                             Image(systemName: "envelope.open")
+                                .foregroundStyle(Color(hex: 0xF7F7F7))
                                 .font(.title2)
                                 .offset(y: -3)
                         }
-                    })
+                    }
                     .foregroundStyle(Color(hex: 0xF7F7F7))
                     .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
                     .imageScale(.large)
                     .padding()
-                    .alert("편지 저장 하기", isPresented: $showAlert) {
-                        NavigationLink(destination: AddLetterView(isSendingLetter: true)) {
-                            Button("편지 저장") {
-
-                        NavigationLink(destination: AddLetterView()) {
-                            Button("보낸 편지 저장") {
-                            }
-                        }
-                        
-                        NavigationLink(destination: AddLetterView()) {
-                            Button("받은 편지 저장") {
-                            }
-                        }
-                        
-                        Button("취소", role: .cancel) {
-                        }
-                    }
                 }
                 .foregroundStyle(Color(hex: 0x1E1E1E))
                 .navigationBarItems(leading: (
@@ -101,7 +116,6 @@ struct HomeView: View {
                             Image(systemName: "line.horizontal.3")
                                 .imageScale(.large)
                         }
-                        
                     ))
             }
             .toolbarBackground(
@@ -261,7 +275,6 @@ struct SideMenuView: View {
         }
         .tint(Color(hex: 0x1E1E1E))
     }
-    
 }
 
 struct ReceiveLetterView: View {
@@ -324,7 +337,7 @@ struct LetterDataListViewFB: View { // 파베 데이터 불러오기 용도, 임
             if let imageUrlStrings = letter.imageUrlStrings {
                 if !imageUrlStrings.isEmpty {
                     NavigationLink {
-                        ImageAsyncView(imageUrlString: imageUrlStrings)
+                        //ImageAsyncView(imageUrlString: imageUrlStrings)
                     } label: {
                         HStack {
                             Spacer()
