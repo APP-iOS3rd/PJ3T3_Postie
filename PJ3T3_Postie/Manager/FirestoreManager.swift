@@ -5,7 +5,6 @@
 //  Created by Eunsu JEONG on 1/17/24.
 //
 
-import Foundation
 import FirebaseAuth
 import FirebaseFirestore
 
