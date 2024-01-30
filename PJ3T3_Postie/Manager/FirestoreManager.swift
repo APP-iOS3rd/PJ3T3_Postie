@@ -11,9 +11,9 @@ class FirestoreManager: ObservableObject {
     static let shared = FirestoreManager()
     var colRef = Firestore.firestore().collection("users") //user 컬렉션 전체를 가져온다.
     var userUid: String = ""
+    var docId: String = ""
     @Published var letters: [Letter] = []
     @Published var shops: [Shop] = []
-    @Published var docId: String = ""
     
     private init() { 
         self.userUid = AuthManager.shared.userUid
@@ -25,11 +25,8 @@ class FirestoreManager: ObservableObject {
     func addLetter(writer: String, recipient: String, summary: String, date: Date, text: String, isReceived: Bool, isFavorite: Bool) async {
         let document = colRef.document(userUid).collection("letters").document() //새로운 document를 생성한다.
         let documentId = document.documentID //생성한 document의 id를 가져온다.
-        
-        DispatchQueue.main.async {
-            self.docId = documentId
-            print(self.docId)
-        }
+        self.docId = documentId
+        print(self.docId)
         
         //Letter model에 맞는 모양으로 document data를 생성한다.
         let docData: [String: Any] = [
