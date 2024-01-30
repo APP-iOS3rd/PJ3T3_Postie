@@ -63,6 +63,7 @@ struct AddLetterView: View {
 
                 ToolbarItemGroup(placement: .keyboard) {
                     Spacer()
+
                     Button {
                         focusField = nil
                     } label: {
@@ -162,10 +163,7 @@ extension AddLetterView {
                         Image(systemName: "envelope.open.fill")
                             .padding()
                             .frame(width: 100, height: 100)
-                            .background(
-                                Color.white,
-                                in: RoundedRectangle(cornerRadius: 5)
-                            )
+                            .background(Color.white, in: RoundedRectangle(cornerRadius: 5))
                     }
 
                     ForEach(0..<addLetterViewModel.images.count, id: \.self) { index in
@@ -180,6 +178,7 @@ extension AddLetterView {
                                     .frame(width: 100, height: 100)
                                     .clipShape(RoundedRectangle(cornerRadius: 10))
                             }
+
                             VStack {
                                 HStack {
                                     Spacer()
