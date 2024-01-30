@@ -7,9 +7,14 @@
 
 import SwiftUI
 
-struct ThemeView: View {
+struct ThemeView<Content: View>: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var selectedThemeButton: Bool = true
+    private let postieGroupTheme = ["PostieTheme_LetterGroup", "PostieTheme_LetterList"]
+    private let postieColorTheme = ["PostieTheme_PostieOrange", "PostieTheme_PostieYellow", "PostieTheme_PostieGreen", "PostieTheme_PostieBlue"]
+    @State private var currentColorIndex: Int = 0
+    @GestureState private var dragOffset: CGFloat = 0
+    
     
     var body: some View {
         ZStack {
@@ -62,9 +67,31 @@ struct ThemeView: View {
                 .padding()
                 
                 if selectedThemeButton {
-                    Text("테마 설정")
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack {
+                            ForEach(postieColorTheme, id: \.self) { theme in
+                                Image(theme)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(height: 550)
+                                    .padding()
+                                    .shadow(color: .black.opacity(0.1), radius: 3)
+                            }
+                        }
+                    }
                 } else {
-                    Text("나열 변경")
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack {
+                            ForEach(postieGroupTheme, id: \.self) { theme in
+                                Image(theme)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(height: 550)
+                                    .padding()
+                                    .shadow(color: .black.opacity(0.1), radius: 3)
+                            }
+                        }
+                    }
                 }
                 
                 Spacer()
@@ -83,6 +110,6 @@ struct ThemeView: View {
     }
 }
 
-#Preview {
-    ThemeView()
-}
+//#Preview {
+//    ThemeView()
+//}
