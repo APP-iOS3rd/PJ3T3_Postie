@@ -106,5 +106,9 @@ class AuthManager: ObservableObject {
             self.currentUser = try? snapshot.data(as: User.self)
             print("DEBUG: Current user is \(String(describing: self.currentUser))")
         }
+        
+        if let userUid = Auth.auth().currentUser?.uid {
+            self.userUid = userUid
+        }
     }
 }
