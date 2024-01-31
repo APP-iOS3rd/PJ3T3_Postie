@@ -18,7 +18,7 @@ struct MapView: View {
     
     //    @State private var selectedPostDivType: Int = 1 //Dafault 우체국(1)
     @State private var selectedButtonIndex: Int = 0
-    @State private var name = ["우체국", "우체통"]
+    @State private let name = ["우체국", "우체통"]
     
     var body: some View {
         NavigationStack {
