@@ -195,7 +195,6 @@
 		9E0FA11A2B54D27A001CEEB9 /* PJ3T3_Postie */ = {
 			isa = PBXGroup;
 			children = (
-				E3EECAF32B5F958C00E639F2 /* PJ3T3-Postie-Info.plist */,
 				E3EECAEE2B5F956200E639F2 /* Font */,
 				9E9F6AA42B5761DE003DFE83 /* App */,
 				9E9F6ADD2B5765A3003DFE83 /* Extenstions */,
@@ -204,6 +203,7 @@
 				9EB8740B2B68C6350025C2DB /* Manager */,
 				9E9F6AA12B5761C5003DFE83 /* Model */,
 				9E0FA11F2B54D27C001CEEB9 /* Assets.xcassets */,
+				E3EECAF32B5F958C00E639F2 /* PJ3T3-Postie-Info.plist */,
 				E3E02CA72B59003100CD3D4C /* GoogleService-Info.plist */,
 				9E0FA1212B54D27C001CEEB9 /* Preview Content */,
 			);
