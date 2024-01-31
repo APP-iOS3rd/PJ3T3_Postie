@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ProfileView: View {
-    @ObservedObject var authViewModel = AuthViewModel.shared
+    @ObservedObject var authViewModel = AuthManager.shared
     
     var body: some View {
         ZStack {

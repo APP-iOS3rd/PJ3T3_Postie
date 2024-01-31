@@ -12,14 +12,14 @@ import CoreLocation
 import NMapsMap
 
 struct MapView: View {
+    private let name = ["우체국", "우체통"]
+    
     @StateObject var naverGeocodeAPI = NaverGeocodeAPI.shared
     @StateObject var officeInfoServiceAPI = OfficeInfoServiceAPI.shared
     @StateObject var coordinator: Coordinator = Coordinator.shared
     
     //    @State private var selectedPostDivType: Int = 1 //Dafault 우체국(1)
     @State private var selectedButtonIndex: Int = 0
-    @State private var name = ["우체국", "우체통"]
-    @State var search = ""
     
     var body: some View {
         NavigationStack {
@@ -62,20 +62,11 @@ struct MapView: View {
                 }
                 .padding()
             }
-//            List {
-//                ForEach(officeInfoServiceAPI.infos, id: \.self) { result in
-//                    VStack {
-//                        Button(result.postNm)
-//                        {
-//                            coordinator.fetchLocation(latitude: Double(result.postLat)!, longitude: Double(result.postLon)!, name: result.postNm)
-//                        }
-//                    }
-//                }
-//            }
             
             NaverMap()
                 .ignoresSafeArea(.all, edges: .top)
         }
+        // 추후 사용 예정
         //        .navigationBarTitle("Postie Map")
         //        .foregroundStyle(Color(hex: 0x1E1E1E))
         .onAppear() {
@@ -83,13 +74,6 @@ struct MapView: View {
             officeInfoServiceAPI.fetchData(postDivType: 1)
             print(coordinator.userLocation.0)
         }
-        //iOS17버전
-        //        .onChange(of: officeInfoServiceAPI.infos) {
-        //            $coordinator.removeAllMakers
-        //            for result in officeInfoServiceAPI.infos {
-        //                coordinator.addMarkerAndInfoWindow(latitude: Double(result.postLat)!, longitude: Double(result.postLon)!, caption: result.postNm)
-        //            }
-        //        }
         .onChange(of: officeInfoServiceAPI.infos) { newInfos in
             coordinator.removeAllMakers()
             for result in newInfos {
