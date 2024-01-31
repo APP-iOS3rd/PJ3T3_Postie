@@ -54,6 +54,11 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate, NMFMapV
     }
     
     func mapView(_ mapView: NMFMapView, cameraIsChangingByReason reason: Int) {
+        // 현재 지도 중심 좌표 가져오기
+        let center = mapView.cameraPosition.target
+        
+        print("change position")
+        print(center)
         // 카메라의 위치가 변경되면 호출되는 함수
     }
     

@@ -39,11 +39,11 @@ class NaverGeocodeAPI: ObservableObject {
     @Published var targetLocation: (latitude: String, longitude: String)?
     
     private var clientID: String? {
-        get { getValueOfPlistFile("ApiKeys", "NAVER_GEOCODE_ID") }
+        get { getValueOfPlistFile("MapApiKeys", "NAVER_GEOCODE_ID") }
     }
     
     private var clinetSecret: String? {
-        get { getValueOfPlistFile("ApiKeys", "NAVER_GEOCODE_SECRET") }
+        get { getValueOfPlistFile("MapApiKeys", "NAVER_GEOCODE_SECRET") }
     }
     
     func fetchLocationForPostalCode(_ postalCode: String,  completion: @escaping (Double?, Double?) -> Void) {
