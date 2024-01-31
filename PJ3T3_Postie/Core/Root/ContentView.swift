@@ -15,7 +15,7 @@ struct TestView: View {
 
 struct ContentView: View {
     //ViewModels
-    @ObservedObject var authViewModel = AuthViewModel.shared
+    @ObservedObject var authViewModel = AuthManager.shared
     
     var body: some View {
         Group {

@@ -22,8 +22,8 @@ protocol AuthenticationProtocol {
 //Actor 내에서 구현이 실행중인 모든 작업은 항상 메인 큐에서 수행하게 된다.
 //Task 로 생성된 작업은 (메인 액터에서 생성되지 않는 한) 백그라운드 스레드에서 즉시 실행되며, await 키워드를 사용해서 완료된 값이 돌아올 때까지 기다릴 수 있다.
 @MainActor
-class AuthViewModel: ObservableObject {
-    static let shared = AuthViewModel()
+class AuthManager: ObservableObject {
+    static let shared = AuthManager()
     @Published var userSession: FirebaseAuth.User? //Firebase user object
     @Published var currentUser: User? //User Data Model
     
