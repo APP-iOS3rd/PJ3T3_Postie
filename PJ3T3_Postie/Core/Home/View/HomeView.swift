@@ -22,9 +22,6 @@ struct HomeView: View {
                     ScrollView {
                         if currentGroupPage == 0 {
                             VStack {
-                                GroupLetterView(letterCount: 3, title: "All", content: "모든 편지 꾸러미들")
-                                    .padding(.bottom, 10)
-                                
                                 GroupLetterView(letterCount: 3, title: "Favorite", content: "즐겨찾기 한 편지 꾸러미들")
                                     .padding(.bottom, 10)
                                 
@@ -222,10 +219,12 @@ struct SideMenuView: View {
                         ZStack {
                             Circle()
                                 .frame(width: 80,height: 80)
-                                .foregroundStyle(Color(hex: 0xD1CEC7))
+                                .foregroundStyle(Color(hex: 0xE6E2DC))
                             
-                            Text("Postie")
-                                .foregroundStyle(Color.black)
+                            Image("Posty_Receiving")
+                                .resizable()
+                                .frame(width: 80,height: 80)
+                                .offset(x: -4, y: 5)
                         }
                         
                         VStack(alignment: .leading) {
