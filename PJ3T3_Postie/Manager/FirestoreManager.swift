@@ -5,38 +5,29 @@
 //  Created by Eunsu JEONG on 1/17/24.
 //
 
-import Foundation
-import FirebaseAuth
 import FirebaseFirestore
 
-@MainActor
 class FirestoreManager: ObservableObject {
     static let shared = FirestoreManager()
-    var colRef = Firestore.firestore().collection("users") //user 컬렉션 전체를 가져온다.
-    var userUid: String {
-        //로그인된 유저가 있는지 확인해서 firebase에서 제공하는 userUid를 가지고온다.
-        if let uid = Auth.auth().currentUser?.uid {
-            return uid
-        }
-
-        return ""
-    }
+    var letterColRef: CollectionReference
+    var docId: String = ""
     @Published var letters: [Letter] = []
     @Published var shops: [Shop] = []
-    @Published var docId: String = ""
     
     private init() { 
+        let userUid = AuthManager.shared.userUid
+        self.letterColRef = Firestore.firestore().collection("users").document(userUid).collection("letters")
         fetchAllLetters()
         fetchAllShops()
     }
 
     //새로운 편지를 추가한다.
-    func addLetter(writer: String, recipient: String, summary: String, date: Date, text: String) async {
-        let document = colRef.document(userUid).collection("letters").document() //새로운 document를 생성한다.
+    func addLetter(writer: String, recipient: String, summary: String, date: Date, text: String, isReceived: Bool, isFavorite: Bool) async {
+        let document = letterColRef.document() //새로운 document를 생성한다.
         let documentId = document.documentID //생성한 document의 id를 가져온다.
+        self.docId = documentId
+        print(self.docId)
         
-        docId = documentId
-        print(docId)
         //Letter model에 맞는 모양으로 document data를 생성한다.
         let docData: [String: Any] = [
             "id": documentId,
@@ -44,7 +35,9 @@ class FirestoreManager: ObservableObject {
             "recipient": recipient,
             "summary": summary,
             "date": date,
-            "text": text
+            "text": text,
+            "isReceived": isReceived,
+            "isFavorite": isFavorite
         ]
 
         //생성한 데이터를 해당되는 경로에 새롭게 생성한다. merge false: overwrite a document or create it if it doesn't exist yet
@@ -64,15 +57,17 @@ class FirestoreManager: ObservableObject {
     ///   - summary: 변경 된 한 줄 요약
     ///   - date: 편지를 보내거나 받은 날짜
     ///   - text: 변경 된 편지 본문
-    func editLetter(documentId: String, writer: String, recipient: String, summary: String, date: Date, text: String) {
-        let docRef = colRef.document(userUid).collection("letters").document(documentId)
+    func editLetter(documentId: String, writer: String, recipient: String, summary: String, date: Date, text: String, isReceived: Bool, isFavorite: Bool) {
+        let docRef = letterColRef.document(documentId)
         let docData: [String: Any] = [
             "id": documentId,
             "writer": writer,
             "recipient": recipient,
             "summary": summary,
             "date": date,
-            "text": text
+            "text": text,
+            "isReceived": isReceived,
+            "isFavorite": isFavorite
         ]
         
         docRef.updateData(docData) { error in
@@ -87,8 +82,8 @@ class FirestoreManager: ObservableObject {
     
     //데이터 삭제
     //Storage의 이미지도 같이 삭제하도록 설정해야 한다.
-    func deleteRestaurant(documentId: String) {
-        let docRef = colRef.document(userUid).collection("letters").document(documentId)
+    func deleteLetter(documentId: String) {
+        let docRef = letterColRef.document(documentId)
         
         docRef.delete() { error in
             if let error = error {
@@ -101,9 +96,8 @@ class FirestoreManager: ObservableObject {
     
     //데이터 전체를 가지고 온다.
     func fetchAllLetters() {
-        let docRef = colRef.document(userUid).collection("letters") //특정 user의 document의 letters라는 하위 컬렉션 가져옴
-        
-        docRef.getDocuments { snapshot, error in
+        //letterColRef(특정 user의 document의 letters라는 하위 컬렉션)에 있는 모든 document를 가져옴
+        letterColRef.getDocuments { snapshot, error in
             guard error == nil else {
                 print(error?.localizedDescription ?? "Undefined error")
                 return
@@ -113,14 +107,12 @@ class FirestoreManager: ObservableObject {
             self.letters.removeAll()
             
             guard let snapshot = snapshot else {
-                print("\(#function): \(error?.localizedDescription)")
+                print("\(#function): No snapshot \(String(describing: error?.localizedDescription))")
                 return
             }
             
             for document in snapshot.documents {
                 let data = document.data()
-                
-                print("Fetch success")
                 
                 //document의 data를 가지고 와서, data를 각 값에 넣어줌
                 self.letters.append(Letter(id: data["id"] as? String ?? "",
@@ -128,8 +120,34 @@ class FirestoreManager: ObservableObject {
                                            recipient: data["recipient"] as? String ?? "",
                                            summary: data["summary"] as? String ?? "",
                                            date: data["date"] as? Date ?? Date(),
-                                           text: data["text"] as? String ?? ""))
+                                           text: data["text"] as? String ?? "",
+                                           isReceived: data["isReceived"] as? Bool ?? true,
+                                           isFavorite: data["isFavorite"] as? Bool ?? false))
+                
+                //위의 코드는 값을 manual하게 mapping해 주어야 하므로 구조체에 업데이트가 발생하거나 오타가 발생하면 작동하지 않는다는 단점이 있습니다.
+                //아래와 같이 코드 개선이 가능하지만 현재 Letter 구조체의 변수 images의 key가 mapping되지 않아 fetch가 되지 않습니다.
+                //우선 주석으로 작성 해 두고 추후 위의 코드와 교체 할 예정입니다.
+//                do {
+//                    let letter = try document.data(as: Letter.self)
+//                    self.letters.append(letter)
+//                    print("Fetch letter success")
+//                } catch let DecodingError.dataCorrupted(context) {
+//                    print(context)
+//                } catch let DecodingError.keyNotFound(key, context) {
+//                    print("Key '\(key)' not found:", context.debugDescription)
+//                    print("codingPath:", context.codingPath)
+//                } catch let DecodingError.valueNotFound(value, context) {
+//                    print("Value '\(value)' not found:", context.debugDescription)
+//                    print("codingPath:", context.codingPath)
+//                } catch let DecodingError.typeMismatch(type, context)  {
+//                    print("Type '\(type)' mismatch:", context.debugDescription)
+//                    print("codingPath:", context.codingPath)
+//                } catch {
+//                    print("error: ", error)
+//                }
             }
+            
+            print("Letter fetch success")
         }
     }
     
@@ -142,26 +160,24 @@ class FirestoreManager: ObservableObject {
                 return
             }
             
-            //우선 전체 내용을 지우고 전체를 추가한다.
             self.shops.removeAll()
             
             guard let snapshot = snapshot else {
-                print("\(#function): \(error?.localizedDescription)")
+                print("\(#function): No snapshot \(String(describing: error?.localizedDescription))")
                 return
             }
             
             for document in snapshot.documents {
-                let data = document.data()
-                
-                print("Shop Fetch success")
-                
-                //document의 data를 가지고 와서, data를 각 값에 넣어줌
-                self.shops.append(Shop(id: data["id"] as? String ?? "",
-                                       shopUrl: data["shopUrl"] as? String ?? "",
-                                       thumbUrl: data["thumbUrl"] as? String ?? "",
-                                       title: data["title"] as? String ?? "",
-                                       category: data["category"] as? String ?? ""))
+                do {
+                    let data = try document.data(as: Shop.self)
+                    
+                    self.shops.append(data)
+                } catch {
+                    print(#function, error.localizedDescription)
+                }
             }
+            
+            print("Shop fetch success")
         }
     }
 }

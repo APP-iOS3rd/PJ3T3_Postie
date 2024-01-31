@@ -8,10 +8,10 @@
 import UIKit
 
 struct LetterPhoto: Hashable, Identifiable {
-    var id: String //파일명
-    var fullPath: String
-    var urlString: String
-    var image: UIImage
+    let id: String //파일명
+    let fullPath: String
+    let urlString: String
+    let image: UIImage
 
     init(id: String, fullPath: String, urlString: String, image: UIImage) {
         self.id = id

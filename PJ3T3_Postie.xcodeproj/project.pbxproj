@@ -205,10 +205,12 @@
 				9E9F6AA22B5761CD003DFE83 /* Core */,
 				9E9F6ADD2B5765A3003DFE83 /* Extenstions */,
 				E3EECAEE2B5F956200E639F2 /* Font */,
+        9EB8740B2B68C6350025C2DB /* Manager */,
 				9E9F6AA12B5761C5003DFE83 /* Model */,
 				9E0FA1212B54D27C001CEEB9 /* Preview Content */,
 				9E0FA11F2B54D27C001CEEB9 /* Assets.xcassets */,
 				E3E02CA72B59003100CD3D4C /* GoogleService-Info.plist */,
+        E3EECAF32B5F958C00E639F2 /* PJ3T3-Postie-Info.plist */,
 			);
 			path = PJ3T3_Postie;
 			sourceTree = "<group>";
@@ -281,7 +283,6 @@
 		9E9F6AA72B5761FF003DFE83 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				9E9F6ACD2B5763CA003DFE83 /* AuthManager.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -424,6 +425,16 @@
 			path = Extenstions;
 			sourceTree = "<group>";
 		};
+		9EB8740B2B68C6350025C2DB /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				9E9F6ACD2B5763CA003DFE83 /* AuthManager.swift */,
+				9E9F6AD72B57642D003DFE83 /* FirestoreManager.swift */,
+				9E7F8C772B5E69B000F1A6BF /* StorageManager.swift */,
+			);
+			path = Manager;
+			sourceTree = "<group>";
+		};
 		E3EECAEE2B5F956200E639F2 /* Font */ = {
 			isa = PBXGroup;
 			children = (
@@ -462,6 +473,7 @@
 				9E0FA1152B54D27A001CEEB9 /* Frameworks */,
 				9E0FA1162B54D27A001CEEB9 /* Resources */,
 				520049332BADFDD576E4570A /* [CP] Embed Pods Frameworks */,
+				9EFED6982B69446700BA1FB8 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -573,6 +585,29 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PJ3T3_Postie/Pods-PJ3T3_Postie-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		9EFED6982B69446700BA1FB8 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${PRODUCT_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist",
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/GoogleService-Info.plist",
+				"$(TARGET_BUILD_DIR)/$(EXECUTABLE_PATH)",
+				"",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\n";
 		};
 		F213A788878F14CC63E1567D /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -701,7 +736,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -758,7 +793,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
