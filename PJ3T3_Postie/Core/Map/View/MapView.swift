@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+
 import MapKit
 import CoreLocation
 import NMapsMap
@@ -18,6 +19,7 @@ struct MapView: View {
     //    @State private var selectedPostDivType: Int = 1 //Dafault 우체국(1)
     @State private var selectedButtonIndex: Int = 0
     @State private var name = ["우체국", "우체통"]
+    @State var search = ""
     
     var body: some View {
         NavigationStack {
@@ -60,16 +62,17 @@ struct MapView: View {
                 }
                 .padding()
             }
-            List {
-                ForEach(officeInfoServiceAPI.infos, id: \.self) { result in
-                    VStack {
-                        Button(result.postNm)
-                        {
-                            coordinator.fetchLocation(latitude: Double(result.postLat)!, longitude: Double(result.postLon)!, name: result.postNm)
-                        }
-                    }
-                }
-            }
+//            List {
+//                ForEach(officeInfoServiceAPI.infos, id: \.self) { result in
+//                    VStack {
+//                        Button(result.postNm)
+//                        {
+//                            coordinator.fetchLocation(latitude: Double(result.postLat)!, longitude: Double(result.postLon)!, name: result.postNm)
+//                        }
+//                    }
+//                }
+//            }
+            
             NaverMap()
                 .ignoresSafeArea(.all, edges: .top)
         }
