@@ -11,7 +11,8 @@ struct ThemeView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var selectedThemeButton: Bool = true
     @State private var currentColorPage: Int = 0
-    @State private var currentGroupPage: Int = 0
+    @Binding var currentGroupPage: Int
+    @State private var isTabGroupButton = true
     
     var body: some View {
         ZStack {
@@ -124,25 +125,37 @@ struct ThemeView: View {
                     .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
                 } else {
                     TabView(selection: $currentGroupPage) {
-                        VStack {
-                            Text("편지 그룹\n")
-                            
-                            Image("PostieTheme_LetterGroup")
-                                .resizable()
-                                .modifier(CustomImageModifier())
-                            
-                            Spacer()
+                        Button(action: {
+                            currentGroupPage = 0
+                            isTabGroupButton = true
+                        }) {
+                            VStack {
+                                Text("편지 그룹\n")
+                                
+                                Image("PostieTheme_LetterGroup")
+                                    .resizable()
+                                    .modifier(CustomImageModifier())
+                                    .border(isTabGroupButton ? Color(hex: 0xFF5733) : Color(hex: 0xFF5733).opacity(0))
+                                
+                                Spacer()
+                            }
                         }
                         .tag(0)
                         
-                        VStack {
-                            Text("편지 리스트\n")
-                            
-                            Image("PostieTheme_LetterList")
-                                .resizable()
-                                .modifier(CustomImageModifier())
-                            
-                            Spacer()
+                        Button(action: {
+                            currentGroupPage = 1
+                            isTabGroupButton = false
+                        }) {
+                            VStack {
+                                Text("편지 리스트\n")
+                                
+                                Image("PostieTheme_LetterList")
+                                    .resizable()
+                                    .modifier(CustomImageModifier())
+                                    .border(isTabGroupButton ? Color(hex: 0xFF5733).opacity(0) : Color(hex: 0xFF5733))
+                                
+                                Spacer()
+                            }
                         }
                         .tag(1)
                     }
@@ -176,6 +189,6 @@ struct CustomImageModifier: ViewModifier {
     }
 }
 
-#Preview {
-    ThemeView()
-}
+//#Preview {
+//    ThemeView()
+//}

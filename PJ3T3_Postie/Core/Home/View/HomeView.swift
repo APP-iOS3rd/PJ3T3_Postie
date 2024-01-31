@@ -13,14 +13,14 @@ struct HomeView: View {
     @State private var isSideMenuOpen = false
     @ObservedObject var firestoreManager = FirestoreManager.shared
     @ObservedObject var storageManager = StorageManager.shared
-    @State private var currentGroupPage = true
+    @State private var currentGroupPage: Int = 0
     
     var body: some View {
         ZStack {
             NavigationStack {
                 ZStack(alignment: .bottomTrailing) {
                     ScrollView {
-                        if currentGroupPage {
+                        if currentGroupPage == 0 {
                             VStack {
                                 GroupLetterView(letterCount: 3, title: "All", content: "모든 편지 꾸러미들")
                                     .padding(.bottom, 10)
@@ -146,23 +146,13 @@ struct HomeView: View {
                             .font(.custom("SourceSerifPro-Black", size: 40))
                             .foregroundStyle(Color(hex: 0xFF5733))
                     }), trailing: (
-                        HStack {
-                            Button(action: {
-                                withAnimation {
-                                    self.currentGroupPage.toggle()
-                                }
-                            }) {
-                                Image(systemName: "square.grid.2x2")
-                                    .imageScale(.large)
+                        Button(action: {
+                            withAnimation {
+                                self.isSideMenuOpen.toggle()
                             }
-                            Button(action: {
-                                withAnimation {
-                                    self.isSideMenuOpen.toggle()
-                                }
-                            }) {
-                                Image(systemName: "line.horizontal.3")
-                                    .imageScale(.large)
-                            }
+                        }) {
+                            Image(systemName: "line.horizontal.3")
+                                .imageScale(.large)
                         }
                     ))
             }
@@ -184,7 +174,7 @@ struct HomeView: View {
             //                .offset(x: isSideMenuOpen ? 0 : UIScreen.main.bounds.width)
             //                .animation(.easeInOut)
             // 임시 세팅뷰
-            SideMenuView(isSideMenuOpen: $isSideMenuOpen)
+            SideMenuView(isSideMenuOpen: $isSideMenuOpen, currentGroupPage: $currentGroupPage)
                 .offset(x: isSideMenuOpen ? 0 : UIScreen.main.bounds.width)
                 .animation(.easeInOut)
         }
@@ -195,6 +185,7 @@ struct HomeView: View {
 // 임시 세팅뷰
 struct SideMenuView: View {
     @Binding var isSideMenuOpen: Bool
+    @Binding var currentGroupPage: Int
     @State private var isToggleOn = false
     
     var body: some View {
@@ -258,7 +249,7 @@ struct SideMenuView: View {
                     .frame(height: 1)
                     .padding(.bottom)
                 
-                NavigationLink(destination: ThemeView()) {
+                NavigationLink(destination: ThemeView(currentGroupPage: $currentGroupPage)) {
                     HStack {
                         Text("테마 설정 하기")
                         
@@ -505,7 +496,7 @@ struct GroupLetterView: View { // 그룹 뷰 용도. 임시
                         .foregroundStyle(Color(hex: 0xFCFBF7))
                         .frame(width: 350, height: 130)
                         .offset(x: 10, y: 10)
-                    .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
+                        .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
                 }
                 
                 if letterCount > 1 {
@@ -513,7 +504,7 @@ struct GroupLetterView: View { // 그룹 뷰 용도. 임시
                         .foregroundStyle(Color(hex: 0xFCFBF7))
                         .frame(width: 350, height: 130)
                         .offset(x: 5, y: 5)
-                    .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
+                        .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
                 }
                 
                 HStack {
