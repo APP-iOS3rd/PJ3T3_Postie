@@ -57,7 +57,7 @@ struct AddLetterView: View {
                     .padding()
                 }
             }
-            .navigationTitle("편지 등록")
+            .navigationTitle(isSendingLetter ? "보낸 편지 기록" : "받은 편지 기록")
             .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(Color(hex: 0xF5F1E8), for: .navigationBar)
             .toolbar {
@@ -149,124 +149,155 @@ struct AddLetterView: View {
 extension AddLetterView {
     @ViewBuilder
     private var letterInfoSection: some View {
-        HStack {
+        HStack(spacing: 16) {
             VStack(alignment: .leading, spacing: 4) {
                 Text(isSendingLetter ? "받는 사람" : "보낸 사람")
-                    .font(.headline)
 
                 TextField("", 
                           text: isSendingLetter ? 
                           $addLetterViewModel.sender : $addLetterViewModel.receiver)
-                    .textFieldStyle(.roundedBorder)
-                    .focused($focusField, equals: .sender)
+                .padding(6)
+                .background(Color(hex: 0xFCFBF7))
+                .clipShape(RoundedRectangle(cornerRadius: 4))
+                .focused($focusField, equals: .sender)
             }
-            .frame(width: UIScreen.main.bounds.width / 3)
-
-            Spacer()
+            .frame(width: UIScreen.main.bounds.width * 0.5)
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(isSendingLetter ? "보낸 날짜" : "받은 날짜")
-                    .font(.headline)
 
-                TextField("", text: .constant(dateFormatter.string(from: addLetterViewModel.date)))
-                    .textFieldStyle(.roundedBorder)
-                    .overlay {
-                        DatePicker(
-                            "",
-                            selection: $addLetterViewModel.date,
-                            displayedComponents: .date
-                        )
-                        .labelsHidden()
-                        .environment(\.locale, Locale.init(identifier: "ko"))
-                        .blendMode(.destinationOver)
-                    }
+                DatePicker(
+                    "",
+                    selection: $addLetterViewModel.date,
+                    displayedComponents: .date
+                )
+                .labelsHidden()
+                .environment(\.locale, Locale.init(identifier: "ko"))
             }
-            .frame(width: UIScreen.main.bounds.width / 3)
-
-            Spacer()
         }
-
     }
 
     @ViewBuilder
     private var letterImagesSection: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text("편지 사진")
-                .font(.headline)
+            HStack {
+                Text("편지 사진")
 
-            ScrollView(.horizontal) {
-                HStack(spacing: 8) {
-                    Button {
-                        addLetterViewModel.showConfirmationDialog = true
-                    } label: {
-                        Image(systemName: "envelope.open.fill")
-                            .padding()
-                            .frame(width: 100, height: 100)
-                            .background(Color.white, in: RoundedRectangle(cornerRadius: 5))
-                    }
+                Spacer()
 
-                    ForEach(0..<addLetterViewModel.images.count, id: \.self) { index in
-                        ZStack {
-                            Button {
-                                addLetterViewModel.selectedIndex = index
-                                addLetterViewModel.showLetterImageFullScreenView = true
-                            } label: {
-                                Image(uiImage: addLetterViewModel.images[index])
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 100, height: 100)
-                                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                            }
+                Button {
+                    addLetterViewModel.showConfirmationDialog = true
+                } label: {
+                    Image(systemName: "plus")
+                }
+            }
 
-                            VStack {
-                                HStack {
-                                    Spacer()
-
-                                    Button {
-                                        withAnimation {
-                                            addLetterViewModel.removeImage(at: index)
-                                        }
-                                    } label: {
-                                        Image(systemName: "x.circle")
-                                    }
-                                    .padding(4)
+            if addLetterViewModel.images.isEmpty {
+                Label("사진을 추가해주세요.", systemImage: "photo.on.rectangle")
+                    .foregroundStyle(Color(hex: 0xAAAAAA))
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 100)
+                    .frame(alignment: .center)
+            } else {
+                ScrollView(.horizontal) {
+                    HStack(spacing: 8) {
+                        ForEach(0..<addLetterViewModel.images.count, id: \.self) { index in
+                            ZStack {
+                                Button {
+                                    addLetterViewModel.selectedIndex = index
+                                    addLetterViewModel.showLetterImageFullScreenView = true
+                                } label: {
+                                    Image(uiImage: addLetterViewModel.images[index])
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width: 100, height: 100)
+                                        .clipShape(RoundedRectangle(cornerRadius: 10))
                                 }
-                                Spacer()
+
+                                VStack {
+                                    HStack {
+                                        Spacer()
+
+                                        Button {
+                                            withAnimation {
+                                                addLetterViewModel.removeImage(at: index)
+                                            }
+                                        } label: {
+                                            Image(systemName: "x.circle")
+                                        }
+                                        .padding(4)
+                                    }
+                                    Spacer()
+                                }
                             }
                         }
                     }
                 }
+                .scrollIndicators(.never)
             }
-            .scrollIndicators(.never)
         }
     }
 
     @ViewBuilder
     private var letterTextSection: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text("편지 내용")
-                .font(.headline)
+            Text("내용")
+            
+            ZStack {
+                if addLetterViewModel.text.isEmpty {
+                    TextEditor(text: .constant("사진을 등록하면 자동으로 편지 내용이 입력됩니다."))
+                        .scrollContentBackground(.hidden)
+                        .background(Color(hex: 0xFCFBF7))
+                        .lineSpacing(5)
+                        .clipShape(RoundedRectangle(cornerRadius: 5))
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 350)
+                        .disabled(true)
+                }
+                TextEditor(text: $addLetterViewModel.text)
+                    .scrollContentBackground(.hidden)
+                    .background(Color(hex: 0xFCFBF7))
+                    .lineSpacing(5)
+                    .clipShape(RoundedRectangle(cornerRadius: 5))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 5)
+                            .stroke(.black, lineWidth: 1 / 4)
+                            .opacity(0.2)
+                    )
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 350)
+                    .opacity(addLetterViewModel.text.isEmpty ? 0.25 : 1)
+                    .focused($focusField, equals: .text)
+            }
 
-            TextEditor(text: $addLetterViewModel.text)
-                .lineSpacing(5)
-                .clipShape(RoundedRectangle(cornerRadius: 5))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 5)
-                        .stroke(.black, lineWidth: 1 / 4)
-                        .opacity(0.2)
-                )
-                .frame(maxWidth: .infinity)
-                .frame(height: 350)
-                .focused($focusField, equals: .text)
         }
 
         VStack(alignment: .leading, spacing: 4) {
-            Text("한 줄 요약")
-                .font(.headline)
+            HStack {
+                Text("한 줄 요약")
 
-            TextField("", text: $addLetterViewModel.summary)
-                .textFieldStyle(.roundedBorder)
-                .focused($focusField, equals: .receiver)
+                Spacer()
+
+                Button {
+                    // TODO: 요약 진행 Alert 띄우기
+                } label: {
+                    Image(systemName: "plus")
+                }
+            }
+
+            if addLetterViewModel.summary.isEmpty {
+                Label("편지를 요약해드릴게요.", systemImage: "text.quote.rtl")
+                    .foregroundStyle(Color(hex: 0xAAAAAA))
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 30)
+                    .frame(alignment: .center)
+            } else {
+                TextField("", text: $addLetterViewModel.summary)
+                    .padding(6)
+                    .background(Color(hex: 0xFCFBF7))
+                    .clipShape(RoundedRectangle(cornerRadius: 4))
+                    .focused($focusField, equals: .receiver)
+            }
         }
     }
 }
