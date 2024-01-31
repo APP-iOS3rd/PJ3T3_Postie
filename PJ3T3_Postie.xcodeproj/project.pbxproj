@@ -11,13 +11,16 @@
 		0E29F0D32B5ED136005B86FB /* MapApiKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0E29F0D22B5ED136005B86FB /* MapApiKeys.plist */; };
 		0E29F0D62B5EDC30005B86FB /* XMLCoder in Frameworks */ = {isa = PBXBuildFile; productRef = 0E29F0D52B5EDC30005B86FB /* XMLCoder */; };
 		0E29F0D82B5FA2FC005B86FB /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E29F0D72B5FA2FC005B86FB /* Button.swift */; };
+		0E29F0DB2B5FDC0F005B86FB /* NaverMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E29F0DA2B5FDC0F005B86FB /* NaverMap.swift */; };
+		0E29F0DD2B5FDC6A005B86FB /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E29F0DC2B5FDC6A005B86FB /* Coordinator.swift */; };
+		0E29F0E02B602E3D005B86FB /* MyCoord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E29F0DF2B602E3D005B86FB /* MyCoord.swift */; };
+		0E9815FC2B6A23B500C9F5BA /* Shop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E9815FB2B6A23B500C9F5BA /* Shop.swift */; };
 		9E0FA11C2B54D27A001CEEB9 /* PJ3T3_PostieApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0FA11B2B54D27A001CEEB9 /* PJ3T3_PostieApp.swift */; };
 		9E0FA11E2B54D27A001CEEB9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0FA11D2B54D27A001CEEB9 /* ContentView.swift */; };
 		9E0FA1202B54D27C001CEEB9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E0FA11F2B54D27C001CEEB9 /* Assets.xcassets */; };
 		9E0FA1232B54D27C001CEEB9 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E0FA1222B54D27C001CEEB9 /* Preview Assets.xcassets */; };
 		9E0FA12A2B54D2EF001CEEB9 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 9E0FA1292B54D2EF001CEEB9 /* README.md */; };
 		9E0FA12C2B54D2FC001CEEB9 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 9E0FA12B2B54D2FC001CEEB9 /* .gitignore */; };
-		9E223C9C2B6787F6004E078E /* Shop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E223C9B2B6787F6004E078E /* Shop.swift */; };
 		9E7F8C782B5E69B000F1A6BF /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7F8C772B5E69B000F1A6BF /* StorageManager.swift */; };
 		9E9F6AB62B5762E5003DFE83 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9F6AB52B5762E5003DFE83 /* HomeView.swift */; };
 		9E9F6AB82B5762EF003DFE83 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9F6AB72B5762EF003DFE83 /* HomeViewModel.swift */; };
@@ -35,7 +38,6 @@
 		9E9F6AD02B5763D0003DFE83 /* LoginInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9F6ACF2B5763D0003DFE83 /* LoginInputView.swift */; };
 		9E9F6AD22B5763F3003DFE83 /* SettingsRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9F6AD12B5763F3003DFE83 /* SettingsRowView.swift */; };
 		9E9F6AD42B576411003DFE83 /* LetterDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9F6AD32B576411003DFE83 /* LetterDetailView.swift */; };
-		9E9F6AD62B576423003DFE83 /* AddLetterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9F6AD52B576423003DFE83 /* AddLetterView.swift */; };
 		9E9F6AD82B57642D003DFE83 /* FirestoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9F6AD72B57642D003DFE83 /* FirestoreManager.swift */; };
 		9E9F6ADA2B576438003DFE83 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9F6AD92B576438003DFE83 /* User.swift */; };
 		9E9F6ADC2B57643F003DFE83 /* Letter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9F6ADB2B57643F003DFE83 /* Letter.swift */; };
@@ -67,6 +69,7 @@
 		9E9F6B142B5769AA003DFE83 /* FirebaseRemoteConfigSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 9E9F6B132B5769AA003DFE83 /* FirebaseRemoteConfigSwift */; };
 		9E9F6B162B5769AA003DFE83 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 9E9F6B152B5769AA003DFE83 /* FirebaseStorage */; };
 		9EA106772B63C5C90033E7A8 /* LetterPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EA106762B63C5C90033E7A8 /* LetterPhoto.swift */; };
+		CE6597042B5FB1E100A3C136 /* AddLetterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6597032B5FB1E100A3C136 /* AddLetterView.swift */; };
 		CE67D55C2B58E9F700C0050B /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE67D55B2B58E9F700C0050B /* PageViewController.swift */; };
 		CE67D55E2B58FF8500C0050B /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE67D55D2B58FF8500C0050B /* String.swift */; };
 		CE6E08452B5E09D900CFBF2A /* LetterDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6E08442B5E09D800CFBF2A /* LetterDetailViewModel.swift */; };
@@ -84,6 +87,10 @@
 /* Begin PBXFileReference section */
 		0E29F0D22B5ED136005B86FB /* MapApiKeys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = MapApiKeys.plist; sourceTree = "<group>"; };
 		0E29F0D72B5FA2FC005B86FB /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
+		0E29F0DA2B5FDC0F005B86FB /* NaverMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverMap.swift; sourceTree = "<group>"; };
+		0E29F0DC2B5FDC6A005B86FB /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+		0E29F0DF2B602E3D005B86FB /* MyCoord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCoord.swift; sourceTree = "<group>"; };
+		0E9815FB2B6A23B500C9F5BA /* Shop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shop.swift; sourceTree = "<group>"; };
 		19068E0481D2E4323D4AC3E2 /* Pods_PJ3T3_Postie.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PJ3T3_Postie.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		23E14589945C36E243AAF134 /* Pods-PJ3T3_Postie.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PJ3T3_Postie.debug.xcconfig"; path = "Target Support Files/Pods-PJ3T3_Postie/Pods-PJ3T3_Postie.debug.xcconfig"; sourceTree = "<group>"; };
 		84267E897C35F8294DF9D1F2 /* Pods-PJ3T3_Postie.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PJ3T3_Postie.release.xcconfig"; path = "Target Support Files/Pods-PJ3T3_Postie/Pods-PJ3T3_Postie.release.xcconfig"; sourceTree = "<group>"; };
@@ -94,7 +101,6 @@
 		9E0FA1222B54D27C001CEEB9 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		9E0FA1292B54D2EF001CEEB9 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		9E0FA12B2B54D2FC001CEEB9 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
-		9E223C9B2B6787F6004E078E /* Shop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shop.swift; sourceTree = "<group>"; };
 		9E7F8C772B5E69B000F1A6BF /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		9E9F6AB52B5762E5003DFE83 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		9E9F6AB72B5762EF003DFE83 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
@@ -112,12 +118,12 @@
 		9E9F6ACF2B5763D0003DFE83 /* LoginInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginInputView.swift; sourceTree = "<group>"; };
 		9E9F6AD12B5763F3003DFE83 /* SettingsRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRowView.swift; sourceTree = "<group>"; };
 		9E9F6AD32B576411003DFE83 /* LetterDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterDetailView.swift; sourceTree = "<group>"; };
-		9E9F6AD52B576423003DFE83 /* AddLetterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLetterView.swift; sourceTree = "<group>"; };
 		9E9F6AD72B57642D003DFE83 /* FirestoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreManager.swift; sourceTree = "<group>"; };
 		9E9F6AD92B576438003DFE83 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		9E9F6ADB2B57643F003DFE83 /* Letter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Letter.swift; sourceTree = "<group>"; };
 		9E9F6ADE2B5765DD003DFE83 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		9EA106762B63C5C90033E7A8 /* LetterPhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterPhoto.swift; sourceTree = "<group>"; };
+		CE6597032B5FB1E100A3C136 /* AddLetterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddLetterView.swift; sourceTree = "<group>"; };
 		CE67D55B2B58E9F700C0050B /* PageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewController.swift; sourceTree = "<group>"; };
 		CE67D55D2B58FF8500C0050B /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		CE6E08442B5E09D800CFBF2A /* LetterDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterDetailViewModel.swift; sourceTree = "<group>"; };
@@ -128,7 +134,6 @@
 		E3E02CA72B59003100CD3D4C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E3EECAEF2B5F957A00E639F2 /* SourceSerifPro-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSerifPro-Black.otf"; sourceTree = "<group>"; };
 		E3EECAF12B5F958300E639F2 /* SourceSerifPro-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSerifPro-Light.otf"; sourceTree = "<group>"; };
-		E3EECAF32B5F958C00E639F2 /* PJ3T3-Postie-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "PJ3T3-Postie-Info.plist"; sourceTree = SOURCE_ROOT; };
 		E3EECAF42B5FD2E000E639F2 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		E3EECAFA2B60FB2400E639F2 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -195,17 +200,17 @@
 		9E0FA11A2B54D27A001CEEB9 /* PJ3T3_Postie */ = {
 			isa = PBXGroup;
 			children = (
-				E3EECAEE2B5F956200E639F2 /* Font */,
 				9E9F6AA42B5761DE003DFE83 /* App */,
-				9E9F6ADD2B5765A3003DFE83 /* Extenstions */,
 				9E9F6AA32B5761D7003DFE83 /* Components */,
 				9E9F6AA22B5761CD003DFE83 /* Core */,
-				9EB8740B2B68C6350025C2DB /* Manager */,
+				9E9F6ADD2B5765A3003DFE83 /* Extenstions */,
+				E3EECAEE2B5F956200E639F2 /* Font */,
+        9EB8740B2B68C6350025C2DB /* Manager */,
 				9E9F6AA12B5761C5003DFE83 /* Model */,
-				9E0FA11F2B54D27C001CEEB9 /* Assets.xcassets */,
-				E3EECAF32B5F958C00E639F2 /* PJ3T3-Postie-Info.plist */,
-				E3E02CA72B59003100CD3D4C /* GoogleService-Info.plist */,
 				9E0FA1212B54D27C001CEEB9 /* Preview Content */,
+				9E0FA11F2B54D27C001CEEB9 /* Assets.xcassets */,
+				E3E02CA72B59003100CD3D4C /* GoogleService-Info.plist */,
+        E3EECAF32B5F958C00E639F2 /* PJ3T3-Postie-Info.plist */,
 			);
 			path = PJ3T3_Postie;
 			sourceTree = "<group>";
@@ -221,10 +226,10 @@
 		9E9F6AA12B5761C5003DFE83 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				9E9F6AD92B576438003DFE83 /* User.swift */,
 				9E9F6ADB2B57643F003DFE83 /* Letter.swift */,
 				9EA106762B63C5C90033E7A8 /* LetterPhoto.swift */,
-				9E223C9B2B6787F6004E078E /* Shop.swift */,
+				9E9F6AD92B576438003DFE83 /* User.swift */,
+				0E9815FB2B6A23B500C9F5BA /* Shop.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -285,9 +290,9 @@
 		9E9F6AA82B576205003DFE83 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				9E9F6ACF2B5763D0003DFE83 /* LoginInputView.swift */,
 				9E9F6AC92B5763B8003DFE83 /* LoginView.swift */,
 				9E9F6ACB2B5763C3003DFE83 /* RegistrationView.swift */,
-				9E9F6ACF2B5763D0003DFE83 /* LoginInputView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -304,10 +309,12 @@
 		9E9F6AAA2B57621D003DFE83 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				9E9F6AB72B5762EF003DFE83 /* HomeViewModel.swift */,
 				CE7E50772B579D6800955F31 /* AddLetterViewModel.swift */,
-				CEF09E482B57BFBF00BE67E4 /* TextRecognizer.swift */,
+				9E9F6AD72B57642D003DFE83 /* FirestoreManager.swift */,
+				9E9F6AB72B5762EF003DFE83 /* HomeViewModel.swift */,
 				CE6E08442B5E09D800CFBF2A /* LetterDetailViewModel.swift */,
+				9E7F8C772B5E69B000F1A6BF /* StorageManager.swift */,
+				CEF09E482B57BFBF00BE67E4 /* TextRecognizer.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -315,12 +322,12 @@
 		9E9F6AAB2B576221003DFE83 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				CE6597032B5FB1E100A3C136 /* AddLetterView.swift */,
 				9E9F6AB52B5762E5003DFE83 /* HomeView.swift */,
 				9E9F6AD32B576411003DFE83 /* LetterDetailView.swift */,
-				9E9F6AD52B576423003DFE83 /* AddLetterView.swift */,
+				CEF09E462B57BD8500BE67E4 /* LetterImageFullScreenView.swift */,
 				CE67D55B2B58E9F700C0050B /* PageViewController.swift */,
 				CEF09E442B57B6C500BE67E4 /* UIImagePicker.swift */,
-				CEF09E462B57BD8500BE67E4 /* LetterImageFullScreenView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -338,8 +345,10 @@
 		9E9F6AAD2B576247003DFE83 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				9E9F6ABD2B576358003DFE83 /* MapViewModel.swift */,
 				9E9F6AC12B576393003DFE83 /* MapApi.swift */,
+				9E9F6ABD2B576358003DFE83 /* MapViewModel.swift */,
+				0E29F0DF2B602E3D005B86FB /* MyCoord.swift */,
+				0E29F0DA2B5FDC0F005B86FB /* NaverMap.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -347,8 +356,9 @@
 		9E9F6AAE2B57624C003DFE83 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				9E9F6AB92B5762FC003DFE83 /* MapView.swift */,
+				0E29F0DC2B5FDC6A005B86FB /* Coordinator.swift */,
 				9E9F6ABB2B576351003DFE83 /* MapCoordinator.swift */,
+				9E9F6AB92B5762FC003DFE83 /* MapView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -398,9 +408,9 @@
 		9E9F6AB42B5762C8003DFE83 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				9E9F6AC52B5763A3003DFE83 /* SettingView.swift */,
-				9E9F6AD12B5763F3003DFE83 /* SettingsRowView.swift */,
 				E3EECAF42B5FD2E000E639F2 /* ProfileView.swift */,
+				9E9F6AD12B5763F3003DFE83 /* SettingsRowView.swift */,
+				9E9F6AC52B5763A3003DFE83 /* SettingView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -409,8 +419,8 @@
 			isa = PBXGroup;
 			children = (
 				9E9F6ADE2B5765DD003DFE83 /* Color.swift */,
-				CE67D55D2B58FF8500C0050B /* String.swift */,
 				E3EECAFA2B60FB2400E639F2 /* Date.swift */,
+				CE67D55D2B58FF8500C0050B /* String.swift */,
 			);
 			path = Extenstions;
 			sourceTree = "<group>";
@@ -631,6 +641,8 @@
 				CE7E50782B579D6800955F31 /* AddLetterViewModel.swift in Sources */,
 				CE6E08452B5E09D900CFBF2A /* LetterDetailViewModel.swift in Sources */,
 				9E9F6AB62B5762E5003DFE83 /* HomeView.swift in Sources */,
+				0E29F0DB2B5FDC0F005B86FB /* NaverMap.swift in Sources */,
+				0E29F0E02B602E3D005B86FB /* MyCoord.swift in Sources */,
 				E3EECAFB2B60FB2400E639F2 /* Date.swift in Sources */,
 				9E0FA11E2B54D27A001CEEB9 /* ContentView.swift in Sources */,
 				9E7F8C782B5E69B000F1A6BF /* StorageManager.swift in Sources */,
@@ -639,15 +651,17 @@
 				9E9F6ABA2B5762FC003DFE83 /* MapView.swift in Sources */,
 				9E9F6ACC2B5763C3003DFE83 /* RegistrationView.swift in Sources */,
 				9E9F6ABC2B576351003DFE83 /* MapCoordinator.swift in Sources */,
+				CE6597042B5FB1E100A3C136 /* AddLetterView.swift in Sources */,
 				9E9F6AD02B5763D0003DFE83 /* LoginInputView.swift in Sources */,
 				9E9F6AD82B57642D003DFE83 /* FirestoreManager.swift in Sources */,
+				9E9F6ACE2B5763CA003DFE83 /* AuthManager.swift in Sources */,
 				9EA106772B63C5C90033E7A8 /* LetterPhoto.swift in Sources */,
-				9E9F6AD62B576423003DFE83 /* AddLetterView.swift in Sources */,
 				9E9F6ACE2B5763CA003DFE83 /* AuthManager.swift in Sources */,
 				CEF09E472B57BD8500BE67E4 /* LetterImageFullScreenView.swift in Sources */,
 				9E9F6AC42B57639D003DFE83 /* ShopViewModel.swift in Sources */,
 				CEF09E452B57B6C500BE67E4 /* UIImagePicker.swift in Sources */,
-				9E223C9C2B6787F6004E078E /* Shop.swift in Sources */,
+				0E29F0DD2B5FDC6A005B86FB /* Coordinator.swift in Sources */,
+				0E9815FC2B6A23B500C9F5BA /* Shop.swift in Sources */,
 				9E9F6AC22B576393003DFE83 /* MapApi.swift in Sources */,
 				9E9F6AD42B576411003DFE83 /* LetterDetailView.swift in Sources */,
 				CEF09E492B57BFBF00BE67E4 /* TextRecognizer.swift in Sources */,
@@ -799,18 +813,20 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"PJ3T3_Postie/Preview Content\"";
-				DEVELOPMENT_TEAM = Y6QXM3Q994;
+				DEVELOPMENT_TEAM = BQUJTNYMGY;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "PJ3T3-Postie-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Postie;
 				INFOPLIST_KEY_NSCameraUsageDescription = "편지 사진을 가져오기 위해 카메라 권한이 필요합니다.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "현위치 정보권한요청";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = "";
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=iphoneos*]" = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -833,12 +849,13 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"PJ3T3_Postie/Preview Content\"";
-				DEVELOPMENT_TEAM = Y6QXM3Q994;
+				DEVELOPMENT_TEAM = BQUJTNYMGY;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "PJ3T3-Postie-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Postie;
 				INFOPLIST_KEY_NSCameraUsageDescription = "편지 사진을 가져오기 위해 카메라 권한이 필요합니다.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "현위치 정보권한요청";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
