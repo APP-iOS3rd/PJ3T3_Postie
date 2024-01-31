@@ -6,77 +6,95 @@
 //
 
 import SwiftUI
+
 import MapKit
 import CoreLocation
 import NMapsMap
 
 struct MapView: View {
+    @StateObject var naverGeocodeAPI = NaverGeocodeAPI.shared
     @StateObject var officeInfoServiceAPI = OfficeInfoServiceAPI.shared
-    @State private var selectedPostDivType: Int = 1 //Dafault 우체국(1)
+    @StateObject var coordinator: Coordinator = Coordinator.shared
+    
+    //    @State private var selectedPostDivType: Int = 1 //Dafault 우체국(1)
+    @State private var selectedButtonIndex: Int = 0
+    private let name = ["우체국", "우체통"]
     
     var body: some View {
         NavigationStack {
             VStack {
                 HStack(spacing: 10) {
-                    ZStack(alignment: .center) {
-                        Rectangle()
-                            .foregroundColor(.clear)
-                            .frame(width: 72, height: 30)
-                            .background(Color(red: 1, green: 0.98, blue: 0.95))
-                            .cornerRadius(20)
-                            .shadow(color: .black.opacity(0.1), radius: 3, x: 2, y: 2)
-                        
+                    ForEach(0...1, id: \.self) { index in
                         Button(action: {
-                            selectedPostDivType = 1
-                            officeInfoServiceAPI.fetchData(postDivType: selectedPostDivType)
+                            selectedButtonIndex = index
+                            officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1)
                         }) {
-                            Text("우체국")
-                                .font(Font.custom("SF Pro Text", size: 12))
-                                .multilineTextAlignment(.center)
-                                .foregroundColor(Color(red: 0.12, green: 0.12, blue: 0.12))
-                                .frame(width: 60, alignment: .top)
-                        }
-                    }
-                    
-                    ZStack(alignment: .center) {
-                        Rectangle()
-                            .foregroundColor(.clear)
-                            .frame(width: 72, height: 30)
-                            .background(Color(red: 1, green: 0.98, blue: 0.95))
-                            .cornerRadius(20)
-                            .shadow(color: .black.opacity(0.1), radius: 3, x: 2, y: 2)
-                        
-                        Button(action: {
-                            selectedPostDivType = 2
-                            officeInfoServiceAPI.fetchData(postDivType: selectedPostDivType)
-                        }) {
-                            Text("우체통")
-                                .font(Font.custom("SF Pro Text", size: 12))
-                                .multilineTextAlignment(.center)
-                                .foregroundColor(Color(red: 0.12, green: 0.12, blue: 0.12))
-                                .frame(width: 60, alignment: .top)
+                            ZStack {
+                                if selectedButtonIndex == index {
+                                    Rectangle()
+                                        .foregroundColor(.clear)
+                                        .frame(width: 70, height: 30)
+                                        .background(Color(red: 1, green: 0.98, blue: 0.95))
+                                        .cornerRadius(16)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 16)
+                                                .inset(by: 0.5)
+                                                .stroke(Color(red: 0.45, green: 0.45, blue: 0.45), lineWidth: 1)
+                                        )} else {
+                                            Rectangle()
+                                                .foregroundColor(.clear)
+                                                .frame(width: 72, height: 30)
+                                                .background(Color(red: 1, green: 0.98, blue: 0.95))
+                                                .cornerRadius(20)
+                                                .shadow(color: .black.opacity(0.1), radius: 3, x: 2, y: 2)
+                                        }
+                                
+                                Text(name[index])
+                                    .font(Font.custom("SF Pro Text", size: 12))
+                                    .multilineTextAlignment(.center)
+                                    .foregroundColor(Color(red: 0.12, green: 0.12, blue: 0.12))
+                                    .frame(width: 60, alignment: .center)
+                            }
                         }
                     }
                     Spacer()
                 }
                 .padding()
-                
             }
             List {
                 ForEach(officeInfoServiceAPI.infos, id: \.self) { result in
                     VStack {
-                        Text(result.postNm)
+                        Button(result.postNm)
+                        {
+                            coordinator.fetchLocation(latitude: Double(result.postLat)!, longitude: Double(result.postLon)!, name: result.postNm)
+                        }
                     }
                 }
             }
-//            NaverMap()
-//                .ignoresSafeArea(.all, edges: .top)
+            NaverMap()
+                .ignoresSafeArea(.all, edges: .top)
         }
-        .navigationBarTitle("Postie Map")
-        .foregroundStyle(Color(hex: 0x1E1E1E))
-        .onAppear(){
+        //        .navigationBarTitle("Postie Map")
+        //        .foregroundStyle(Color(hex: 0x1E1E1E))
+        .onAppear() {
+            CLLocationManager().requestWhenInUseAuthorization()
             officeInfoServiceAPI.fetchData(postDivType: 1)
+            print(coordinator.userLocation.0)
         }
+        //iOS17버전
+        //        .onChange(of: officeInfoServiceAPI.infos) {
+        //            $coordinator.removeAllMakers
+        //            for result in officeInfoServiceAPI.infos {
+        //                coordinator.addMarkerAndInfoWindow(latitude: Double(result.postLat)!, longitude: Double(result.postLon)!, caption: result.postNm)
+        //            }
+        //        }
+        .onChange(of: officeInfoServiceAPI.infos) { newInfos in
+            coordinator.removeAllMakers()
+            for result in newInfos {
+                coordinator.addMarkerAndInfoWindow(latitude: Double(result.postLat)!, longitude: Double(result.postLon)!, caption: result.postNm)
+            }
+        }
+        .zIndex(1)
     }
 }
 
