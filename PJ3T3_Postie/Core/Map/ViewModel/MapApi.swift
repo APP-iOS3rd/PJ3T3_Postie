@@ -5,8 +5,8 @@
 //  Created by Eunsu JEONG on 1/17/24.
 //
 
-import SwiftUI
 import Foundation
+import SwiftUI
 
 import CoreLocation
 import NMapsMap
