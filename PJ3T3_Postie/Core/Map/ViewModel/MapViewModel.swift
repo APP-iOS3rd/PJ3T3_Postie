@@ -57,59 +57,23 @@ struct PostItem: Codable, Hashable {
     let modDt: String
 }
 
-class OfficeInfoServiceAPI: ObservableObject {
-    static let shared = OfficeInfoServiceAPI()
-    
-    @Published var infos = [PostItem]()
-//    @Published var officeMarkers = [OfficeMarker]()
-    
-    private var apiKey: String? {
-        get { getValueOfPlistFile("MapApiKeys", "OFFICE_MAIN_KEY")}
-    }
-    
-    func fetchData(postDivType: Int) {
-        guard let apiKey = apiKey else { return }
-        
-        //postDivType 데이터 대상 null=전체대상, 1=우체국, 2=우체통
-        //postGap 반경 코드 1km = 1, 0.5km = 0.5
-        let urlString = "https://www.koreapost.go.kr/koreapost/openapi/searchPostScopeList.do?serviceKey=\(apiKey)&postLatitude=37.56&postLongitude=126.98&postGap=0.5&postDivType=\(postDivType)"
-        print(apiKey)
-        
-        //URL주소로 받아와 지면 값을 url로 저장해라
-        //url설정 부터 str까진 공통 작업
-        guard let url = URL(string: urlString) else { return }
-        
-        let session = URLSession(configuration: .default)
-        
-        let task = session.dataTask(with: url) { data, response, error in
-            if let error = error {
-                print(error.localizedDescription)
-                return
-            }
-            
-            guard let response = response as? HTTPURLResponse, response.statusCode == 200 else { return }
-            
-            guard let data = data else {
-                print("No data received")
-                return
-            }
-            
-            let str = String(decoding: data, as: UTF8.self)
-            print(str)
-            
-            do {
-                let postListResponse = try XMLDecoder().decode(PostListResponse.self, from: data)
-                DispatchQueue.main.async {
-                    self.infos = postListResponse.postItems
-//                    self.updateOfficeMarkers()
-                }
-                print(postListResponse.postItems)
-            } catch {
-                print(error)
-            }
-        }
-        task.resume()
-    }
-    
-    private init() {}
+//NaverMap에서 만들어지는 구조체 / 주소를 위,경도로 바꾸는 값 포함
+struct GeocodeResponse: Decodable {
+    let status: String
+    let addresses: [Address]
 }
+
+struct Address: Decodable {
+    let roadAddress: String
+    let jibunAddress: String
+    let x: String
+    let y: String
+}
+
+//내가 정말 필요한 값 주소, 위도, 경도
+struct CombinedResult: Decodable, Hashable {
+    let latitude: String
+    let longitude: String
+    let address: String
+}
+
