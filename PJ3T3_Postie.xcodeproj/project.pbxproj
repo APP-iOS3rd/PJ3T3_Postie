@@ -195,16 +195,16 @@
 		9E0FA11A2B54D27A001CEEB9 /* PJ3T3_Postie */ = {
 			isa = PBXGroup;
 			children = (
-				E3EECAF32B5F958C00E639F2 /* PJ3T3-Postie-Info.plist */,
-				E3EECAEE2B5F956200E639F2 /* Font */,
 				9E9F6AA42B5761DE003DFE83 /* App */,
-				9E9F6ADD2B5765A3003DFE83 /* Extenstions */,
 				9E9F6AA32B5761D7003DFE83 /* Components */,
 				9E9F6AA22B5761CD003DFE83 /* Core */,
+				9E9F6ADD2B5765A3003DFE83 /* Extenstions */,
+				E3EECAEE2B5F956200E639F2 /* Font */,
 				9E9F6AA12B5761C5003DFE83 /* Model */,
+				9E0FA1212B54D27C001CEEB9 /* Preview Content */,
 				9E0FA11F2B54D27C001CEEB9 /* Assets.xcassets */,
 				E3E02CA72B59003100CD3D4C /* GoogleService-Info.plist */,
-				9E0FA1212B54D27C001CEEB9 /* Preview Content */,
+				E3EECAF32B5F958C00E639F2 /* PJ3T3-Postie-Info.plist */,
 			);
 			path = PJ3T3_Postie;
 			sourceTree = "<group>";
@@ -220,10 +220,10 @@
 		9E9F6AA12B5761C5003DFE83 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				9E9F6AD92B576438003DFE83 /* User.swift */,
 				9E9F6ADB2B57643F003DFE83 /* Letter.swift */,
 				9EA106762B63C5C90033E7A8 /* LetterPhoto.swift */,
 				9E223C9B2B6787F6004E078E /* Shop.swift */,
+				9E9F6AD92B576438003DFE83 /* User.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -285,9 +285,9 @@
 		9E9F6AA82B576205003DFE83 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				9E9F6ACF2B5763D0003DFE83 /* LoginInputView.swift */,
 				9E9F6AC92B5763B8003DFE83 /* LoginView.swift */,
 				9E9F6ACB2B5763C3003DFE83 /* RegistrationView.swift */,
-				9E9F6ACF2B5763D0003DFE83 /* LoginInputView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -304,12 +304,12 @@
 		9E9F6AAA2B57621D003DFE83 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				9E9F6AB72B5762EF003DFE83 /* HomeViewModel.swift */,
-				9E9F6AD72B57642D003DFE83 /* FirestoreManager.swift */,
 				CE7E50772B579D6800955F31 /* AddLetterViewModel.swift */,
-				CEF09E482B57BFBF00BE67E4 /* TextRecognizer.swift */,
-				9E7F8C772B5E69B000F1A6BF /* StorageManager.swift */,
+				9E9F6AD72B57642D003DFE83 /* FirestoreManager.swift */,
+				9E9F6AB72B5762EF003DFE83 /* HomeViewModel.swift */,
 				CE6E08442B5E09D800CFBF2A /* LetterDetailViewModel.swift */,
+				9E7F8C772B5E69B000F1A6BF /* StorageManager.swift */,
+				CEF09E482B57BFBF00BE67E4 /* TextRecognizer.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -317,12 +317,12 @@
 		9E9F6AAB2B576221003DFE83 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				9E9F6AB52B5762E5003DFE83 /* HomeView.swift */,
 				CE6597032B5FB1E100A3C136 /* AddLetterView.swift */,
+				9E9F6AB52B5762E5003DFE83 /* HomeView.swift */,
 				9E9F6AD32B576411003DFE83 /* LetterDetailView.swift */,
+				CEF09E462B57BD8500BE67E4 /* LetterImageFullScreenView.swift */,
 				CE67D55B2B58E9F700C0050B /* PageViewController.swift */,
 				CEF09E442B57B6C500BE67E4 /* UIImagePicker.swift */,
-				CEF09E462B57BD8500BE67E4 /* LetterImageFullScreenView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -340,8 +340,8 @@
 		9E9F6AAD2B576247003DFE83 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				9E9F6ABD2B576358003DFE83 /* MapViewModel.swift */,
 				9E9F6AC12B576393003DFE83 /* MapApi.swift */,
+				9E9F6ABD2B576358003DFE83 /* MapViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -349,8 +349,8 @@
 		9E9F6AAE2B57624C003DFE83 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				9E9F6AB92B5762FC003DFE83 /* MapView.swift */,
 				9E9F6ABB2B576351003DFE83 /* MapCoordinator.swift */,
+				9E9F6AB92B5762FC003DFE83 /* MapView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -400,9 +400,9 @@
 		9E9F6AB42B5762C8003DFE83 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				9E9F6AC52B5763A3003DFE83 /* SettingView.swift */,
-				9E9F6AD12B5763F3003DFE83 /* SettingsRowView.swift */,
 				E3EECAF42B5FD2E000E639F2 /* ProfileView.swift */,
+				9E9F6AD12B5763F3003DFE83 /* SettingsRowView.swift */,
+				9E9F6AC52B5763A3003DFE83 /* SettingView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -411,8 +411,8 @@
 			isa = PBXGroup;
 			children = (
 				9E9F6ADE2B5765DD003DFE83 /* Color.swift */,
-				CE67D55D2B58FF8500C0050B /* String.swift */,
 				E3EECAFA2B60FB2400E639F2 /* Date.swift */,
+				CE67D55D2B58FF8500C0050B /* String.swift */,
 			);
 			path = Extenstions;
 			sourceTree = "<group>";
