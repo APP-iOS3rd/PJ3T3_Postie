@@ -55,7 +55,7 @@ struct ListLetterView: View {
                     .frame(width: 300, height: 130)
                     .background(
                         RoundedRectangle(cornerRadius: 10)
-                            .foregroundStyle(Color(hex: 0xFFFFFF))
+                            .foregroundStyle(letter.isReceived ? Color(hex: 0xF7F7F7) : Color(hex: 0xFCFBF7))
                             .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
                     )
                     
