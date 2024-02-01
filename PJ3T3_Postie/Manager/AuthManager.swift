@@ -112,34 +112,10 @@ extension AuthManager {
         }
     }
 
-    func createEmailUser(withEamil email: String, password: String, fullName: String) async throws {
-        do {
-            //1. Try to create user -> await its result -> store it to the property
-            let result = try await Auth.auth().createUser(withEmail: email, password: password)
-
-            //2. Once success, set userSession property
-            DispatchQueue.main.async {
-                self.userSession = result.user //result에서 user값을 받아와 userSession에 넣어줌
-            }
-
-            //3. Create our User object
-            //firebase의 user는 firebase에서 새로운 user를 생성하고 uid 를 제공해준다.
-            //기타 사용자에게 얻고자 하는 데이터(예: 핸드폰 번호, 생일 등)가 있다면 User Model에 구성을 추가하고 input을 받아야 한다.
-            let user = EmailUser(id: result.user.uid, fullName: fullName, email: email)
-
-            //4. Encode the object throught the codable protocol
-            let encodedUser = try Firestore.Encoder().encode(user)
-
-            //5. Upload data to Firestore
-            try await Firestore.firestore().collection("users").document(user.id).setData(encodedUser)
-            
-            //회원가입을 하면 userSession이 업데이트 되며 Firestore에 데이터를 저장하는데,
-            //userSession이 업데이트 됨에 따라 자동으로 Login 된 유저 뷰로 Navigate 되면, 업로드 된 Firestore의 데이터를 fetch해준다.
-            await fetchUser()
-        } catch {
-            //if anything goes wrong:
-            print("DEBUG: Failed to create user with error \(error.localizedDescription)")
-        }
+    func createEmailUser(withEamil email: String, password: String, fullName: String, nickname: String) async throws {
+        let authDataResult = try await Auth.auth().createUser(withEmail: email, password: password)
+        
+        try await createUser(authDataResult: authDataResult, nickname: nickname)
     }
 }
 
