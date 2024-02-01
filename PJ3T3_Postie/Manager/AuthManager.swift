@@ -93,6 +93,30 @@ class AuthManager: ObservableObject {
     func deleteAccount() {
 
     }
+    
+    //google.com, password
+    func getProviders() throws -> [AuthProviderOption] {
+        guard let providerData = Auth.auth().currentUser?.providerData else {
+            throw URLError(.badServerResponse)
+        }
+        
+        var providers: [AuthProviderOption] = []
+        for provider in providerData {
+            if let option = AuthProviderOption(rawValue: provider.providerID) {
+                providers.append(option)
+            } else {
+//                fatalError() //앱이 종료되므로 사용하지 않기를 권장한다.
+                assertionFailure("Provider option not found: \(provider.providerID)") //fatalError, preconditionFailure와의 차이점은?
+            }
+        }
+        
+        return providers
+    }
+}
+
+enum AuthProviderOption: String {
+    case email = "password"
+    case google = "google.com"
 }
 
 // MARK: Sign in Email
