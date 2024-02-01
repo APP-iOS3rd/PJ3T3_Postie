@@ -32,23 +32,7 @@ class AuthManager: ObservableObject {
             await fetchUser()
         }
     }
-
-    //로그인 화면으로 돌아가고, back-end에서 로그아웃 되어야 한다.
-    func signOut() {
-        do {
-            try Auth.auth().signOut() //Signs out user on backend
-            self.userSession = nil //userSession의 데이터가 사라지며 ContentView에서 Login하기 전 화면을 보여주게 된다.
-            self.currentUser = nil //데이터 모델을 초기화시켜 현재 유저의 데이터를 지운다.
-        } catch {
-            print("DEBUG: Failed to sign out with error \(error.localizedDescription)")
-        }
-    }
     
-    
-    func deleteAccount() {
-
-    }
-
     func fetchUser() async {
         //현재 로그인중인 유저가 있다면 fetch가 진행된다. 로그인 유저가 없다면 해당 guard문을 통과하지 못하고 return된다.
         guard let uid = Auth.auth().currentUser?.uid else { return }
@@ -67,8 +51,49 @@ class AuthManager: ObservableObject {
             self.userUid = userUid
         }
     }
-}
+    
+    func createUser(authDataResult: AuthDataResult, nickname: String) async throws {
+        do {
+            DispatchQueue.main.async {
+                self.userSession = authDataResult.user //result에서 user값을 받아와 userSession에 넣어줌
+            }
+            
+            let postieUser = PostieUser(id: authDataResult.user.uid,
+                                        fullName: authDataResult.user.displayName ?? "익명의 포스티",
+                                        nickname: nickname,
+                                        email: authDataResult.user.email ?? "No Email?!",
+                                        profileImageUrl: authDataResult.user.photoURL?.absoluteString)
+            
+            //4. Encode the object throught the codable protocol
+            let encodedUser = try Firestore.Encoder().encode(postieUser)
+            
+            //5. Upload data to Firestore
+            try await Firestore.firestore().collection("users").document(postieUser.id).setData(encodedUser)
+            
+            //회원가입을 하면 userSession이 업데이트 되며 Firestore에 데이터를 저장하는데,
+            //userSession이 업데이트 됨에 따라 자동으로 Login 된 유저 뷰로 Navigate 되면, 업로드 된 Firestore의 데이터를 fetch해준다.
+            await fetchUser()
+        } catch {
+            print("DEBUG: Failed to create user with error \(error.localizedDescription)")
+        }
+    }
+    
+    //로그인 화면으로 돌아가고, back-end에서 로그아웃 되어야 한다.
+    func signOut() {
+        do {
+            try Auth.auth().signOut() //Signs out user on backend
+            self.userSession = nil //userSession의 데이터가 사라지며 ContentView에서 Login하기 전 화면을 보여주게 된다.
+            self.currentUser = nil //데이터 모델을 초기화시켜 현재 유저의 데이터를 지운다.
+        } catch {
+            print("DEBUG: Failed to sign out with error \(error.localizedDescription)")
+        }
+    }
+    
+    
+    func deleteAccount() {
 
+    }
+}
 
 // MARK: Sign in Email
 extension AuthManager {
