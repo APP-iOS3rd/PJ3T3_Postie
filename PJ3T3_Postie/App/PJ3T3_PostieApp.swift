@@ -7,6 +7,7 @@
 
 import SwiftUI
 import FirebaseCore
+import NMapsMap
 
 
 class AppDelegate: NSObject, UIApplicationDelegate {
@@ -20,14 +21,23 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
 @main
 struct YourApp: App {
-  // register app delegate for Firebase setup
-  @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-
-  var body: some Scene {
-    WindowGroup {
-      NavigationView {
-        ContentView()
-      }
+    // register app delegate for Firebase setup
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    
+    private var clientID: String? {
+        get { getValueOfPlistFile("MapApiKeys", "NAVER_GEOCODE_ID") }
     }
-  }
+    
+    init() {
+        NMFAuthManager.shared().clientId = clientID
+    }
+    
+    var body: some Scene {
+        WindowGroup {
+            NavigationView {
+                ContentView()
+            }
+        }
+    }
 }
+
