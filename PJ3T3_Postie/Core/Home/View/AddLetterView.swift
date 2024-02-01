@@ -51,10 +51,15 @@ struct AddLetterView: View {
                 .padding()
             }
         }
-        .navigationTitle(isSendingLetter ? "보낸 편지 기록" : "받은 편지 기록")
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(Color(hex: 0xF5F1E8), for: .navigationBar)
         .toolbar {
+            ToolbarItemGroup(placement: .principal) {
+                Text(isSendingLetter ? "보낸 편지 기록" : "받은 편지 기록")
+                    .bold()
+                    .foregroundStyle(Color(hex: 0xFF5733))
+            }
+
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button {
                     Task {
