@@ -19,11 +19,6 @@ struct AddLetterView: View {
     }
 
     var isSendingLetter: Bool
-    let dateFormatter: DateFormatter = {
-         let formatter = DateFormatter()
-         formatter.dateFormat = "yyyy.MM.dd"
-         return formatter
-     }()
 
     @FocusState private var focusField: Field?
     @Environment(\.dismiss) var dismiss
