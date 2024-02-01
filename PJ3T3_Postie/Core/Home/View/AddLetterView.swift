@@ -162,9 +162,7 @@ extension AddLetterView {
                 .clipShape(RoundedRectangle(cornerRadius: 4))
                 .focused($focusField, equals: .sender)
             }
-            .frame(width: UIScreen.main.bounds.width * 0.5)
-            
-            Spacer()
+            .frame(maxWidth: .infinity)
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(isSendingLetter ? "보낸 날짜" : "받은 날짜")
