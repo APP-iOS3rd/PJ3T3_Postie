@@ -10,12 +10,19 @@ import SwiftUI
 import GoogleSignIn
 import GoogleSignInSwift
 
+@MainActor
+final class AuthenticationViewModel: ObservableObject {
+    static let shared = AuthenticationViewModel()
+    private init() { }
+}
+
 struct LoginView: View {
     //Colors
     private let viewBackground: Color = .white
     private let buttonColor: Color = Color(uiColor: .darkGray)
     //ViewModels
     @ObservedObject var authViewModel = AuthManager.shared
+    @ObservedObject var authenticationViewModel = AuthenticationViewModel.shared
     //TextFields의 input값을 하위뷰에 넘겨준다.
     @State private var email = ""
     @State private var password = ""
