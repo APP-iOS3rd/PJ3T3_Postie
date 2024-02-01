@@ -77,7 +77,7 @@ struct RegistrationView: View {
                 //Sign up Button
                 Button {
                     Task {
-                        try await authViewModel.createUser(withEamil: email, password: password, fullName: fullName)
+                        try await authViewModel.createEmailUser(withEamil: email, password: password, fullName: fullName)
                     }
                 } label: {
                     HStack {
