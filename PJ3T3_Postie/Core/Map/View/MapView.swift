@@ -16,10 +16,12 @@ struct MapView: View {
     
     @StateObject var naverGeocodeAPI = NaverGeocodeAPI.shared
     @StateObject var officeInfoServiceAPI = OfficeInfoServiceAPI.shared
+    @StateObject var locationManager = LocationManager.shared
     @StateObject var coordinator: Coordinator = Coordinator.shared
     
     //    @State private var selectedPostDivType: Int = 1 //Dafault 우체국(1)
     @State private var selectedButtonIndex: Int = 0
+    @State var coord: MyCoord = MyCoord(37.579081, 126.974375)
     
     var body: some View {
         NavigationStack {
@@ -63,7 +65,7 @@ struct MapView: View {
                 .padding()
             }
             
-            NaverMap()
+            NaverMap(coord: coord)
                 .ignoresSafeArea(.all, edges: .top)
         }
         // 추후 사용 예정
@@ -72,7 +74,11 @@ struct MapView: View {
         .onAppear() {
             CLLocationManager().requestWhenInUseAuthorization()
             officeInfoServiceAPI.fetchData(postDivType: 1)
-            print(coordinator.userLocation.0)
+            if let currentLocation = locationManager.currentLocation {
+                coord = MyCoord(currentLocation.coordinate.latitude,
+                                currentLocation.coordinate.longitude)
+                print("현재위치: \(coord)")
+            }
         }
         .onChange(of: officeInfoServiceAPI.infos) { newInfos in
             coordinator.removeAllMakers()
