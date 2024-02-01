@@ -18,13 +18,13 @@ struct AddLetterView: View {
         case text
     }
 
-    var isSendingLetter: Bool
+    var isReceived: Bool
 
     @FocusState private var focusField: Field?
     @Environment(\.dismiss) var dismiss
 
-    init(isSendingLetter: Bool) {
-        self.isSendingLetter = isSendingLetter
+    init(isReceived: Bool) {
+        self.isReceived = isReceived
 
         // TextEditor 패딩
         UITextView.appearance().textContainerInset = UIEdgeInsets(
@@ -55,7 +55,7 @@ struct AddLetterView: View {
         .toolbarBackground(Color(hex: 0xF5F1E8), for: .navigationBar)
         .toolbar {
             ToolbarItemGroup(placement: .principal) {
-                Text(isSendingLetter ? "보낸 편지 기록" : "받은 편지 기록")
+                Text(isReceived ? "받은 편지 기록" : "보낸 편지 기록")
                     .bold()
                     .foregroundStyle(Color(hex: 0xFF5733))
             }
@@ -68,14 +68,15 @@ struct AddLetterView: View {
                             recipient: addLetterViewModel.receiver,
                             summary: addLetterViewModel.summary,
                             date: addLetterViewModel.date,
-                            text: addLetterViewModel.text
+                            text: addLetterViewModel.text,
+                            isReceived: isReceived,
+                            isFavorite: false
                         )
 
                         if !addLetterViewModel.images.isEmpty {
                             do {
                                 try await storageManager.saveUIImage(
                                     images: addLetterViewModel.images,
-                                    userId: firestoreManager.userUid,
                                     docId: firestoreManager.docId
                                 )
                             } catch {
@@ -142,10 +143,10 @@ extension AddLetterView {
     private var letterInfoSection: some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
-                Text(isSendingLetter ? "받는 사람" : "보낸 사람")
+                Text(isReceived ? "보낸 사람" : "받는 사람")
 
                 TextField("",
-                          text: isSendingLetter ?
+                          text: isReceived ?
                           $addLetterViewModel.sender : $addLetterViewModel.receiver)
                 .padding(6)
                 .background(Color(hex: 0xFCFBF7))
@@ -155,7 +156,7 @@ extension AddLetterView {
             .frame(maxWidth: .infinity)
 
             VStack(alignment: .leading, spacing: 4) {
-                Text(isSendingLetter ? "보낸 날짜" : "받은 날짜")
+                Text(isReceived ? "받은 날짜" : "보낸 날짜")
 
                 DatePicker(
                     "",
@@ -232,7 +233,7 @@ extension AddLetterView {
                                         addLetterViewModel.removeImage(at: index)
                                     }
                                 } label: {
-                                    Image(systemName: "x.circle.fill")
+                                    Image(systemName: "xmark.circle.fill")
                                         .symbolRenderingMode(.palette)
                                         .foregroundStyle(.white, Color(hex: 0xFF5733))
                                 }
@@ -315,6 +316,6 @@ extension AddLetterView {
 
 #Preview {
     NavigationStack {
-        AddLetterView(isSendingLetter: false)
+        AddLetterView(isReceived: false)
     }
 }

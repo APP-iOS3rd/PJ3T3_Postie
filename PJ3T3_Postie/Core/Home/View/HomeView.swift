@@ -71,7 +71,7 @@ struct HomeView: View {
                     .imageScale(.large)
                     .padding()
                     .alert("편지 저장 하기", isPresented: $showAlert) {
-                        NavigationLink(destination: AddLetterView(isSendingLetter: true)) {
+                        NavigationLink(destination: AddLetterView(isReceived: true)) {
                             Button("편지 저장") {
                             }
                         }
