@@ -25,15 +25,6 @@ struct HomeView: View {
                                 GroupLetterView(letterCount: 3, title: "Favorite", content: "즐겨찾기 한 편지 꾸러미들")
                                     .padding(.bottom, 10)
                                 
-                                GroupLetterView(letterCount: 1, title: "테스트1", content: "테스트를 위한 텍스트")
-                                    .padding(.bottom, 10)
-                                
-                                GroupLetterView(letterCount: 2, title: "테스트2", content: "테스트를 위한 텍스트")
-                                    .padding(.bottom, 10)
-                                
-                                GroupLetterView(letterCount: 3, title: "테스트3", content: "테스트를 위한 텍스트")
-                                    .padding(.bottom, 10)
-                                
                                 // ScrollView margin 임시
                                 Rectangle()
                                     .frame(height: 70)
@@ -191,7 +182,12 @@ struct SideMenuView: View {
             
             VStack(alignment: .leading) {
                 HStack {
+                    Text("Setting")
+                        .font(.custom("SourceSerifPro-Black", size: 32))
+                        .foregroundStyle(Color(hex: 0xFF5733))
+                    
                     Spacer()
+                    
                     Button(action: {
                         withAnimation {
                             self.isSideMenuOpen.toggle()
@@ -201,10 +197,6 @@ struct SideMenuView: View {
                             .imageScale(.large)
                     }
                 }
-                
-                Text("Setting")
-                    .font(.custom("SourceSerifPro-Black", size: 32))
-                    .foregroundStyle(Color(hex: 0xFF5733))
                 
                 Text("프로필 설정")
                     .foregroundStyle(Color.gray)
@@ -483,71 +475,88 @@ struct SendLetterView: View {
 }
 
 struct GroupLetterView: View { // 그룹 뷰 용도. 임시
+    var letterReceivedGrouped: [String] = []
+    var letterWritedGrouped: [String] = []
+    var letterGrouped: [String] = []
     let letterCount: Int
     let title: String
     let content: String
+    @ObservedObject var firestoreManager = FirestoreManager.shared
+    @ObservedObject var authManager = AuthManager.shared
     
     var body: some View {
-        HStack {
-            ZStack {
-                if letterCount > 2 {
-                    RoundedRectangle(cornerRadius: 10)
-                        .foregroundStyle(Color(hex: 0xFCFBF7))
-                        .frame(width: 350, height: 130)
-                        .offset(x: 10, y: 10)
-                        .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
-                }
-                
-                if letterCount > 1 {
-                    RoundedRectangle(cornerRadius: 10)
-                        .foregroundStyle(Color(hex: 0xFCFBF7))
-                        .frame(width: 350, height: 130)
-                        .offset(x: 5, y: 5)
-                        .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
-                }
-                
-                HStack {
-                    VStack(alignment: .leading) {
-                        HStack {
-                            Text("From.")
-                                .font(.custom("SourceSerifPro-Black", size: 18))
-                                .foregroundColor(.black)
-                            
-                            Text("\(title)")
-                                .foregroundStyle(Color(hex: 0x1E1E1E))
+        // recipient 에서 중복 된것을 제외 후 letterReceivedGrouped 에 삽입
+        var letterReceivedGrouped: [String] = Array(Set(firestoreManager.letters.map { $0.recipient }.filter { !$0.isEmpty }))
+        // writer 에서 중복 된것을 제외 후 letterWritedGrouped 에 삽입
+        var letterWritedGrouped: [String] = Array(Set(firestoreManager.letters.map { $0.writer }.filter { !$0.isEmpty }))
+        // letterReceivedGrouped와 letterWritedGrouped를 합친 후 중복 제거
+        var letterGrouped: [String] = Array(Set(letterReceivedGrouped + letterWritedGrouped))
+        // 본인 이름 항목 제거
+        // "me" << 추후에는 authManager.currentUser?.fullName 로 해야함
+        let filteredLetterGrouped: [String] = letterGrouped.filter { $0 != "me" }
+        
+        ForEach(filteredLetterGrouped, id: \.self) { recipient in
+            HStack {
+                ZStack {
+                    if letterCount > 2 {
+                        RoundedRectangle(cornerRadius: 10)
+                            .foregroundStyle(Color(hex: 0xFCFBF7))
+                            .frame(width: 350, height: 130)
+                            .offset(x: 10, y: 10)
+                            .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
+                    }
+                    
+                    if letterCount > 1 {
+                        RoundedRectangle(cornerRadius: 10)
+                            .foregroundStyle(Color(hex: 0xFCFBF7))
+                            .frame(width: 350, height: 130)
+                            .offset(x: 5, y: 5)
+                            .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
+                    }
+                    
+                    HStack {
+                        VStack(alignment: .leading) {
+                            HStack {
+                                Text("From.")
+                                    .font(.custom("SourceSerifPro-Black", size: 18))
+                                    .foregroundColor(.black)
+                                
+                                Text("\(recipient)")
+                                    .foregroundStyle(Color(hex: 0x1E1E1E))
+                                
+                                Spacer()
+                                
+                                Text(" ") // date
+                                    .font(.custom("SourceSerifPro-Light", size: 18))
+                                    .foregroundStyle(Color(hex: 0x1E1E1E))
+                                
+                                ZStack {
+                                    Image(systemName: "water.waves")
+                                        .font(.headline)
+                                        .offset(x:18)
+                                    
+                                    Image(systemName: "sleep.circle")
+                                        .font(.largeTitle)
+                                }
+                                .foregroundStyle(Color(hex: 0x979797))
+                            }
                             
                             Spacer()
                             
-                            Text(" ") // date
-                                .font(.custom("SourceSerifPro-Light", size: 18))
-                                .foregroundStyle(Color(hex: 0x1E1E1E))
-                            
-                            ZStack {
-                                Image(systemName: "water.waves")
-                                    .font(.headline)
-                                    .offset(x:18)
-                                
-                                Image(systemName: "sleep.circle")
-                                    .font(.largeTitle)
-                            }
-                            .foregroundStyle(Color(hex: 0x979797))
+                            Text("\"\"")
                         }
-                        
-                        Spacer()
-                        
-                        Text("\"\(content)\"")
                     }
+                    .padding()
+                    .frame(width: 350, height: 130)
+                    .background(
+                        RoundedRectangle(cornerRadius: 10)
+                            .foregroundStyle(Color(hex: 0xFCFBF7))
+                            .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
+                    )
                 }
-                .padding()
-                .frame(width: 350, height: 130)
-                .background(
-                    RoundedRectangle(cornerRadius: 10)
-                        .foregroundStyle(Color(hex: 0xFCFBF7))
-                        .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
-                )
+                
+                Spacer()
             }
-            
-            Spacer()
         }
     }
 }
