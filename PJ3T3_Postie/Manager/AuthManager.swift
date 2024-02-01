@@ -13,6 +13,11 @@ protocol AuthenticationProtocol {
     var formIsValid: Bool { get }
 }
 
+enum AuthProviderOption: String {
+    case email = "password"
+    case google = "google.com"
+}
+
 class AuthManager: ObservableObject {
     static let shared = AuthManager()
     var userUid: String  = ""
@@ -114,9 +119,20 @@ class AuthManager: ObservableObject {
     }
 }
 
-enum AuthProviderOption: String {
-    case email = "password"
-    case google = "google.com"
+// MARK: Sign in SSO
+extension AuthManager {
+    func signInWithGoogle(nickname: String) async throws {
+        let helper = GoogleSignInHelper()
+        let tokens = try await helper.googleHelperSingIn()
+        let credential = GoogleAuthProvider.credential(withIDToken: tokens.idToken, accessToken: tokens.accessToken)
+        let authDataResult = try await signInWithSSO(credential: credential)
+        
+        try await createUser(authDataResult: authDataResult, nickname: nickname)
+    }
+    
+    private func signInWithSSO(credential: AuthCredential) async throws -> AuthDataResult {
+        return try await Auth.auth().signIn(with: credential)
+    }
 }
 
 // MARK: Sign in Email
@@ -140,22 +156,5 @@ extension AuthManager {
         let authDataResult = try await Auth.auth().createUser(withEmail: email, password: password)
         
         try await createUser(authDataResult: authDataResult, nickname: nickname)
-    }
-}
-
-
-// MARK: Sign in SSO
-extension AuthManager {
-    func signInWithGoogle(nickname: String) async throws {
-        let helper = GoogleSignInHelper()
-        let tokens = try await helper.googleHelperSingIn()
-        let credential = GoogleAuthProvider.credential(withIDToken: tokens.idToken, accessToken: tokens.accessToken)
-        let authDataResult = try await signInWithSSO(credential: credential)
-        
-        try await createUser(authDataResult: authDataResult, nickname: nickname)
-    }
-    
-    private func signInWithSSO(credential: AuthCredential) async throws -> AuthDataResult {
-        return try await Auth.auth().signIn(with: credential)
     }
 }
