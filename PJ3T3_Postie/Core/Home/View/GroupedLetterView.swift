@@ -27,7 +27,7 @@ struct GroupedLetterView: View {
         // 좋아하는 편지들
         let favoriteLetters = firestoreManager.letters.filter { $0.isFavorite }
         
-        HStack {
+        HStack { // 좋아하는 편지 뷰
             ZStack {
                 if favoriteLetters.count > 2 {
                     RoundedRectangle(cornerRadius: 10)
@@ -74,7 +74,13 @@ struct GroupedLetterView: View {
                         
                         Spacer()
                         
-                        Text("\"\"")
+                        HStack {
+                            Text("\"\"")
+                            Spacer()
+                            Image(systemName: "heart.fill")
+                                .font(.title2)
+                                .foregroundStyle(Color(hex: 0xFF5733))
+                        }
                     }
                 }
                 .padding()
@@ -89,6 +95,7 @@ struct GroupedLetterView: View {
             Spacer()
         }
         
+        // 편지 그룹 뷰
         ForEach(filteredLetterGrouped, id: \.self) { recipient in
             let countOfMatchingRecipients = firestoreManager.letters
                 .filter { $0.recipient == recipient }
