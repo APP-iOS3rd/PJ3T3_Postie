@@ -11,7 +11,6 @@ struct GroupedLetterView: View {
     var letterReceivedGrouped: [String] = []
     var letterWritedGrouped: [String] = []
     var letterGrouped: [String] = []
-    let letterCount: Int
     @ObservedObject var firestoreManager = FirestoreManager.shared
     @ObservedObject var authManager = AuthManager.shared
     
@@ -27,9 +26,17 @@ struct GroupedLetterView: View {
         let filteredLetterGrouped: [String] = letterGrouped.filter { $0 != "me" }
         
         ForEach(filteredLetterGrouped, id: \.self) { recipient in
+            let countOfMatchingRecipients = firestoreManager.letters
+                .filter { $0.recipient == recipient }
+                .count
+            
+            let countOfMatchingWriters = firestoreManager.letters
+                .filter { $0.writer == recipient }
+                .count
+            
             HStack {
                 ZStack {
-                    if letterCount > 2 {
+                    if countOfMatchingRecipients + countOfMatchingWriters > 2 {
                         RoundedRectangle(cornerRadius: 10)
                             .foregroundStyle(Color(hex: 0xFCFBF7))
                             .frame(width: 350, height: 130)
@@ -37,7 +44,7 @@ struct GroupedLetterView: View {
                             .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
                     }
                     
-                    if letterCount > 1 {
+                    if countOfMatchingRecipients + countOfMatchingWriters > 1 {
                         RoundedRectangle(cornerRadius: 10)
                             .foregroundStyle(Color(hex: 0xFCFBF7))
                             .frame(width: 350, height: 130)
@@ -52,7 +59,7 @@ struct GroupedLetterView: View {
                                     .font(.custom("SourceSerifPro-Black", size: 18))
                                     .foregroundColor(.black)
                                 
-                                Text("\(recipient)")
+                                Text("\(recipient) \(countOfMatchingRecipients + countOfMatchingWriters)")
                                     .foregroundStyle(Color(hex: 0x1E1E1E))
                                 
                                 Spacer()

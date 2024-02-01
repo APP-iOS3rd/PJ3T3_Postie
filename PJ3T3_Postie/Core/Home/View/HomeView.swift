@@ -22,7 +22,7 @@ struct HomeView: View {
                     ScrollView {
                         if currentGroupPage == 0 {
                             VStack {
-                                GroupedLetterView(letterCount: 3)
+                                GroupedLetterView()
                                     .padding(.bottom, 10)
                             }
                             .padding()
