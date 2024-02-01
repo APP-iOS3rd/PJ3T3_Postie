@@ -205,7 +205,7 @@ extension AddLetterView {
                 ScrollView(.horizontal) {
                     HStack(spacing: 8) {
                         ForEach(0..<addLetterViewModel.images.count, id: \.self) { index in
-                            ZStack {
+                            ZStack(alignment: .topTrailing) {
                                 Button {
                                     addLetterViewModel.selectedIndex = index
                                     addLetterViewModel.showLetterImageFullScreenView = true
@@ -217,24 +217,20 @@ extension AddLetterView {
                                         .clipShape(RoundedRectangle(cornerRadius: 4))
                                 }
 
-                                VStack {
-                                    HStack {
-                                        Spacer()
-
-                                        Button {
-                                            withAnimation {
-                                                addLetterViewModel.removeImage(at: index)
-                                            }
-                                        } label: {
-                                            Image(systemName: "x.circle")
-                                        }
-                                        .padding(4)
+                                Button {
+                                    withAnimation {
+                                        addLetterViewModel.removeImage(at: index)
                                     }
-                                    Spacer()
+                                } label: {
+                                    Image(systemName: "x.circle.fill")
+                                        .symbolRenderingMode(.palette)
+                                        .foregroundStyle(.white, Color(hex: 0xFF5733))
                                 }
+                                .offset(x: 8, y: -8)
                             }
                         }
                     }
+                    .padding(.top, 8)
                 }
                 .scrollIndicators(.never)
             }
