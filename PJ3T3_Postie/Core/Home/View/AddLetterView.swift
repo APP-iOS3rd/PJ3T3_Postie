@@ -34,99 +34,97 @@ struct AddLetterView: View {
             right: 8
         )
     }
-
+    
     var body: some View {
-        NavigationStack {
-            ZStack {
-                Color(hex: 0xF5F1E8)
-                    .ignoresSafeArea()
+        ZStack {
+            Color(hex: 0xF5F1E8)
+                .ignoresSafeArea()
 
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 16) {
-                        letterInfoSection
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    letterInfoSection
 
-                        letterImagesSection
+                    letterImagesSection
 
-                        letterTextSection
-                    }
-                    .padding()
+                    letterTextSection
                 }
+                .padding()
             }
-            .navigationTitle(isSendingLetter ? "보낸 편지 기록" : "받은 편지 기록")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbarBackground(Color(hex: 0xF5F1E8), for: .navigationBar)
-            .toolbar {
-                ToolbarItemGroup(placement: .topBarTrailing) {
-                    Button {
-                        Task {
-                            await firestoreManager.addLetter(
-                                writer: addLetterViewModel.sender,
-                                recipient: addLetterViewModel.receiver,
-                                summary: addLetterViewModel.summary,
-                                date: addLetterViewModel.date,
-                                text: addLetterViewModel.text
-                            )
+        }
+        .navigationTitle(isSendingLetter ? "보낸 편지 기록" : "받은 편지 기록")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(Color(hex: 0xF5F1E8), for: .navigationBar)
+        .toolbar {
+            ToolbarItemGroup(placement: .topBarTrailing) {
+                Button {
+                    Task {
+                        await firestoreManager.addLetter(
+                            writer: addLetterViewModel.sender,
+                            recipient: addLetterViewModel.receiver,
+                            summary: addLetterViewModel.summary,
+                            date: addLetterViewModel.date,
+                            text: addLetterViewModel.text
+                        )
 
-                            if !addLetterViewModel.images.isEmpty {
-                                do {
-                                    try await storageManager.saveUIImage(
-                                        images: addLetterViewModel.images,
-                                        userId: firestoreManager.userUid,
-                                        docId: firestoreManager.docId
-                                    )
-                                } catch {
-                                    // TODO: Error 처리 필요
-                                    print("DEBUG: Failed to save UIImages to Firestore: \(error)")
-                                }
+                        if !addLetterViewModel.images.isEmpty {
+                            do {
+                                try await storageManager.saveUIImage(
+                                    images: addLetterViewModel.images,
+                                    userId: firestoreManager.userUid,
+                                    docId: firestoreManager.docId
+                                )
+                            } catch {
+                                // TODO: Error 처리 필요
+                                print("DEBUG: Failed to save UIImages to Firestore: \(error)")
                             }
-
-                            dismiss()
                         }
-                    } label : {
-                        Text("완료")
+
+                        dismiss()
                     }
-                }
-
-                ToolbarItemGroup(placement: .keyboard) {
-                    Spacer()
-
-                    Button {
-                        focusField = nil
-                    } label: {
-                        Image(systemName: "keyboard.chevron.compact.down")
-                    }
+                } label : {
+                    Text("완료")
                 }
             }
-            .toolbar(.hidden, for: .tabBar)
-            .fullScreenCover(isPresented: $addLetterViewModel.showLetterImageFullScreenView) {
-                LetterImageFullScreenView(
-                    images: addLetterViewModel.images,
-                    pageIndex: $addLetterViewModel.selectedIndex
-                )
-            }
-            .sheet(isPresented: $addLetterViewModel.showUIImagePicker) {
-                UIImagePicker(
-                    sourceType: addLetterViewModel.imagePickerSourceType,
-                    selectedImages: $addLetterViewModel.images,
-                    text: $addLetterViewModel.text,
-                    showTextRecognizerErrorAlert: $addLetterViewModel.showTextRecognizerErrorAlert
-                )
-            }
-            .alert("문자 인식 실패", isPresented: $addLetterViewModel.showTextRecognizerErrorAlert) {
 
-            } message: {
-                Text("문자 인식에 실패했습니다. 다시 시도해 주세요.")
-            }
-            .alert("한 줄 요약", isPresented: $addLetterViewModel.showSummaryAlert) {
-                Button("직접 작성") {
-                    // TODO: 함수로 빼기
-                    addLetterViewModel.showSummaryTextField = true
-                }
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
 
-                Button("AI 완성") {
-                    // TODO: 네이버 클로바 API 호출
-                    addLetterViewModel.showSummaryTextField = true
+                Button {
+                    focusField = nil
+                } label: {
+                    Image(systemName: "keyboard.chevron.compact.down")
                 }
+            }
+        }
+        .toolbar(.hidden, for: .tabBar)
+        .fullScreenCover(isPresented: $addLetterViewModel.showLetterImageFullScreenView) {
+            LetterImageFullScreenView(
+                images: addLetterViewModel.images,
+                pageIndex: $addLetterViewModel.selectedIndex
+            )
+        }
+        .sheet(isPresented: $addLetterViewModel.showUIImagePicker) {
+            UIImagePicker(
+                sourceType: addLetterViewModel.imagePickerSourceType,
+                selectedImages: $addLetterViewModel.images,
+                text: $addLetterViewModel.text,
+                showTextRecognizerErrorAlert: $addLetterViewModel.showTextRecognizerErrorAlert
+            )
+        }
+        .alert("문자 인식 실패", isPresented: $addLetterViewModel.showTextRecognizerErrorAlert) {
+
+        } message: {
+            Text("문자 인식에 실패했습니다. 다시 시도해 주세요.")
+        }
+        .alert("한 줄 요약", isPresented: $addLetterViewModel.showSummaryAlert) {
+            Button("직접 작성") {
+                // TODO: 함수로 빼기
+                addLetterViewModel.showSummaryTextField = true
+            }
+
+            Button("AI 완성") {
+                // TODO: 네이버 클로바 API 호출
+                addLetterViewModel.showSummaryTextField = true
             }
         }
     }
@@ -141,8 +139,8 @@ extension AddLetterView {
             VStack(alignment: .leading, spacing: 4) {
                 Text(isSendingLetter ? "받는 사람" : "보낸 사람")
 
-                TextField("", 
-                          text: isSendingLetter ? 
+                TextField("",
+                          text: isSendingLetter ?
                           $addLetterViewModel.sender : $addLetterViewModel.receiver)
                 .padding(6)
                 .background(Color(hex: 0xFCFBF7))
@@ -248,7 +246,7 @@ extension AddLetterView {
     private var letterTextSection: some View {
         VStack(alignment: .leading, spacing: 4) {
             Text("내용")
-            
+
             ZStack {
                 if addLetterViewModel.text.isEmpty {
                     TextEditor(text: .constant("사진을 등록하면 자동으로 편지 내용이 입력됩니다."))
