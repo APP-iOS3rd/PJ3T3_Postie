@@ -9,7 +9,7 @@ import Foundation
 
 //Decoding: Raw data나 Raw json 데이터를 받아 data object로 map해준다.
 //Encoding: data object를 json data로 변환한다.
-struct User: Identifiable, Codable {
+struct EmailUser: Identifiable, Codable {
     let id: String
     let fullName: String
     let email: String
@@ -25,6 +25,6 @@ struct User: Identifiable, Codable {
     }
 }
 
-extension User {
-    static var MOCK_USER = User(id: UUID().uuidString, fullName: "Eunice Jeong", email: "test@gmail.com")
+extension EmailUser {
+    static var MOCK_USER = EmailUser(id: UUID().uuidString, fullName: "Eunice Jeong", email: "test@gmail.com")
 }
