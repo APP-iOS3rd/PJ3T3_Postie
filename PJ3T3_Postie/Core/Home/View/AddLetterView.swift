@@ -122,11 +122,20 @@ struct AddLetterView: View {
             } message: {
                 Text("문자 인식에 실패했습니다. 다시 시도해 주세요.")
             }
-            .alert("", isPresented: $addLetterViewModel.showTextRecognizerErrorAlert, actions: {
-                
-            })
+            .alert("한 줄 요약", isPresented: $addLetterViewModel.showSummaryAlert) {
+                Button("직접 작성") {
+                    // TODO: 함수로 빼기
+                    addLetterViewModel.showSummaryTextField = true
+                }
+
+                Button("AI 완성") {
+                    // TODO: 네이버 클로바 API 호출
+                    addLetterViewModel.showSummaryTextField = true
+                }
+            }
             .confirmationDialog("편지 사진 가져오기",
                                 isPresented: $addLetterViewModel.showConfirmationDialog) {
+                #warning("이거 햄버거로 바꾸기")
                 Button("카메라") {
                     addLetterViewModel.showUIImagePicker(sourceType: .camera)
                 }
@@ -276,8 +285,7 @@ extension AddLetterView {
                 Spacer()
 
                 Button {
-                    // TODO: 요약 진행 Alert 띄우기
-                    addLetterViewModel.showSummaryTextField = true
+                    addLetterViewModel.showSummaryAlert = true
                 } label: {
                     Image(systemName: "plus")
                 }
