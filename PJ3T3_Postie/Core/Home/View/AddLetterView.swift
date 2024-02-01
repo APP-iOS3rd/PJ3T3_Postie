@@ -150,7 +150,7 @@ struct AddLetterView: View {
 extension AddLetterView {
     @ViewBuilder
     private var letterInfoSection: some View {
-        HStack(spacing: 16) {
+        HStack {
             VStack(alignment: .leading, spacing: 4) {
                 Text(isSendingLetter ? "받는 사람" : "보낸 사람")
 
@@ -163,6 +163,8 @@ extension AddLetterView {
                 .focused($focusField, equals: .sender)
             }
             .frame(width: UIScreen.main.bounds.width * 0.5)
+            
+            Spacer()
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(isSendingLetter ? "보낸 날짜" : "받은 날짜")
@@ -212,7 +214,7 @@ extension AddLetterView {
                                         .resizable()
                                         .scaledToFill()
                                         .frame(width: 100, height: 100)
-                                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                                        .clipShape(RoundedRectangle(cornerRadius: 4))
                                 }
 
                                 VStack {
@@ -250,7 +252,7 @@ extension AddLetterView {
                         .scrollContentBackground(.hidden)
                         .background(Color(hex: 0xFCFBF7))
                         .lineSpacing(5)
-                        .clipShape(RoundedRectangle(cornerRadius: 5))
+                        .clipShape(RoundedRectangle(cornerRadius: 4))
                         .frame(maxWidth: .infinity)
                         .frame(height: 350)
                         .disabled(true)
@@ -259,9 +261,9 @@ extension AddLetterView {
                     .scrollContentBackground(.hidden)
                     .background(Color(hex: 0xFCFBF7))
                     .lineSpacing(5)
-                    .clipShape(RoundedRectangle(cornerRadius: 5))
+                    .clipShape(RoundedRectangle(cornerRadius: 4))
                     .overlay(
-                        RoundedRectangle(cornerRadius: 5)
+                        RoundedRectangle(cornerRadius: 4)
                             .stroke(.black, lineWidth: 1 / 4)
                             .opacity(0.2)
                     )
@@ -281,23 +283,25 @@ extension AddLetterView {
 
                 Button {
                     // TODO: 요약 진행 Alert 띄우기
+                    addLetterViewModel.showSummaryTextField = true
                 } label: {
                     Image(systemName: "plus")
                 }
             }
 
-            if addLetterViewModel.summary.isEmpty {
-                Label("편지를 요약해드릴게요.", systemImage: "text.quote.rtl")
-                    .foregroundStyle(Color(hex: 0xAAAAAA))
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 30)
-                    .frame(alignment: .center)
-            } else {
+            if addLetterViewModel.showSummaryTextField {
                 TextField("", text: $addLetterViewModel.summary)
                     .padding(6)
                     .background(Color(hex: 0xFCFBF7))
                     .clipShape(RoundedRectangle(cornerRadius: 4))
                     .focused($focusField, equals: .receiver)
+            } else {
+                Label("편지를 요약해드릴게요.", systemImage: "text.quote.rtl")
+                    .foregroundStyle(Color(hex: 0xAAAAAA))
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 30)
+                    .frame(alignment: .center)
+
             }
         }
     }

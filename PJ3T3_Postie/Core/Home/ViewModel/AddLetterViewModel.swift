@@ -19,6 +19,7 @@ class AddLetterViewModel: ObservableObject {
     @Published var images: [UIImage] = []
     @Published var showLetterImageFullScreenView: Bool = false
     @Published var showTextRecognizerErrorAlert: Bool = false
+    @Published var showSummaryTextField: Bool = false
     @Published var selectedIndex: Int = 0
 
     private(set) var imagePickerSourceType: UIImagePickerController.SourceType = .camera
