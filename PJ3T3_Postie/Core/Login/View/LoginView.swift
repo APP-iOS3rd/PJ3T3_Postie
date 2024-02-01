@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+import GoogleSignIn
+import GoogleSignInSwift
+
 struct LoginView: View {
     //Colors
     private let viewBackground: Color = .white
@@ -68,6 +71,13 @@ struct LoginView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 10))
                     .padding(.top, 24)
 
+                    Spacer()
+                    
+                    //Google sign in Button
+                    GoogleSignInButton(viewModel: GoogleSignInButtonViewModel(scheme: .light, style: .wide, state: .normal)) {
+                        
+                    }
+                    
                     Spacer()
 
                     //Sign up Button
