@@ -133,23 +133,6 @@ struct AddLetterView: View {
                     addLetterViewModel.showSummaryTextField = true
                 }
             }
-            .confirmationDialog("편지 사진 가져오기",
-                                isPresented: $addLetterViewModel.showConfirmationDialog) {
-                #warning("이거 햄버거로 바꾸기")
-                Button("카메라") {
-                    addLetterViewModel.showUIImagePicker(sourceType: .camera)
-                }
-
-                Button("앨범") {
-                    addLetterViewModel.showUIImagePicker(sourceType: .photoLibrary)
-                }
-
-                Button("스캐너") {
-
-                }
-            } message: {
-                Text("편지 사진 가져오기")
-            }
         }
     }
 }
@@ -195,8 +178,30 @@ extension AddLetterView {
 
                 Spacer()
 
-                Button {
-                    addLetterViewModel.showConfirmationDialog = true
+                Menu {
+                    Button {
+                        addLetterViewModel.showUIImagePicker(sourceType: .photoLibrary)
+                    } label: {
+                        HStack {
+                            Text("사진 보관함")
+
+                            Spacer()
+
+                            Image(systemName: "photo.on.rectangle")
+                        }
+                    }
+
+                    Button {
+                        addLetterViewModel.showUIImagePicker(sourceType: .camera)
+                    } label: {
+                        HStack {
+                            Text("사진 찍기")
+
+                            Spacer()
+
+                            Image(systemName: "camera")
+                        }
+                    }
                 } label: {
                     Image(systemName: "plus")
                 }

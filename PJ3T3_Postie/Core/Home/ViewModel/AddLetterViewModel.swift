@@ -14,9 +14,8 @@ class AddLetterViewModel: ObservableObject {
     @Published var date: Date = .now
     @Published var text: String = ""
     @Published var summary: String = ""
-    @Published var showConfirmationDialog: Bool = false
+    @Published var images: [UIImage] = [UIImage(systemName: "photo.fill")!]
     @Published var showUIImagePicker = false
-    @Published var images: [UIImage] = []
     @Published var showLetterImageFullScreenView: Bool = false
     @Published var showTextRecognizerErrorAlert: Bool = false
     @Published var showSummaryTextField: Bool = false
