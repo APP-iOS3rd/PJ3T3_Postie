@@ -137,8 +137,14 @@ struct GroupedListLetterView: View {
                     .imageScale(.large)
                     .padding()
                 }
-                .navigationTitle("\(recipient)")
                 .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .principal) {
+                        Text("\(recipient)")
+                            .bold()
+                            .foregroundStyle(Color(hex: 0xFF5733))
+                    }
+                }
             }
             .foregroundStyle(Color(hex: 0x1E1E1E))
             .tint(Color.init(hex: 0x1E1E1E))
