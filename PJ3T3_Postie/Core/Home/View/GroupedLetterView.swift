@@ -44,52 +44,58 @@ struct GroupedLetterView: View {
                         .offset(x: 5, y: 5)
                         .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
                 }
-                
-                HStack {
-                    VStack(alignment: .leading) {
-                        HStack {
-                            Text("From.")
-                                .font(.custom("SourceSerifPro-Black", size: 18))
-                                .foregroundColor(.black)
-                            
-                            Text("\("좋아하는 편지들") \(favoriteLetters.count)")
-                                .foregroundStyle(Color(hex: 0x1E1E1E))
-                            
-                            Spacer()
-                            
-                            Text(" ") // date
-                                .font(.custom("SourceSerifPro-Light", size: 18))
-                                .foregroundStyle(Color(hex: 0x1E1E1E))
-                            
-                            ZStack {
-                                Image(systemName: "water.waves")
-                                    .font(.headline)
-                                    .offset(x:18)
+                NavigationLink {
+                    GroupedFavoriteListLetter()
+                } label: {
+                    HStack {
+                        VStack(alignment: .leading) {
+                            HStack {
+                                Text("From.")
+                                    .font(.custom("SourceSerifPro-Black", size: 18))
+                                    .foregroundColor(.black)
                                 
-                                Image(systemName: "sleep.circle")
-                                    .font(.largeTitle)
+                                Text("\("좋아하는 편지들") \(favoriteLetters.count)")
+                                    .foregroundStyle(Color(hex: 0x1E1E1E))
+                                
+                                Spacer()
+                                
+                                Text(" ") // date
+                                    .font(.custom("SourceSerifPro-Light", size: 18))
+                                    .foregroundStyle(Color(hex: 0x1E1E1E))
+                                
+                                ZStack {
+                                    Image(systemName: "water.waves")
+                                        .font(.headline)
+                                        .offset(x:18)
+                                    
+                                    Image(systemName: "sleep.circle")
+                                        .font(.largeTitle)
+                                }
+                                .foregroundStyle(Color(hex: 0x979797))
                             }
-                            .foregroundStyle(Color(hex: 0x979797))
-                        }
-                        
-                        Spacer()
-                        
-                        HStack {
-                            Text("\"\"")
+                            
                             Spacer()
-                            Image(systemName: "heart.fill")
-                                .font(.title2)
-                                .foregroundStyle(Color(hex: 0xFF5733))
+                            
+                            HStack {
+                                Text("\"\"")
+                                
+                                Spacer()
+                                
+                                Image(systemName: "heart.fill")
+                                    .font(.title2)
+                                    .foregroundStyle(Color(hex: 0xFF5733))
+                            }
                         }
+                        
+                        .padding()
+                        .frame(width: 350, height: 130)
+                        .background(
+                            RoundedRectangle(cornerRadius: 10)
+                                .foregroundStyle(Color(hex: 0xFCFBF7))
+                                .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
+                        )
                     }
                 }
-                .padding()
-                .frame(width: 350, height: 130)
-                .background(
-                    RoundedRectangle(cornerRadius: 10)
-                        .foregroundStyle(Color(hex: 0xFCFBF7))
-                        .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
-                )
             }
             
             Spacer()
