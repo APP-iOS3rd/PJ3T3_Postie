@@ -24,60 +24,23 @@ struct HomeView: View {
                             VStack {
                                 GroupLetterView(letterCount: 3, title: "Favorite", content: "즐겨찾기 한 편지 꾸러미들")
                                     .padding(.bottom, 10)
-                                
-                                // ScrollView margin 임시
-                                Rectangle()
-                                    .frame(height: 70)
-                                    .foregroundStyle(Color.black.opacity(0))
                             }
                             .padding()
                         } else {
                             VStack {
-                                NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
-                                    ReceiveLetterView(letter: Letter.preview)
-                                }
-                                
-                                NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
-                                    SendLetterView(letter: Letter.preview)
-                                }
-                                
-                                NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
-                                    ReceiveLetterView(letter: Letter.preview)
-                                }
-                                
-                                NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
-                                    ReceiveLetterView(letter: Letter.preview)
-                                }
-                                NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
-                                    SendLetterView(letter: Letter.preview)
-                                }
-                                
                                 LetterDataListViewFB()
-                                
-                                // ScrollView margin 임시
-                                Rectangle()
-                                    .frame(height: 70)
-                                    .foregroundStyle(Color.black.opacity(0))
                             }
                             .padding()
                         }
+                        // ScrollView margin 임시
+                        Rectangle()
+                            .frame(height: 70)
+                            .foregroundStyle(Color.black.opacity(0))
                     }
                     .searchable(text: $search)
                     .background(Color(hex: 0xF5F1E8))
                     
                     Menu {
-                        // 맨 밑 네비링크가 작동 안되는 버그가 있어서 임시로 만들어둠. 오류 수정하면 없앨 예정
-                        NavigationLink(destination: AddLetterView(isReceived: false)) {
-                            Button (action: {
-                            }) {
-                                HStack {
-                                    Text("취소")
-                                    
-                                    Image(systemName: "x.square")
-                                }
-                            }
-                        }
-                        
                         NavigationLink(destination: AddLetterView(isReceived: false)) {
                             Button (action: {
                             }) {
@@ -367,16 +330,18 @@ struct ReceiveLetterView: View {
     }
 }
 
-struct LetterDataListViewFB: View { // 파베 데이터 불러오기 용도, 임시 뷰, 에러나면 일단 전부 주석처리 해주세요
+struct LetterDataListViewFB: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
     
     var body: some View {
         ForEach(firestoreManager.letters, id: \.self) { letter in
             NavigationLink {
-                TestDetailView(letter: letter)
+                LetterDetailView(letter: letter)
             } label: {
                 HStack {
-                    Spacer()
+                    if letter.isReceived {
+                        Spacer()
+                    }
                     
                     HStack {
                         VStack(alignment: .leading) {
@@ -416,6 +381,10 @@ struct LetterDataListViewFB: View { // 파베 데이터 불러오기 용도, 임
                             .foregroundStyle(Color(hex: 0xFFFFFF))
                             .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
                     )
+                    
+                    if !letter.isReceived {
+                        Spacer()
+                    }
                 }
             }
         }
@@ -486,11 +455,11 @@ struct GroupLetterView: View { // 그룹 뷰 용도. 임시
     
     var body: some View {
         // recipient 에서 중복 된것을 제외 후 letterReceivedGrouped 에 삽입
-        var letterReceivedGrouped: [String] = Array(Set(firestoreManager.letters.map { $0.recipient }.filter { !$0.isEmpty }))
+        let letterReceivedGrouped: [String] = Array(Set(firestoreManager.letters.map { $0.recipient }.filter { !$0.isEmpty }))
         // writer 에서 중복 된것을 제외 후 letterWritedGrouped 에 삽입
-        var letterWritedGrouped: [String] = Array(Set(firestoreManager.letters.map { $0.writer }.filter { !$0.isEmpty }))
+        let letterWritedGrouped: [String] = Array(Set(firestoreManager.letters.map { $0.writer }.filter { !$0.isEmpty }))
         // letterReceivedGrouped와 letterWritedGrouped를 합친 후 중복 제거
-        var letterGrouped: [String] = Array(Set(letterReceivedGrouped + letterWritedGrouped))
+        let letterGrouped: [String] = Array(Set(letterReceivedGrouped + letterWritedGrouped))
         // 본인 이름 항목 제거
         // "me" << 추후에는 authManager.currentUser?.fullName 로 해야함
         let filteredLetterGrouped: [String] = letterGrouped.filter { $0 != "me" }
