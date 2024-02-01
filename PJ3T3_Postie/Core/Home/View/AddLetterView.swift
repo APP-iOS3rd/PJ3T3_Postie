@@ -263,6 +263,7 @@ extension AddLetterView {
                         .frame(height: 350)
                         .disabled(true)
                 }
+
                 TextEditor(text: $addLetterViewModel.text)
                     .scrollContentBackground(.hidden)
                     .background(Color(hex: 0xFCFBF7))
