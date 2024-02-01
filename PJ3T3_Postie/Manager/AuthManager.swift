@@ -17,7 +17,7 @@ class AuthManager: ObservableObject {
     static let shared = AuthManager()
     var userUid: String  = ""
     @Published var userSession: FirebaseAuth.User? //Firebase user object
-    @Published var currentUser: EmailUser? //User Data Model
+    @Published var currentUser: PostieUser? //User Data Model
     
     private init() {
         //viewModel이 init될 때 이미 존재하는 user가 있는지 확인한다.
@@ -43,7 +43,7 @@ class AuthManager: ObservableObject {
         //클래스 상단에 @MainActor를 선언해 주거나 아래와 같이 DispatchQueue.main.async 에서 코드를 실행해야 한다.
         DispatchQueue.main.async {
             //Firestore에서 받은 데이터를 User model에 맞는 형태로 변환하여 currentUser에 값을 부여한다.
-            self.currentUser = try? snapshot.data(as: EmailUser.self)
+            self.currentUser = try? snapshot.data(as: PostieUser.self)
             print("DEBUG: Current user is \(String(describing: self.currentUser))")
         }
         
