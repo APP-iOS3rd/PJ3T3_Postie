@@ -20,13 +20,25 @@ struct SettingView: View {
                 List {
                     Section {
                         HStack {
-                            Text(user.initials)
-                                .font(.title)
-                                .fontWeight(.semibold)
-                                .foregroundStyle(.white)
-                                .frame(width: 72, height: 72)
-                                .background(profileBackgroundColor)
-                                .clipShape(Circle())
+                            if let profileImageUrl = user.profileImageUrl {
+                                AsyncImage(url: URL(string: profileImageUrl), content: { image in
+                                    image
+                                        .resizable()
+                                        .frame(width: 72, height: 72)
+                                }, placeholder: {
+                                    ZStack {
+                                        Circle()
+                                            .foregroundStyle(.postieGray)
+                                            .frame(width: 72, height: 72)
+                                        
+                                        ProgressView()
+                                    }
+                                })
+                            } else {
+                                Circle()
+                                    .foregroundStyle(.postieGray)
+                                    .frame(width: 72, height: 72)
+                            }
                             
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(user.fullName)
