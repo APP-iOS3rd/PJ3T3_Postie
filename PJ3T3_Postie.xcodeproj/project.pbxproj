@@ -82,6 +82,7 @@
 		E349F8842B6AAC6800253B02 /* PJ3T3-Postie-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E349F8832B6AAC6800253B02 /* PJ3T3-Postie-Info.plist */; };
 		E349F8862B6B672E00253B02 /* ListLetterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E349F8852B6B672E00253B02 /* ListLetterView.swift */; };
 		E349F8882B6B673C00253B02 /* GroupedLetterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E349F8872B6B673C00253B02 /* GroupedLetterView.swift */; };
+		E349F88A2B6B7DA500253B02 /* GroupedListLetterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E349F8892B6B7DA500253B02 /* GroupedListLetterView.swift */; };
 		E3E02CA82B59003100CD3D4C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E3E02CA72B59003100CD3D4C /* GoogleService-Info.plist */; };
 		E3EECAF02B5F957A00E639F2 /* SourceSerifPro-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = E3EECAEF2B5F957A00E639F2 /* SourceSerifPro-Black.otf */; };
 		E3EECAF22B5F958300E639F2 /* SourceSerifPro-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = E3EECAF12B5F958300E639F2 /* SourceSerifPro-Light.otf */; };
@@ -142,6 +143,7 @@
 		E349F8832B6AAC6800253B02 /* PJ3T3-Postie-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "PJ3T3-Postie-Info.plist"; sourceTree = "<group>"; };
 		E349F8852B6B672E00253B02 /* ListLetterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListLetterView.swift; sourceTree = "<group>"; };
 		E349F8872B6B673C00253B02 /* GroupedLetterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupedLetterView.swift; sourceTree = "<group>"; };
+		E349F8892B6B7DA500253B02 /* GroupedListLetterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupedListLetterView.swift; sourceTree = "<group>"; };
 		E3E02CA72B59003100CD3D4C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E3EECAEF2B5F957A00E639F2 /* SourceSerifPro-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSerifPro-Black.otf"; sourceTree = "<group>"; };
 		E3EECAF12B5F958300E639F2 /* SourceSerifPro-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSerifPro-Light.otf"; sourceTree = "<group>"; };
@@ -326,6 +328,7 @@
 			children = (
 				CE6597032B5FB1E100A3C136 /* AddLetterView.swift */,
 				E349F8872B6B673C00253B02 /* GroupedLetterView.swift */,
+				E349F8892B6B7DA500253B02 /* GroupedListLetterView.swift */,
 				9E9F6AB52B5762E5003DFE83 /* HomeView.swift */,
 				9E9F6AD32B576411003DFE83 /* LetterDetailView.swift */,
 				CEF09E462B57BD8500BE67E4 /* LetterImageFullScreenView.swift */,
@@ -675,6 +678,7 @@
 				CEF09E472B57BD8500BE67E4 /* LetterImageFullScreenView.swift in Sources */,
 				9E9F6AC42B57639D003DFE83 /* ShopViewModel.swift in Sources */,
 				CEF09E452B57B6C500BE67E4 /* UIImagePicker.swift in Sources */,
+				E349F88A2B6B7DA500253B02 /* GroupedListLetterView.swift in Sources */,
 				0E29F0DD2B5FDC6A005B86FB /* Coordinator.swift in Sources */,
 				9E9F6AC22B576393003DFE83 /* MapApi.swift in Sources */,
 				9E9F6AD42B576411003DFE83 /* LetterDetailView.swift in Sources */,

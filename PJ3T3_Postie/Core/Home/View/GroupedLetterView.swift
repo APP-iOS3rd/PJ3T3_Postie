@@ -105,66 +105,70 @@ struct GroupedLetterView: View {
                 .filter { $0.writer == recipient }
                 .count
             
-            HStack {
-                ZStack {
-                    if countOfMatchingRecipients + countOfMatchingWriters > 2 {
-                        RoundedRectangle(cornerRadius: 10)
-                            .foregroundStyle(Color(hex: 0xFCFBF7))
-                            .frame(width: 350, height: 130)
-                            .offset(x: 10, y: 10)
-                            .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
-                    }
-                    
-                    if countOfMatchingRecipients + countOfMatchingWriters > 1 {
-                        RoundedRectangle(cornerRadius: 10)
-                            .foregroundStyle(Color(hex: 0xFCFBF7))
-                            .frame(width: 350, height: 130)
-                            .offset(x: 5, y: 5)
-                            .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
-                    }
-                    
-                    HStack {
-                        VStack(alignment: .leading) {
-                            HStack {
-                                Text("From.")
-                                    .font(.custom("SourceSerifPro-Black", size: 18))
-                                    .foregroundColor(.black)
-                                
-                                Text("\(recipient) \(countOfMatchingRecipients + countOfMatchingWriters)")
-                                    .foregroundStyle(Color(hex: 0x1E1E1E))
+            NavigationLink {
+                GroupedListLetterView(recipient: recipient)
+            } label: {
+                HStack {
+                    ZStack {
+                        if countOfMatchingRecipients + countOfMatchingWriters > 2 {
+                            RoundedRectangle(cornerRadius: 10)
+                                .foregroundStyle(Color(hex: 0xFCFBF7))
+                                .frame(width: 350, height: 130)
+                                .offset(x: 10, y: 10)
+                                .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
+                        }
+                        
+                        if countOfMatchingRecipients + countOfMatchingWriters > 1 {
+                            RoundedRectangle(cornerRadius: 10)
+                                .foregroundStyle(Color(hex: 0xFCFBF7))
+                                .frame(width: 350, height: 130)
+                                .offset(x: 5, y: 5)
+                                .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
+                        }
+                        
+                        HStack {
+                            VStack(alignment: .leading) {
+                                HStack {
+                                    Text("From.")
+                                        .font(.custom("SourceSerifPro-Black", size: 18))
+                                        .foregroundColor(.black)
+                                    
+                                    Text("\(recipient) \(countOfMatchingRecipients + countOfMatchingWriters)")
+                                        .foregroundStyle(Color(hex: 0x1E1E1E))
+                                    
+                                    Spacer()
+                                    
+                                    Text(" ") // date
+                                        .font(.custom("SourceSerifPro-Light", size: 18))
+                                        .foregroundStyle(Color(hex: 0x1E1E1E))
+                                    
+                                    ZStack {
+                                        Image(systemName: "water.waves")
+                                            .font(.headline)
+                                            .offset(x:18)
+                                        
+                                        Image(systemName: "sleep.circle")
+                                            .font(.largeTitle)
+                                    }
+                                    .foregroundStyle(Color(hex: 0x979797))
+                                }
                                 
                                 Spacer()
                                 
-                                Text(" ") // date
-                                    .font(.custom("SourceSerifPro-Light", size: 18))
-                                    .foregroundStyle(Color(hex: 0x1E1E1E))
-                                
-                                ZStack {
-                                    Image(systemName: "water.waves")
-                                        .font(.headline)
-                                        .offset(x:18)
-                                    
-                                    Image(systemName: "sleep.circle")
-                                        .font(.largeTitle)
-                                }
-                                .foregroundStyle(Color(hex: 0x979797))
+                                Text("\"\"")
                             }
-                            
-                            Spacer()
-                            
-                            Text("\"\"")
                         }
+                        .padding()
+                        .frame(width: 350, height: 130)
+                        .background(
+                            RoundedRectangle(cornerRadius: 10)
+                                .foregroundStyle(Color(hex: 0xFCFBF7))
+                                .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
+                        )
                     }
-                    .padding()
-                    .frame(width: 350, height: 130)
-                    .background(
-                        RoundedRectangle(cornerRadius: 10)
-                            .foregroundStyle(Color(hex: 0xFCFBF7))
-                            .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
-                    )
+                    
+                    Spacer()
                 }
-                
-                Spacer()
             }
         }
     }
