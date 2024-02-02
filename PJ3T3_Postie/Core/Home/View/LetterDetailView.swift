@@ -24,23 +24,42 @@ struct LetterDetailView: View {
             }
             .padding()
         }
-        .navigationTitle("편지 정보")
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(Color(hex: 0xF5F1E8), for: .navigationBar)
         .toolbar {
+            ToolbarItemGroup(placement: .principal) {
+                Text(letter.isReceived ? "받은 편지" : "보낸 편지")
+                    .bold()
+                    .foregroundStyle(Color(hex: 0xFF5733))
+            }
+
             ToolbarItemGroup(placement: .topBarTrailing) {
+                Button {
+
+                } label: {
+                    Image(systemName: "heart")
+                }
+
                 Menu {
                     Button {
 
                     } label: {
-                        Text("수정")
+                        HStack {
+                            Text("수정")
+
+                            Image(systemName: "square.and.pencil")
+                        }
                     }
 
                     Button(role: .destructive) {
                         // TODO: 함수로 빼기
                         letterDetailViewModel.showDeleteAlert = true
                     } label: {
-                        Text("삭제")
+                        HStack {
+                            Text("삭제")
+
+                            Image(systemName: "trash")
+                        }
                     }
                 } label: {
                     Image(systemName: "ellipsis")
