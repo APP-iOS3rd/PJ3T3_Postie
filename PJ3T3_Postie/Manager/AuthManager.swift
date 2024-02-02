@@ -30,9 +30,23 @@ class AuthManager: ObservableObject {
         }
     }
     
+    /**
+     ```
+     1. Authentication에 입력받은 계정이 존재하는지 확인한다.
+     2. 해당 계정의 uuid로 firestore에서 계정 정보를 불러온다.
+     3. Firestore에서 받은 데이터를 model에 맞는 형태로 변환(decoding)하여 currentUser에 값을 부여한다.
+     ```
+     ### Usage ###
+     - init될 때: Firebase에서 디바이스에 캐시 데이터로 저장해 둔 currentUser가 로그인을 한 상태인지에 대한 정보를 활용한다.
+     - createUser의 가장 마지막: 계정이 제대로 생성되었는지를 확인하며 앱에서 로그인 처리를 한다.
+     - signInWithSSO의 가장 마지막: 계정이 있는지 없는지 여부를 확인하여 NicknameView나 HomeView중 한 화면으로 전환된다.
+     - signInWithEmail의 가장 마지막: 계정이 제대로 생성되었는지를 확인하며 앱에서 로그인 처리를 한다.
+     ### Notes ###
+     UI 업데이트는 꼭 메인 스레드에서 진행되어야 한다. 비동기 네트워킹은 기본적으로 메인이 아닌 다른 스레드에서 진행된다. UI 업데이트를 하는 Publish가 반드시 메인 스레드에서 수행되도록 설정하기 위해 클래스나 함수 상단에 @MainActor를 붙여주거나 DispatchQueue.main.async에서 코드를 실행해야 한다.
+     */
     func fetchUser() async {
         DispatchQueue.main.async {
-            //입력받은 정보가 Authentication에 존재하는 계정인지 확인한다.
+            //1. Authentication에 입력받은 계정이 존재하는지 확인한다.
             self.userSession = Auth.auth().currentUser
             print(self.userSession)
         }
@@ -47,16 +61,14 @@ class AuthManager: ObservableObject {
             self.userUid = uid
         }
         
+        //2. 해당 계정의 uuid로 firestore에서 계정 정보를 불러온다.
         guard let snapshot = try? await Firestore.firestore().collection("users").document(uid).getDocument() else {
             print(#function, "Failed to fetch user data from firestore")
             return
         }
         
-        //UI 업데이트는 꼭 메인 스레드에서 진행되어야 하는데
-        //비동기 네트워킹은 기본적으로 메인이 아닌 다른 스레드에서 진행되므로 UI 업데이트를 하는 Publish가 반드시 메인 스레드에서 수행되도록 설정하기 위해
-        //클래스 상단에 @MainActor를 선언해 주거나 아래와 같이 DispatchQueue.main.async 에서 코드를 실행해야 한다.
         DispatchQueue.main.async {
-            //Firestore에서 받은 데이터를 User model에 맞는 형태로 변환하여 currentUser에 값을 부여한다.
+            //3. Firestore에서 받은 데이터를 User model에 맞는 형태로 변환(decoding)하여 currentUser에 값을 부여한다.
             self.currentUser = try? snapshot.data(as: PostieUser.self)
             print(#function, "Current user is \(String(describing: self.currentUser))")
             
