@@ -34,10 +34,7 @@ struct PJ3T3_PostieApp: App {
     
     var body: some Scene {
         WindowGroup {
-            NavigationView {
-                ContentView()
-            }
+            ContentView()
         }
     }
 }
-
