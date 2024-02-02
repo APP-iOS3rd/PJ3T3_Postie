@@ -152,13 +152,10 @@ class AuthManager: ObservableObject {
 
 // MARK: Sign in SSO
 extension AuthManager {
-    func signInWithGoogle(nickname: String) async throws {
+    func signInWithGoogle() async throws -> AuthCredential {
         let helper = GoogleSignInHelper()
         let tokens = try await helper.googleHelperSingIn()
-        let credential = GoogleAuthProvider.credential(withIDToken: tokens.idToken, accessToken: tokens.accessToken)
-        let authDataResult = try await signInWithSSO(credential: credential)
-        
-        try await createUser(authDataResult: authDataResult, nickname: nickname)
+        return GoogleAuthProvider.credential(withIDToken: tokens.idToken, accessToken: tokens.accessToken)
     }
     
     func signInWithSSO(credential: AuthCredential) async throws -> AuthDataResult {
