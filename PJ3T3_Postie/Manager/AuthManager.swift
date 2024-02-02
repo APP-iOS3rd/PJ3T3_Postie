@@ -92,20 +92,17 @@ class AuthManager: ObservableObject {
     
     func createUser(authDataResult: AuthDataResult, nickname: String) async throws {
         do {
-            DispatchQueue.main.async {
-                self.userSession = authDataResult.user //result에서 user값을 받아와 userSession에 넣어줌
-            }
-            
+            //입력받은 데이터를 바탕으로 User 프로퍼티 생성
             let postieUser = PostieUser(id: authDataResult.user.uid,
                                         fullName: authDataResult.user.displayName ?? "익명의 포스티",
                                         nickname: nickname,
                                         email: authDataResult.user.email ?? "No Email?!",
                                         profileImageUrl: authDataResult.user.photoURL?.absoluteString)
             
-            //4. Encode the object throught the codable protocol
+            //유저 구조체 인코딩
             let encodedUser = try Firestore.Encoder().encode(postieUser)
             
-            //5. Upload data to Firestore
+            //Firebase 업로드
             try await Firestore.firestore().collection("users").document(postieUser.id).setData(encodedUser)
             
             //회원가입을 하면 userSession이 업데이트 되며 Firestore에 데이터를 저장하는데,
