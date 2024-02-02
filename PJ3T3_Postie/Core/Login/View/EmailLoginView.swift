@@ -44,7 +44,7 @@ struct EmailLoginView: View {
                     //Sign in Button
                     Button {
                         Task {
-                            try await authViewModel.signIn(withEamil: email, password: password)
+                            try await authViewModel.signInWithEmail(withEamil: email, password: password)
                         }
                     } label: {
                         HStack {
