@@ -89,6 +89,9 @@ class AuthManager: ObservableObject {
                 print("This user is logged in without nickname")
             }
         }
+        
+        FirestoreManager.shared.fetchReference()
+        StorageManager.shared.fetchReference()
     }
     
     func createUser(authDataResult: AuthDataResult, nickname: String) async throws {
