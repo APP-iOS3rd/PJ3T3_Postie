@@ -16,12 +16,13 @@ struct MapView: View {
     
     @StateObject var naverGeocodeAPI = NaverGeocodeAPI.shared
     @StateObject var officeInfoServiceAPI = OfficeInfoServiceAPI.shared
-    @StateObject var locationManager = LocationManager.shared
+    @StateObject var locationManager = LocationManager() // 지금 위치를 알기 위한 값
     @StateObject var coordinator: Coordinator = Coordinator.shared
     
     //    @State private var selectedPostDivType: Int = 1 //Dafault 우체국(1)
     @State private var selectedButtonIndex: Int = 0
-    @State var coord: MyCoord = MyCoord(37.579081, 126.974375)
+    @State var coord: MyCoord = MyCoord(37.579081, 126.974375) //Dafult값
+//    @State var coord: MyCoord?
     
     var body: some View {
         NavigationStack {
@@ -64,21 +65,15 @@ struct MapView: View {
                 }
                 .padding()
             }
-            
+            //여기에서 좌표를 이동 시키는건데 coord값을 잘 전달 받으면 될꺼같은데.. 현재 default값을 받는다.
             NaverMap(coord: coord)
-                .ignoresSafeArea(.all, edges: .top)
+                    .ignoresSafeArea(.all, edges: .top)
         }
-        // 추후 사용 예정
-        //        .navigationBarTitle("Postie Map")
-        //        .foregroundStyle(Color(hex: 0x1E1E1E))
         .onAppear() {
             CLLocationManager().requestWhenInUseAuthorization()
             officeInfoServiceAPI.fetchData(postDivType: 1)
-            if let currentLocation = locationManager.currentLocation {
-                coord = MyCoord(currentLocation.coordinate.latitude,
-                                currentLocation.coordinate.longitude)
-                print("현재위치: \(coord)")
-            }
+            locationManager.startUpdatingLocation()
+//            coord = MyCoord(locationManager.location?.coordinate.latitude ?? 37.579081,locationManager.location?.coordinate.longitude ?? 126.974375)
         }
         .onChange(of: officeInfoServiceAPI.infos) { newInfos in
             coordinator.removeAllMakers()
@@ -86,7 +81,25 @@ struct MapView: View {
                 coordinator.addMarkerAndInfoWindow(latitude: Double(result.postLat)!, longitude: Double(result.postLon)!, caption: result.postNm)
             }
         }
+        .onChange(of: locationManager.location) { newLocation in
+            if let location = newLocation {
+                coord = MyCoord(location.coordinate.latitude, location.coordinate.longitude)
+                print("현재위치: \(coord)")
+            }
+        }
+//        .onChange(of: locationManager.isUpdatingLocation) { locations in
+//            if locations {
+//                locationManager.startUpdatingLocation()
+//            } else {
+//                locationManager.stopUpdatingLocation()
+//            }
+//            
+//        }
+        .onDisappear {
+            locationManager.stopUpdatingLocation()
+        }
         .zIndex(1)
+        
     }
 }
 

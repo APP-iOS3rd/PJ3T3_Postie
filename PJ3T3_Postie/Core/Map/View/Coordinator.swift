@@ -7,6 +7,7 @@
 
 import SwiftUI
 import UIKit
+import CoreLocation
 
 import NMapsMap
 
@@ -14,18 +15,19 @@ import NMapsMap
 // - NMFMapViewTouchDelegate 맵 터치할 때 필요한 델리게이트,
 // - CLLocationManagerDelegate 위치 관련해서 필요한 델리게이트
 
-class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate, NMFMapViewTouchDelegate, CLLocationManagerDelegate {
+class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate {
     
     static let shared = Coordinator()
     
     //    let startInfoWindow = NMFInfoWindow()
     let view = NMFNaverMapView(frame: .zero) // 지도 객체 생성
-    let locationManager = CLLocationManager()
+//    let locationManager = CLLocationManager()
     
     var markers: [NMFMarker] = []
     var coord: MyCoord = MyCoord(0.0,0.0) // 내 위치값 초기 설정
 
     @Published var currentLocation: CLLocation?
+    @Published var isUpdatingLocation: Bool = false
     
     override init() {
         super.init()
@@ -42,11 +44,13 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate, NMFMapV
         view.showScaleBar = true // 스케일 바 : 지도의 축척을 표현합니다. 지도를 조작하는 기능은 없습니다.
         
         view.mapView.addCameraDelegate(delegate: self)
-        view.mapView.touchDelegate = self
+//        view.mapView.touchDelegate = self
         
-        // 내 위치 확인
-//        locationManager!.delegate = self
-//        locationManager!.requestWhenInUseAuthorization()
+//         내 위치 확인
+//        locationManager.delegate = self
+//        locationManager.requestWhenInUseAuthorization()
+//        
+//        getCurrentLocation()
         
        
     }
@@ -98,12 +102,6 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate, NMFMapV
         locationOverlay.location = coord
     }
     
-//    func getCurrentLocation() {
-//        // 현재 위치를 일회성으로 전달
-//        locationManager.requestLocation()
-//        currentLocation = locationManager.location
-//    }
-    
     // 카메라를 옮기는 기능
     func moveCamera(coord: NMGLatLng, animation: NMFCameraUpdateAnimation = .none, duration: TimeInterval = 1) {
         let cameraUpdate = NMFCameraUpdate(scrollTo: coord)
@@ -119,11 +117,12 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate, NMFMapV
     }
     
     // 현재 위치 전달
-    func getCurrentLocation() {
-        // https://developer.apple.com/documentation/corelocation/cllocationmanager/1620548-requestlocation
-        locationManager.requestLocation()
-        currentLocation = locationManager.location
-    }
+//    func getCurrentLocation() {
+//        // https://developer.apple.com/documentation/corelocation/cllocationmanager/1620548-requestlocation
+//        locationManager.requestLocation()
+//        currentLocation = locationManager.location
+////        print(currentLocation)
+//    }
 
     
     // 마커 찍는 행위

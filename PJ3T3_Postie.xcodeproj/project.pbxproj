@@ -16,6 +16,7 @@
 		0E29F0E02B602E3D005B86FB /* MyCoord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E29F0DF2B602E3D005B86FB /* MyCoord.swift */; };
 		0E882AEE2B6B73DE00D8F2FC /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E882AED2B6B73DE00D8F2FC /* LocationManager.swift */; };
 		0E882AF02B6B79D800D8F2FC /* CoordinaterEtc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E882AEF2B6B79D800D8F2FC /* CoordinaterEtc.swift */; };
+		0E882AF12B6B907200D8F2FC /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9F6ACD2B5763CA003DFE83 /* AuthManager.swift */; };
 		0E9815FC2B6A23B500C9F5BA /* Shop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E9815FB2B6A23B500C9F5BA /* Shop.swift */; };
 		9E0FA11C2B54D27A001CEEB9 /* PJ3T3_PostieApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0FA11B2B54D27A001CEEB9 /* PJ3T3_PostieApp.swift */; };
 		9E0FA11E2B54D27A001CEEB9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0FA11D2B54D27A001CEEB9 /* ContentView.swift */; };
@@ -36,7 +37,6 @@
 		9E9F6AC82B5763AD003DFE83 /* SettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9F6AC72B5763AD003DFE83 /* SettingViewModel.swift */; };
 		9E9F6ACA2B5763B8003DFE83 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9F6AC92B5763B8003DFE83 /* LoginView.swift */; };
 		9E9F6ACC2B5763C3003DFE83 /* RegistrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9F6ACB2B5763C3003DFE83 /* RegistrationView.swift */; };
-		9E9F6ACE2B5763CA003DFE83 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9F6ACD2B5763CA003DFE83 /* AuthManager.swift */; };
 		9E9F6AD02B5763D0003DFE83 /* LoginInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9F6ACF2B5763D0003DFE83 /* LoginInputView.swift */; };
 		9E9F6AD22B5763F3003DFE83 /* SettingsRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9F6AD12B5763F3003DFE83 /* SettingsRowView.swift */; };
 		9E9F6AD42B576411003DFE83 /* LetterDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9F6AD32B576411003DFE83 /* LetterDetailView.swift */; };
@@ -641,6 +641,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0E882AF12B6B907200D8F2FC /* AuthManager.swift in Sources */,
 				CE7E50782B579D6800955F31 /* AddLetterViewModel.swift in Sources */,
 				CE6E08452B5E09D900CFBF2A /* LetterDetailViewModel.swift in Sources */,
 				9E9F6AB62B5762E5003DFE83 /* HomeView.swift in Sources */,
@@ -657,9 +658,7 @@
 				CE6597042B5FB1E100A3C136 /* AddLetterView.swift in Sources */,
 				9E9F6AD02B5763D0003DFE83 /* LoginInputView.swift in Sources */,
 				9E9F6AD82B57642D003DFE83 /* FirestoreManager.swift in Sources */,
-				9E9F6ACE2B5763CA003DFE83 /* AuthManager.swift in Sources */,
 				9EA106772B63C5C90033E7A8 /* LetterPhoto.swift in Sources */,
-				9E9F6ACE2B5763CA003DFE83 /* AuthManager.swift in Sources */,
 				CEF09E472B57BD8500BE67E4 /* LetterImageFullScreenView.swift in Sources */,
 				9E9F6AC42B57639D003DFE83 /* ShopViewModel.swift in Sources */,
 				CEF09E452B57B6C500BE67E4 /* UIImagePicker.swift in Sources */,
