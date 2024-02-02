@@ -86,7 +86,6 @@ struct GroupedLetterView: View {
                                     .foregroundStyle(Color(hex: 0xFF5733))
                             }
                         }
-                        
                         .padding()
                         .frame(width: 350, height: 130)
                         .background(

@@ -23,9 +23,15 @@ struct ListLetterView: View {
                     HStack {
                         VStack(alignment: .leading) {
                             HStack {
-                                Text("To.")
-                                    .font(.custom("SourceSerifPro-Black", size: 18))
-                                    .foregroundColor(.black)
+                                if letter.isReceived {
+                                    Text("To.")
+                                        .font(.custom("SourceSerifPro-Black", size: 18))
+                                        .foregroundColor(.black)
+                                } else {
+                                    Text("From.")
+                                        .font(.custom("SourceSerifPro-Black", size: 18))
+                                        .foregroundColor(.black)
+                                }
                                 
                                 Text("\(letter.recipient)")
                                 
