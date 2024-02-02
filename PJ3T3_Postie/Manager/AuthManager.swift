@@ -20,11 +20,11 @@ enum AuthProviderOption: String {
 
 class AuthManager: ObservableObject {
     static let shared = AuthManager()
+    var hasAccount: Bool = true
     @Published var userUid: String  = ""
     @Published var userSession: FirebaseAuth.User? //Firebase user object
     @Published var currentUser: PostieUser? //User Data Model
     @Published var authDataResult: AuthDataResult?
-    @Published var hasAccount: Bool = true
     
     private init() {
         Task {
