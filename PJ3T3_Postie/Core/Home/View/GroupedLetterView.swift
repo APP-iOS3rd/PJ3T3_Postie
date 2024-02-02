@@ -44,6 +44,7 @@ struct GroupedLetterView: View {
                         .offset(x: 5, y: 5)
                         .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
                 }
+                
                 NavigationLink {
                     GroupedFavoriteListLetter()
                 } label: {
@@ -96,6 +97,7 @@ struct GroupedLetterView: View {
                     }
                 }
             }
+            .padding(.bottom)
             
             Spacer()
         }
@@ -105,7 +107,6 @@ struct GroupedLetterView: View {
             let countOfMatchingRecipients = firestoreManager.letters
                 .filter { $0.recipient == recipient }
                 .count
-            
             let countOfMatchingWriters = firestoreManager.letters
                 .filter { $0.writer == recipient }
                 .count
@@ -171,6 +172,7 @@ struct GroupedLetterView: View {
                                 .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
                         )
                     }
+                    .padding(.bottom)
                     
                     Spacer()
                 }

@@ -81,6 +81,7 @@ struct GroupedListLetterView: View {
                                             Spacer()
                                         }
                                     }
+                                    .padding(5)
                                 }
                             }
                         }
@@ -153,7 +154,6 @@ struct GroupedListLetterView: View {
             }
             .foregroundStyle(Color(hex: 0x1E1E1E))
             .tint(Color.init(hex: 0x1E1E1E))
-            .padding()
         }
     }
 }
