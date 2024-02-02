@@ -18,83 +18,24 @@ struct HomeView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                ZStack(alignment: .bottomTrailing) {
-                    ScrollView {
-                        if currentGroupPage == 0 {
-                            VStack {
-                                GroupedLetterView()
-                            }
-                        } else {
-                            VStack {
-                                ListLetterView()
-                            }
-                            .padding()
-                        }
-                        // ScrollView margin 임시
-                        Rectangle()
-                            .frame(height: 70)
-                            .foregroundStyle(Color.black.opacity(0))
-                    }
-                    .searchable(text: $search)
-                    .background(Color(hex: 0xF5F1E8))
-                    
-                    Menu {
-                        NavigationLink(destination: AddLetterView(isReceived: false)) {
-                            Button (action: {
-                            }) {
-                                HStack {
-                                    Text("나의 느린 우체통")
-                                    
-                                    Image(systemName: "envelope.open.badge.clock")
-                                }
-                            }
-                        }
-                        
-                        NavigationLink(destination: AddLetterView(isReceived: true)) {
-                            Button (action: {
-                            }) {
-                                HStack {
-                                    Text("받은 편지 저장")
-                                    
-                                    Image(systemName: "envelope.open")
-                                }
-                            }
-                        }
-                        
-                        NavigationLink(destination: AddLetterView(isReceived: false)) {
-                            Button (action: {
-                            }) {
-                                HStack {
-                                    Text("보낸 편지 저장")
-                                    
-                                    Image(systemName: "paperplane")
-                                }
-                            }
-                        }
-                    } label: {
-                        ZStack {
-                            Circle()
-                                .foregroundStyle(Color(hex: 0xFF5733))
-                                .frame(width:70,height:70)
-                            
-                            Image(systemName: "envelope.open")
-                                .foregroundStyle(Color(hex: 0xF7F7F7))
-                                .font(.title2)
-                                .offset(y: -3)
-                        }
-                    }
-                    .foregroundStyle(Color(hex: 0xF7F7F7))
-                    .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
-                    .imageScale(.large)
-                    .padding()
-                }
-                .foregroundStyle(Color(hex: 0x1E1E1E))
-                .navigationBarItems(leading: (
+                Color.postieBeige
+                    .ignoresSafeArea()
+                
+                VStack(spacing: 0) {
                     HStack {
                         Text("Postie")
                             .font(.custom("SourceSerifPro-Black", size: 40))
-                            .foregroundStyle(Color(hex: 0xFF5733))
-                    }), trailing: (
+                            .foregroundStyle(Color.postieOrange)
+                        
+                        Spacer()
+                        
+                        Button(action: {
+                        }) {
+                            Image(systemName: "magnifyingglass")
+                                .imageScale(.large)
+                                .padding(.horizontal, 5)
+                        }
+                        
                         Button(action: {
                             withAnimation {
                                 self.isSideMenuOpen.toggle()
@@ -103,7 +44,83 @@ struct HomeView: View {
                             Image(systemName: "line.horizontal.3")
                                 .imageScale(.large)
                         }
-                    ))
+                    }
+                    .background(Color.postieBeige)
+                    .padding(.horizontal)
+                    
+                    ZStack(alignment: .bottomTrailing) {
+                        ScrollView {
+                            if currentGroupPage == 0 {
+                                VStack {
+                                    GroupedLetterView()
+                                }
+                            } else {
+                                VStack {
+                                    ListLetterView()
+                                }
+                                .padding()
+                            }
+                            // ScrollView margin 임시
+                            Rectangle()
+                                .frame(height: 70)
+                                .foregroundStyle(Color.black.opacity(0))
+                        }
+                        .background(Color(hex: 0xF5F1E8))
+                        
+                        Menu {
+                            NavigationLink(destination: AddLetterView(isReceived: false)) {
+                                Button (action: {
+                                }) {
+                                    HStack {
+                                        Text("나의 느린 우체통")
+                                        
+                                        Image(systemName: "envelope.open.badge.clock")
+                                    }
+                                }
+                            }
+                            
+                            NavigationLink(destination: AddLetterView(isReceived: true)) {
+                                Button (action: {
+                                }) {
+                                    HStack {
+                                        Text("받은 편지 저장")
+                                        
+                                        Image(systemName: "envelope.open")
+                                    }
+                                }
+                            }
+                            
+                            NavigationLink(destination: AddLetterView(isReceived: false)) {
+                                Button (action: {
+                                }) {
+                                    HStack {
+                                        Text("보낸 편지 저장")
+                                        
+                                        Image(systemName: "paperplane")
+                                    }
+                                }
+                            }
+                        } label: {
+                            ZStack {
+                                Circle()
+                                    .foregroundStyle(Color(hex: 0xFF5733))
+                                    .frame(width:70,height:70)
+                                
+                                Image(systemName: "envelope.open")
+                                    .foregroundStyle(Color(hex: 0xF7F7F7))
+                                    .font(.title2)
+                                    .offset(y: -3)
+                            }
+                        }
+                        .foregroundStyle(Color(hex: 0xF7F7F7))
+                        .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
+                        .imageScale(.large)
+                        .padding()
+                    }
+                    .preferredColorScheme(.light)
+                }
+                .background(Color.postieBeige)
+                
                 if isSideMenuOpen {
                     Color.black.opacity(0.5)
                         .onTapGesture {
@@ -122,8 +139,9 @@ struct HomeView: View {
                 SideMenuView(isSideMenuOpen: $isSideMenuOpen, currentGroupPage: $currentGroupPage)
                     .offset(x: isSideMenuOpen ? 0 : UIScreen.main.bounds.width)
                     .animation(.easeInOut)
+                    .overlay(Color.clear)
             }
-            .tint(Color(hex: 0x1E1E1E))
+            .tint(Color.init(hex: 0x1E1E1E))
         }
     }
 }
