@@ -58,11 +58,22 @@ class AuthManager: ObservableObject {
         DispatchQueue.main.async {
             //Firestore에서 받은 데이터를 User model에 맞는 형태로 변환하여 currentUser에 값을 부여한다.
             self.currentUser = try? snapshot.data(as: PostieUser.self)
-            print("DEBUG: Current user is \(String(describing: self.currentUser))")
-        }
-        
-        if let userUid = Auth.auth().currentUser?.uid {
-            self.userUid = userUid
+            print(#function, "Current user is \(String(describing: self.currentUser))")
+            
+            //hasAccount의 default는 ture로 로그인 과정에서 account가 있는지 확인하는 동안 ProgressView를 보여준다.
+            //이 과정이 없을 경우 로그인 계정이 있음에도 NicknameView가 잠시 나타났다가 홈 뷰로 넘어가는 문제가 발생한다.
+            if self.currentUser != nil {
+                self.hasAccount = true
+            } else {
+                self.hasAccount = false
+            }
+            
+            //NicknameView에서 아무 이름도 입력하지 않은 경우를 판별한다. 필요 없을 경우 삭제할 예정
+            if self.currentUser?.nickname != "" {
+                print(self.currentUser?.nickname)
+            } else {
+                print("This user is logged in without nickname")
+            }
         }
     }
     
