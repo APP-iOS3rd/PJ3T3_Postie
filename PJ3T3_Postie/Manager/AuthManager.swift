@@ -23,6 +23,7 @@ class AuthManager: ObservableObject {
     @Published var userUid: String  = ""
     @Published var userSession: FirebaseAuth.User? //Firebase user object
     @Published var currentUser: PostieUser? //User Data Model
+    @Published var hasAccount: Bool = true
     
     private init() {
         Task {
