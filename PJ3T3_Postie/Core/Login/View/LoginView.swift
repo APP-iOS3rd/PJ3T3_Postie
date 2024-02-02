@@ -51,7 +51,8 @@ struct LoginView: View {
                     GoogleSignInButton(viewModel: GoogleSignInButtonViewModel(scheme: .light, style: .wide, state: .normal)) {
                         Task {
                             do {
-                                try await authViewModel.signInWithGoogle(nickname: "익명의 포스티이")
+                                let credential = try await authViewModel.signInWithGoogle()
+                                authViewModel.authDataResult = try await authViewModel.signInWithSSO(credential: credential)
                             } catch {
                                 print(error)
                             }
