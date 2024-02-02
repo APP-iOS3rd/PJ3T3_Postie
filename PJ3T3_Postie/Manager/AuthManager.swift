@@ -117,6 +117,7 @@ class AuthManager: ObservableObject {
     func signOut() {
         do {
             try Auth.auth().signOut() //Signs out user on backend
+            self.userSession = nil //userSession의 데이터가 사라지며 ContentView에서 Login하기 전 화면을 보여주게 된다.
             self.currentUser = nil //데이터 모델을 초기화시켜 현재 유저의 데이터를 지운다.
         } catch {
             print("DEBUG: Failed to sign out with error \(error.localizedDescription)")
