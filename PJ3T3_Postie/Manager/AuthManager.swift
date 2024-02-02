@@ -20,28 +20,37 @@ enum AuthProviderOption: String {
 
 class AuthManager: ObservableObject {
     static let shared = AuthManager()
-    var userUid: String  = ""
+    @Published var userUid: String  = ""
     @Published var userSession: FirebaseAuth.User? //Firebase user object
     @Published var currentUser: PostieUser? //User Data Model
     
     private init() {
-        //viewModel이 init될 때 이미 존재하는 user가 있는지 확인한다.
-        //이 기능은 Firebase에서 제공하는 기능으로 currentUser가 로그인을 했는지(한 상태인지)에 대한 정보를 디바이스에 캐시 데이터로 저장해 둔다.
-        self.userSession = Auth.auth().currentUser
-        //로그인된 유저가 있는지 확인해서 firebase에서 제공하는 userUid를 가지고온다.
-        if let userUid = Auth.auth().currentUser?.uid {
-            self.userUid = userUid
-        }
-        
         Task {
             await fetchUser()
         }
     }
     
     func fetchUser() async {
-        //현재 로그인중인 유저가 있다면 fetch가 진행된다. 로그인 유저가 없다면 해당 guard문을 통과하지 못하고 return된다.
-        guard let uid = Auth.auth().currentUser?.uid else { return }
-        guard let snapshot = try? await Firestore.firestore().collection("users").document(uid).getDocument() else { return }
+        DispatchQueue.main.async {
+            //입력받은 정보가 Authentication에 존재하는 계정인지 확인한다.
+            self.userSession = Auth.auth().currentUser
+            print(self.userSession)
+        }
+        
+        guard let uid = Auth.auth().currentUser?.uid else {
+            print(#function, "Returned since no userSession")
+            return
+        }
+        
+        DispatchQueue.main.async {
+            print(#function, "User uid updated")
+            self.userUid = uid
+        }
+        
+        guard let snapshot = try? await Firestore.firestore().collection("users").document(uid).getDocument() else {
+            print(#function, "Failed to fetch user data from firestore")
+            return
+        }
         
         //UI 업데이트는 꼭 메인 스레드에서 진행되어야 하는데
         //비동기 네트워킹은 기본적으로 메인이 아닌 다른 스레드에서 진행되므로 UI 업데이트를 하는 Publish가 반드시 메인 스레드에서 수행되도록 설정하기 위해
@@ -87,7 +96,6 @@ class AuthManager: ObservableObject {
     func signOut() {
         do {
             try Auth.auth().signOut() //Signs out user on backend
-            self.userSession = nil //userSession의 데이터가 사라지며 ContentView에서 Login하기 전 화면을 보여주게 된다.
             self.currentUser = nil //데이터 모델을 초기화시켜 현재 유저의 데이터를 지운다.
         } catch {
             print("DEBUG: Failed to sign out with error \(error.localizedDescription)")
@@ -140,10 +148,6 @@ extension AuthManager {
     func signIn(withEamil email: String, password: String) async throws {
         do {
             let result = try await Auth.auth().signIn(withEmail: email, password: password)
-            
-            DispatchQueue.main.async {
-                self.userSession = result.user
-            }
             
             //fetchUser가 uid로 firebase에서 데이터를 찾기 위해서는 반드시 signIn이 완료 된 다음 fetchUser 함수를 호출해야 한다.
             await fetchUser()
