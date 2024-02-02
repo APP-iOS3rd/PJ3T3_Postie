@@ -90,6 +90,7 @@ struct MapView: View {
                 print("현재위치: \(coord)")
             }
         }
+        
         // 카메라 위치 바뀌면 그 값에 따라 좌표 실시간으로 바꾸기 구현 예정
         //        .onChange(of: locationManager.isUpdatingLocation) { locations in
         //            if locations {
