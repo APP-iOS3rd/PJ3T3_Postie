@@ -16,15 +16,14 @@ struct HomeView: View {
     @State private var currentGroupPage: Int = 0
     
     var body: some View {
-        ZStack {
-            NavigationStack {
+        NavigationStack {
+            ZStack {
                 ZStack(alignment: .bottomTrailing) {
                     ScrollView {
                         if currentGroupPage == 0 {
                             VStack {
                                 GroupedLetterView()
                             }
-                            .padding()
                         } else {
                             VStack {
                                 ListLetterView()
@@ -105,30 +104,27 @@ struct HomeView: View {
                                 .imageScale(.large)
                         }
                     ))
-            }
-            .toolbarBackground(
-                Color(hex: 0xF5F1E8),
-                for: .tabBar)
-            if isSideMenuOpen {
-                Color.black.opacity(0.5)
-                    .onTapGesture {
-                        withAnimation {
-                            self.isSideMenuOpen.toggle()
+                if isSideMenuOpen {
+                    Color.black.opacity(0.5)
+                        .onTapGesture {
+                            withAnimation {
+                                self.isSideMenuOpen.toggle()
+                            }
                         }
-                    }
-                    .edgesIgnoringSafeArea(.all)
+                        .edgesIgnoringSafeArea(.all)
+                }
+                
+                // 세팅 뷰
+                //            SettingView()
+                //                .offset(x: isSideMenuOpen ? 0 : UIScreen.main.bounds.width)
+                //                .animation(.easeInOut)
+                // 임시 세팅뷰
+                SideMenuView(isSideMenuOpen: $isSideMenuOpen, currentGroupPage: $currentGroupPage)
+                    .offset(x: isSideMenuOpen ? 0 : UIScreen.main.bounds.width)
+                    .animation(.easeInOut)
             }
-            
-            // 세팅 뷰
-            //            SettingView()
-            //                .offset(x: isSideMenuOpen ? 0 : UIScreen.main.bounds.width)
-            //                .animation(.easeInOut)
-            // 임시 세팅뷰
-            SideMenuView(isSideMenuOpen: $isSideMenuOpen, currentGroupPage: $currentGroupPage)
-                .offset(x: isSideMenuOpen ? 0 : UIScreen.main.bounds.width)
-                .animation(.easeInOut)
+            .tint(Color(hex: 0x1E1E1E))
         }
-        .tint(Color.init(hex: 0x1E1E1E))
     }
 }
 

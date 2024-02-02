@@ -27,96 +27,13 @@ struct GroupedLetterView: View {
         // 좋아하는 편지들
         let favoriteLetters = firestoreManager.letters.filter { $0.isFavorite }
         
-        HStack { // 좋아하는 편지 뷰
-            ZStack {
-                if favoriteLetters.count > 2 {
-                    RoundedRectangle(cornerRadius: 10)
-                        .foregroundStyle(Color(hex: 0xFCFBF7))
-                        .frame(width: 350, height: 130)
-                        .offset(x: 10, y: 10)
-                        .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
-                }
-                
-                if favoriteLetters.count > 1 {
-                    RoundedRectangle(cornerRadius: 10)
-                        .foregroundStyle(Color(hex: 0xFCFBF7))
-                        .frame(width: 350, height: 130)
-                        .offset(x: 5, y: 5)
-                        .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
-                }
-                
-                NavigationLink {
-                    GroupedFavoriteListLetter()
-                } label: {
-                    HStack {
-                        VStack(alignment: .leading) {
-                            HStack {
-                                Text("From.")
-                                    .font(.custom("SourceSerifPro-Black", size: 18))
-                                    .foregroundColor(.black)
-                                
-                                Text("\("좋아하는 편지들") \(favoriteLetters.count)")
-                                    .foregroundStyle(Color(hex: 0x1E1E1E))
-                                
-                                Spacer()
-                                
-                                Text(" ") // date
-                                    .font(.custom("SourceSerifPro-Light", size: 18))
-                                    .foregroundStyle(Color(hex: 0x1E1E1E))
-                                
-                                ZStack {
-                                    Image(systemName: "water.waves")
-                                        .font(.headline)
-                                        .offset(x:18)
-                                    
-                                    Image(systemName: "sleep.circle")
-                                        .font(.largeTitle)
-                                }
-                                .foregroundStyle(Color(hex: 0x979797))
-                            }
-                            
-                            Spacer()
-                            
-                            HStack {
-                                Text("\"\"")
-                                
-                                Spacer()
-                                
-                                Image(systemName: "heart.fill")
-                                    .font(.title2)
-                                    .foregroundStyle(Color(hex: 0xFF5733))
-                            }
-                        }
-                        .padding()
-                        .frame(width: 350, height: 130)
-                        .background(
-                            RoundedRectangle(cornerRadius: 10)
-                                .foregroundStyle(Color(hex: 0xFCFBF7))
-                                .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
-                        )
-                    }
-                }
-            }
-            .padding(.bottom)
-            
-            Spacer()
-        }
-        
-        // 편지 그룹 뷰
-        ForEach(filteredLetterGrouped, id: \.self) { recipient in
-            let countOfMatchingRecipients = firestoreManager.letters
-                .filter { $0.recipient == recipient }
-                .count
-            let countOfMatchingWriters = firestoreManager.letters
-                .filter { $0.writer == recipient }
-                .count
-            
-            NavigationLink {
-                GroupedListLetterView(recipient: recipient)
+        VStack {
+            NavigationLink { // 좋아하는 편지 뷰
+                GroupedFavoriteListLetter()
             } label: {
                 HStack {
                     ZStack {
-                        if countOfMatchingRecipients + countOfMatchingWriters > 2 {
+                        if favoriteLetters.count > 2 {
                             RoundedRectangle(cornerRadius: 10)
                                 .foregroundStyle(Color(hex: 0xFCFBF7))
                                 .frame(width: 350, height: 130)
@@ -124,7 +41,7 @@ struct GroupedLetterView: View {
                                 .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
                         }
                         
-                        if countOfMatchingRecipients + countOfMatchingWriters > 1 {
+                        if favoriteLetters.count > 1 {
                             RoundedRectangle(cornerRadius: 10)
                                 .foregroundStyle(Color(hex: 0xFCFBF7))
                                 .frame(width: 350, height: 130)
@@ -135,11 +52,11 @@ struct GroupedLetterView: View {
                         HStack {
                             VStack(alignment: .leading) {
                                 HStack {
-                                    Text("From.")
+                                    Text("My Favorite.")
                                         .font(.custom("SourceSerifPro-Black", size: 18))
                                         .foregroundColor(.black)
                                     
-                                    Text("\(recipient) \(countOfMatchingRecipients + countOfMatchingWriters)")
+                                    Text("\("좋아하는 편지 ") \(favoriteLetters.count)")
                                         .foregroundStyle(Color(hex: 0x1E1E1E))
                                     
                                     Spacer()
@@ -161,20 +78,108 @@ struct GroupedLetterView: View {
                                 
                                 Spacer()
                                 
-                                Text("\"\"")
+                                HStack {
+                                    Text("\"\"")
+                                    
+                                    Spacer()
+                                    
+                                    Image(systemName: "heart.fill")
+                                        .font(.title2)
+                                        .foregroundStyle(Color(hex: 0xFF5733))
+                                }
                             }
+                            .padding()
+                            .frame(width: 350, height: 130)
+                            .background(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .foregroundStyle(Color(hex: 0xFCFBF7))
+                                    .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
+                            )
                         }
-                        .padding()
-                        .frame(width: 350, height: 130)
-                        .background(
-                            RoundedRectangle(cornerRadius: 10)
-                                .foregroundStyle(Color(hex: 0xFCFBF7))
-                                .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
-                        )
                     }
-                    .padding(.bottom)
-                    
-                    Spacer()
+                }
+                
+                Spacer()
+            }
+            .padding()
+            
+            // 편지 그룹 뷰
+            ForEach(filteredLetterGrouped, id: \.self) { recipient in
+                // 받거나 보낸 사람 수 확인
+                let countOfMatchingRecipients = firestoreManager.letters
+                    .filter { $0.recipient == recipient }
+                    .count
+                let countOfMatchingWriters = firestoreManager.letters
+                    .filter { $0.writer == recipient }
+                    .count
+                
+                NavigationLink {
+                    GroupedListLetterView(recipient: recipient)
+                } label: {
+                    HStack {
+                        ZStack {
+                            if countOfMatchingRecipients + countOfMatchingWriters > 2 {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .foregroundStyle(Color(hex: 0xFCFBF7))
+                                    .frame(width: 350, height: 130)
+                                    .offset(x: 10, y: 10)
+                                    .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
+                            }
+                            
+                            if countOfMatchingRecipients + countOfMatchingWriters > 1 {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .foregroundStyle(Color(hex: 0xFCFBF7))
+                                    .frame(width: 350, height: 130)
+                                    .offset(x: 5, y: 5)
+                                    .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
+                            }
+                            
+                            HStack {
+                                VStack(alignment: .leading) {
+                                    HStack {
+                                        Text("From.")
+                                            .font(.custom("SourceSerifPro-Black", size: 18))
+                                            .foregroundColor(.black)
+                                        
+                                        // 편지 갯수 확인용 임시 코드
+                                        Text("\(recipient) \(countOfMatchingRecipients + countOfMatchingWriters)")
+                                            .foregroundStyle(Color(hex: 0x1E1E1E))
+                                        
+                                        Spacer()
+                                        
+                                        Text(" ") // date
+                                            .font(.custom("SourceSerifPro-Light", size: 18))
+                                            .foregroundStyle(Color(hex: 0x1E1E1E))
+                                        
+                                        ZStack {
+                                            Image(systemName: "water.waves")
+                                                .font(.headline)
+                                                .offset(x:18)
+                                            
+                                            Image(systemName: "sleep.circle")
+                                                .font(.largeTitle)
+                                        }
+                                        .foregroundStyle(Color(hex: 0x979797))
+                                    }
+                                    
+                                    Spacer()
+                                    
+                                    Text("\"\"")
+                                }
+                            }
+                            .padding()
+                            .frame(width: 350, height: 130)
+                            .background(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .foregroundStyle(Color(hex: 0xFCFBF7))
+                                    .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
+                            )
+                        }
+                        .padding(.horizontal)
+                        .padding(.bottom, 8)
+                        
+                        Spacer()
+                    }
                 }
             }
         }

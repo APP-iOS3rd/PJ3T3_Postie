@@ -88,7 +88,7 @@ struct GroupedFavoriteListLetter: View {
                                             Spacer()
                                         }
                                     }
-                                    .padding(5)
+                                    .padding(.horizontal)
                                 }
                             }
                         }
