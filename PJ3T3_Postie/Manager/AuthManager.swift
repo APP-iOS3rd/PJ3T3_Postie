@@ -59,7 +59,7 @@ class AuthManager: ObservableObject {
         }
         
         DispatchQueue.main.async {
-            print(#function, "User uid updated")
+            print(#function, "User uid updated: \(uid)")
             self.userUid = uid
         }
         
