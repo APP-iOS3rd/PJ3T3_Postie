@@ -280,7 +280,6 @@ extension AddLetterView {
                     .opacity(addLetterViewModel.text.isEmpty ? 0.25 : 1)
                     .focused($focusField, equals: .text)
             }
-
         }
 
         VStack(alignment: .leading, spacing: 4) {
