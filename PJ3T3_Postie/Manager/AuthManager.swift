@@ -169,7 +169,7 @@ extension AuthManager {
 
 // MARK: Sign in Email
 extension AuthManager {
-    func signIn(withEamil email: String, password: String) async throws {
+    func signInWithEmail(withEamil email: String, password: String) async throws {
         do {
             let result = try await Auth.auth().signIn(withEmail: email, password: password)
             
@@ -182,6 +182,15 @@ extension AuthManager {
 
     func createEmailUser(withEamil email: String, password: String, fullName: String, nickname: String) async throws {
         let authDataResult = try await Auth.auth().createUser(withEmail: email, password: password)
+        let changeRequest = Auth.auth().currentUser?.createProfileChangeRequest()
+        
+        changeRequest?.displayName = fullName
+        
+        do {
+            try await changeRequest?.commitChanges()
+        } catch {
+            print(#function, "Unable to update the user's displayname: \(error.localizedDescription)")
+        }
         
         try await createUser(authDataResult: authDataResult, nickname: nickname)
     }
