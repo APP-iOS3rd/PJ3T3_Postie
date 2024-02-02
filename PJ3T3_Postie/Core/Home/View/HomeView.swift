@@ -8,13 +8,11 @@
 import SwiftUI
 
 struct HomeView: View {
-    @State private var search: String = ""
-    @State private var showAlert = false
-    @State private var isSideMenuOpen = false
     @ObservedObject var firestoreManager = FirestoreManager.shared
     @ObservedObject var storageManager = StorageManager.shared
-    @State private var currentGroupPage: Int = 0
+    @State private var isSideMenuOpen = false
     @State private var isTabGroupButton = true
+    @State private var currentGroupPage: Int = 0
     
     var body: some View {
         NavigationStack {
@@ -59,8 +57,8 @@ struct HomeView: View {
                                 VStack {
                                     ListLetterView()
                                 }
-                                .padding()
                             }
+                            
                             // ScrollView margin 임시
                             Rectangle()
                                 .frame(height: 80)
@@ -68,59 +66,10 @@ struct HomeView: View {
                         }
                         .background(Color.postieBeige)
                         
-                        Menu {
-                            NavigationLink(destination: AddLetterView(isReceived: false)) {
-                                Button (action: {
-                                }) {
-                                    HStack {
-                                        Text("나의 느린 우체통")
-                                        
-                                        Image(systemName: "envelope.open.badge.clock")
-                                    }
-                                }
-                            }
-                            
-                            NavigationLink(destination: AddLetterView(isReceived: true)) {
-                                Button (action: {
-                                }) {
-                                    HStack {
-                                        Text("받은 편지 저장")
-                                        
-                                        Image(systemName: "envelope.open")
-                                    }
-                                }
-                            }
-                            
-                            NavigationLink(destination: AddLetterView(isReceived: false)) {
-                                Button (action: {
-                                }) {
-                                    HStack {
-                                        Text("보낸 편지 저장")
-                                        
-                                        Image(systemName: "paperplane")
-                                    }
-                                }
-                            }
-                        } label: {
-                            ZStack {
-                                Circle()
-                                    .foregroundStyle(Color.postieOrange)
-                                    .frame(width:70,height:70)
-                                
-                                Image(systemName: "envelope.open")
-                                    .foregroundStyle(Color.postieWhite)
-                                    .font(.title2)
-                                    .offset(y: -3)
-                            }
-                        }
-                        .foregroundStyle(Color.postieLightGray)
-                        .shadow(color: Color.postieBlack.opacity(0.1), radius: 3, x: 3, y: 3)
-                        .imageScale(.large)
-                        .padding()
+                        AddLetterButton()
                     }
                     .preferredColorScheme(.light)
                 }
-                .background(Color.postieBeige)
                 
                 if isSideMenuOpen {
                     Color.black.opacity(0.5)
@@ -178,10 +127,7 @@ struct SideMenuView: View {
                 Text("프로필 설정")
                     .foregroundStyle(Color.postieDarkGray)
                 
-                Rectangle()
-                    .foregroundStyle(Color.postieDarkGray)
-                    .frame(height: 1)
-                    .padding(.bottom)
+                DividerView()
                 
                 NavigationLink(destination: ProfileView()) {
                     HStack {
@@ -212,10 +158,7 @@ struct SideMenuView: View {
                 Text("테마 설정")
                     .foregroundStyle(Color.postieDarkGray)
                 
-                Rectangle()
-                    .foregroundStyle(Color.postieDarkGray)
-                    .frame(height: 1)
-                    .padding(.bottom)
+                DividerView()
                 
                 NavigationLink(destination: ThemeView(isTabGroupButton: $isTabGroupButton, currentGroupPage: $currentGroupPage)) {
                     HStack {
@@ -232,10 +175,7 @@ struct SideMenuView: View {
                 Text("앱 설정")
                     .foregroundStyle(Color.postieDarkGray)
                 
-                Rectangle()
-                    .frame(height: 1)
-                    .foregroundStyle(Color.postieDarkGray)
-                    .padding(.bottom)
+                DividerView()
                 
                 HStack {
                     Text("공지사항")
@@ -289,6 +229,48 @@ struct SideMenuView: View {
             .background(Color.postieBeige)
         }
         .tint(Color.postieBlack)
+    }
+}
+
+struct AddLetterButton: View {
+    var body: some View {
+        Menu {
+            NavigationLink(destination: AddLetterView(isReceived: false)) {
+                Label("나의 느린 우체통", systemImage: "envelope.open.badge.clock")
+            }
+            
+            NavigationLink(destination: AddLetterView(isReceived: true)) {
+                Label("받은 편지 저장", systemImage: "envelope.open")
+            }
+            
+            NavigationLink(destination: AddLetterView(isReceived: false)) {
+                Label("보낸 편지 저장", systemImage: "paperplane")
+            }
+        } label: {
+            ZStack {
+                Circle()
+                    .foregroundStyle(Color.postieOrange)
+                    .frame(width: 70, height: 70)
+                
+                Image(systemName: "envelope.open")
+                    .foregroundStyle(Color.postieWhite)
+                    .font(.title2)
+                    .offset(y: -3)
+            }
+        }
+        .foregroundStyle(Color.postieLightGray)
+        .shadow(color: Color.postieBlack.opacity(0.1), radius: 3, x: 3, y: 3)
+        .imageScale(.large)
+        .padding()
+    }
+}
+
+struct DividerView: View {
+    var body: some View {
+        Rectangle()
+            .fill(Color.postieDarkGray)
+            .frame(height: 1)
+            .padding(.bottom)
     }
 }
 

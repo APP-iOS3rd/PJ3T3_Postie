@@ -8,11 +8,34 @@
 import SwiftUI
 
 struct GroupedLetterView: View {
-    var letterReceivedGrouped: [String] = []
-    var letterWritedGrouped: [String] = []
-    var letterGrouped: [String] = []
     @ObservedObject var firestoreManager = FirestoreManager.shared
     @ObservedObject var authManager = AuthManager.shared
+    private var letterReceivedGrouped: [String] = []
+    private var letterWritedGrouped: [String] = []
+    private var letterGrouped: [String] = []
+    
+    // 숫자, 한글, 알파벳 순서대로 정렬
+    func customSort(recipients: [String]) -> [String] {
+        return recipients.sorted { (lhs: String, rhs: String) -> Bool in
+            func isKorean(_ string: String) -> Bool {
+                for scalar in string.unicodeScalars {
+                    if CharacterSet(charactersIn: "가"..."힣").contains(scalar) {
+                        return true
+                    }
+                }
+                return false
+            }
+            
+            func isNumber(_ string: String) -> Bool {
+                return string.rangeOfCharacter(from: CharacterSet.decimalDigits) != nil
+            }
+            
+            let lhsPriority = (isNumber(lhs) ? 0 : isKorean(lhs) ? 1 : 2)
+            let rhsPriority = (isNumber(rhs) ? 0 : isKorean(rhs) ? 1 : 2)
+            
+            return lhsPriority == rhsPriority ? lhs < rhs : lhsPriority < rhsPriority
+        }
+    }
     
     var body: some View {
         // recipient 에서 중복 된것을 제외 후 letterReceivedGrouped 에 삽입
@@ -22,9 +45,11 @@ struct GroupedLetterView: View {
         // letterReceivedGrouped와 letterWritedGrouped를 합친 후 중복 제거
         let letterGrouped: [String] = Array(Set(letterReceivedGrouped + letterWritedGrouped))
         // 본인 이름 항목 제거
-        // "me" << 추후에는 authManager.currentUser?.fullName 로 해야함
+        // "me" << 추후에는 authManager.currentUser?.nickName 로 해야함
         let filteredLetterGrouped: [String] = letterGrouped.filter { $0 != "me" }
-        // 좋아하는 편지들
+        // 숫자, 한글, 알파벳 순서대로 정렬
+        let sortedRecipients = customSort(recipients: filteredLetterGrouped)
+        // 좋아하는 편지들만 필터
         let favoriteLetters = firestoreManager.letters.filter { $0.isFavorite }
         
         VStack {
@@ -56,7 +81,7 @@ struct GroupedLetterView: View {
                                         .font(.custom("SourceSerifPro-Black", size: 18))
                                         .foregroundColor(Color.postieBlack)
                                     
-                                    Text("\("좋아하는 편지 ") \(favoriteLetters.count)")
+                                    Text("\("좋아하는 편지 ")")
                                         .foregroundStyle(Color.postieBlack)
                                     
                                     Spacer()
@@ -101,10 +126,11 @@ struct GroupedLetterView: View {
                 
                 Spacer()
             }
-            .padding()
+            .padding(.horizontal)
+            .padding(.bottom, 8)
             
             // 편지 그룹 뷰
-            ForEach(filteredLetterGrouped, id: \.self) { recipient in
+            ForEach(sortedRecipients, id: \.self) { recipient in
                 // 받거나 보낸 사람 수 확인
                 let countOfMatchingRecipients = firestoreManager.letters
                     .filter { $0.recipient == recipient }
@@ -141,9 +167,8 @@ struct GroupedLetterView: View {
                                             .font(.custom("SourceSerifPro-Black", size: 18))
                                             .foregroundColor(Color.postieBlack)
                                         
-                                        // 편지 갯수 확인용 임시 코드
-                                        Text("\(recipient) \(countOfMatchingRecipients + countOfMatchingWriters)")
-                                            .foregroundStyle(Color.postieBlack)
+                                        Text("\(recipient)")
+                                            .foregroundColor(Color.postieBlack)
                                         
                                         Spacer()
                                         

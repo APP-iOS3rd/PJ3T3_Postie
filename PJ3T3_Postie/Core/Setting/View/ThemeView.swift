@@ -91,6 +91,7 @@ struct ThemeView: View {
                         }) {
                             VStack {
                                 Text("포스티 옐로우\n")
+                                
                                 Image("PostieTheme_PostieYellow")
                                     .resizable()
                                     .modifier(CustomImageModifier())

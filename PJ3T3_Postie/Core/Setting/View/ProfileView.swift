@@ -36,10 +36,7 @@ struct ProfileView: View {
                 Text("이름")
                     .foregroundStyle(Color.postieDarkGray)
                 
-                Rectangle()
-                    .frame(height: 1)
-                    .foregroundStyle(Color.postieDarkGray)
-                    .padding(.bottom)
+                DividerView()
                 
                 Text("Postie_test")
                     .font(.title3)
@@ -48,10 +45,7 @@ struct ProfileView: View {
                 Text("계정")
                     .foregroundStyle(Color.postieDarkGray)
                 
-                Rectangle()
-                    .frame(height: 1)
-                    .foregroundStyle(Color.postieDarkGray)
-                    .padding(.bottom)
+                DividerView()
                 
                 Text("postie@test.com")
                     .font(.title3)
@@ -60,10 +54,7 @@ struct ProfileView: View {
                 Text("구독정보")
                     .foregroundStyle(Color.postieDarkGray)
                 
-                Rectangle()
-                    .frame(height: 1)
-                    .foregroundStyle(Color.postieDarkGray)
-                    .padding(.bottom)
+                DividerView()
                 
                 Text("일반회원")
                     .font(.title3)
@@ -72,10 +63,7 @@ struct ProfileView: View {
                 Text("계정 관리")
                     .foregroundStyle(Color.postieDarkGray)
                 
-                Rectangle()
-                    .frame(height: 1)
-                    .foregroundStyle(Color.postieDarkGray)
-                    .padding(.bottom)
+                DividerView()
                 
                 Button {
                     authViewModel.signOut()
