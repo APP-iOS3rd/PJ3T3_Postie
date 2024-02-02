@@ -101,7 +101,7 @@ struct GroupedFavoriteListLetter: View {
                     .background(Color(hex: 0xF5F1E8))
                     
                     Menu {
-                        NavigationLink(destination: AddLetterView(isSendingLetter: true)) {
+                        NavigationLink(destination: AddLetterView(isReceived: true)) {
                             Button (action: {
                             }) {
                                 HStack {
@@ -112,7 +112,7 @@ struct GroupedFavoriteListLetter: View {
                             }
                         }
                         
-                        NavigationLink(destination: AddLetterView(isSendingLetter: false)) {
+                        NavigationLink(destination: AddLetterView(isReceived: false)) {
                             Button (action: {
                             }) {
                                 HStack {
@@ -123,7 +123,7 @@ struct GroupedFavoriteListLetter: View {
                             }
                         }
                         
-                        NavigationLink(destination: AddLetterView(isSendingLetter: true)) {
+                        NavigationLink(destination: AddLetterView(isReceived: true)) {
                             Button (action: {
                             }) {
                                 HStack {
