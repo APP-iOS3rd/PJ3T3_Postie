@@ -21,8 +21,7 @@ struct MapView: View {
     
     //    @State private var selectedPostDivType: Int = 1 //Dafault 우체국(1)
     @State private var selectedButtonIndex: Int = 0
-    @State var coord: MyCoord = MyCoord(37.579081, 126.974375) //Dafult값
-//    @State var coord: MyCoord?
+    @State var coord: MyCoord = MyCoord(37.579081, 126.974375) //Dafult값 (서울역)
     
     var body: some View {
         NavigationStack {
@@ -61,22 +60,25 @@ struct MapView: View {
                             }
                         }
                     }
+                    
                     Spacer()
                 }
                 .padding()
             }
-            //여기에서 좌표를 이동 시키는건데 coord값을 잘 전달 받으면 될꺼같은데.. 현재 default값을 받는다.
+            
             NaverMap(coord: coord)
-                    .ignoresSafeArea(.all, edges: .top)
+                .ignoresSafeArea(.all, edges: .top)
         }
         .onAppear() {
             CLLocationManager().requestWhenInUseAuthorization()
+            
             officeInfoServiceAPI.fetchData(postDivType: 1)
+            
             locationManager.startUpdatingLocation()
-//            coord = MyCoord(locationManager.location?.coordinate.latitude ?? 37.579081,locationManager.location?.coordinate.longitude ?? 126.974375)
         }
         .onChange(of: officeInfoServiceAPI.infos) { newInfos in
             coordinator.removeAllMakers()
+            
             for result in newInfos {
                 coordinator.addMarkerAndInfoWindow(latitude: Double(result.postLat)!, longitude: Double(result.postLon)!, caption: result.postNm)
             }
@@ -84,17 +86,18 @@ struct MapView: View {
         .onChange(of: locationManager.location) { newLocation in
             if let location = newLocation {
                 coord = MyCoord(location.coordinate.latitude, location.coordinate.longitude)
+                
                 print("현재위치: \(coord)")
             }
         }
-//        .onChange(of: locationManager.isUpdatingLocation) { locations in
-//            if locations {
-//                locationManager.startUpdatingLocation()
-//            } else {
-//                locationManager.stopUpdatingLocation()
-//            }
-//            
-//        }
+        // 카메라 위치 바뀌면 그 값에 따라 좌표 실시간으로 바꾸기 구현 예정
+        //        .onChange(of: locationManager.isUpdatingLocation) { locations in
+        //            if locations {
+        //                locationManager.startUpdatingLocation()
+        //            } else {
+        //                locationManager.stopUpdatingLocation()
+        //            }
+        //        }
         .onDisappear {
             locationManager.stopUpdatingLocation()
         }
@@ -103,6 +106,6 @@ struct MapView: View {
     }
 }
 
-#Preview {
-    MapView()
-}
+//#Preview {
+//    MapView()
+//}

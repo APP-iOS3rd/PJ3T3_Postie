@@ -19,9 +19,9 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate {
     
     static let shared = Coordinator()
     
-    //    let startInfoWindow = NMFInfoWindow()
     let view = NMFNaverMapView(frame: .zero) // 지도 객체 생성
 //    let locationManager = CLLocationManager()
+//    let startInfoWindow = NMFInfoWindow()
     
     var markers: [NMFMarker] = []
     var coord: MyCoord = MyCoord(0.0,0.0) // 내 위치값 초기 설정
@@ -51,8 +51,6 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate {
 //        locationManager.requestWhenInUseAuthorization()
 //        
 //        getCurrentLocation()
-        
-       
     }
     
     func getNaverMapView() -> NMFNaverMapView {
@@ -70,8 +68,6 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate {
         print("change position")
         // 카메라의 위치가 변경되면 호출되는 함수
     }
-    
-    
     
     // 맵을 업데이트 -> 해당 위치에서 우체국 찾기 때 사용 예정
     func updateMapView(coord: MyCoord) {
@@ -123,7 +119,6 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate {
 //        currentLocation = locationManager.location
 ////        print(currentLocation)
 //    }
-
     
     // 마커 찍는 행위
     func addMarkerAndInfoWindow(latitude: Double, longitude: Double, caption: String) {

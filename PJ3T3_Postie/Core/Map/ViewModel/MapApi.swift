@@ -113,7 +113,6 @@ class OfficeInfoServiceAPI: ObservableObject {
     @StateObject var coordinator: Coordinator = Coordinator.shared
     
     @Published var infos = [PostItem]()
-    //    @Published var officeMarkers = [OfficeMarker]()
     
     private var apiKey: String? {
         get { getValueOfPlistFile("MapApiKeys", "OFFICE_MAIN_KEY")}
@@ -153,7 +152,6 @@ class OfficeInfoServiceAPI: ObservableObject {
                 let postListResponse = try XMLDecoder().decode(PostListResponse.self, from: data)
                 DispatchQueue.main.async {
                     self.infos = postListResponse.postItems
-                    //                    self.updateOfficeMarkers()
                 }
 //                print(postListResponse.postItems)
             } catch {
