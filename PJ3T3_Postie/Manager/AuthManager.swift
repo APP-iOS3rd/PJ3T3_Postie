@@ -23,6 +23,7 @@ class AuthManager: ObservableObject {
     @Published var userUid: String  = ""
     @Published var userSession: FirebaseAuth.User? //Firebase user object
     @Published var currentUser: PostieUser? //User Data Model
+    @Published var authDataResult: AuthDataResult?
     @Published var hasAccount: Bool = true
     
     private init() {
@@ -160,8 +161,12 @@ extension AuthManager {
         try await createUser(authDataResult: authDataResult, nickname: nickname)
     }
     
-    private func signInWithSSO(credential: AuthCredential) async throws -> AuthDataResult {
-        return try await Auth.auth().signIn(with: credential)
+    func signInWithSSO(credential: AuthCredential) async throws -> AuthDataResult {
+            let authDataResult = try await Auth.auth().signIn(with: credential)
+            
+            await fetchUser()
+            
+            return authDataResult
     }
 }
 
