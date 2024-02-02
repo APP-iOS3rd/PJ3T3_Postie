@@ -26,11 +26,11 @@ struct ListLetterView: View {
                                 if letter.isReceived {
                                     Text("To.")
                                         .font(.custom("SourceSerifPro-Black", size: 18))
-                                        .foregroundColor(.black)
+                                        .foregroundStyle(Color.postieBlack)
                                 } else {
                                     Text("From.")
                                         .font(.custom("SourceSerifPro-Black", size: 18))
-                                        .foregroundColor(.black)
+                                        .foregroundStyle(Color.postieBlack)
                                 }
                                 
                                 Text("\(letter.recipient)")
@@ -39,7 +39,7 @@ struct ListLetterView: View {
                                 
                                 Text("\(letter.date.toString())")
                                     .font(.custom("SourceSerifPro-Light", size: 18))
-                                    .foregroundStyle(Color(hex: 0x1E1E1E))
+                                    .foregroundStyle(Color.postieBlack)
                                 
                                 ZStack {
                                     Image(systemName: "water.waves")
@@ -49,7 +49,7 @@ struct ListLetterView: View {
                                     Image(systemName: "sleep.circle")
                                         .font(.largeTitle)
                                 }
-                                .foregroundStyle(Color(hex: 0x979797))
+                                .foregroundStyle(Color.postieDarkGray)
                             }
                             
                             Spacer()
@@ -61,7 +61,7 @@ struct ListLetterView: View {
                     .frame(width: 300, height: 130)
                     .background(
                         RoundedRectangle(cornerRadius: 10)
-                            .foregroundStyle(letter.isReceived ? Color(hex: 0xF7F7F7) : Color(hex: 0xFCFBF7))
+                            .foregroundStyle(letter.isReceived ? Color.postieLightGray : Color.postieWhite)
                             .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
                     )
                     

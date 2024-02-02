@@ -35,7 +35,7 @@ struct GroupedLetterView: View {
                     ZStack {
                         if favoriteLetters.count > 2 {
                             RoundedRectangle(cornerRadius: 10)
-                                .foregroundStyle(Color(hex: 0xFCFBF7))
+                                .foregroundStyle(Color.postieWhite)
                                 .frame(width: 350, height: 130)
                                 .offset(x: 10, y: 10)
                                 .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
@@ -43,7 +43,7 @@ struct GroupedLetterView: View {
                         
                         if favoriteLetters.count > 1 {
                             RoundedRectangle(cornerRadius: 10)
-                                .foregroundStyle(Color(hex: 0xFCFBF7))
+                                .foregroundStyle(Color.postieWhite)
                                 .frame(width: 350, height: 130)
                                 .offset(x: 5, y: 5)
                                 .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
@@ -54,16 +54,16 @@ struct GroupedLetterView: View {
                                 HStack {
                                     Text("My Favorite.")
                                         .font(.custom("SourceSerifPro-Black", size: 18))
-                                        .foregroundColor(.black)
+                                        .foregroundColor(Color.postieBlack)
                                     
                                     Text("\("좋아하는 편지 ") \(favoriteLetters.count)")
-                                        .foregroundStyle(Color(hex: 0x1E1E1E))
+                                        .foregroundStyle(Color.postieBlack)
                                     
                                     Spacer()
                                     
                                     Text(" ") // date
                                         .font(.custom("SourceSerifPro-Light", size: 18))
-                                        .foregroundStyle(Color(hex: 0x1E1E1E))
+                                        .foregroundStyle(Color.postieBlack)
                                     
                                     ZStack {
                                         Image(systemName: "water.waves")
@@ -85,14 +85,14 @@ struct GroupedLetterView: View {
                                     
                                     Image(systemName: "heart.fill")
                                         .font(.title2)
-                                        .foregroundStyle(Color(hex: 0xFF5733))
+                                        .foregroundStyle(Color.postieOrange)
                                 }
                             }
                             .padding()
                             .frame(width: 350, height: 130)
                             .background(
                                 RoundedRectangle(cornerRadius: 10)
-                                    .foregroundStyle(Color(hex: 0xFCFBF7))
+                                    .foregroundStyle(Color.postieWhite)
                                     .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
                             )
                         }
@@ -120,18 +120,18 @@ struct GroupedLetterView: View {
                         ZStack {
                             if countOfMatchingRecipients + countOfMatchingWriters > 2 {
                                 RoundedRectangle(cornerRadius: 10)
-                                    .foregroundStyle(Color(hex: 0xFCFBF7))
+                                    .foregroundStyle(Color.postieWhite)
                                     .frame(width: 350, height: 130)
                                     .offset(x: 10, y: 10)
-                                    .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
+                                    .shadow(color: Color.postieBlack.opacity(0.1), radius: 3, x: 3, y: 3)
                             }
                             
                             if countOfMatchingRecipients + countOfMatchingWriters > 1 {
                                 RoundedRectangle(cornerRadius: 10)
-                                    .foregroundStyle(Color(hex: 0xFCFBF7))
+                                    .foregroundStyle(Color.postieWhite)
                                     .frame(width: 350, height: 130)
                                     .offset(x: 5, y: 5)
-                                    .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
+                                    .shadow(color: Color.postieBlack.opacity(0.1), radius: 3, x: 3, y: 3)
                             }
                             
                             HStack {
@@ -139,17 +139,17 @@ struct GroupedLetterView: View {
                                     HStack {
                                         Text("From.")
                                             .font(.custom("SourceSerifPro-Black", size: 18))
-                                            .foregroundColor(.black)
+                                            .foregroundColor(Color.postieBlack)
                                         
                                         // 편지 갯수 확인용 임시 코드
                                         Text("\(recipient) \(countOfMatchingRecipients + countOfMatchingWriters)")
-                                            .foregroundStyle(Color(hex: 0x1E1E1E))
+                                            .foregroundStyle(Color.postieBlack)
                                         
                                         Spacer()
                                         
                                         Text(" ") // date
                                             .font(.custom("SourceSerifPro-Light", size: 18))
-                                            .foregroundStyle(Color(hex: 0x1E1E1E))
+                                            .foregroundStyle(Color.postieBlack)
                                         
                                         ZStack {
                                             Image(systemName: "water.waves")
@@ -159,7 +159,7 @@ struct GroupedLetterView: View {
                                             Image(systemName: "sleep.circle")
                                                 .font(.largeTitle)
                                         }
-                                        .foregroundStyle(Color(hex: 0x979797))
+                                        .foregroundStyle(Color.postieDarkGray)
                                     }
                                     
                                     Spacer()
@@ -171,7 +171,7 @@ struct GroupedLetterView: View {
                             .frame(width: 350, height: 130)
                             .background(
                                 RoundedRectangle(cornerRadius: 10)
-                                    .foregroundStyle(Color(hex: 0xFCFBF7))
+                                    .foregroundStyle(Color.postieWhite)
                                     .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
                             )
                         }

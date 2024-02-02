@@ -14,6 +14,7 @@ struct HomeView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
     @ObservedObject var storageManager = StorageManager.shared
     @State private var currentGroupPage: Int = 0
+    @State private var isTabGroupButton = true
     
     var body: some View {
         NavigationStack {
@@ -62,10 +63,10 @@ struct HomeView: View {
                             }
                             // ScrollView margin 임시
                             Rectangle()
-                                .frame(height: 70)
-                                .foregroundStyle(Color.black.opacity(0))
+                                .frame(height: 80)
+                                .foregroundStyle(Color.postieBlack.opacity(0))
                         }
-                        .background(Color(hex: 0xF5F1E8))
+                        .background(Color.postieBeige)
                         
                         Menu {
                             NavigationLink(destination: AddLetterView(isReceived: false)) {
@@ -103,17 +104,17 @@ struct HomeView: View {
                         } label: {
                             ZStack {
                                 Circle()
-                                    .foregroundStyle(Color(hex: 0xFF5733))
+                                    .foregroundStyle(Color.postieOrange)
                                     .frame(width:70,height:70)
                                 
                                 Image(systemName: "envelope.open")
-                                    .foregroundStyle(Color(hex: 0xF7F7F7))
+                                    .foregroundStyle(Color.postieWhite)
                                     .font(.title2)
                                     .offset(y: -3)
                             }
                         }
-                        .foregroundStyle(Color(hex: 0xF7F7F7))
-                        .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
+                        .foregroundStyle(Color.postieLightGray)
+                        .shadow(color: Color.postieBlack.opacity(0.1), radius: 3, x: 3, y: 3)
                         .imageScale(.large)
                         .padding()
                     }
@@ -136,12 +137,11 @@ struct HomeView: View {
                 //                .offset(x: isSideMenuOpen ? 0 : UIScreen.main.bounds.width)
                 //                .animation(.easeInOut)
                 // 임시 세팅뷰
-                SideMenuView(isSideMenuOpen: $isSideMenuOpen, currentGroupPage: $currentGroupPage)
+                SideMenuView(isSideMenuOpen: $isSideMenuOpen, currentGroupPage: $currentGroupPage, isTabGroupButton: $isTabGroupButton)
                     .offset(x: isSideMenuOpen ? 0 : UIScreen.main.bounds.width)
-                    .animation(.easeInOut)
-                    .overlay(Color.clear)
+                    .animation(.easeInOut, value: 1)
             }
-            .tint(Color.init(hex: 0x1E1E1E))
+            .tint(Color.postieBlack)
         }
     }
 }
@@ -150,6 +150,7 @@ struct HomeView: View {
 struct SideMenuView: View {
     @Binding var isSideMenuOpen: Bool
     @Binding var currentGroupPage: Int
+    @Binding var isTabGroupButton: Bool
     @State private var isToggleOn = false
     
     var body: some View {
@@ -160,7 +161,7 @@ struct SideMenuView: View {
                 HStack {
                     Text("Setting")
                         .font(.custom("SourceSerifPro-Black", size: 32))
-                        .foregroundStyle(Color(hex: 0xFF5733))
+                        .foregroundStyle(Color.postieOrange)
                     
                     Spacer()
                     
@@ -175,10 +176,10 @@ struct SideMenuView: View {
                 }
                 
                 Text("프로필 설정")
-                    .foregroundStyle(Color.gray)
+                    .foregroundStyle(Color.postieDarkGray)
                 
                 Rectangle()
-                    .foregroundStyle(Color.gray)
+                    .foregroundStyle(Color.postieDarkGray)
                     .frame(height: 1)
                     .padding(.bottom)
                 
@@ -187,7 +188,7 @@ struct SideMenuView: View {
                         ZStack {
                             Circle()
                                 .frame(width: 80,height: 80)
-                                .foregroundStyle(Color(hex: 0xE6E2DC))
+                                .foregroundStyle(Color.postieGray)
                             
                             Image("Posty_Receiving")
                                 .resizable()
@@ -202,38 +203,38 @@ struct SideMenuView: View {
                         
                         Spacer()
                         
-                        Image(systemName: "greaterthan")
-                            .foregroundStyle(Color.gray)
+                        Image(systemName: "chevron.right")
+                            .foregroundStyle(Color.postieDarkGray)
                     }
                     .padding(.bottom)
                 }
                 
                 Text("테마 설정")
-                    .foregroundStyle(Color.gray)
+                    .foregroundStyle(Color.postieDarkGray)
                 
                 Rectangle()
-                    .foregroundStyle(Color.gray)
+                    .foregroundStyle(Color.postieDarkGray)
                     .frame(height: 1)
                     .padding(.bottom)
                 
-                NavigationLink(destination: ThemeView(currentGroupPage: $currentGroupPage)) {
+                NavigationLink(destination: ThemeView(isTabGroupButton: $isTabGroupButton, currentGroupPage: $currentGroupPage)) {
                     HStack {
                         Text("테마 설정 하기")
                         
                         Spacer()
                         
-                        Image(systemName: "greaterthan")
-                            .foregroundStyle(Color.gray)
+                        Image(systemName: "chevron.right")
+                            .foregroundStyle(Color.postieDarkGray)
                     }
                     .padding(.bottom)
                 }
                 
                 Text("앱 설정")
-                    .foregroundStyle(Color.gray)
+                    .foregroundStyle(Color.postieDarkGray)
                 
                 Rectangle()
                     .frame(height: 1)
-                    .foregroundStyle(Color.gray)
+                    .foregroundStyle(Color.postieDarkGray)
                     .padding(.bottom)
                 
                 HStack {
@@ -241,8 +242,8 @@ struct SideMenuView: View {
                     
                     Spacer()
                     
-                    Image(systemName: "greaterthan")
-                        .foregroundStyle(Color.gray)
+                    Image(systemName: "chevron.right")
+                        .foregroundStyle(Color.postieDarkGray)
                 }
                 .padding(.bottom)
                 
@@ -251,8 +252,8 @@ struct SideMenuView: View {
                     
                     Spacer()
                     
-                    Image(systemName: "greaterthan")
-                        .foregroundStyle(Color.gray)
+                    Image(systemName: "chevron.right")
+                        .foregroundStyle(Color.postieDarkGray)
                 }
                 .padding(.bottom)
                 
@@ -261,8 +262,8 @@ struct SideMenuView: View {
                     
                     Spacer()
                     
-                    Image(systemName: "greaterthan")
-                        .foregroundStyle(Color.gray)
+                    Image(systemName: "chevron.right")
+                        .foregroundStyle(Color.postieDarkGray)
                 }
                 .padding(.bottom)
                 
@@ -271,8 +272,8 @@ struct SideMenuView: View {
                     
                     Spacer()
                     
-                    Image(systemName: "greaterthan")
-                        .foregroundStyle(Color.gray)
+                    Image(systemName: "chevron.right")
+                        .foregroundStyle(Color.postieDarkGray)
                 }
                 .padding(.bottom)
                 
@@ -280,14 +281,14 @@ struct SideMenuView: View {
                 
                 Text("COPYRIGHT 2024 ComeOn12 RIGHTS RESERVED")
                     .font(.caption2)
-                    .foregroundStyle(Color.gray)
+                    .foregroundStyle(Color.postieDarkGray)
             }
             .padding()
             .frame(width: UIScreen.main.bounds.width - 100 , alignment: .leading)
-            .foregroundStyle(Color(hex: 0x1e1e1e))
-            .background(Color(hex: 0xF5F1E8))
+            .foregroundStyle(Color.postieBlack)
+            .background(Color.postieBeige)
         }
-        .tint(Color(hex: 0x1E1E1E))
+        .tint(Color.postieBlack)
     }
 }
 

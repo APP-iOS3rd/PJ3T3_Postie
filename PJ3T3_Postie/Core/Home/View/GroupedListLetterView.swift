@@ -16,7 +16,7 @@ struct GroupedListLetterView: View {
     
     var body: some View {
         ZStack {
-            Color(hex: 0xF5F1E8)
+            Color.postieBeige
                 .ignoresSafeArea()
             
             NavigationStack {
@@ -38,11 +38,11 @@ struct GroupedListLetterView: View {
                                                     if letter.isReceived {
                                                         Text("To.")
                                                             .font(.custom("SourceSerifPro-Black", size: 18))
-                                                            .foregroundColor(.black)
+                                                            .foregroundStyle(Color.postieBlack)
                                                     } else {
                                                         Text("From.")
                                                             .font(.custom("SourceSerifPro-Black", size: 18))
-                                                            .foregroundColor(.black)
+                                                            .foregroundStyle(Color.postieBlack)
                                                     }
                                                     
                                                     Text("\(letter.recipient)")
@@ -51,7 +51,7 @@ struct GroupedListLetterView: View {
                                                     
                                                     Text("\(letter.date.toString())")
                                                         .font(.custom("SourceSerifPro-Light", size: 18))
-                                                        .foregroundStyle(Color(hex: 0x1E1E1E))
+                                                        .foregroundStyle(Color.postieBlack)
                                                     
                                                     ZStack {
                                                         Image(systemName: "water.waves")
@@ -61,7 +61,7 @@ struct GroupedListLetterView: View {
                                                         Image(systemName: "sleep.circle")
                                                             .font(.largeTitle)
                                                     }
-                                                    .foregroundStyle(Color(hex: 0x979797))
+                                                    .foregroundStyle(Color.postieDarkGray)
                                                 }
                                                 
                                                 Spacer()
@@ -73,8 +73,8 @@ struct GroupedListLetterView: View {
                                         .frame(width: 300, height: 130)
                                         .background(
                                             RoundedRectangle(cornerRadius: 10)
-                                                .foregroundStyle(letter.isReceived ? Color(hex: 0xF7F7F7) : Color(hex: 0xFCFBF7))
-                                                .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
+                                                .foregroundStyle(letter.isReceived ? Color.postieLightGray : Color.postieWhite)
+                                                .shadow(color: Color.postieBlack.opacity(0.1), radius: 3, x: 3, y: 3)
                                         )
                                         
                                         if !letter.isReceived {
@@ -89,9 +89,9 @@ struct GroupedListLetterView: View {
                         // ScrollView margin 임시
                         Rectangle()
                             .frame(height: 70)
-                            .foregroundStyle(Color.black.opacity(0))
+                            .foregroundStyle(Color.postieBlack.opacity(0))
                     }
-                    .background(Color(hex: 0xF5F1E8))
+                    .background(Color.postieWhite)
                     
                     Menu {
                         NavigationLink(destination: AddLetterView(isReceived: true)) {
@@ -129,17 +129,17 @@ struct GroupedListLetterView: View {
                     } label: {
                         ZStack {
                             Circle()
-                                .foregroundStyle(Color(hex: 0xFF5733))
+                                .foregroundStyle(Color.postieOrange)
                                 .frame(width:70,height:70)
                             
                             Image(systemName: "envelope.open")
-                                .foregroundStyle(Color(hex: 0xF7F7F7))
+                                .foregroundStyle(Color.postieLightGray)
                                 .font(.title2)
                                 .offset(y: -3)
                         }
                     }
-                    .foregroundStyle(Color(hex: 0xF7F7F7))
-                    .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
+                    .foregroundStyle(Color.postieLightGray)
+                    .shadow(color: Color.postieBlack.opacity(0.1), radius: 3, x: 3, y: 3)
                     .imageScale(.large)
                     .padding()
                 }
@@ -148,12 +148,12 @@ struct GroupedListLetterView: View {
                     ToolbarItem(placement: .principal) {
                         Text("\(recipient)")
                             .bold()
-                            .foregroundStyle(Color(hex: 0xFF5733))
+                            .foregroundStyle(Color.postieOrange)
                     }
                 }
             }
-            .foregroundStyle(Color(hex: 0x1E1E1E))
-            .tint(Color.init(hex: 0x1E1E1E))
+            .foregroundStyle(Color.postieBlack)
+            .tint(Color.postieBlack)
         }
     }
 }
