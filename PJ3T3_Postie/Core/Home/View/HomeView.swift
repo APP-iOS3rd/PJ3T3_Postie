@@ -76,7 +76,7 @@ struct HomeView: View {
                     
                     Menu {
                         // 맨 밑 네비링크가 작동 안되는 버그가 있어서 임시로 만들어둠. 오류 수정하면 없앨 예정
-                        NavigationLink(destination: AddLetterView(isSendingLetter: true)) {
+                        NavigationLink(destination: AddLetterView(isReceived: false)) {
                             Button (action: {
                             }) {
                                 HStack {
@@ -87,7 +87,7 @@ struct HomeView: View {
                             }
                         }
                         
-                        NavigationLink(destination: AddLetterView(isSendingLetter: true)) {
+                        NavigationLink(destination: AddLetterView(isReceived: false)) {
                             Button (action: {
                             }) {
                                 HStack {
@@ -98,7 +98,7 @@ struct HomeView: View {
                             }
                         }
                         
-                        NavigationLink(destination: AddLetterView(isSendingLetter: false)) {
+                        NavigationLink(destination: AddLetterView(isReceived: true)) {
                             Button (action: {
                             }) {
                                 HStack {
@@ -109,7 +109,7 @@ struct HomeView: View {
                             }
                         }
                         
-                        NavigationLink(destination: AddLetterView(isSendingLetter: true)) {
+                        NavigationLink(destination: AddLetterView(isReceived: false)) {
                             Button (action: {
                             }) {
                                 HStack {
