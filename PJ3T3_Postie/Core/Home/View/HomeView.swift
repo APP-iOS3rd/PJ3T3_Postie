@@ -23,7 +23,6 @@ struct HomeView: View {
                         if currentGroupPage == 0 {
                             VStack {
                                 GroupedLetterView()
-                                    .padding(.bottom, 10)
                             }
                             .padding()
                         } else {
