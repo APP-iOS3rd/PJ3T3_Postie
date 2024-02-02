@@ -21,12 +21,13 @@ struct ProfileView: View {
                     
                     ZStack {
                         Circle()
-                            .frame(width: 170,height: 170)
-                            .foregroundStyle(Color.init(hex: 0xD1CEC7))
+                            .frame(width: 170, height: 170)
+                            .foregroundStyle(Color.init(hex: 0xE6E2DC))
                         
-                        Text("Postie")
-                            .font(.title)
-                            .foregroundStyle(Color.black)
+                        Image("Posty_Receiving")
+                            .resizable()
+                            .frame(width: 170, height: 170)
+                            .offset(x: -8, y: 5)
                     }
                     
                     Spacer()
