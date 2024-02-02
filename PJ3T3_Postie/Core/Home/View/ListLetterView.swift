@@ -54,7 +54,17 @@ struct ListLetterView: View {
                             
                             Spacer()
                             
-                            Text("\"\(letter.summary)\"")
+                            HStack {
+                                Text("\"\(letter.summary)\"")
+                                
+                                Spacer()
+                                
+                                if letter.isFavorite {
+                                    Image(systemName: "heart.fill")
+                                        .font(.title2)
+                                        .foregroundStyle(Color.postieOrange)
+                                }
+                            }
                         }
                     }
                     .padding()

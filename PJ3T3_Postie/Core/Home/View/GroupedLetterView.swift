@@ -79,7 +79,7 @@ struct GroupedLetterView: View {
                                 Spacer()
                                 
                                 HStack {
-                                    Text("\"\"")
+                                    Text("\"좋아하는 편지 꾸러미\"")
                                     
                                     Spacer()
                                     
@@ -164,7 +164,7 @@ struct GroupedLetterView: View {
                                     
                                     Spacer()
                                     
-                                    Text("\"\"")
+                                    Text("\"\(recipient)님과 주고받은 편지 꾸러미\"")
                                 }
                             }
                             .padding()
