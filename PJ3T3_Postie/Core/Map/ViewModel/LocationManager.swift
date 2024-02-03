@@ -31,7 +31,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         locationManager.startUpdatingLocation()
         location = locationManager.location
     }
-//    
+
     func startUpdatingLocation() {
         // https://developer.apple.com/documentation/corelocation/cllocationmanager/1423750-startupdatinglocation
         isUpdatingLocation = true
