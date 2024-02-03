@@ -97,12 +97,15 @@ struct HomeView: View {
 
 // 임시 세팅뷰
 struct SideMenuView: View {
+    @ObservedObject var authViewModel = AuthManager.shared
     @Binding var isSideMenuOpen: Bool
     @Binding var currentGroupPage: Int
     @Binding var isTabGroupButton: Bool
     @State private var isToggleOn = false
     
     var body: some View {
+        let user = authViewModel.currentUser
+        
         HStack {
             Spacer()
             
@@ -143,8 +146,8 @@ struct SideMenuView: View {
                         }
                         
                         VStack(alignment: .leading) {
-                            Text("Postie_test")
-                            Text("postie@test.com")
+                            Text(String(user?.fullName ?? ""))
+                            Text(user?.email ?? "")
                         }
                         
                         Spacer()

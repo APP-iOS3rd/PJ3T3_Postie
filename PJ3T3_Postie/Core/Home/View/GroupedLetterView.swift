@@ -118,7 +118,7 @@ struct GroupedLetterView: View {
                             .background(
                                 RoundedRectangle(cornerRadius: 10)
                                     .foregroundStyle(Color.postieWhite)
-                                    .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
+                                    .shadow(color: Color.postieBlack.opacity(0.1), radius: 3, x: 3, y: 3)
                             )
                         }
                     }
@@ -132,12 +132,8 @@ struct GroupedLetterView: View {
             // 편지 그룹 뷰
             ForEach(sortedRecipients, id: \.self) { recipient in
                 // 받거나 보낸 사람 수 확인
-                let countOfMatchingRecipients = firestoreManager.letters
-                    .filter { $0.recipient == recipient }
-                    .count
-                let countOfMatchingWriters = firestoreManager.letters
-                    .filter { $0.writer == recipient }
-                    .count
+                let countOfMatchingRecipients = firestoreManager.letters.filter { $0.recipient == recipient }.count
+                let countOfMatchingWriters = firestoreManager.letters.filter { $0.writer == recipient }.count
                 
                 NavigationLink {
                     GroupedListLetterView(recipient: recipient)
