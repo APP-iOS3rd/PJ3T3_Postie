@@ -63,9 +63,11 @@ struct LetterItemView: View {
                         
                         Spacer()
                         
-                        Image(systemName: "heart.fill")
-                            .font(.title2)
-                            .foregroundStyle(Color.postieOrange)
+                        if letter.isFavorite {
+                            Image(systemName: "heart.fill")
+                                .font(.title2)
+                                .foregroundStyle(Color.postieOrange)
+                        }
                     }
                 }
             }
