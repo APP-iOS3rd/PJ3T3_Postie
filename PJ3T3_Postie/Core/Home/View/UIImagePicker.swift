@@ -46,11 +46,7 @@ struct UIImagePicker: UIViewControllerRepresentable {
                 do {
                     try recognizer.recognizeText()
 
-                    if self.parent.text == "사진을 등록하면 자동으로 편지 내용이 입력됩니다." {
-                        self.parent.text = recognizer.recognizedText
-                    } else {
-                        self.parent.text.append(" \(recognizer.recognizedText)")
-                    }
+                    self.parent.text.append(" \(recognizer.recognizedText)")
                 } catch {
                     parent.showTextRecognizerErrorAlert = true
                 }

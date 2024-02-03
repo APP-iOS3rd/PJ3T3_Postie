@@ -37,6 +37,7 @@ struct LetterDetailView: View {
                     }
 
                     Button(role: .destructive) {
+                        // TODO: 함수로 빼기
                         letterDetailViewModel.showDeleteAlert = true
                     } label: {
                         Text("삭제")

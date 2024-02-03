@@ -11,81 +11,137 @@ struct HomeView: View {
     @State private var search: String = ""
     @State private var showAlert = false
     @State private var isSideMenuOpen = false
+    @ObservedObject var firestoreManager = FirestoreManager.shared
+    @ObservedObject var storageManager = StorageManager.shared
+    @State private var currentGroupPage: Int = 0
     
     var body: some View {
         ZStack {
             NavigationStack {
                 ZStack(alignment: .bottomTrailing) {
                     ScrollView {
-                        VStack {
-                            NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
-                                ReceiveLetterView(letter: Letter.preview)
+                        if currentGroupPage == 0 {
+                            VStack {
+                                GroupLetterView(letterCount: 3, title: "Favorite", content: "즐겨찾기 한 편지 꾸러미들")
+                                    .padding(.bottom, 10)
+                                
+                                GroupLetterView(letterCount: 1, title: "테스트1", content: "테스트를 위한 텍스트")
+                                    .padding(.bottom, 10)
+                                
+                                GroupLetterView(letterCount: 2, title: "테스트2", content: "테스트를 위한 텍스트")
+                                    .padding(.bottom, 10)
+                                
+                                GroupLetterView(letterCount: 3, title: "테스트3", content: "테스트를 위한 텍스트")
+                                    .padding(.bottom, 10)
+                                
+                                // ScrollView margin 임시
+                                Rectangle()
+                                    .frame(height: 70)
+                                    .foregroundStyle(Color.black.opacity(0))
                             }
-                            
-                            NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
-                                SendLetterView(letter: Letter.preview)
+                            .padding()
+                        } else {
+                            VStack {
+                                NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
+                                    ReceiveLetterView(letter: Letter.preview)
+                                }
+                                
+                                NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
+                                    SendLetterView(letter: Letter.preview)
+                                }
+                                
+                                NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
+                                    ReceiveLetterView(letter: Letter.preview)
+                                }
+                                
+                                NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
+                                    ReceiveLetterView(letter: Letter.preview)
+                                }
+                                NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
+                                    SendLetterView(letter: Letter.preview)
+                                }
+                                
+                                LetterDataListViewFB()
+                                
+                                // ScrollView margin 임시
+                                Rectangle()
+                                    .frame(height: 70)
+                                    .foregroundStyle(Color.black.opacity(0))
                             }
-                            
-                            NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
-                                ReceiveLetterView(letter: Letter.preview)
-                            }
-                            
-                            NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
-                                ReceiveLetterView(letter: Letter.preview)
-                            }
-                            NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
-                                SendLetterView(letter: Letter.preview)
-                            }
-                            
-                            // ScrollView margin 임시
-                            Rectangle()
-                                .frame(height: 70)
-                                .foregroundStyle(Color.black.opacity(0))
+                            .padding()
                         }
-                        .padding()
                     }
                     .searchable(text: $search)
                     .background(Color(hex: 0xF5F1E8))
                     
-                    Button(action: {
-                        showAlert.toggle()
-                    }, label: {
-                        ZStack {
-                            Circle()
-                                .foregroundStyle(Color(hex: 0xC2AD7E))
-                                .frame(width:70,height:70)
-                            
-                            ZStack {
-                                Image(systemName: "envelope")
-                                    .font(.title2)
-                                    .offset(y: -3)
-                                
-                                Image(systemName: "plus.circle")
-                                    .font(.footnote)
-                                    .offset(x:15, y:9)
+                    Menu {
+                        // 맨 밑 네비링크가 작동 안되는 버그가 있어서 임시로 만들어둠. 오류 수정하면 없앨 예정
+                        NavigationLink(destination: AddLetterView(isReceived: false)) {
+                            Button (action: {
+                            }) {
+                                HStack {
+                                    Text("취소")
+                                    
+                                    Image(systemName: "x.square")
+                                }
                             }
                         }
-                    })
+                        
+                        NavigationLink(destination: AddLetterView(isReceived: false)) {
+                            Button (action: {
+                            }) {
+                                HStack {
+                                    Text("나의 느린 우체통")
+                                    
+                                    Image(systemName: "envelope.open.badge.clock")
+                                }
+                            }
+                        }
+                        
+                        NavigationLink(destination: AddLetterView(isReceived: true)) {
+                            Button (action: {
+                            }) {
+                                HStack {
+                                    Text("받은 편지 저장")
+                                    
+                                    Image(systemName: "envelope.open")
+                                }
+                            }
+                        }
+                        
+                        NavigationLink(destination: AddLetterView(isReceived: false)) {
+                            Button (action: {
+                            }) {
+                                HStack {
+                                    Text("보낸 편지 저장")
+                                    
+                                    Image(systemName: "paperplane")
+                                }
+                            }
+                        }
+                    } label: {
+                        ZStack {
+                            Circle()
+                                .foregroundStyle(Color(hex: 0xFF5733))
+                                .frame(width:70,height:70)
+                            
+                            Image(systemName: "envelope.open")
+                                .foregroundStyle(Color(hex: 0xF7F7F7))
+                                .font(.title2)
+                                .offset(y: -3)
+                        }
+                    }
                     .foregroundStyle(Color(hex: 0xF7F7F7))
                     .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
                     .imageScale(.large)
                     .padding()
-                    .alert("편지 저장 하기", isPresented: $showAlert) {
-                        NavigationLink(destination: AddLetterView(isSendingLetter: true)) {
-                            Button("편지 저장") {
-                            }
-                        }
-                        
-                        Button("취소", role: .cancel) {
-                        }
-                    }
                 }
                 .foregroundStyle(Color(hex: 0x1E1E1E))
                 .navigationBarItems(leading: (
                     HStack {
                         Text("Postie")
                             .font(.custom("SourceSerifPro-Black", size: 40))
-                            .foregroundStyle(Color.black)
+                            .foregroundStyle(Color(hex: 0xFF5733))
                     }), trailing: (
                         Button(action: {
                             withAnimation {
@@ -95,7 +151,6 @@ struct HomeView: View {
                             Image(systemName: "line.horizontal.3")
                                 .imageScale(.large)
                         }
-                        
                     ))
             }
             .toolbarBackground(
@@ -116,7 +171,7 @@ struct HomeView: View {
             //                .offset(x: isSideMenuOpen ? 0 : UIScreen.main.bounds.width)
             //                .animation(.easeInOut)
             // 임시 세팅뷰
-            SideMenuView(isSideMenuOpen: $isSideMenuOpen)
+            SideMenuView(isSideMenuOpen: $isSideMenuOpen, currentGroupPage: $currentGroupPage)
                 .offset(x: isSideMenuOpen ? 0 : UIScreen.main.bounds.width)
                 .animation(.easeInOut)
         }
@@ -127,6 +182,7 @@ struct HomeView: View {
 // 임시 세팅뷰
 struct SideMenuView: View {
     @Binding var isSideMenuOpen: Bool
+    @Binding var currentGroupPage: Int
     @State private var isToggleOn = false
     
     var body: some View {
@@ -148,7 +204,7 @@ struct SideMenuView: View {
                 
                 Text("Setting")
                     .font(.custom("SourceSerifPro-Black", size: 32))
-                    .foregroundStyle(Color.black)
+                    .foregroundStyle(Color(hex: 0xFF5733))
                 
                 Text("프로필 설정")
                     .foregroundStyle(Color.gray)
@@ -163,10 +219,12 @@ struct SideMenuView: View {
                         ZStack {
                             Circle()
                                 .frame(width: 80,height: 80)
-                                .foregroundStyle(Color(hex: 0xD1CEC7))
+                                .foregroundStyle(Color(hex: 0xE6E2DC))
                             
-                            Text("Postie")
-                                .foregroundStyle(Color.black)
+                            Image("Posty_Receiving")
+                                .resizable()
+                                .frame(width: 80,height: 80)
+                                .offset(x: -4, y: 5)
                         }
                         
                         VStack(alignment: .leading) {
@@ -188,11 +246,19 @@ struct SideMenuView: View {
                 Rectangle()
                     .foregroundStyle(Color.gray)
                     .frame(height: 1)
+                    .padding(.bottom)
                 
-                Toggle("다크모드", isOn: $isToggleOn)
-                    .onChange(of: isToggleOn) { _ in
+                NavigationLink(destination: ThemeView(currentGroupPage: $currentGroupPage)) {
+                    HStack {
+                        Text("테마 설정 하기")
+                        
+                        Spacer()
+                        
+                        Image(systemName: "greaterthan")
+                            .foregroundStyle(Color.gray)
                     }
                     .padding(.bottom)
+                }
                 
                 Text("앱 설정")
                     .foregroundStyle(Color.gray)
@@ -255,7 +321,6 @@ struct SideMenuView: View {
         }
         .tint(Color(hex: 0x1E1E1E))
     }
-    
 }
 
 struct ReceiveLetterView: View {
@@ -301,11 +366,66 @@ struct ReceiveLetterView: View {
             .frame(width: 300, height: 130)
             .background(
                 RoundedRectangle(cornerRadius: 10)
-                    .foregroundStyle(Color(hex: 0xD1CEC7).opacity(0.65))
+                    .foregroundStyle(Color(hex: 0xFCFBF7))
                     .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
             )
             
             Spacer()
+        }
+    }
+}
+
+struct LetterDataListViewFB: View { // 파베 데이터 불러오기 용도, 임시 뷰, 에러나면 일단 전부 주석처리 해주세요
+    @ObservedObject var firestoreManager = FirestoreManager.shared
+    
+    var body: some View {
+        ForEach(firestoreManager.letters, id: \.self) { letter in
+            NavigationLink {
+                TestDetailView(letter: letter)
+            } label: {
+                HStack {
+                    Spacer()
+                    
+                    HStack {
+                        VStack(alignment: .leading) {
+                            HStack {
+                                Text("To.")
+                                    .font(.custom("SourceSerifPro-Black", size: 18))
+                                    .foregroundColor(.black)
+                                
+                                Text("\(letter.recipient)")
+                                
+                                Spacer()
+                                
+                                Text("\(letter.date.toString())")
+                                    .font(.custom("SourceSerifPro-Light", size: 18))
+                                    .foregroundStyle(Color(hex: 0x1E1E1E))
+                                
+                                ZStack {
+                                    Image(systemName: "water.waves")
+                                        .font(.headline)
+                                        .offset(x:18)
+                                    
+                                    Image(systemName: "sleep.circle")
+                                        .font(.largeTitle)
+                                }
+                                .foregroundStyle(Color(hex: 0x979797))
+                            }
+                            
+                            Spacer()
+                            
+                            Text("\"\(letter.summary)\"")
+                        }
+                    }
+                    .padding()
+                    .frame(width: 300, height: 130)
+                    .background(
+                        RoundedRectangle(cornerRadius: 10)
+                            .foregroundStyle(Color(hex: 0xFFFFFF))
+                            .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
+                    )
+                }
+            }
         }
     }
 }
@@ -355,9 +475,79 @@ struct SendLetterView: View {
             .frame(width: 300, height: 130)
             .background(
                 RoundedRectangle(cornerRadius: 10)
-                    .foregroundStyle(Color(hex: 0xF7F7F7).opacity(0.65))
+                    .foregroundStyle(Color(hex: 0xFFFFFF))
                     .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
             )
+        }
+    }
+}
+
+struct GroupLetterView: View { // 그룹 뷰 용도. 임시
+    let letterCount: Int
+    let title: String
+    let content: String
+    
+    var body: some View {
+        HStack {
+            ZStack {
+                if letterCount > 2 {
+                    RoundedRectangle(cornerRadius: 10)
+                        .foregroundStyle(Color(hex: 0xFCFBF7))
+                        .frame(width: 350, height: 130)
+                        .offset(x: 10, y: 10)
+                        .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
+                }
+                
+                if letterCount > 1 {
+                    RoundedRectangle(cornerRadius: 10)
+                        .foregroundStyle(Color(hex: 0xFCFBF7))
+                        .frame(width: 350, height: 130)
+                        .offset(x: 5, y: 5)
+                        .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
+                }
+                
+                HStack {
+                    VStack(alignment: .leading) {
+                        HStack {
+                            Text("From.")
+                                .font(.custom("SourceSerifPro-Black", size: 18))
+                                .foregroundColor(.black)
+                            
+                            Text("\(title)")
+                                .foregroundStyle(Color(hex: 0x1E1E1E))
+                            
+                            Spacer()
+                            
+                            Text(" ") // date
+                                .font(.custom("SourceSerifPro-Light", size: 18))
+                                .foregroundStyle(Color(hex: 0x1E1E1E))
+                            
+                            ZStack {
+                                Image(systemName: "water.waves")
+                                    .font(.headline)
+                                    .offset(x:18)
+                                
+                                Image(systemName: "sleep.circle")
+                                    .font(.largeTitle)
+                            }
+                            .foregroundStyle(Color(hex: 0x979797))
+                        }
+                        
+                        Spacer()
+                        
+                        Text("\"\(content)\"")
+                    }
+                }
+                .padding()
+                .frame(width: 350, height: 130)
+                .background(
+                    RoundedRectangle(cornerRadius: 10)
+                        .foregroundStyle(Color(hex: 0xFCFBF7))
+                        .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
+                )
+            }
+            
+            Spacer()
         }
     }
 }
