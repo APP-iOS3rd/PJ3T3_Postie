@@ -68,18 +68,20 @@
 		9E9F6B142B5769AA003DFE83 /* FirebaseRemoteConfigSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 9E9F6B132B5769AA003DFE83 /* FirebaseRemoteConfigSwift */; };
 		9E9F6B162B5769AA003DFE83 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 9E9F6B152B5769AA003DFE83 /* FirebaseStorage */; };
 		9EA106772B63C5C90033E7A8 /* LetterPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EA106762B63C5C90033E7A8 /* LetterPhoto.swift */; };
+		CE5FF9252B6CF4A600DDA5BF /* PJ3T3-Postie-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CE5FF9242B6CF4A600DDA5BF /* PJ3T3-Postie-Info.plist */; };
+		CE5FF9272B6CF8A400DDA5BF /* NanumMyeongjo.otf in Resources */ = {isa = PBXBuildFile; fileRef = CE5FF9262B6CF8A400DDA5BF /* NanumMyeongjo.otf */; };
+		CE60AACD2B6F907500D6717A /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE60AACC2B6F907500D6717A /* Font.swift */; };
+		CE60AACF2B6F930600D6717A /* NanumMyeongjoBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = CE60AACE2B6F930600D6717A /* NanumMyeongjoBold.otf */; };
 		CE6597042B5FB1E100A3C136 /* AddLetterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6597032B5FB1E100A3C136 /* AddLetterView.swift */; };
 		CE67D55C2B58E9F700C0050B /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE67D55B2B58E9F700C0050B /* PageViewController.swift */; };
 		CE67D55E2B58FF8500C0050B /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE67D55D2B58FF8500C0050B /* String.swift */; };
 		CE6E08452B5E09D900CFBF2A /* LetterDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6E08442B5E09D800CFBF2A /* LetterDetailViewModel.swift */; };
 		CE7E50782B579D6800955F31 /* AddLetterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7E50772B579D6800955F31 /* AddLetterViewModel.swift */; };
-		CEDC0F672B6A2E6200E12EAB /* Shop.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDC0F662B6A2E6200E12EAB /* Shop.swift */; };
 		CEF09E452B57B6C500BE67E4 /* UIImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF09E442B57B6C500BE67E4 /* UIImagePicker.swift */; };
 		CEF09E472B57BD8500BE67E4 /* LetterImageFullScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF09E462B57BD8500BE67E4 /* LetterImageFullScreenView.swift */; };
 		CEF09E492B57BFBF00BE67E4 /* TextRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF09E482B57BFBF00BE67E4 /* TextRecognizer.swift */; };
 		E349F8712B6918B500253B02 /* ThemeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E349F8702B6918B500253B02 /* ThemeView.swift */; };
 		E349F87D2B6A1A2400253B02 /* Shop.swift in Sources */ = {isa = PBXBuildFile; fileRef = E349F87C2B6A1A2400253B02 /* Shop.swift */; };
-		E349F8842B6AAC6800253B02 /* PJ3T3-Postie-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E349F8832B6AAC6800253B02 /* PJ3T3-Postie-Info.plist */; };
 		E3E02CA82B59003100CD3D4C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E3E02CA72B59003100CD3D4C /* GoogleService-Info.plist */; };
 		E3EECAF02B5F957A00E639F2 /* SourceSerifPro-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = E3EECAEF2B5F957A00E639F2 /* SourceSerifPro-Black.otf */; };
 		E3EECAF22B5F958300E639F2 /* SourceSerifPro-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = E3EECAF12B5F958300E639F2 /* SourceSerifPro-Light.otf */; };
@@ -126,18 +128,20 @@
 		9E9F6ADB2B57643F003DFE83 /* Letter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Letter.swift; sourceTree = "<group>"; };
 		9E9F6ADE2B5765DD003DFE83 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		9EA106762B63C5C90033E7A8 /* LetterPhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterPhoto.swift; sourceTree = "<group>"; };
+		CE5FF9242B6CF4A600DDA5BF /* PJ3T3-Postie-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "PJ3T3-Postie-Info.plist"; sourceTree = "<group>"; };
+		CE5FF9262B6CF8A400DDA5BF /* NanumMyeongjo.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = NanumMyeongjo.otf; sourceTree = "<group>"; };
+		CE60AACC2B6F907500D6717A /* Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
+		CE60AACE2B6F930600D6717A /* NanumMyeongjoBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = NanumMyeongjoBold.otf; sourceTree = "<group>"; };
 		CE6597032B5FB1E100A3C136 /* AddLetterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddLetterView.swift; sourceTree = "<group>"; };
 		CE67D55B2B58E9F700C0050B /* PageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewController.swift; sourceTree = "<group>"; };
 		CE67D55D2B58FF8500C0050B /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		CE6E08442B5E09D800CFBF2A /* LetterDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterDetailViewModel.swift; sourceTree = "<group>"; };
 		CE7E50772B579D6800955F31 /* AddLetterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLetterViewModel.swift; sourceTree = "<group>"; };
-		CEDC0F662B6A2E6200E12EAB /* Shop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shop.swift; sourceTree = "<group>"; };
 		CEF09E442B57B6C500BE67E4 /* UIImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImagePicker.swift; sourceTree = "<group>"; };
 		CEF09E462B57BD8500BE67E4 /* LetterImageFullScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterImageFullScreenView.swift; sourceTree = "<group>"; };
 		CEF09E482B57BFBF00BE67E4 /* TextRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextRecognizer.swift; sourceTree = "<group>"; };
 		E349F8702B6918B500253B02 /* ThemeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeView.swift; sourceTree = "<group>"; };
 		E349F87C2B6A1A2400253B02 /* Shop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shop.swift; sourceTree = "<group>"; };
-		E349F8832B6AAC6800253B02 /* PJ3T3-Postie-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "PJ3T3-Postie-Info.plist"; sourceTree = "<group>"; };
 		E3E02CA72B59003100CD3D4C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E3EECAEF2B5F957A00E639F2 /* SourceSerifPro-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSerifPro-Black.otf"; sourceTree = "<group>"; };
 		E3EECAF12B5F958300E639F2 /* SourceSerifPro-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSerifPro-Light.otf"; sourceTree = "<group>"; };
@@ -218,7 +222,7 @@
 				9E0FA1212B54D27C001CEEB9 /* Preview Content */,
 				9E0FA11F2B54D27C001CEEB9 /* Assets.xcassets */,
 				E3E02CA72B59003100CD3D4C /* GoogleService-Info.plist */,
-				E349F8832B6AAC6800253B02 /* PJ3T3-Postie-Info.plist */,
+				CE5FF9242B6CF4A600DDA5BF /* PJ3T3-Postie-Info.plist */,
 			);
 			path = PJ3T3_Postie;
 			sourceTree = "<group>";
@@ -419,6 +423,7 @@
 			children = (
 				9E9F6ADE2B5765DD003DFE83 /* Color.swift */,
 				E3EECAFA2B60FB2400E639F2 /* Date.swift */,
+				CE60AACC2B6F907500D6717A /* Font.swift */,
 				CE67D55D2B58FF8500C0050B /* String.swift */,
 			);
 			path = Extenstions;
@@ -445,6 +450,8 @@
 		E3EECAEE2B5F956200E639F2 /* Font */ = {
 			isa = PBXGroup;
 			children = (
+				CE5FF9262B6CF8A400DDA5BF /* NanumMyeongjo.otf */,
+				CE60AACE2B6F930600D6717A /* NanumMyeongjoBold.otf */,
 				E3EECAEF2B5F957A00E639F2 /* SourceSerifPro-Black.otf */,
 				E3EECAF12B5F958300E639F2 /* SourceSerifPro-Light.otf */,
 			);
@@ -565,7 +572,9 @@
 				9E0FA12C2B54D2FC001CEEB9 /* .gitignore in Resources */,
 				0E29F0D32B5ED136005B86FB /* MapApiKeys.plist in Resources */,
 				9E0FA12A2B54D2EF001CEEB9 /* README.md in Resources */,
-				E349F8842B6AAC6800253B02 /* PJ3T3-Postie-Info.plist in Resources */,
+				CE60AACF2B6F930600D6717A /* NanumMyeongjoBold.otf in Resources */,
+				CE5FF9272B6CF8A400DDA5BF /* NanumMyeongjo.otf in Resources */,
+				CE5FF9252B6CF4A600DDA5BF /* PJ3T3-Postie-Info.plist in Resources */,
 				E3EECAF02B5F957A00E639F2 /* SourceSerifPro-Black.otf in Resources */,
 				9E0FA1232B54D27C001CEEB9 /* Preview Assets.xcassets in Resources */,
 				9E0FA1202B54D27C001CEEB9 /* Assets.xcassets in Resources */,
@@ -648,6 +657,7 @@
 			files = (
 				E349F8712B6918B500253B02 /* ThemeView.swift in Sources */,
 				CE7E50782B579D6800955F31 /* AddLetterViewModel.swift in Sources */,
+				CE60AACD2B6F907500D6717A /* Font.swift in Sources */,
 				CE6E08452B5E09D900CFBF2A /* LetterDetailViewModel.swift in Sources */,
 				9E9F6AB62B5762E5003DFE83 /* HomeView.swift in Sources */,
 				0E29F0DB2B5FDC0F005B86FB /* NaverMap.swift in Sources */,
