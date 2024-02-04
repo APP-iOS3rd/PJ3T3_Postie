@@ -20,14 +20,7 @@ struct LetterDetailView: View {
             VStack {
                 Page(letter: letter)
 
-                if !letter.summary.isEmpty {
-                    Text(letter.summary)
-                        .font(.letter(.nanumMyeongjo))
-                        .padding()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Color(hex: 0xFFFBF2))
-                        .clipShape(RoundedRectangle(cornerRadius: 4))
-                }
+                letterSummarySection
 
                 letterImageSection
             }
@@ -47,6 +40,7 @@ struct LetterDetailView: View {
 
                 } label: {
                     Image(systemName: "heart")
+                        .foregroundStyle(.postieOrange)
                 }
 
                 Menu {
@@ -103,31 +97,51 @@ struct LetterDetailView: View {
 // MARK: - Computed Views
 
 extension LetterDetailView {
+    @ViewBuilder
+    private var letterSummarySection: some View {
+        if !letter.summary.isEmpty {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("한 줄 요약")
+
+                Text(letter.summary)
+                    .font(.letter(.nanumMyeongjo))
+                    .padding()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color(hex: 0xFFFBF2))
+                    .clipShape(RoundedRectangle(cornerRadius: 4))
+            }
+        }
+    }
+
     private var letterImageSection: some View {
-        ScrollView(.horizontal) {
-            HStack(spacing: 8) {
-                if let images = letter.images {
-                    ForEach(0..<images.count, id: \.self) { index in
-                        ZStack {
-                            Button {
-                                letterDetailViewModel.selectedIndex = index
-                                letterDetailViewModel.showLetterImageFullScreenView = true
-                            } label: {
-                                Image(uiImage: images[index])
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 50, height: 50)
-                                    .clipShape(RoundedRectangle(cornerRadius: 10))
+        VStack(alignment: .leading, spacing: 4) {
+            Text("편지 사진")
+
+            ScrollView(.horizontal) {
+                HStack(spacing: 8) {
+                    if let images = letter.images {
+                        ForEach(0..<images.count, id: \.self) { index in
+                            ZStack {
+                                Button {
+                                    letterDetailViewModel.selectedIndex = index
+                                    letterDetailViewModel.showLetterImageFullScreenView = true
+                                } label: {
+                                    Image(uiImage: images[index])
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width: 50, height: 50)
+                                        .clipShape(RoundedRectangle(cornerRadius: 4))
+                                }
                             }
                         }
                     }
                 }
             }
+            .scrollIndicators(.never)
         }
-        .padding(.top, 8)
-        .scrollIndicators(.never)
     }
 }
+
 #Preview {
     NavigationStack {
         LetterDetailView(letter: Letter.preview)
