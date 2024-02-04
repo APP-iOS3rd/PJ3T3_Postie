@@ -10,9 +10,10 @@ import SwiftUI
 struct GroupedLetterView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
     @ObservedObject var authManager = AuthManager.shared
-    private var letterReceivedGrouped: [String] = []
-    private var letterWritedGrouped: [String] = []
-    private var letterGrouped: [String] = []
+    @Binding var currentColorPage: Int
+    var letterReceivedGrouped: [String] = []
+    var letterWritedGrouped: [String] = []
+    var letterGrouped: [String] = []
     
     // 숫자, 한글, 알파벳 순서대로 정렬
     func customSort(recipients: [String]) -> [String] {
@@ -54,7 +55,7 @@ struct GroupedLetterView: View {
         
         VStack {
             NavigationLink { // 좋아하는 편지 뷰
-                GroupedFavoriteListLetter()
+                GroupedFavoriteListLetter(currentColorPage: $currentColorPage)
             } label: {
                 HStack {
                     ZStack {
@@ -136,7 +137,7 @@ struct GroupedLetterView: View {
                 let countOfMatchingWriters = firestoreManager.letters.filter { $0.writer == recipient }.count
                 
                 NavigationLink {
-                    GroupedListLetterView(recipient: recipient)
+                    GroupedListLetterView(currentColorPage: $currentColorPage, recipient: recipient)
                 } label: {
                     HStack {
                         ZStack {

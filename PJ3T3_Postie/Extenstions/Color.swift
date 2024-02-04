@@ -20,13 +20,15 @@ extension Color {
     }
 }
 
-private let themeColors = [
-    ThemeData(backGroundColor: .blue, receivedLetterColor: .green, writenLetterColor: .white, profileColor: .black, tabBarTintColor: .black, tintColor: .black, dividerColor:. black),
-    ThemeData(backGroundColor: .blue, receivedLetterColor: .green, writenLetterColor: .white, profileColor: .black, tabBarTintColor: .black, tintColor: .black, dividerColor:. black),
-    ThemeData(backGroundColor: .blue, receivedLetterColor: .green, writenLetterColor: .white, profileColor: .black, tabBarTintColor: .black, tintColor: .black, dividerColor:. black),
-    ThemeData(backGroundColor: .blue, receivedLetterColor: .green, writenLetterColor: .white, profileColor: .black, tabBarTintColor: .black, tintColor: .black, dividerColor:. black),
-    ThemeData(backGroundColor: .blue, receivedLetterColor: .green, writenLetterColor: .white, profileColor: .black, tabBarTintColor: .black, tintColor: .black, dividerColor:. black)
+struct ThemeManager {
+    static let themeColors = [
+        ThemeData(backGroundColor: Color.postieBeige, receivedLetterColor: Color.postieWhite, writenLetterColor: Color.postieLightGray, profileColor: Color.postieGray, tabBarTintColor: Color.postieBlack, tintColor: Color.postieOrange, dividerColor: Color.postieDarkGray),
+        ThemeData(backGroundColor: Color.postieRealWhite, receivedLetterColor: Color.postieWhite, writenLetterColor: Color.postieLightGray, profileColor: Color.postieGray, tabBarTintColor: Color.postieBlack, tintColor: Color.postieYellow, dividerColor: Color.postieDarkGray),
+        ThemeData(backGroundColor: Color.postieWhite, receivedLetterColor: Color.postieLightBeige, writenLetterColor: Color.postieRealWhite, profileColor: Color.postieGray, tabBarTintColor: Color.postieBlack, tintColor: Color.postieGreen, dividerColor: Color.postieDarkGray),
+        ThemeData(backGroundColor: Color.postieRealWhite, receivedLetterColor: Color.postieLightBlue, writenLetterColor: Color.postieLightYellow, profileColor: Color.postieGray, tabBarTintColor: Color.postieBlack, tintColor: Color.postieBlue, dividerColor: Color.postieDarkGray),
+        ThemeData(backGroundColor: Color.postieBlack, receivedLetterColor: Color.postieLightBlack, writenLetterColor: Color.postieSpaceGray, profileColor: Color.postieGray, tabBarTintColor: Color.postieLightGray, tintColor: Color.postieLightGray, dividerColor: Color.postieLightGray)
     ]
+}
 
 
 struct ThemeData {
