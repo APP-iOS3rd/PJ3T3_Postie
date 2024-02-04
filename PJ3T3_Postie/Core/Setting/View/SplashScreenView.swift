@@ -13,18 +13,10 @@ struct SplashScreenView: View {
             Color.postieBeige
                 .ignoresSafeArea()
             
+            ToFromLabelView()
+                .padding()
+            
             VStack {
-                HStack {
-                    Text("To.")
-                        .font(.custom("SourceSerifPro-Black", size: 40))
-                        .foregroundStyle(Color.postieBlack)
-                        .padding()
-                    
-                    Spacer()
-                }
-                
-                Spacer()
-                
                 Text("Postie")
                     .font(.custom("SourceSerifPro-Black", size: 70))
                     .foregroundStyle(Color.postieOrange)
@@ -42,19 +34,34 @@ struct SplashScreenView: View {
                 
                 ProgressView()
                     .offset(y: -40)
-                
-                Spacer()
-                
-                HStack {
-                    Spacer()
-                    
-                    Text("From.")
-                        .font(.custom("SourceSerifPro-Black", size: 40))
-                        .foregroundStyle(Color.postieBlack)
-                        .padding()
-                }
             }
             .padding()
+        }
+    }
+}
+
+struct ToFromLabelView: View {
+    var body: some View {
+        VStack {
+            HStack {
+                Text("To.")
+                    .font(.custom("SourceSerifPro-Black", size: 35))
+                    .foregroundStyle(Color.postieBlack)
+                    .padding()
+                
+                Spacer()
+            }
+            
+            Spacer()
+            
+            HStack {
+                Spacer()
+                
+                Text("From.")
+                    .font(.custom("SourceSerifPro-Black", size: 35))
+                    .foregroundStyle(Color.postieBlack)
+                    .padding()
+            }
         }
     }
 }
