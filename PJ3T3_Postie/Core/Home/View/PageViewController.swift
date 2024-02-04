@@ -78,42 +78,38 @@ struct Page: View {
     let letter: Letter
 
     var body: some View {
-        if !letter.summary.isEmpty {
-            Text("\"\(letter.summary)\"")
-                .font(.headline)
-        }
+        ScrollView {
+            HStack {
+                Text("To. ")
+                    .font(.view(.sourceSerifProBlack))
+                + Text(letter.recipient)
+                    .font(.letter(.nanumMyeongjoBold))
+                Spacer()
+            }
 
-        VStack(spacing: 16) {
-            ScrollView {
-                HStack {
-                    Text("To. \(letter.recipient)")
-                        .font(.headline)
-                    Spacer()
-                }
+            Text(letter.text)
+                .font(.letter(.nanumMyeongjo))
+                .lineSpacing(10.0)
+                .padding(.vertical, 8)
 
-                Divider()
+            Spacer()
 
-                Text(letter.text)
-                    .lineSpacing(10.0)
+            HStack {
+                Text(letter.date.toString(format: "yyyy년 M월 d일"))
+                    .font(.letter(.nanumMyeongjo))
 
                 Spacer()
 
-                Divider()
-
-                HStack {
-                    Text(letter.date.formatted())
-
-                    Spacer()
-
-                    Text("From. \(letter.writer)")
-                        .font(.headline)
-                }
+                Text("From. ")
+                    .font(.view(.sourceSerifProBlack))
+                + Text(letter.writer)
+                    .font(.letter(.nanumMyeongjoBold))
             }
-            .scrollIndicators(.never)
         }
+        .scrollIndicators(.never)
         .padding()
         .background(Color(hex: 0xFFFBF2))
-        .clipShape(RoundedRectangle(cornerRadius: 10.0))
+        .clipShape(RoundedRectangle(cornerRadius: 4))
     }
 }
 

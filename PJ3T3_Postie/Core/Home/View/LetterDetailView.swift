@@ -20,6 +20,15 @@ struct LetterDetailView: View {
             VStack {
                 Page(letter: letter)
 
+                if !letter.summary.isEmpty {
+                    Text(letter.summary)
+                        .font(.letter(.nanumMyeongjo))
+                        .padding()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(Color(hex: 0xFFFBF2))
+                        .clipShape(RoundedRectangle(cornerRadius: 4))
+                }
+
                 letterImageSection
             }
             .padding()
