@@ -30,11 +30,18 @@ struct SplashScreenView: View {
                     .foregroundStyle(Color.postieOrange)
                     .padding()
                 
+                Text("내 손안의 편지 보관함")
+                    .foregroundStyle(Color.postieDarkGray)
+                
+                Text("언제 어디서나")
+                    .foregroundStyle(Color.postieDarkGray)
+                
                 Image("postyReceiving")
                     .resizable()
                     .frame(width: 300, height: 300)
                 
                 ProgressView()
+                    .offset(y: -40)
                 
                 Spacer()
                 

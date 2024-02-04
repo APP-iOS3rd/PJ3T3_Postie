@@ -139,10 +139,9 @@ struct SideMenuView: View {
                                 .frame(width: 80,height: 80)
                                 .foregroundStyle(Color.postieGray)
                             
-                            Image("Posty_Receiving")
+                            Image("postyReceiving")
                                 .resizable()
                                 .frame(width: 80,height: 80)
-                                .offset(x: -4, y: 5)
                         }
                         
                         VStack(alignment: .leading) {

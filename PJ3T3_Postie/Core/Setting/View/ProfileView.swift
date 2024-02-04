@@ -24,10 +24,9 @@ struct ProfileView: View {
                             .frame(width: 170, height: 170)
                             .foregroundStyle(Color.postieGray)
                         
-                        Image("Posty_Receiving")
+                        Image("postyReceiving")
                             .resizable()
                             .frame(width: 170, height: 170)
-                            .offset(x: -8, y: 5)
                     }
                     
                     Spacer()
