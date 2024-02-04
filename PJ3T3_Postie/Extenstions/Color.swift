@@ -19,3 +19,22 @@ extension Color {
         )
     }
 }
+
+private let themeColors = [
+    ThemeData(backGroundColor: .blue, receivedLetterColor: .green, writenLetterColor: .white, profileColor: .black, tabBarTintColor: .black, tintColor: .black, dividerColor:. black),
+    ThemeData(backGroundColor: .blue, receivedLetterColor: .green, writenLetterColor: .white, profileColor: .black, tabBarTintColor: .black, tintColor: .black, dividerColor:. black),
+    ThemeData(backGroundColor: .blue, receivedLetterColor: .green, writenLetterColor: .white, profileColor: .black, tabBarTintColor: .black, tintColor: .black, dividerColor:. black),
+    ThemeData(backGroundColor: .blue, receivedLetterColor: .green, writenLetterColor: .white, profileColor: .black, tabBarTintColor: .black, tintColor: .black, dividerColor:. black),
+    ThemeData(backGroundColor: .blue, receivedLetterColor: .green, writenLetterColor: .white, profileColor: .black, tabBarTintColor: .black, tintColor: .black, dividerColor:. black)
+    ]
+
+
+struct ThemeData {
+    let backGroundColor: Color
+    let receivedLetterColor: Color
+    let writenLetterColor: Color
+    let profileColor: Color
+    let tabBarTintColor: Color
+    let tintColor: Color
+    let dividerColor: Color
+}
