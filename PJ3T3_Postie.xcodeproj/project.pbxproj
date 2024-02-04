@@ -77,6 +77,7 @@
 		CEF09E472B57BD8500BE67E4 /* LetterImageFullScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF09E462B57BD8500BE67E4 /* LetterImageFullScreenView.swift */; };
 		CEF09E492B57BFBF00BE67E4 /* TextRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF09E482B57BFBF00BE67E4 /* TextRecognizer.swift */; };
 		E30DED6B2B6DF9D000FA70A6 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E30DED6A2B6DF9D000FA70A6 /* GoogleService-Info.plist */; };
+		E30DED6F2B6FD25B00FA70A6 /* SplashScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E30DED6E2B6FD25B00FA70A6 /* SplashScreenView.swift */; };
 		E349F8712B6918B500253B02 /* ThemeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E349F8702B6918B500253B02 /* ThemeView.swift */; };
 		E349F87D2B6A1A2400253B02 /* Shop.swift in Sources */ = {isa = PBXBuildFile; fileRef = E349F87C2B6A1A2400253B02 /* Shop.swift */; };
 		E349F8842B6AAC6800253B02 /* PJ3T3-Postie-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E349F8832B6AAC6800253B02 /* PJ3T3-Postie-Info.plist */; };
@@ -138,6 +139,7 @@
 		CEF09E462B57BD8500BE67E4 /* LetterImageFullScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterImageFullScreenView.swift; sourceTree = "<group>"; };
 		CEF09E482B57BFBF00BE67E4 /* TextRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextRecognizer.swift; sourceTree = "<group>"; };
 		E30DED6A2B6DF9D000FA70A6 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../GoogleService-Info.plist"; sourceTree = "<group>"; };
+		E30DED6E2B6FD25B00FA70A6 /* SplashScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreenView.swift; sourceTree = "<group>"; };
 		E349F8702B6918B500253B02 /* ThemeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeView.swift; sourceTree = "<group>"; };
 		E349F87C2B6A1A2400253B02 /* Shop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shop.swift; sourceTree = "<group>"; };
 		E349F8832B6AAC6800253B02 /* PJ3T3-Postie-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "PJ3T3-Postie-Info.plist"; sourceTree = "<group>"; };
@@ -420,6 +422,7 @@
 				9E9F6AD12B5763F3003DFE83 /* SettingsRowView.swift */,
 				9E9F6AC52B5763A3003DFE83 /* SettingView.swift */,
 				E349F8702B6918B500253B02 /* ThemeView.swift */,
+				E30DED6E2B6FD25B00FA70A6 /* SplashScreenView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -663,6 +666,7 @@
 				0E29F0DB2B5FDC0F005B86FB /* NaverMap.swift in Sources */,
 				0E29F0E02B602E3D005B86FB /* MyCoord.swift in Sources */,
 				E3EECAFB2B60FB2400E639F2 /* Date.swift in Sources */,
+				E30DED6F2B6FD25B00FA70A6 /* SplashScreenView.swift in Sources */,
 				9E0FA11E2B54D27A001CEEB9 /* ContentView.swift in Sources */,
 				9E7F8C782B5E69B000F1A6BF /* StorageManager.swift in Sources */,
 				9E9F6ADF2B5765DE003DFE83 /* Color.swift in Sources */,

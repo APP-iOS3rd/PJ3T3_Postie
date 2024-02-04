@@ -6,5 +6,17 @@
 //
 
 import SwiftUI
-
 import Foundation
+
+class AppViewModel: ObservableObject {
+    @Published var isInitialized = false
+    
+    init() {
+        // 데이터 로딩 또는 초기화 작업을 여기서 수행
+        // 데이터 로딩 또는 초기화에 2초 소요
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            
+            self.isInitialized = true
+        }
+    }
+}
