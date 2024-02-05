@@ -38,7 +38,8 @@ struct GroupedLetterView: View {
         }
     }
     
-    var body: some View {
+    // 편지 데이터 정렬
+    func sortedLetterData() -> [String] {
         // recipient 에서 중복 된것을 제외 후 letterReceivedGrouped 에 삽입
         let letterReceivedGrouped: [String] = Array(Set(firestoreManager.letters.map { $0.recipient }.filter { !$0.isEmpty }))
         // writer 에서 중복 된것을 제외 후 letterWritedGrouped 에 삽입
@@ -50,6 +51,13 @@ struct GroupedLetterView: View {
         let filteredLetterGrouped: [String] = letterGrouped.filter { $0 != "me" }
         // 숫자, 한글, 알파벳 순서대로 정렬
         let sortedRecipients = customSort(recipients: filteredLetterGrouped)
+        
+        return sortedRecipients
+    }
+    
+    var body: some View {
+        // 편지 데이터 정렬
+        let sortedRecipients = sortedLetterData()
         // 좋아하는 편지들만 필터
         let favoriteLetters = firestoreManager.letters.filter { $0.isFavorite }
         

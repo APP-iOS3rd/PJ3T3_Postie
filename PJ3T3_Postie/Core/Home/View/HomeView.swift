@@ -100,7 +100,7 @@ struct HomeView: View {
 
 // 임시 세팅뷰
 struct SideMenuView: View {
-    @ObservedObject var authViewModel = AuthManager.shared
+    @ObservedObject var authManager = AuthManager.shared
     @Binding var isSideMenuOpen: Bool
     @Binding var currentGroupPage: Int
     @Binding var isTabGroupButton: Bool
@@ -109,7 +109,7 @@ struct SideMenuView: View {
     @State private var isToggleOn = false
     
     var body: some View {
-        let user = authViewModel.currentUser
+        let user = authManager.currentUser
         
         HStack {
             Spacer()
