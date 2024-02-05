@@ -16,8 +16,10 @@ struct ThemeView: View {
     @Binding var currentGroupPage: Int
     
     var body: some View {
+        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
+        
         ZStack {
-            ThemeManager.themeColors[isThemeGroupButton].backGroundColor
+            postieColors.backGroundColor
                 .ignoresSafeArea()
             
             VStack {
@@ -26,7 +28,7 @@ struct ThemeView: View {
                         Rectangle()
                             .foregroundColor(.clear)
                             .frame(width: 72, height: 30)
-                            .background(selectedThemeButton ? ThemeManager.themeColors[isThemeGroupButton].tintColor : ThemeManager.themeColors[isThemeGroupButton].receivedLetterColor)
+                            .background(selectedThemeButton ? postieColors.tintColor : postieColors.receivedLetterColor)
                             .cornerRadius(20)
                             .shadow(color: Color.postieBlack.opacity(0.1), radius: 3, x: 2, y: 2)
                         
@@ -55,7 +57,7 @@ struct ThemeView: View {
                         Rectangle()
                             .foregroundColor(.clear)
                             .frame(width: 72, height: 30)
-                            .background(selectedThemeButton ? ThemeManager.themeColors[isThemeGroupButton].receivedLetterColor : ThemeManager.themeColors[isThemeGroupButton].tintColor)
+                            .background(selectedThemeButton ? postieColors.receivedLetterColor : postieColors.tintColor)
                             .cornerRadius(20)
                             .shadow(color: Color.postieBlack.opacity(0.1), radius: 3, x: 2, y: 2)
                         
@@ -96,7 +98,7 @@ struct ThemeView: View {
                                 Image("PostieTheme_PostieOrange")
                                     .resizable()
                                     .modifier(CustomImageModifier())
-                                    .border(isThemeGroupButton == 0 ? ThemeManager.themeColors[isThemeGroupButton].tintColor : ThemeManager.themeColors[isThemeGroupButton].tintColor.opacity(0))
+                                    .border(isThemeGroupButton == 0 ? postieColors.tintColor : postieColors.tintColor.opacity(0))
                                 
                                 Spacer()
                             }
@@ -113,7 +115,7 @@ struct ThemeView: View {
                                 Image("PostieTheme_PostieYellow")
                                     .resizable()
                                     .modifier(CustomImageModifier())
-                                    .border(isThemeGroupButton == 1 ? ThemeManager.themeColors[isThemeGroupButton].tintColor : ThemeManager.themeColors[isThemeGroupButton].tintColor.opacity(0))
+                                    .border(isThemeGroupButton == 1 ? postieColors.tintColor : postieColors.tintColor.opacity(0))
                                 
                                 Spacer()
                             }
@@ -130,7 +132,7 @@ struct ThemeView: View {
                                 Image("PostieTheme_PostieGreen")
                                     .resizable()
                                     .modifier(CustomImageModifier())
-                                    .border(isThemeGroupButton == 2 ? ThemeManager.themeColors[isThemeGroupButton].tintColor : ThemeManager.themeColors[isThemeGroupButton].tintColor.opacity(0))
+                                    .border(isThemeGroupButton == 2 ? postieColors.tintColor : postieColors.tintColor.opacity(0))
                                 
                                 Spacer()
                             }
@@ -147,7 +149,7 @@ struct ThemeView: View {
                                 Image("PostieTheme_PostieBlue")
                                     .resizable()
                                     .modifier(CustomImageModifier())
-                                    .border(isThemeGroupButton == 3 ? ThemeManager.themeColors[isThemeGroupButton].tintColor : ThemeManager.themeColors[isThemeGroupButton].tintColor.opacity(0))
+                                    .border(isThemeGroupButton == 3 ? postieColors.tintColor : postieColors.tintColor.opacity(0))
                                 
                                 Spacer()
                             }
@@ -164,7 +166,7 @@ struct ThemeView: View {
                                 Image("PostieTheme_PostieBlack")
                                     .resizable()
                                     .modifier(CustomImageModifier())
-                                    .border(isThemeGroupButton == 4 ? ThemeManager.themeColors[isThemeGroupButton].tintColor : ThemeManager.themeColors[isThemeGroupButton].tintColor.opacity(0))
+                                    .border(isThemeGroupButton == 4 ? postieColors.tintColor : postieColors.tintColor.opacity(0))
                                 
                                 Spacer()
                             }
@@ -185,7 +187,7 @@ struct ThemeView: View {
                                 Image("PostieTheme_LetterGroup")
                                     .resizable()
                                     .modifier(CustomImageModifier())
-                                    .border(isTabGroupButton ? ThemeManager.themeColors[isThemeGroupButton].tintColor : ThemeManager.themeColors[isThemeGroupButton].tintColor.opacity(0))
+                                    .border(isTabGroupButton ? postieColors.tintColor : postieColors.tintColor.opacity(0))
                                 
                                 Spacer()
                             }
@@ -202,7 +204,7 @@ struct ThemeView: View {
                                 Image("PostieTheme_LetterList")
                                     .resizable()
                                     .modifier(CustomImageModifier())
-                                    .border(isTabGroupButton ? ThemeManager.themeColors[isThemeGroupButton].tintColor.opacity(0) : ThemeManager.themeColors[isThemeGroupButton].tintColor)
+                                    .border(isTabGroupButton ? postieColors.tintColor.opacity(0) : postieColors.tintColor)
                                 
                                 Spacer()
                             }
@@ -220,7 +222,7 @@ struct ThemeView: View {
             ToolbarItemGroup(placement: .principal) {
                 Text("테마 설정")
                     .bold()
-                    .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].tintColor)
+                    .foregroundStyle(postieColors.tintColor)
             }
             
             ToolbarItemGroup(placement: .topBarTrailing) {
@@ -233,7 +235,7 @@ struct ThemeView: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
-        .tint(ThemeManager.themeColors[isThemeGroupButton].tabBarTintColor)
+        .tint(postieColors.tabBarTintColor)
     }
 }
 

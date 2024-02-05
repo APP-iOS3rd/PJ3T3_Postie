@@ -34,6 +34,7 @@ struct GroupedLetterView: View {
             let lhsPriority = (isNumber(lhs) ? 0 : isKorean(lhs) ? 1 : 2)
             let rhsPriority = (isNumber(rhs) ? 0 : isKorean(rhs) ? 1 : 2)
             
+            // 왼쪽 String과 오른쪽 String을 비교하여 숫자, 한글, 알파벳 순으로 정렬
             return lhsPriority == rhsPriority ? lhs < rhs : lhsPriority < rhsPriority
         }
     }
@@ -56,6 +57,7 @@ struct GroupedLetterView: View {
     }
     
     var body: some View {
+        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
         // 편지 데이터 정렬
         let sortedRecipients = sortedLetterData()
         // 좋아하는 편지들만 필터
@@ -69,7 +71,7 @@ struct GroupedLetterView: View {
                     ZStack {
                         if favoriteLetters.count > 2 {
                             RoundedRectangle(cornerRadius: 10)
-                                .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].receivedLetterColor)
+                                .foregroundStyle(postieColors.receivedLetterColor)
                                 .frame(width: 350, height: 130)
                                 .offset(x: 10, y: 10)
                                 .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
@@ -77,7 +79,7 @@ struct GroupedLetterView: View {
                         
                         if favoriteLetters.count > 1 {
                             RoundedRectangle(cornerRadius: 10)
-                                .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].receivedLetterColor)
+                                .foregroundStyle(postieColors.receivedLetterColor)
                                 .frame(width: 350, height: 130)
                                 .offset(x: 5, y: 5)
                                 .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
@@ -88,16 +90,16 @@ struct GroupedLetterView: View {
                                 HStack {
                                     Text("My Favorite.")
                                         .font(.custom("SourceSerifPro-Black", size: 18))
-                                        .foregroundColor(ThemeManager.themeColors[isThemeGroupButton].tabBarTintColor)
+                                        .foregroundColor(postieColors.tabBarTintColor)
                                     
                                     Text("\("좋아하는 편지 ")")
-                                        .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].tabBarTintColor)
+                                        .foregroundStyle(postieColors.tabBarTintColor)
                                     
                                     Spacer()
                                     
                                     Text(" ") // date
                                         .font(.custom("SourceSerifPro-Light", size: 18))
-                                        .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].tabBarTintColor)
+                                        .foregroundStyle(postieColors.tabBarTintColor)
                                     
                                     ZStack {
                                         Image(systemName: "water.waves")
@@ -107,14 +109,14 @@ struct GroupedLetterView: View {
                                         Image(systemName: "sleep.circle")
                                             .font(.largeTitle)
                                     }
-                                    .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].dividerColor)
+                                    .foregroundStyle(postieColors.dividerColor)
                                 }
                                 
                                 Spacer()
                                 
                                 HStack {
                                     Text("\"좋아하는 편지 꾸러미\"")
-                                        .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].tabBarTintColor)
+                                        .foregroundStyle(postieColors.tabBarTintColor)
                                     
                                     Spacer()
                                     
@@ -127,7 +129,7 @@ struct GroupedLetterView: View {
                             .frame(width: 350, height: 130)
                             .background(
                                 RoundedRectangle(cornerRadius: 10)
-                                    .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].receivedLetterColor)
+                                    .foregroundStyle(postieColors.receivedLetterColor)
                                     .shadow(color: Color.postieBlack.opacity(0.1), radius: 3, x: 3, y: 3)
                             )
                         }
@@ -152,7 +154,7 @@ struct GroupedLetterView: View {
                         ZStack {
                             if countOfMatchingRecipients + countOfMatchingWriters > 2 {
                                 RoundedRectangle(cornerRadius: 10)
-                                    .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].receivedLetterColor)
+                                    .foregroundStyle(postieColors.receivedLetterColor)
                                     .frame(width: 350, height: 130)
                                     .offset(x: 10, y: 10)
                                     .shadow(color: Color.postieBlack.opacity(0.1), radius: 3, x: 3, y: 3)
@@ -160,7 +162,7 @@ struct GroupedLetterView: View {
                             
                             if countOfMatchingRecipients + countOfMatchingWriters > 1 {
                                 RoundedRectangle(cornerRadius: 10)
-                                    .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].receivedLetterColor)
+                                    .foregroundStyle(postieColors.receivedLetterColor)
                                     .frame(width: 350, height: 130)
                                     .offset(x: 5, y: 5)
                                     .shadow(color: Color.postieBlack.opacity(0.1), radius: 3, x: 3, y: 3)
@@ -171,16 +173,16 @@ struct GroupedLetterView: View {
                                     HStack {
                                         Text("With.")
                                             .font(.custom("SourceSerifPro-Black", size: 18))
-                                            .foregroundColor(ThemeManager.themeColors[isThemeGroupButton].tabBarTintColor)
+                                            .foregroundColor(postieColors.tabBarTintColor)
                                         
                                         Text("\(recipient)")
-                                            .foregroundColor(ThemeManager.themeColors[isThemeGroupButton].tabBarTintColor)
+                                            .foregroundColor(postieColors.tabBarTintColor)
                                         
                                         Spacer()
                                         
                                         Text(" ") // date
                                             .font(.custom("SourceSerifPro-Light", size: 18))
-                                            .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].tabBarTintColor)
+                                            .foregroundStyle(postieColors.tabBarTintColor)
                                         
                                         ZStack {
                                             Image(systemName: "water.waves")
@@ -190,7 +192,7 @@ struct GroupedLetterView: View {
                                             Image(systemName: "sleep.circle")
                                                 .font(.largeTitle)
                                         }
-                                        .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].dividerColor)
+                                        .foregroundStyle(postieColors.dividerColor)
                                     }
                                     
                                     Spacer()
@@ -202,7 +204,7 @@ struct GroupedLetterView: View {
                             .frame(width: 350, height: 130)
                             .background(
                                 RoundedRectangle(cornerRadius: 10)
-                                    .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].receivedLetterColor)
+                                    .foregroundStyle(postieColors.receivedLetterColor)
                                     .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
                             )
                         }
@@ -214,7 +216,7 @@ struct GroupedLetterView: View {
                 }
             }
         }
-        .tint(ThemeManager.themeColors[isThemeGroupButton].tabBarTintColor)
+        .tint(postieColors.tabBarTintColor)
     }
 }
 

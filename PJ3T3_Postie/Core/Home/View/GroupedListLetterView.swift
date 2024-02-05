@@ -26,8 +26,10 @@ struct GroupedListLetterView: View {
     }
     
     var body: some View {
+        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
+        
         ZStack(alignment: .bottomTrailing) {
-            ThemeManager.themeColors[isThemeGroupButton].backGroundColor
+            postieColors.backGroundColor
                 .ignoresSafeArea()
             
             ScrollView {
@@ -52,10 +54,10 @@ struct GroupedListLetterView: View {
             ToolbarItem(placement: .principal) {
                 Text("\(recipient)")
                     .bold()
-                    .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].tintColor)
+                    .foregroundStyle(postieColors.tintColor)
             }
         }
-        .tint(ThemeManager.themeColors[isThemeGroupButton].tabBarTintColor)
+        .tint(postieColors.tabBarTintColor)
     }
 }
 

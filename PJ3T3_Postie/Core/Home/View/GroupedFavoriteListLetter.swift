@@ -24,8 +24,10 @@ struct GroupedFavoriteListLetter: View {
     }
     
     var body: some View {
+        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
+        
         ZStack(alignment: .bottomTrailing) {
-            ThemeManager.themeColors[isThemeGroupButton].backGroundColor
+            postieColors.backGroundColor
                 .ignoresSafeArea()
             
             ScrollView {
@@ -45,13 +47,13 @@ struct GroupedFavoriteListLetter: View {
             
             AddLetterButton(isThemeGroupButton: $isThemeGroupButton)
         }
-        .tint(ThemeManager.themeColors[isThemeGroupButton].tabBarTintColor)
+        .tint(postieColors.tabBarTintColor)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .principal) {
                 Text("좋아하는 편지들")
                     .bold()
-                    .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].tintColor)
+                    .foregroundStyle(postieColors.tintColor)
             }
         }
     }

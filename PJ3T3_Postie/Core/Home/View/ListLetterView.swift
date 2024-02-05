@@ -27,6 +27,8 @@ struct LetterItemView: View {
     var letter: Letter
     
     var body: some View {
+        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
+        
         HStack {
             if letter.isReceived {
                 Spacer()
@@ -37,16 +39,16 @@ struct LetterItemView: View {
                     HStack {
                         Text(letter.isReceived ? "To." : "From.")
                             .font(.custom("SourceSerifPro-Black", size: 18))
-                            .foregroundColor(ThemeManager.themeColors[isThemeGroupButton].tabBarTintColor)
+                            .foregroundColor(postieColors.tabBarTintColor)
                         
                         Text("\(letter.recipient)")
-                            .foregroundColor(ThemeManager.themeColors[isThemeGroupButton].tabBarTintColor)
+                            .foregroundColor(postieColors.tabBarTintColor)
                         
                         Spacer()
                         
                         Text("\(letter.date.toString())")
                             .font(.custom("SourceSerifPro-Light", size: 18))
-                            .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].tabBarTintColor)
+                            .foregroundStyle(postieColors.tabBarTintColor)
                         
                         ZStack {
                             Image(systemName: "water.waves")
@@ -56,14 +58,14 @@ struct LetterItemView: View {
                             Image(systemName: "sleep.circle")
                                 .font(.largeTitle)
                         }
-                        .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].dividerColor)
+                        .foregroundStyle(postieColors.dividerColor)
                     }
                     
                     Spacer()
                     
                     HStack {
                         Text("\"\(letter.summary)\"")
-                            .foregroundColor(ThemeManager.themeColors[isThemeGroupButton].tabBarTintColor)
+                            .foregroundColor(postieColors.tabBarTintColor)
                         
                         Spacer()
                         
@@ -79,7 +81,7 @@ struct LetterItemView: View {
             .frame(width: 300, height: 130)
             .background(
                 RoundedRectangle(cornerRadius: 10)
-                    .foregroundStyle(letter.isReceived ? ThemeManager.themeColors[isThemeGroupButton].writenLetterColor : ThemeManager.themeColors[isThemeGroupButton].receivedLetterColor)
+                    .foregroundStyle(letter.isReceived ? postieColors.writenLetterColor : postieColors.receivedLetterColor)
                     .shadow(color: Color.postieBlack.opacity(0.1), radius: 3, x: 3, y: 3)
             )
             

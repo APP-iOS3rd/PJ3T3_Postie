@@ -12,8 +12,10 @@ struct ProfileView: View {
     @Binding var isThemeGroupButton: Int
     
     var body: some View {
+        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
+        
         ZStack {
-            ThemeManager.themeColors[isThemeGroupButton].backGroundColor
+            postieColors.backGroundColor
                 .ignoresSafeArea()
             
             VStack(alignment: .leading) {
@@ -23,7 +25,7 @@ struct ProfileView: View {
                     ZStack {
                         Circle()
                             .frame(width: 170, height: 170)
-                            .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].profileColor)
+                            .foregroundStyle(postieColors.profileColor)
                         
                         Image("postyReceiving")
                             .resizable()
@@ -34,37 +36,37 @@ struct ProfileView: View {
                 }
                 
                 Text("이름")
-                    .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].dividerColor)
+                    .foregroundStyle(postieColors.dividerColor)
                 
                 DividerView(isThemeGroupButton: $isThemeGroupButton)
                 
                 Text("Postie_test")
-                    .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].tabBarTintColor)
+                    .foregroundStyle(postieColors.tabBarTintColor)
                     .font(.title3)
                     .padding(.bottom)
                 
                 Text("계정")
-                    .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].dividerColor)
+                    .foregroundStyle(postieColors.dividerColor)
                 
                 DividerView(isThemeGroupButton: $isThemeGroupButton)
                 
                 Text("postie@test.com")
-                    .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].tabBarTintColor)
+                    .foregroundStyle(postieColors.tabBarTintColor)
                     .font(.title3)
                     .padding(.bottom)
                 
                 Text("구독정보")
-                    .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].dividerColor)
+                    .foregroundStyle(postieColors.dividerColor)
                 
                 DividerView(isThemeGroupButton: $isThemeGroupButton)
                 
                 Text("일반회원")
-                    .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].tabBarTintColor)
+                    .foregroundStyle(postieColors.tabBarTintColor)
                     .font(.title3)
                     .padding(.bottom)
                 
                 Text("계정 관리")
-                    .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].dividerColor)
+                    .foregroundStyle(postieColors.dividerColor)
                 
                 DividerView(isThemeGroupButton: $isThemeGroupButton)
                 
@@ -72,37 +74,37 @@ struct ProfileView: View {
                     authViewModel.signOut()
                 } label: {
                     Text("로그아웃")
-                        .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].tabBarTintColor)
+                        .foregroundStyle(postieColors.tabBarTintColor)
                         .font(.title3)
                         .padding(.bottom)
                 }
                 
                 Text("회원탈퇴")
-                    .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].tabBarTintColor)
+                    .foregroundStyle(postieColors.tabBarTintColor)
                     .font(.title3)
                 
                 Spacer()
             }
-            .tint(ThemeManager.themeColors[isThemeGroupButton].tabBarTintColor)
+            .tint(postieColors.tabBarTintColor)
             .padding()
         }
         .toolbar {
             ToolbarItemGroup(placement: .principal) {
                 Text("프로필 설정")
                     .bold()
-                    .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].tintColor)
+                    .foregroundStyle(postieColors.tintColor)
             }
             
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button(action: {
                 }) {
                     Text("수정")
-                        .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].tabBarTintColor)
+                        .foregroundStyle(postieColors.tabBarTintColor)
                 }
             }
         }
         .navigationBarTitleDisplayMode(.inline)
-        .tint(ThemeManager.themeColors[isThemeGroupButton].tabBarTintColor)
+        .tint(postieColors.tabBarTintColor)
     }
 }
 
