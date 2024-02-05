@@ -15,9 +15,6 @@ struct GroupedListLetterView: View {
 
     @State private var showAlert = false
     @State private var isSideMenuOpen = false
-    
-    @State private var showAlert = false
-    @State private var isSideMenuOpen = false
     @Binding var isThemeGroupButton: Int
     
     var body: some View {
