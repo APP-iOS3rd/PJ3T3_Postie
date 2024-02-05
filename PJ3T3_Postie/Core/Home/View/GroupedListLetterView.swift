@@ -10,9 +10,9 @@ import SwiftUI
 struct GroupedListLetterView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
     @ObservedObject var storageManager = StorageManager.shared
+    var recipient: String
     @State private var showAlert = false
     @State private var isSideMenuOpen = false
-    var recipient: String
     
     @ViewBuilder
     func GroupedLetterView(letter: Letter) -> some View {
