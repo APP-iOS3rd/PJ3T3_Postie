@@ -215,7 +215,6 @@
 		9E0FA11A2B54D27A001CEEB9 /* PJ3T3_Postie */ = {
 			isa = PBXGroup;
 			children = (
-				9E9A8BF52B70B6790072CB75 /* PJ3T3_Postie.entitlements */,
 				9E9F6AA42B5761DE003DFE83 /* App */,
 				9E9F6AA32B5761D7003DFE83 /* Components */,
 				9E9F6AA22B5761CD003DFE83 /* Core */,
@@ -227,6 +226,7 @@
 				9E0FA11F2B54D27C001CEEB9 /* Assets.xcassets */,
 				E3E02CA72B59003100CD3D4C /* GoogleService-Info.plist */,
 				9E9A8BDF2B6AB09D0072CB75 /* PJ3T3-Postie-Info.plist */,
+				9E9A8BF52B70B6790072CB75 /* PJ3T3_Postie.entitlements */,
 			);
 			path = PJ3T3_Postie;
 			sourceTree = "<group>";
