@@ -12,7 +12,7 @@ struct HomeView: View {
     @ObservedObject var storageManager = StorageManager.shared
     @State private var isSideMenuOpen = false
     @State private var isTabGroupButton = true
-    @State private var currentGroupPage: Int = 1
+    @State private var currentGroupPage: Int = 0
     @State private var isThemeGroupButton: Int = 0
     @State private var currentColorPage: Int = 0
     
@@ -53,7 +53,7 @@ struct HomeView: View {
                     
                     ZStack(alignment: .bottomTrailing) {
                         ScrollView {
-                            if currentGroupPage == 0 {
+                            if isTabGroupButton {
                                 VStack {
                                     GroupedLetterView(isThemeGroupButton: $isThemeGroupButton)
                                 }

@@ -69,7 +69,7 @@ struct GroupedLetterView: View {
                     ZStack {
                         if favoriteLetters.count > 2 {
                             RoundedRectangle(cornerRadius: 10)
-                                .foregroundStyle(Color.postieWhite)
+                                .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].receivedLetterColor)
                                 .frame(width: 350, height: 130)
                                 .offset(x: 10, y: 10)
                                 .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
@@ -77,7 +77,7 @@ struct GroupedLetterView: View {
                         
                         if favoriteLetters.count > 1 {
                             RoundedRectangle(cornerRadius: 10)
-                                .foregroundStyle(Color.postieWhite)
+                                .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].receivedLetterColor)
                                 .frame(width: 350, height: 130)
                                 .offset(x: 5, y: 5)
                                 .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
@@ -88,16 +88,16 @@ struct GroupedLetterView: View {
                                 HStack {
                                     Text("My Favorite.")
                                         .font(.custom("SourceSerifPro-Black", size: 18))
-                                        .foregroundColor(Color.postieBlack)
+                                        .foregroundColor(ThemeManager.themeColors[isThemeGroupButton].tabBarTintColor)
                                     
                                     Text("\("좋아하는 편지 ")")
-                                        .foregroundStyle(Color.postieBlack)
+                                        .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].tabBarTintColor)
                                     
                                     Spacer()
                                     
                                     Text(" ") // date
                                         .font(.custom("SourceSerifPro-Light", size: 18))
-                                        .foregroundStyle(Color.postieBlack)
+                                        .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].tabBarTintColor)
                                     
                                     ZStack {
                                         Image(systemName: "water.waves")
@@ -107,13 +107,14 @@ struct GroupedLetterView: View {
                                         Image(systemName: "sleep.circle")
                                             .font(.largeTitle)
                                     }
-                                    .foregroundStyle(Color(hex: 0x979797))
+                                    .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].dividerColor)
                                 }
                                 
                                 Spacer()
                                 
                                 HStack {
                                     Text("\"좋아하는 편지 꾸러미\"")
+                                        .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].tabBarTintColor)
                                     
                                     Spacer()
                                     
@@ -126,7 +127,7 @@ struct GroupedLetterView: View {
                             .frame(width: 350, height: 130)
                             .background(
                                 RoundedRectangle(cornerRadius: 10)
-                                    .foregroundStyle(Color.postieWhite)
+                                    .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].receivedLetterColor)
                                     .shadow(color: Color.postieBlack.opacity(0.1), radius: 3, x: 3, y: 3)
                             )
                         }
@@ -151,7 +152,7 @@ struct GroupedLetterView: View {
                         ZStack {
                             if countOfMatchingRecipients + countOfMatchingWriters > 2 {
                                 RoundedRectangle(cornerRadius: 10)
-                                    .foregroundStyle(Color.postieWhite)
+                                    .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].receivedLetterColor)
                                     .frame(width: 350, height: 130)
                                     .offset(x: 10, y: 10)
                                     .shadow(color: Color.postieBlack.opacity(0.1), radius: 3, x: 3, y: 3)
@@ -159,7 +160,7 @@ struct GroupedLetterView: View {
                             
                             if countOfMatchingRecipients + countOfMatchingWriters > 1 {
                                 RoundedRectangle(cornerRadius: 10)
-                                    .foregroundStyle(Color.postieWhite)
+                                    .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].receivedLetterColor)
                                     .frame(width: 350, height: 130)
                                     .offset(x: 5, y: 5)
                                     .shadow(color: Color.postieBlack.opacity(0.1), radius: 3, x: 3, y: 3)
@@ -168,18 +169,18 @@ struct GroupedLetterView: View {
                             HStack {
                                 VStack(alignment: .leading) {
                                     HStack {
-                                        Text("From.")
+                                        Text("With.")
                                             .font(.custom("SourceSerifPro-Black", size: 18))
-                                            .foregroundColor(Color.postieBlack)
+                                            .foregroundColor(ThemeManager.themeColors[isThemeGroupButton].tabBarTintColor)
                                         
                                         Text("\(recipient)")
-                                            .foregroundColor(Color.postieBlack)
+                                            .foregroundColor(ThemeManager.themeColors[isThemeGroupButton].tabBarTintColor)
                                         
                                         Spacer()
                                         
                                         Text(" ") // date
                                             .font(.custom("SourceSerifPro-Light", size: 18))
-                                            .foregroundStyle(Color.postieBlack)
+                                            .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].tabBarTintColor)
                                         
                                         ZStack {
                                             Image(systemName: "water.waves")
@@ -189,7 +190,7 @@ struct GroupedLetterView: View {
                                             Image(systemName: "sleep.circle")
                                                 .font(.largeTitle)
                                         }
-                                        .foregroundStyle(Color.postieDarkGray)
+                                        .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].dividerColor)
                                     }
                                     
                                     Spacer()
@@ -201,7 +202,7 @@ struct GroupedLetterView: View {
                             .frame(width: 350, height: 130)
                             .background(
                                 RoundedRectangle(cornerRadius: 10)
-                                    .foregroundStyle(Color.postieWhite)
+                                    .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].receivedLetterColor)
                                     .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
                             )
                         }
@@ -213,6 +214,7 @@ struct GroupedLetterView: View {
                 }
             }
         }
+        .tint(ThemeManager.themeColors[isThemeGroupButton].tabBarTintColor)
     }
 }
 
