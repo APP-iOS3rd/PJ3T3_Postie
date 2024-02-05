@@ -68,18 +68,32 @@ struct LoginView: View {
                     }
                     .padding(.bottom, 10)
                     
-                    SignInWithAppleButton { request in
+                    Button {
                         
-                    } onCompletion: { result in
-                        
+                    } label: {
+                        SignInWithAppleButtonViewRepresentable(type: .default, style: .black)
+                            .frame(height: 54)
+                            .signInWithAppleButtonStyle(.black)
+                            .shadow(radius: 3, x: 3, y: 3)
                     }
-                    .frame(height: 54)
-                    .signInWithAppleButtonStyle(.black)
-                    .shadow(radius: 3, x: 3, y: 3)
                 }
                 .padding(.horizontal, 32)
             }
         }
+    }
+}
+
+//Apple로그인을 Firebase를 통해 사용하기 위해서는 UIKit을 활용해야 한다.
+struct SignInWithAppleButtonViewRepresentable: UIViewRepresentable {
+    let type: ASAuthorizationAppleIDButton.ButtonType
+    let style: ASAuthorizationAppleIDButton.Style
+    
+    func makeUIView(context: Context) -> ASAuthorizationAppleIDButton {
+        return ASAuthorizationAppleIDButton(authorizationButtonType: type, authorizationButtonStyle: style)
+    }
+    
+    func updateUIView(_ uiView: ASAuthorizationAppleIDButton, context: Context) {
+        
     }
 }
 
