@@ -20,7 +20,7 @@ struct RegistrationView: View {
     @State private var password = ""
     @State private var confirmPassword = ""
     //ViewModels
-    @ObservedObject var authViewModel = AuthManager.shared
+    @ObservedObject var authManager = AuthManager.shared
     
     var body: some View {
         ZStack {
@@ -82,7 +82,7 @@ struct RegistrationView: View {
                 //Sign up Button
                 Button {
                     Task {
-                        try await authViewModel.createEmailUser(withEamil: email, password: password, fullName: fullName, nickname: nickname)
+                        try await authManager.createEmailUser(withEamil: email, password: password, fullName: fullName, nickname: nickname)
                     }
                 } label: {
                     HStack {

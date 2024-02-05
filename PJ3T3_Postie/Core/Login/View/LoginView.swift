@@ -9,7 +9,7 @@ import SwiftUI
 import GoogleSignInSwift
 
 struct LoginView: View {
-    @ObservedObject var authViewModel = AuthManager.shared
+    @ObservedObject var authManager = AuthManager.shared
     
     var body: some View {
         NavigationStack {
@@ -51,8 +51,8 @@ struct LoginView: View {
                     GoogleSignInButton(viewModel: GoogleSignInButtonViewModel(scheme: .light, style: .wide, state: .normal)) {
                         Task {
                             do {
-                                let credential = try await authViewModel.signInWithGoogle()
-                                authViewModel.authDataResult = try await authViewModel.signInWithSSO(credential: credential)
+                                let credential = try await authManager.signInWithGoogle()
+                                authManager.authDataResult = try await authManager.signInWithSSO(credential: credential)
                             } catch {
                                 print(error)
                             }

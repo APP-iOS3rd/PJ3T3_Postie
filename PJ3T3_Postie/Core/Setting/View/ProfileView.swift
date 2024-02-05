@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ProfileView: View {
-    @ObservedObject var authViewModel = AuthManager.shared
+    @ObservedObject var authManager = AuthManager.shared
     
     var body: some View {
         ZStack {
@@ -77,7 +77,7 @@ struct ProfileView: View {
                     .padding(.bottom)
                 
                 Button {
-                    authViewModel.signOut()
+                    authManager.signOut()
                 } label: {
                     Text("로그아웃")
                         .font(.title3)

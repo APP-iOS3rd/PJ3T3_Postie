@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct EmailLoginView: View {
-    @ObservedObject var authViewModel = AuthManager.shared
+    @ObservedObject var authManager = AuthManager.shared
     @State private var email = ""
     @State private var password = ""
     
@@ -44,7 +44,7 @@ struct EmailLoginView: View {
                     //Sign in Button
                     Button {
                         Task {
-                            try await authViewModel.signInWithEmail(withEamil: email, password: password)
+                            try await authManager.signInWithEmail(withEamil: email, password: password)
                         }
                     } label: {
                         HStack {
