@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ThemeView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    
     @State private var selectedThemeButton: Bool = true
     @Binding var isThemeGroupButton: Int
     @Binding var currentColorPage: Int

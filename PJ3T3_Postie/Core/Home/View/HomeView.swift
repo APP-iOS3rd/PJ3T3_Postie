@@ -10,10 +10,11 @@ import SwiftUI
 struct HomeView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
     @ObservedObject var storageManager = StorageManager.shared
+    
     @State private var isSideMenuOpen = false
     @State private var isTabGroupButton = true
-    @State private var currentGroupPage: Int = 0
     @State private var isThemeGroupButton: Int = 0
+    @State private var currentGroupPage: Int = 0
     @State private var currentColorPage: Int = 0
     
     var body: some View {

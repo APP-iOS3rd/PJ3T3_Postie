@@ -7,21 +7,13 @@
 
 import SwiftUI
 
-struct GroupedFavoriteListLetter: View {
+struct GroupedFavoriteListLetterView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
     @ObservedObject var storageManager = StorageManager.shared
+    
     @State private var showAlert: Bool = false
     @State private var isSideMenuOpen: Bool = false
     @Binding var isThemeGroupButton: Int
-    
-    @ViewBuilder
-    func FavoriteLetterView(letter: Letter) -> some View {
-        if letter.isFavorite {
-            LetterItemView(isThemeGroupButton: $isThemeGroupButton, letter: letter)
-        } else {
-            EmptyView()
-        }
-    }
     
     var body: some View {
         let postieColors = ThemeManager.themeColors[isThemeGroupButton]
@@ -35,7 +27,7 @@ struct GroupedFavoriteListLetter: View {
                     NavigationLink {
                         LetterDetailView(letter: letter)
                     } label: {
-                        FavoriteLetterView(letter: letter)
+                        favoriteLetterView(letter: letter)
                     }
                 }
                 
@@ -55,6 +47,15 @@ struct GroupedFavoriteListLetter: View {
                     .bold()
                     .foregroundStyle(postieColors.tintColor)
             }
+        }
+    }
+    
+    @ViewBuilder
+    func favoriteLetterView(letter: Letter) -> some View {
+        if letter.isFavorite {
+            LetterItemView(letter: letter, isThemeGroupButton: $isThemeGroupButton)
+        } else {
+            EmptyView()
         }
     }
 }

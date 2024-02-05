@@ -10,10 +10,12 @@ import SwiftUI
 struct GroupedLetterView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
     @ObservedObject var authManager = AuthManager.shared
-    @Binding var isThemeGroupButton: Int
+    
     var letterReceivedGrouped: [String] = []
     var letterWritedGrouped: [String] = []
     var letterGrouped: [String] = []
+    
+    @Binding var isThemeGroupButton: Int
     
     // 숫자, 한글, 알파벳 순서대로 정렬
     func customSort(recipients: [String]) -> [String] {
@@ -65,35 +67,82 @@ struct GroupedLetterView: View {
         
         VStack {
             NavigationLink { // 좋아하는 편지 뷰
-                GroupedFavoriteListLetter(isThemeGroupButton: $isThemeGroupButton)
+                GroupedFavoriteListLetterView(isThemeGroupButton: $isThemeGroupButton)
             } label: {
                 HStack {
-                    ZStack {
-                        if favoriteLetters.count > 2 {
-                            RoundedRectangle(cornerRadius: 10)
-                                .foregroundStyle(postieColors.receivedLetterColor)
-                                .frame(width: 350, height: 130)
-                                .offset(x: 10, y: 10)
-                                .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
+                    VStack(alignment: .leading) {
+                        HStack {
+                            Text("My Favorite.")
+                                .font(.custom("SourceSerifPro-Black", size: 18))
+                                .foregroundColor(postieColors.tabBarTintColor)
+                            
+                            Text("\("좋아하는 편지 ")")
+                                .foregroundStyle(postieColors.tabBarTintColor)
+                            
+                            Spacer()
+                            
+                            Text(" ") // date
+                                .font(.custom("SourceSerifPro-Light", size: 18))
+                                .foregroundStyle(postieColors.tabBarTintColor)
+                            
+                            ZStack {
+                                Image(systemName: "water.waves")
+                                    .font(.headline)
+                                    .offset(x:18)
+                                
+                                Image(systemName: "sleep.circle")
+                                    .font(.largeTitle)
+                            }
+                            .foregroundStyle(postieColors.dividerColor)
                         }
                         
-                        if favoriteLetters.count > 1 {
-                            RoundedRectangle(cornerRadius: 10)
-                                .foregroundStyle(postieColors.receivedLetterColor)
-                                .frame(width: 350, height: 130)
-                                .offset(x: 5, y: 5)
-                                .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
-                        }
+                        Spacer()
                         
                         HStack {
+                            Text("\"좋아하는 편지 꾸러미\"")
+                                .foregroundStyle(postieColors.tabBarTintColor)
+                            
+                            Spacer()
+                            
+                            Image(systemName: "heart.fill")
+                                .font(.title2)
+                                .foregroundStyle(Color.postieOrange)
+                        }
+                    }
+                    .padding()
+                    .frame(width: 350, height: 130)
+                    .background(
+                        RoundedRectangle(cornerRadius: 4)
+                            .foregroundStyle(postieColors.receivedLetterColor)
+                            .shadow(color: Color.postieBlack.opacity(0.1), radius: 3, x: 3, y: 3)
+                    )
+                    .modifier(StackedRoundedRectangleModifier(count: favoriteLetters.count, isThemeGroupButton: $isThemeGroupButton))
+                }
+                
+                Spacer()
+            }
+            .padding(.horizontal)
+            .padding(.bottom, 8)
+            
+            // 편지 그룹 뷰
+            ForEach(sortedRecipients, id: \.self) { recipient in
+                // 받거나 보낸 사람 수 확인
+                let countOfMatchingRecipients = firestoreManager.letters.filter { $0.recipient == recipient }.count
+                let countOfMatchingWriters = firestoreManager.letters.filter { $0.writer == recipient }.count
+                
+                NavigationLink {
+                    GroupedListLetterView(recipient: recipient, isThemeGroupButton: $isThemeGroupButton)
+                } label: {
+                    HStack {
+                        ZStack {
                             VStack(alignment: .leading) {
                                 HStack {
-                                    Text("My Favorite.")
+                                    Text("With.")
                                         .font(.custom("SourceSerifPro-Black", size: 18))
                                         .foregroundColor(postieColors.tabBarTintColor)
                                     
-                                    Text("\("좋아하는 편지 ")")
-                                        .foregroundStyle(postieColors.tabBarTintColor)
+                                    Text("\(recipient)")
+                                        .foregroundColor(postieColors.tabBarTintColor)
                                     
                                     Spacer()
                                     
@@ -114,99 +163,16 @@ struct GroupedLetterView: View {
                                 
                                 Spacer()
                                 
-                                HStack {
-                                    Text("\"좋아하는 편지 꾸러미\"")
-                                        .foregroundStyle(postieColors.tabBarTintColor)
-                                    
-                                    Spacer()
-                                    
-                                    Image(systemName: "heart.fill")
-                                        .font(.title2)
-                                        .foregroundStyle(Color.postieOrange)
-                                }
+                                Text("\"\(recipient)님과 주고받은 편지 꾸러미\"")
                             }
                             .padding()
                             .frame(width: 350, height: 130)
                             .background(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .foregroundStyle(postieColors.receivedLetterColor)
-                                    .shadow(color: Color.postieBlack.opacity(0.1), radius: 3, x: 3, y: 3)
-                            )
-                        }
-                    }
-                }
-                
-                Spacer()
-            }
-            .padding(.horizontal)
-            .padding(.bottom, 8)
-            
-            // 편지 그룹 뷰
-            ForEach(sortedRecipients, id: \.self) { recipient in
-                // 받거나 보낸 사람 수 확인
-                let countOfMatchingRecipients = firestoreManager.letters.filter { $0.recipient == recipient }.count
-                let countOfMatchingWriters = firestoreManager.letters.filter { $0.writer == recipient }.count
-                
-                NavigationLink {
-                    GroupedListLetterView(recipient: recipient, isThemeGroupButton: $isThemeGroupButton)
-                } label: {
-                    HStack {
-                        ZStack {
-                            if countOfMatchingRecipients + countOfMatchingWriters > 2 {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .foregroundStyle(postieColors.receivedLetterColor)
-                                    .frame(width: 350, height: 130)
-                                    .offset(x: 10, y: 10)
-                                    .shadow(color: Color.postieBlack.opacity(0.1), radius: 3, x: 3, y: 3)
-                            }
-                            
-                            if countOfMatchingRecipients + countOfMatchingWriters > 1 {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .foregroundStyle(postieColors.receivedLetterColor)
-                                    .frame(width: 350, height: 130)
-                                    .offset(x: 5, y: 5)
-                                    .shadow(color: Color.postieBlack.opacity(0.1), radius: 3, x: 3, y: 3)
-                            }
-                            
-                            HStack {
-                                VStack(alignment: .leading) {
-                                    HStack {
-                                        Text("With.")
-                                            .font(.custom("SourceSerifPro-Black", size: 18))
-                                            .foregroundColor(postieColors.tabBarTintColor)
-                                        
-                                        Text("\(recipient)")
-                                            .foregroundColor(postieColors.tabBarTintColor)
-                                        
-                                        Spacer()
-                                        
-                                        Text(" ") // date
-                                            .font(.custom("SourceSerifPro-Light", size: 18))
-                                            .foregroundStyle(postieColors.tabBarTintColor)
-                                        
-                                        ZStack {
-                                            Image(systemName: "water.waves")
-                                                .font(.headline)
-                                                .offset(x:18)
-                                            
-                                            Image(systemName: "sleep.circle")
-                                                .font(.largeTitle)
-                                        }
-                                        .foregroundStyle(postieColors.dividerColor)
-                                    }
-                                    
-                                    Spacer()
-                                    
-                                    Text("\"\(recipient)님과 주고받은 편지 꾸러미\"")
-                                }
-                            }
-                            .padding()
-                            .frame(width: 350, height: 130)
-                            .background(
-                                RoundedRectangle(cornerRadius: 10)
+                                RoundedRectangle(cornerRadius: 4)
                                     .foregroundStyle(postieColors.receivedLetterColor)
                                     .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
                             )
+                            .modifier(StackedRoundedRectangleModifier(count: countOfMatchingRecipients + countOfMatchingWriters, isThemeGroupButton: $isThemeGroupButton))
                         }
                         .padding(.horizontal)
                         .padding(.bottom, 8)
@@ -217,6 +183,36 @@ struct GroupedLetterView: View {
             }
         }
         .tint(postieColors.tabBarTintColor)
+    }
+}
+
+struct StackedRoundedRectangleModifier: ViewModifier {
+    let count: Int
+    
+    @Binding var isThemeGroupButton: Int
+    
+    func body(content: Content) -> some View {
+        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
+        
+        ZStack {
+            if count > 2 {
+                RoundedRectangle(cornerRadius: 4)
+                    .foregroundStyle(postieColors.receivedLetterColor)
+                    .frame(width: 350, height: 130)
+                    .offset(x: 10, y: 10)
+                    .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
+            }
+            
+            if count > 1 {
+                RoundedRectangle(cornerRadius: 4)
+                    .foregroundStyle(postieColors.receivedLetterColor)
+                    .frame(width: 350, height: 130)
+                    .offset(x: 5, y: 5)
+                    .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
+            }
+            
+            content
+        }
     }
 }
 

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ListLetterView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
+    
     @Binding var isThemeGroupButton: Int
     
     var body: some View {
@@ -16,15 +17,16 @@ struct ListLetterView: View {
             NavigationLink {
                 LetterDetailView(letter: letter)
             } label: {
-                LetterItemView(isThemeGroupButton: $isThemeGroupButton, letter: letter)
+                LetterItemView(letter: letter, isThemeGroupButton: $isThemeGroupButton)
             }
         }
     }
 }
 
 struct LetterItemView: View {
-    @Binding var isThemeGroupButton: Int
     var letter: Letter
+    
+    @Binding var isThemeGroupButton: Int
     
     var body: some View {
         let postieColors = ThemeManager.themeColors[isThemeGroupButton]
@@ -80,7 +82,7 @@ struct LetterItemView: View {
             .padding()
             .frame(width: 300, height: 130)
             .background(
-                RoundedRectangle(cornerRadius: 10)
+                RoundedRectangle(cornerRadius: 4)
                     .foregroundStyle(letter.isReceived ? postieColors.writenLetterColor : postieColors.receivedLetterColor)
                     .shadow(color: Color.postieBlack.opacity(0.1), radius: 3, x: 3, y: 3)
             )

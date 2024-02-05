@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ProfileView: View {
     @ObservedObject var authViewModel = AuthManager.shared
+    
     @Binding var isThemeGroupButton: Int
     
     var body: some View {

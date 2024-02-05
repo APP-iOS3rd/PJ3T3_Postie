@@ -10,20 +10,12 @@ import SwiftUI
 struct GroupedListLetterView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
     @ObservedObject var storageManager = StorageManager.shared
+    
     var recipient: String
+    
     @State private var showAlert = false
     @State private var isSideMenuOpen = false
     @Binding var isThemeGroupButton: Int
-    
-    
-    @ViewBuilder
-    func GroupedLetterView(letter: Letter) -> some View {
-        if letter.recipient == recipient || letter.writer == recipient {
-            LetterItemView(isThemeGroupButton: $isThemeGroupButton, letter: letter)
-        } else {
-            EmptyView()
-        }
-    }
     
     var body: some View {
         let postieColors = ThemeManager.themeColors[isThemeGroupButton]
@@ -37,7 +29,7 @@ struct GroupedListLetterView: View {
                     NavigationLink {
                         LetterDetailView(letter: letter)
                     } label: {
-                        GroupedLetterView(letter: letter)
+                        groupedLetterView(letter: letter)
                     }
                 }
                 
@@ -58,6 +50,15 @@ struct GroupedListLetterView: View {
             }
         }
         .tint(postieColors.tabBarTintColor)
+    }
+    
+    @ViewBuilder
+    func groupedLetterView(letter: Letter) -> some View {
+        if letter.recipient == recipient || letter.writer == recipient {
+            LetterItemView(letter: letter, isThemeGroupButton: $isThemeGroupButton)
+        } else {
+            EmptyView()
+        }
     }
 }
 
