@@ -17,7 +17,7 @@ struct ThemeView: View {
     
     var body: some View {
         ZStack {
-            Color.postieBeige
+            ThemeManager.themeColors[isThemeGroupButton].backGroundColor
                 .ignoresSafeArea()
             
             VStack {
@@ -26,19 +26,28 @@ struct ThemeView: View {
                         Rectangle()
                             .foregroundColor(.clear)
                             .frame(width: 72, height: 30)
-                            .background(selectedThemeButton ? Color.postieOrange : Color.postieWhite)
+                            .background(selectedThemeButton ? ThemeManager.themeColors[isThemeGroupButton].tintColor : ThemeManager.themeColors[isThemeGroupButton].receivedLetterColor)
                             .cornerRadius(20)
                             .shadow(color: Color.postieBlack.opacity(0.1), radius: 3, x: 2, y: 2)
                         
                         Button(action: {
                             selectedThemeButton = true
                         }) {
-                            Text("테마 설정")
-                                .font(.caption)
-                                .bold(selectedThemeButton)
-                                .multilineTextAlignment(.center)
-                                .foregroundColor(selectedThemeButton ? Color.postieWhite : Color.postieBlack)
-                                .frame(width: 60, alignment: .top)
+                            if isThemeGroupButton == 4 {
+                                Text("테마 설정")
+                                    .font(.caption)
+                                    .bold(selectedThemeButton)
+                                    .multilineTextAlignment(.center)
+                                    .foregroundColor(selectedThemeButton ? Color.postieBlack : Color.postieWhite)
+                                    .frame(width: 60, alignment: .top)
+                            } else {
+                                Text("테마 설정")
+                                    .font(.caption)
+                                    .bold(selectedThemeButton)
+                                    .multilineTextAlignment(.center)
+                                    .foregroundColor(selectedThemeButton ? Color.postieWhite : Color.postieBlack)
+                                    .frame(width: 60, alignment: .top)
+                            }
                         }
                     }
                     
@@ -46,19 +55,28 @@ struct ThemeView: View {
                         Rectangle()
                             .foregroundColor(.clear)
                             .frame(width: 72, height: 30)
-                            .background(selectedThemeButton ? Color.postieWhite : Color.postieOrange)
+                            .background(selectedThemeButton ? ThemeManager.themeColors[isThemeGroupButton].receivedLetterColor : ThemeManager.themeColors[isThemeGroupButton].tintColor)
                             .cornerRadius(20)
                             .shadow(color: Color.postieBlack.opacity(0.1), radius: 3, x: 2, y: 2)
                         
                         Button(action: {
                             selectedThemeButton = false
                         }) {
-                            Text("나열 변경")
-                                .font(.caption)
-                                .multilineTextAlignment(.center)
-                                .bold(!selectedThemeButton)
-                                .foregroundColor(selectedThemeButton ? Color.postieBlack : Color.postieWhite)
-                                .frame(width: 60, alignment: .top)
+                            if isThemeGroupButton == 4 {
+                                Text("나열 변경")
+                                    .font(.caption)
+                                    .multilineTextAlignment(.center)
+                                    .bold(!selectedThemeButton)
+                                    .foregroundColor(selectedThemeButton ? Color.postieWhite : Color.postieBlack)
+                                    .frame(width: 60, alignment: .top)
+                            } else {
+                                Text("나열 변경")
+                                    .font(.caption)
+                                    .multilineTextAlignment(.center)
+                                    .bold(!selectedThemeButton)
+                                    .foregroundColor(selectedThemeButton ? Color.postieBlack : Color.postieWhite)
+                                    .frame(width: 60, alignment: .top)
+                            }
                         }
                     }
                     
@@ -69,8 +87,8 @@ struct ThemeView: View {
                 if selectedThemeButton {
                     TabView(selection: $currentColorPage) {
                         Button(action: {
-                            currentColorPage = 0
                             isThemeGroupButton = 0
+                            currentColorPage = isThemeGroupButton
                         }) {
                             VStack {
                                 Text("포스티 오렌지 (기본)\n")
@@ -78,7 +96,7 @@ struct ThemeView: View {
                                 Image("PostieTheme_PostieOrange")
                                     .resizable()
                                     .modifier(CustomImageModifier())
-                                    .border(isThemeGroupButton == 0 ? Color.postieOrange : Color.postieOrange.opacity(0))
+                                    .border(isThemeGroupButton == 0 ? ThemeManager.themeColors[isThemeGroupButton].tintColor : ThemeManager.themeColors[isThemeGroupButton].tintColor.opacity(0))
                                 
                                 Spacer()
                             }
@@ -86,8 +104,8 @@ struct ThemeView: View {
                         .tag(0)
                         
                         Button(action: {
-                            currentColorPage = 1
                             isThemeGroupButton = 1
+                            currentColorPage = isThemeGroupButton
                         }) {
                             VStack {
                                 Text("포스티 옐로우\n")
@@ -95,7 +113,7 @@ struct ThemeView: View {
                                 Image("PostieTheme_PostieYellow")
                                     .resizable()
                                     .modifier(CustomImageModifier())
-                                    .border(isThemeGroupButton == 1 ? Color.postieOrange : Color.postieOrange.opacity(0))
+                                    .border(isThemeGroupButton == 1 ? ThemeManager.themeColors[isThemeGroupButton].tintColor : ThemeManager.themeColors[isThemeGroupButton].tintColor.opacity(0))
                                 
                                 Spacer()
                             }
@@ -103,8 +121,8 @@ struct ThemeView: View {
                         .tag(1)
                         
                         Button(action: {
-                            currentColorPage = 2
                             isThemeGroupButton = 2
+                            currentColorPage = isThemeGroupButton
                         }) {
                             VStack {
                                 Text("포스티 그린 \n")
@@ -112,7 +130,7 @@ struct ThemeView: View {
                                 Image("PostieTheme_PostieGreen")
                                     .resizable()
                                     .modifier(CustomImageModifier())
-                                    .border(isThemeGroupButton == 2 ? Color.postieOrange : Color.postieOrange.opacity(0))
+                                    .border(isThemeGroupButton == 2 ? ThemeManager.themeColors[isThemeGroupButton].tintColor : ThemeManager.themeColors[isThemeGroupButton].tintColor.opacity(0))
                                 
                                 Spacer()
                             }
@@ -120,8 +138,8 @@ struct ThemeView: View {
                         .tag(2)
                         
                         Button(action: {
-                            currentColorPage = 3
                             isThemeGroupButton = 3
+                            currentColorPage = isThemeGroupButton
                         }) {
                             VStack {
                                 Text("포스티 블루\n")
@@ -129,7 +147,7 @@ struct ThemeView: View {
                                 Image("PostieTheme_PostieBlue")
                                     .resizable()
                                     .modifier(CustomImageModifier())
-                                    .border(isThemeGroupButton == 3 ? Color.postieOrange : Color.postieOrange.opacity(0))
+                                    .border(isThemeGroupButton == 3 ? ThemeManager.themeColors[isThemeGroupButton].tintColor : ThemeManager.themeColors[isThemeGroupButton].tintColor.opacity(0))
                                 
                                 Spacer()
                             }
@@ -137,8 +155,8 @@ struct ThemeView: View {
                         .tag(3)
                         
                         Button(action: {
-                            currentColorPage = 4
                             isThemeGroupButton = 4
+                            currentColorPage = isThemeGroupButton
                         }) {
                             VStack {
                                 Text("포스티 블랙\n")
@@ -146,7 +164,7 @@ struct ThemeView: View {
                                 Image("PostieTheme_PostieBlack")
                                     .resizable()
                                     .modifier(CustomImageModifier())
-                                    .border(isThemeGroupButton == 4 ? Color.postieOrange : Color.postieOrange.opacity(0))
+                                    .border(isThemeGroupButton == 4 ? ThemeManager.themeColors[isThemeGroupButton].tintColor : ThemeManager.themeColors[isThemeGroupButton].tintColor.opacity(0))
                                 
                                 Spacer()
                             }
@@ -167,7 +185,7 @@ struct ThemeView: View {
                                 Image("PostieTheme_LetterGroup")
                                     .resizable()
                                     .modifier(CustomImageModifier())
-                                    .border(isTabGroupButton ? Color.postieOrange : Color.postieOrange.opacity(0))
+                                    .border(isTabGroupButton ? ThemeManager.themeColors[isThemeGroupButton].tintColor : ThemeManager.themeColors[isThemeGroupButton].tintColor.opacity(0))
                                 
                                 Spacer()
                             }
@@ -184,7 +202,7 @@ struct ThemeView: View {
                                 Image("PostieTheme_LetterList")
                                     .resizable()
                                     .modifier(CustomImageModifier())
-                                    .border(isTabGroupButton ? Color.postieOrange.opacity(0) : Color.postieOrange)
+                                    .border(isTabGroupButton ? ThemeManager.themeColors[isThemeGroupButton].tintColor.opacity(0) : ThemeManager.themeColors[isThemeGroupButton].tintColor)
                                 
                                 Spacer()
                             }
@@ -202,7 +220,7 @@ struct ThemeView: View {
             ToolbarItemGroup(placement: .principal) {
                 Text("테마 설정")
                     .bold()
-                    .foregroundStyle(Color.postieOrange)
+                    .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].tintColor)
             }
             
             ToolbarItemGroup(placement: .topBarTrailing) {
@@ -215,7 +233,7 @@ struct ThemeView: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
-        .tint(Color.postieBlack)
+        .tint(ThemeManager.themeColors[isThemeGroupButton].tabBarTintColor)
     }
 }
 

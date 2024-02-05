@@ -12,12 +12,12 @@ struct GroupedFavoriteListLetter: View {
     @ObservedObject var storageManager = StorageManager.shared
     @State private var showAlert: Bool = false
     @State private var isSideMenuOpen: Bool = false
-    @Binding var currentColorPage: Int
+    @Binding var isThemeGroupButton: Int
     
     @ViewBuilder
     func FavoriteLetterView(letter: Letter) -> some View {
         if letter.isFavorite {
-            LetterItemView(currentColorPage: $currentColorPage, letter: letter)
+            LetterItemView(isThemeGroupButton: $isThemeGroupButton, letter: letter)
         } else {
             EmptyView()
         }
@@ -43,7 +43,7 @@ struct GroupedFavoriteListLetter: View {
                     .foregroundStyle(Color.postieBlack.opacity(0))
             }
             
-            AddLetterButton(currentColorPage: $currentColorPage)
+            AddLetterButton(isThemeGroupButton: $isThemeGroupButton)
         }
         .tint(Color.postieBlack)
         .navigationBarTitleDisplayMode(.inline)

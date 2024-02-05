@@ -26,10 +26,9 @@ struct ThemeManager {
         ThemeData(backGroundColor: Color.postieRealWhite, receivedLetterColor: Color.postieWhite, writenLetterColor: Color.postieLightGray, profileColor: Color.postieGray, tabBarTintColor: Color.postieBlack, tintColor: Color.postieYellow, dividerColor: Color.postieDarkGray),
         ThemeData(backGroundColor: Color.postieWhite, receivedLetterColor: Color.postieLightBeige, writenLetterColor: Color.postieRealWhite, profileColor: Color.postieGray, tabBarTintColor: Color.postieBlack, tintColor: Color.postieGreen, dividerColor: Color.postieDarkGray),
         ThemeData(backGroundColor: Color.postieRealWhite, receivedLetterColor: Color.postieLightBlue, writenLetterColor: Color.postieLightYellow, profileColor: Color.postieGray, tabBarTintColor: Color.postieBlack, tintColor: Color.postieBlue, dividerColor: Color.postieDarkGray),
-        ThemeData(backGroundColor: Color.postieBlack, receivedLetterColor: Color.postieLightBlack, writenLetterColor: Color.postieSpaceGray, profileColor: Color.postieGray, tabBarTintColor: Color.postieLightGray, tintColor: Color.postieLightGray, dividerColor: Color.postieLightGray)
+        ThemeData(backGroundColor: Color.postieBlack, receivedLetterColor: Color.postieLightBlack, writenLetterColor: Color.postieSpaceGray, profileColor: Color.postieGray, tabBarTintColor: Color.postieLightGray, tintColor: Color.postieLightGray, dividerColor: Color(hex: 0xD5D5D5))
     ]
 }
-
 
 struct ThemeData {
     let backGroundColor: Color

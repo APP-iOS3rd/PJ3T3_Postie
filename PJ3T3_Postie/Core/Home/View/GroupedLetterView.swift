@@ -10,7 +10,7 @@ import SwiftUI
 struct GroupedLetterView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
     @ObservedObject var authManager = AuthManager.shared
-    @Binding var currentColorPage: Int
+    @Binding var isThemeGroupButton: Int
     var letterReceivedGrouped: [String] = []
     var letterWritedGrouped: [String] = []
     var letterGrouped: [String] = []
@@ -55,7 +55,7 @@ struct GroupedLetterView: View {
         
         VStack {
             NavigationLink { // 좋아하는 편지 뷰
-                GroupedFavoriteListLetter(currentColorPage: $currentColorPage)
+                GroupedFavoriteListLetter(isThemeGroupButton: $isThemeGroupButton)
             } label: {
                 HStack {
                     ZStack {
@@ -137,7 +137,7 @@ struct GroupedLetterView: View {
                 let countOfMatchingWriters = firestoreManager.letters.filter { $0.writer == recipient }.count
                 
                 NavigationLink {
-                    GroupedListLetterView(currentColorPage: $currentColorPage, recipient: recipient)
+                    GroupedListLetterView(recipient: recipient, isThemeGroupButton: $isThemeGroupButton)
                 } label: {
                     HStack {
                         ZStack {

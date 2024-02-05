@@ -10,15 +10,16 @@ import SwiftUI
 struct GroupedListLetterView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
     @ObservedObject var storageManager = StorageManager.shared
-    @Binding var currentColorPage: Int
+    var recipient: String
     @State private var showAlert = false
     @State private var isSideMenuOpen = false
-    var recipient: String
+    @Binding var isThemeGroupButton: Int
+    
     
     @ViewBuilder
     func GroupedLetterView(letter: Letter) -> some View {
         if letter.recipient == recipient || letter.writer == recipient {
-            LetterItemView(currentColorPage: $currentColorPage, letter: letter)
+            LetterItemView(isThemeGroupButton: $isThemeGroupButton, letter: letter)
         } else {
             EmptyView()
         }
@@ -44,7 +45,7 @@ struct GroupedListLetterView: View {
                     .foregroundStyle(Color.postieBlack.opacity(0))
             }
             
-            AddLetterButton(currentColorPage: $currentColorPage)
+            AddLetterButton(isThemeGroupButton: $isThemeGroupButton)
         }
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
