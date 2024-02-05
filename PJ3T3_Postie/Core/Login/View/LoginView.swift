@@ -72,6 +72,7 @@ struct LoginView: View {
                         
                     } label: {
                         SignInWithAppleButtonViewRepresentable(type: .default, style: .black)
+                            .allowsHitTesting(false)
                             .frame(height: 54)
                             .signInWithAppleButtonStyle(.black)
                             .shadow(radius: 3, x: 3, y: 3)
