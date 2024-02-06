@@ -11,6 +11,8 @@ struct LetterDetailView: View {
     @StateObject private var letterDetailViewModel = LetterDetailViewModel()
     @ObservedObject var firestoreManager = FirestoreManager.shared
 
+    @Environment(\.dismiss) var dismiss
+
     var letter: Letter
 
     var body: some View {
@@ -86,6 +88,7 @@ struct LetterDetailView: View {
 
             Button(role: .destructive) {
                 firestoreManager.deleteLetter(documentId: letter.id)
+                dismiss()
             } label: {
                 Text("삭제")
             }
