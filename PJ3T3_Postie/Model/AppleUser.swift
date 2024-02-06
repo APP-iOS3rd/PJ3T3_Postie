@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+struct AppleUser {
+    let token: String
+    let nonce: String
+    let fullName: PersonNameComponents
+}
