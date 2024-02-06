@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ProfileView: View {
-    @ObservedObject var authViewModel = AuthManager.shared
+    @ObservedObject var authManager = AuthManager.shared
     
     @Binding var isThemeGroupButton: Int
     
@@ -72,7 +72,7 @@ struct ProfileView: View {
                 DividerView(isThemeGroupButton: $isThemeGroupButton)
                 
                 Button {
-                    authViewModel.signOut()
+                    authManager.signOut()
                 } label: {
                     Text("로그아웃")
                         .foregroundStyle(postieColors.tabBarTintColor)

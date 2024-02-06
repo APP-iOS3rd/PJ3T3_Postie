@@ -9,24 +9,36 @@ import SwiftUI
 import PhotosUI //Storage test를 위한 import로 이후 삭제 예정
 
 struct SettingView: View {
-    @ObservedObject var authViewModel = AuthManager.shared
+    @ObservedObject var authManager = AuthManager.shared
     //Colors
     private let profileBackgroundColor: Color = .gray
     private let signOutIconColor: Color = Color(uiColor: .lightGray)
     
     var body: some View {
         NavigationStack {
-            if let user = authViewModel.currentUser {
+            if let user = authManager.currentUser {
                 List {
                     Section {
                         HStack {
-                            Text(user.initials)
-                                .font(.title)
-                                .fontWeight(.semibold)
-                                .foregroundStyle(.white)
-                                .frame(width: 72, height: 72)
-                                .background(profileBackgroundColor)
-                                .clipShape(Circle())
+                            if let profileImageUrl = user.profileImageUrl {
+                                AsyncImage(url: URL(string: profileImageUrl), content: { image in
+                                    image
+                                        .resizable()
+                                        .frame(width: 72, height: 72)
+                                }, placeholder: {
+                                    ZStack {
+                                        Circle()
+                                            .foregroundStyle(.postieGray)
+                                            .frame(width: 72, height: 72)
+                                        
+                                        ProgressView()
+                                    }
+                                })
+                            } else {
+                                Circle()
+                                    .foregroundStyle(.postieGray)
+                                    .frame(width: 72, height: 72)
+                            }
                             
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(user.fullName)
@@ -55,7 +67,7 @@ struct SettingView: View {
                     
                     Section("Account") {
                         Button {
-                            authViewModel.signOut()
+                            authManager.signOut()
                         } label: {
                             SettingsRowView(imageName: "arrow.left.circle.fill", title: "Sign Out", tintColor: signOutIconColor)
                         }
@@ -130,8 +142,7 @@ struct AddDataSectionView: View {
         }
     }
     
-    //userUid를 AuthViewModel에서 가져오도록 리팩토링 필요
-    //리팩토링 하면서 파일 이름도 함께 변경 AuthViewModel -> AuthManager
+    //userUid를 AuthManager에서 가져오도록 리팩토링 필요
     func uploadLetter(uiImages: [UIImage]) {
         Task {
             //letter객체를 만들어 append한다면 id는 어떻게 하지?

@@ -6,95 +6,62 @@
 //
 
 import SwiftUI
+import GoogleSignInSwift
 
 struct LoginView: View {
-    //Colors
-    private let viewBackground: Color = .white
-    private let buttonColor: Color = Color(uiColor: .darkGray)
-    //ViewModels
-    @ObservedObject var authViewModel = AuthManager.shared
-    //TextFields의 input값을 하위뷰에 넘겨준다.
-    @State private var email = ""
-    @State private var password = ""
+    @ObservedObject var authManager = AuthManager.shared
     
     var body: some View {
         NavigationStack {
             ZStack {
                 Rectangle()
-                    .foregroundStyle(viewBackground)
+                    .foregroundStyle(.postieBeige)
                     .ignoresSafeArea()
                 
                 VStack {
-                    Image(systemName: "archivebox")
+                    Image(systemName: "envelope")
                         .resizable()
-                        .scaledToFill()
-                        .frame(width: 120, height: 120)
+                        .scaledToFit()
+                        .frame(width: 120)
                         .padding(.vertical, 36)
 
-                    //Form fields
-                    VStack(spacing: 24) {
-                        LoginInputView(title: "Email Address",
-                                       placeholder: "name@example.com",
-                                       text: $email)
-                        .textInputAutocapitalization(.never)
-
-                        LoginInputView(title: "Password",
-                                       placeholder: "Enter your password",
-                                       isSecureField: true,
-                                       text: $password)
-                    }
-                    .padding(.horizontal)
-                    .padding(.top, 12)
-
-                    //Sign in Button
-                    Button {
-                        Task {
-                            try await authViewModel.signIn(withEamil: email, password: password)
-                        }
+                    //Email sign in: 테스트용 이메일을 사용하기 위한 것으로 배포시 삭제 예정입니다.
+                    NavigationLink {
+                        EmailLoginView()
                     } label: {
-                        HStack {
-                            Text("SIGN IN")
-                                .fontWeight(.semibold)
+                        HStack() {
+                            Image(systemName: "at")
+                                .padding(.horizontal, 10)
                             
-                            Image(systemName: "arrow.right")
+                            Text("Sign in with Email")
+                                .font(.system(size: 14, weight: .semibold))
+                            
+                            Spacer()
                         }
                         .foregroundColor(.white)
-                        .frame(height: 48)
-                        .padding(.horizontal, 32)
+                        .frame(height: 42)
+                        .frame(maxWidth: .infinity)
                     }
-                    .background(buttonColor)
-                    .disabled(!formIsValid)
-                    .opacity(formIsValid ? 1.0 : 0.5)
+                    .background(.postieOrange)
                     .clipShape(RoundedRectangle(cornerRadius: 10))
-                    .padding(.top, 24)
+                    .shadow(radius: 3, x: 3, y: 3)
+                    .padding(.bottom, 10)
 
-                    Spacer()
-
-                    //Sign up Button
-                    NavigationLink {
-                        RegistrationView()
-                            .navigationBarBackButtonHidden()
-                    } label: {
-                        HStack(spacing: 3) {
-                            Text("Don't have an account?")
-                            
-                            Text("Sign up")
-                                .fontWeight(.bold)
+                    //Google sign in Button
+                    GoogleSignInButton(viewModel: GoogleSignInButtonViewModel(scheme: .light, style: .wide, state: .normal)) {
+                        Task {
+                            do {
+                                let credential = try await authManager.signInWithGoogle()
+                                authManager.authDataResult = try await authManager.signInWithSSO(credential: credential)
+                            } catch {
+                                print(error)
+                            }
                         }
-                        .font(.system(size: 14))
                     }
-                } //VStack
-            } //ZStack
-        } //NavigationStack
-    }
-}
-
-extension LoginView: AuthenticationProtocol {
-    var formIsValid: Bool {
-        return !email.isEmpty
-        && email.contains("@")
-        && !password.isEmpty
-        && password.count > 5
+                }
+                .padding(.horizontal, 32)
+            }
+        }
     }
 }
 

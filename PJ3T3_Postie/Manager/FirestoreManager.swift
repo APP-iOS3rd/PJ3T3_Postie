@@ -9,16 +9,20 @@ import FirebaseFirestore
 
 class FirestoreManager: ObservableObject {
     static let shared = FirestoreManager()
-    var letterColRef: CollectionReference
+    var letterColRef: CollectionReference = Firestore.firestore().collection("users")
     var docId: String = ""
     @Published var letters: [Letter] = []
     @Published var shops: [Shop] = []
     
     private init() { 
+        fetchReference()
+        fetchAllShops()
+    }
+    
+    func fetchReference() {
         let userUid = AuthManager.shared.userUid
         self.letterColRef = Firestore.firestore().collection("users").document(userUid).collection("letters")
         fetchAllLetters()
-        fetchAllShops()
     }
 
     //새로운 편지를 추가한다.

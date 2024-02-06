@@ -16,10 +16,11 @@ struct RegistrationView: View {
     //TextFields의 input값을 하위뷰에 넘겨준다.
     @State private var email = ""
     @State private var fullName = ""
+    @State private var nickname = ""
     @State private var password = ""
     @State private var confirmPassword = ""
     //ViewModels
-    @ObservedObject var authViewModel = AuthManager.shared
+    @ObservedObject var authManager = AuthManager.shared
     
     var body: some View {
         ZStack {
@@ -45,6 +46,10 @@ struct RegistrationView: View {
                     LoginInputView(title: "Full Name",
                                    placeholder: "Enter your name",
                                    text: $fullName)
+                    
+                    LoginInputView(title: "Nickname",
+                                   placeholder: "Enter your nickname",
+                                   text: $nickname)
 
                     LoginInputView(title: "Password",
                                    placeholder: "Enter your password",
@@ -77,7 +82,7 @@ struct RegistrationView: View {
                 //Sign up Button
                 Button {
                     Task {
-                        try await authViewModel.createUser(withEamil: email, password: password, fullName: fullName)
+                        try await authManager.createEmailUser(withEamil: email, password: password, fullName: fullName, nickname: nickname)
                     }
                 } label: {
                     HStack {

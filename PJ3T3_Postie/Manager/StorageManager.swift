@@ -11,10 +11,14 @@ import FirebaseStorage
 
 final class StorageManager: ObservableObject {
     static let shared = StorageManager()
-    var userReference: StorageReference
+    var userReference: StorageReference = Storage.storage().reference()
     @Published var images: [LetterPhoto] = []
     
     private init() { 
+        self.fetchReference()
+    }
+    
+    func fetchReference() {
         let userUid = AuthManager.shared.userUid
         self.userReference = Storage.storage().reference().child("users").child(userUid)
     }
