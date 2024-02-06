@@ -187,7 +187,7 @@ struct ThemeView: View {
                             VStack {
                                 Text("편지 그룹")
                                 
-                                Image("postieGroup\(colorFromNumber(isThemeGroupButton))")
+                                Image("postieGroup\(stringFromNumber(isThemeGroupButton))")
                                     .resizable()
                                     .modifier(CustomImageModifier())
                                     .border(isTabGroupButton ? postieColors.tintColor : postieColors.tintColor.opacity(0))
@@ -204,7 +204,7 @@ struct ThemeView: View {
                             VStack {
                                 Text("편지 리스트")
                                 
-                                Image("postieList\(colorFromNumber(isThemeGroupButton))")
+                                Image("postieList\(stringFromNumber(isThemeGroupButton))")
                                     .resizable()
                                     .modifier(CustomImageModifier())
                                     .border(isTabGroupButton ? postieColors.tintColor.opacity(0) : postieColors.tintColor)
@@ -233,7 +233,7 @@ struct ThemeView: View {
             
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button(action: {
-                    currentColorPage = currentColorPage
+                    currentColorPage = isThemeGroupButton
                     dismiss()
                 }) {
                     Text("완료")
@@ -258,7 +258,7 @@ private func saveToUserDefaults<T>(value: T, key: String) {
     UserDefaults.standard.set(value, forKey: key)
 }
 
-private func colorFromNumber(_ number: Int) -> String {
+private func stringFromNumber(_ number: Int) -> String {
     switch number {
     case 1:
         return "Yellow"
