@@ -7,24 +7,19 @@
 
 import SwiftUI
 
-struct GroupedFavoriteListLetter: View {
+struct GroupedFavoriteListLetterView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
     @ObservedObject var storageManager = StorageManager.shared
+    
     @State private var showAlert: Bool = false
     @State private var isSideMenuOpen: Bool = false
-    
-    @ViewBuilder
-    func FavoriteLetterView(letter: Letter) -> some View {
-        if letter.isFavorite {
-            LetterItemView(letter: letter)
-        } else {
-            EmptyView()
-        }
-    }
+    @Binding var isThemeGroupButton: Int
     
     var body: some View {
+        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
+        
         ZStack(alignment: .bottomTrailing) {
-            Color.postieBeige
+            postieColors.backGroundColor
                 .ignoresSafeArea()
             
             ScrollView {
@@ -32,7 +27,7 @@ struct GroupedFavoriteListLetter: View {
                     NavigationLink {
                         LetterDetailView(letter: letter)
                     } label: {
-                        FavoriteLetterView(letter: letter)
+                        favoriteLetterView(letter: letter)
                     }
                 }
                 
@@ -42,16 +37,25 @@ struct GroupedFavoriteListLetter: View {
                     .foregroundStyle(Color.postieBlack.opacity(0))
             }
             
-            AddLetterButton()
+            AddLetterButton(isThemeGroupButton: $isThemeGroupButton)
         }
-        .tint(Color.postieBlack)
+        .tint(postieColors.tabBarTintColor)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .principal) {
                 Text("좋아하는 편지들")
                     .bold()
-                    .foregroundStyle(Color.postieOrange)
+                    .foregroundStyle(postieColors.tintColor)
             }
+        }
+    }
+    
+    @ViewBuilder
+    private func favoriteLetterView(letter: Letter) -> some View {
+        if letter.isFavorite {
+            LetterItemView(letter: letter, isThemeGroupButton: $isThemeGroupButton)
+        } else {
+            EmptyView()
         }
     }
 }
