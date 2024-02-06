@@ -89,6 +89,11 @@ struct LetterDetailView: View {
 
             Button(role: .destructive) {
                 firestoreManager.deleteLetter(documentId: letter.id)
+
+                storageManager.images.forEach { letterPhoto in
+                    storageManager.deleteItem(fullPath: letterPhoto.fullPath)
+                }
+
                 dismiss()
             } label: {
                 Text("삭제")
