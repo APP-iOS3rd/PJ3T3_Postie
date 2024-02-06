@@ -68,15 +68,26 @@ struct LoginView: View {
                     }
                     .padding(.bottom, 10)
                     
-                    Button {
-                        
-                    } label: {
-                        SignInWithAppleButtonViewRepresentable(type: .default, style: .black)
-                            .allowsHitTesting(false)
-                            .frame(height: 54)
-                            .signInWithAppleButtonStyle(.black)
-                            .shadow(radius: 3, x: 3, y: 3)
+                    SignInWithAppleButton { request in
+                        AppleSignInHelper.shared.signInWithAppleRequest(request)
+                    } onCompletion: { result in
+                        Task {
+                            do {
+                                AppleSignInHelper.shared.signInWithAppleCompletion(result)
+                                guard let credential = authManager.credential else {
+                                    print("Unable to fetch credential")
+                                    return
+                                }
+                                authManager.authDataResult = try await AuthManager.shared.signInWithSSO(credential: credential)
+                            } catch {
+                                print(error)
+                            }
+                        }
                     }
+                    .frame(height: 54)
+                    .signInWithAppleButtonStyle(.black)
+                    .shadow(radius: 3, x: 3, y: 3)
+                    .padding(.bottom, 10)
                 }
                 .padding(.horizontal, 32)
             }
