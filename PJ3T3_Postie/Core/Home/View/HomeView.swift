@@ -33,8 +33,9 @@ struct HomeView: View {
                         
                         Spacer()
                         
-                        Button(action: {
-                        }) {
+                        NavigationLink {
+                            SearchView()
+                        } label: {
                             Image(systemName: "magnifyingglass")
                                 .imageScale(.large)
                                 .foregroundStyle(postieColors.tabBarTintColor)
