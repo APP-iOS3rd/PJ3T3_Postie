@@ -35,7 +35,6 @@ class NaverGeocodeAPI: ObservableObject {
     static let shared = NaverGeocodeAPI()
     private init() { }
     
-    //이게 왜 필요한거지?
     @Published var targetLocation: (latitude: String, longitude: String)?
     
     private var clientID: String? {
@@ -93,8 +92,6 @@ class NaverGeocodeAPI: ObservableObject {
                     let latitude = Double(firstAddress.y)!
                     let longitude = Double(firstAddress.x)!
                     
-                    print("Latitude: \(latitude), Longitude: \(longitude)")
-                    
                     //메인 스레드에서 UI를 업데이트 한다.
                     DispatchQueue.main.async {
                         //                        self.targetLocation = (latitude: latitude, longitude: longitude)
@@ -116,7 +113,6 @@ class OfficeInfoServiceAPI: ObservableObject {
     @StateObject var coordinator: Coordinator = Coordinator.shared
     
     @Published var infos = [PostItem]()
-    //    @Published var officeMarkers = [OfficeMarker]()
     
     private var apiKey: String? {
         get { getValueOfPlistFile("MapApiKeys", "OFFICE_MAIN_KEY")}
@@ -128,7 +124,7 @@ class OfficeInfoServiceAPI: ObservableObject {
         //postDivType 데이터 대상 null=전체대상, 1=우체국, 2=우체통
         //postGap 반경 코드 1km = 1, 0.5km = 0.5
         let urlString = "https://www.koreapost.go.kr/koreapost/openapi/searchPostScopeList.do?serviceKey=\(apiKey)&postLatitude=37.56&postLongitude=126.98&postGap=10&postDivType=\(postDivType)&pageCount=40"
-        print(apiKey)
+//        print(apiKey)
         
         //URL주소로 받아와 지면 값을 url로 저장해라
         //url설정 부터 str까진 공통 작업
@@ -150,15 +146,14 @@ class OfficeInfoServiceAPI: ObservableObject {
             }
             
             let str = String(decoding: data, as: UTF8.self)
-            print(str)
+//            print(str)
             
             do {
                 let postListResponse = try XMLDecoder().decode(PostListResponse.self, from: data)
                 DispatchQueue.main.async {
                     self.infos = postListResponse.postItems
-                    //                    self.updateOfficeMarkers()
                 }
-                print(postListResponse.postItems)
+//                print(postListResponse.postItems)
             } catch {
                 print(error)
             }
