@@ -10,6 +10,7 @@ import SwiftUI
 struct LetterDetailView: View {
     @StateObject private var letterDetailViewModel = LetterDetailViewModel()
     @ObservedObject var firestoreManager = FirestoreManager.shared
+    @ObservedObject var storageManager = StorageManager.shared
 
     @Environment(\.dismiss) var dismiss
 
@@ -95,6 +96,12 @@ struct LetterDetailView: View {
         } message: {
             Text("편지를 삭제하시겠습니까?")
         }
+        .onAppear {
+            storageManager.listAllFile(docId: letter.id)
+        }
+        .onDisappear {
+            storageManager.images.removeAll()
+        }
     }
 }
 
@@ -119,24 +126,30 @@ extension LetterDetailView {
 
     @ViewBuilder
     private var letterImageSection: some View {
-        if let images = letter.images, !images.isEmpty {
+
+        if !storageManager.images.isEmpty {
             VStack(alignment: .leading, spacing: 4) {
                 Text("편지 사진")
 
                 ScrollView(.horizontal) {
                     HStack(spacing: 8) {
-                        if let images = letter.images {
-                            ForEach(0..<images.count, id: \.self) { index in
-                                ZStack {
-                                    Button {
-                                        letterDetailViewModel.selectedIndex = index
-                                        letterDetailViewModel.showLetterImageFullScreenView = true
-                                    } label: {
-                                        Image(uiImage: images[index])
+                        ForEach(0..<storageManager.images.count, id: \.self) { index in
+                            ZStack {
+                                Button {
+                                    letterDetailViewModel.selectedIndex = index
+                                    letterDetailViewModel.showLetterImageFullScreenView = true
+                                } label: {
+                                    AsyncImage(
+                                        url: URL(string: storageManager.images[index].urlString)
+                                    ) { image in
+                                        image
                                             .resizable()
                                             .scaledToFill()
                                             .frame(width: 50, height: 50)
                                             .clipShape(RoundedRectangle(cornerRadius: 4))
+                                    } placeholder: {
+                                        ProgressView()
+                                            .frame(width: 50, height: 50)
                                     }
                                 }
                             }
