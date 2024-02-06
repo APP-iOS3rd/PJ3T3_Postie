@@ -66,6 +66,12 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate {
         let center = mapView.cameraPosition.target
         
         print("change position")
+        print(center)
+        DispatchQueue.main.async {
+                // Coordinator 클래스에서 바인딩한 @Published 속성을 통해 값 전달
+                self.coord = MyCoord(center.lat, center.lng)
+            print(self.coord)
+            }
         // 카메라의 위치가 변경되면 호출되는 함수
     }
     
@@ -77,7 +83,7 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate {
         // https://navermaps.github.io/ios-map-sdk/guide-ko/2-2.html
         let coord = NMGLatLng(lat: coord.lat, lng: coord.lng)
         
-        print(currentLocation ?? "못찾음")
+//        print(currentLocation ?? "못찾음")
         moveCamera(coord: coord) //카메라 바로 이동
         
         // 마커와 정보 창을 새롭게 추가하기 위해 기존 내용을 삭제

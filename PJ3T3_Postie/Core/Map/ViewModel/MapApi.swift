@@ -118,12 +118,12 @@ class OfficeInfoServiceAPI: ObservableObject {
         get { getValueOfPlistFile("MapApiKeys", "OFFICE_MAIN_KEY")}
     }
     
-    func fetchData(postDivType: Int) {
+    func fetchData(postDivType: Int, postLatitude: Double, postLongitude: Double) {
         guard let apiKey = apiKey else { return }
         
         //postDivType 데이터 대상 null=전체대상, 1=우체국, 2=우체통
         //postGap 반경 코드 1km = 1, 0.5km = 0.5
-        let urlString = "https://www.koreapost.go.kr/koreapost/openapi/searchPostScopeList.do?serviceKey=\(apiKey)&postLatitude=37.56&postLongitude=126.98&postGap=10&postDivType=\(postDivType)&pageCount=40"
+        let urlString = "https://www.koreapost.go.kr/koreapost/openapi/searchPostScopeList.do?serviceKey=\(apiKey)&postLatitude=\(postLatitude)&postLongitude=\(postLongitude)&postGap=10&postDivType=\(postDivType)&pageCount=20"
 //        print(apiKey)
         
         //URL주소로 받아와 지면 값을 url로 저장해라
