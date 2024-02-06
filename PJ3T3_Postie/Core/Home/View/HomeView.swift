@@ -12,10 +12,10 @@ struct HomeView: View {
     @ObservedObject var storageManager = StorageManager.shared
     
     @State private var isSideMenuOpen = false
-    @State private var isTabGroupButton = true
-    @State private var isThemeGroupButton: Int = 0
     @State private var currentGroupPage: Int = 0
     @State private var currentColorPage: Int = 0
+    @State private var isTabGroupButton: Bool = getValueFromUserDefaults(key: "IsTabGroupButton", defaultValue: true)
+    @State private var isThemeGroupButton: Int = getValueFromUserDefaults(key: "IsThemeGroupButton", defaultValue: 0)
     
     var body: some View {
         let postieColors = ThemeManager.themeColors[isThemeGroupButton]
@@ -293,6 +293,10 @@ struct DividerView: View {
             .frame(height: 1)
             .padding(.bottom)
     }
+}
+
+private func getValueFromUserDefaults<T>(key: String, defaultValue: T) -> T {
+    return UserDefaults.standard.object(forKey: key) as? T ?? defaultValue
 }
 
 #Preview {

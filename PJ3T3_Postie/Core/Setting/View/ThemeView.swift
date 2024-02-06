@@ -175,6 +175,9 @@ struct ThemeView: View {
                     }
                     .tabViewStyle(PageTabViewStyle())
                     .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
+                    .onChange(of: isThemeGroupButton) { newValue in
+                        saveToUserDefaults(value: newValue, key: "IsThemeGroupButton")
+                    }
                 } else {
                     TabView(selection: $currentGroupPage) {
                         Button(action: {
@@ -182,7 +185,7 @@ struct ThemeView: View {
                             isTabGroupButton = true
                         }) {
                             VStack {
-                                Text("편지 그룹\n")
+                                Text("편지 그룹")
                                 
                                 Image("PostieTheme_LetterGroup")
                                     .resizable()
@@ -199,7 +202,7 @@ struct ThemeView: View {
                             isTabGroupButton = false
                         }) {
                             VStack {
-                                Text("편지 리스트\n")
+                                Text("편지 리스트")
                                 
                                 Image("PostieTheme_LetterList")
                                     .resizable()
@@ -213,6 +216,9 @@ struct ThemeView: View {
                     }
                     .tabViewStyle(PageTabViewStyle())
                     .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
+                    .onChange(of: isTabGroupButton) { newValue in
+                        saveToUserDefaults(value: newValue, key: "IsTabGroupButton")
+                    }
                 }
                 
                 Spacer()
@@ -246,6 +252,10 @@ struct CustomImageModifier: ViewModifier {
             .frame(height: 550)
             .shadow(color: Color.postieBlack.opacity(0.1), radius: 3)
     }
+}
+
+private func saveToUserDefaults<T>(value: T, key: String) {
+    UserDefaults.standard.set(value, forKey: key)
 }
 
 //#Preview {
