@@ -14,8 +14,8 @@ struct HomeView: View {
     @State private var isSideMenuOpen = false
     @State private var currentGroupPage: Int = 0
     @State private var currentColorPage: Int = 0
-    @State private var isTabGroupButton: Bool = getValueFromUserDefaults(key: "IsTabGroupButton", defaultValue: true)
-    @State private var isThemeGroupButton: Int = getValueFromUserDefaults(key: "IsThemeGroupButton", defaultValue: 0)
+    @AppStorage("isTabGroupButton") private var isTabGroupButton: Bool = true
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
     var body: some View {
         let postieColors = ThemeManager.themeColors[isThemeGroupButton]
