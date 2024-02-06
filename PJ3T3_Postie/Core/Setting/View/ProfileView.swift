@@ -12,7 +12,7 @@ struct ProfileView: View {
     
     var body: some View {
         ZStack {
-            Color(hex: 0xF5F1E8)
+            Color.postieBeige
                 .ignoresSafeArea()
             
             VStack(alignment: .leading) {
@@ -21,60 +21,49 @@ struct ProfileView: View {
                     
                     ZStack {
                         Circle()
-                            .frame(width: 170,height: 170)
-                            .foregroundStyle(Color.init(hex: 0xD1CEC7))
+                            .frame(width: 170, height: 170)
+                            .foregroundStyle(Color.postieGray)
                         
-                        Text("Postie")
-                            .font(.title)
-                            .foregroundStyle(Color.black)
+                        Image("Posty_Receiving")
+                            .resizable()
+                            .frame(width: 170, height: 170)
+                            .offset(x: -8, y: 5)
                     }
                     
                     Spacer()
                 }
                 
                 Text("이름")
-                    .foregroundStyle(Color.gray)
+                    .foregroundStyle(Color.postieDarkGray)
                 
-                Rectangle()
-                    .frame(height: 1)
-                    .foregroundStyle(Color.gray)
-                    .padding(.bottom)
+                DividerView()
                 
                 Text("Postie_test")
                     .font(.title3)
                     .padding(.bottom)
                 
                 Text("계정")
-                    .foregroundStyle(Color.gray)
+                    .foregroundStyle(Color.postieDarkGray)
                 
-                Rectangle()
-                    .frame(height: 1)
-                    .foregroundStyle(Color.gray)
-                    .padding(.bottom)
+                DividerView()
                 
                 Text("postie@test.com")
                     .font(.title3)
                     .padding(.bottom)
                 
                 Text("구독정보")
-                    .foregroundStyle(Color.gray)
+                    .foregroundStyle(Color.postieDarkGray)
                 
-                Rectangle()
-                    .frame(height: 1)
-                    .foregroundStyle(Color.gray)
-                    .padding(.bottom)
+                DividerView()
                 
                 Text("일반회원")
                     .font(.title3)
                     .padding(.bottom)
                 
                 Text("계정 관리")
-                    .foregroundStyle(Color.gray)
+                    .foregroundStyle(Color.postieDarkGray)
                 
-                Rectangle()
-                    .frame(height: 1)
-                    .foregroundStyle(Color.gray)
-                    .padding(.bottom)
+                DividerView()
                 
                 Button {
                     authManager.signOut()
@@ -89,18 +78,25 @@ struct ProfileView: View {
                 
                 Spacer()
             }
-            .tint(Color(hex: 0x1E1E1E))
+            .tint(Color.postieBlack)
             .padding()
         }
-        .navigationTitle("프로필 설정")
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationBarItems(trailing: (
+        .toolbar {
+            ToolbarItemGroup(placement: .principal) {
+                Text("프로필 설정")
+                    .bold()
+                    .foregroundStyle(Color.postieOrange)
+            }
+            
+            ToolbarItemGroup(placement: .topBarTrailing) {
                 Button(action: {
                 }) {
                     Text("수정")
                 }
-            ))
-        .tint(Color(hex: 0x1E1E1E))
+            }
+        }
+        .navigationBarTitleDisplayMode(.inline)
+        .tint(Color.postieBlack)
     }
 }
 

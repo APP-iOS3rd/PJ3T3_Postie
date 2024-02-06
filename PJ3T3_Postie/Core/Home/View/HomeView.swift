@@ -8,85 +8,33 @@
 import SwiftUI
 
 struct HomeView: View {
-    @State private var search: String = ""
-    @State private var showAlert = false
+    @ObservedObject var firestoreManager = FirestoreManager.shared
+    @ObservedObject var storageManager = StorageManager.shared
     @State private var isSideMenuOpen = false
+    @State private var isTabGroupButton = true
+    @State private var currentGroupPage: Int = 0
     
     var body: some View {
-        ZStack {
-            NavigationStack {
-                ZStack(alignment: .bottomTrailing) {
-                    ScrollView {
-                        VStack {
-                            NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
-                                ReceiveLetterView(letter: Letter.preview)
-                            }
-                            
-                            NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
-                                SendLetterView(letter: Letter.preview)
-                            }
-                            
-                            NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
-                                ReceiveLetterView(letter: Letter.preview)
-                            }
-                            
-                            NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
-                                ReceiveLetterView(letter: Letter.preview)
-                            }
-                            NavigationLink(destination: LetterDetailView(letter: Letter.preview)) {
-                                SendLetterView(letter: Letter.preview)
-                            }
-                            
-                            // ScrollView margin 임시
-                            Rectangle()
-                                .frame(height: 70)
-                                .foregroundStyle(Color.black.opacity(0))
-                        }
-                        .padding()
-                    }
-                    .searchable(text: $search)
-                    .background(Color(hex: 0xF5F1E8))
-                    
-                    Button(action: {
-                        showAlert.toggle()
-                    }, label: {
-                        ZStack {
-                            Circle()
-                                .foregroundStyle(Color(hex: 0xC2AD7E))
-                                .frame(width:70,height:70)
-                            
-                            ZStack {
-                                Image(systemName: "envelope")
-                                    .font(.title2)
-                                    .offset(y: -3)
-                                
-                                Image(systemName: "plus.circle")
-                                    .font(.footnote)
-                                    .offset(x:15, y:9)
-                            }
-                        }
-                    })
-                    .foregroundStyle(Color(hex: 0xF7F7F7))
-                    .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
-                    .imageScale(.large)
-                    .padding()
-                    .alert("편지 저장 하기", isPresented: $showAlert) {
-                        NavigationLink(destination: AddLetterView(isSendingLetter: true)) {
-                            Button("편지 저장") {
-                            }
-                        }
-                        
-                        Button("취소", role: .cancel) {
-                        }
-                    }
-                }
-                .foregroundStyle(Color(hex: 0x1E1E1E))
-                .navigationBarItems(leading: (
+        NavigationStack {
+            ZStack {
+                Color.postieBeige
+                    .ignoresSafeArea()
+                
+                VStack(spacing: 0) {
                     HStack {
                         Text("Postie")
                             .font(.custom("SourceSerifPro-Black", size: 40))
-                            .foregroundStyle(Color.black)
-                    }), trailing: (
+                            .foregroundStyle(Color.postieOrange)
+                        
+                        Spacer()
+                        
+                        Button(action: {
+                        }) {
+                            Image(systemName: "magnifyingglass")
+                                .imageScale(.large)
+                                .padding(.horizontal, 5)
+                        }
+                        
                         Button(action: {
                             withAnimation {
                                 self.isSideMenuOpen.toggle()
@@ -95,47 +43,80 @@ struct HomeView: View {
                             Image(systemName: "line.horizontal.3")
                                 .imageScale(.large)
                         }
-                        
-                    ))
-            }
-            .toolbarBackground(
-                Color(hex: 0xF5F1E8),
-                for: .tabBar)
-            if isSideMenuOpen {
-                Color.black.opacity(0.5)
-                    .onTapGesture {
-                        withAnimation {
-                            self.isSideMenuOpen.toggle()
-                        }
                     }
-                    .edgesIgnoringSafeArea(.all)
+                    .background(Color.postieBeige)
+                    .padding(.horizontal)
+                    
+                    ZStack(alignment: .bottomTrailing) {
+                        ScrollView {
+                            if currentGroupPage == 0 {
+                                VStack {
+                                    GroupedLetterView()
+                                }
+                            } else {
+                                VStack {
+                                    ListLetterView()
+                                }
+                            }
+                            
+                            // ScrollView margin 임시
+                            Rectangle()
+                                .frame(height: 80)
+                                .foregroundStyle(Color.postieBlack.opacity(0))
+                        }
+                        .background(Color.postieBeige)
+                        
+                        AddLetterButton()
+                    }
+                    .preferredColorScheme(.light)
+                }
+                
+                if isSideMenuOpen {
+                    Color.black.opacity(0.5)
+                        .onTapGesture {
+                            withAnimation {
+                                self.isSideMenuOpen.toggle()
+                            }
+                        }
+                        .edgesIgnoringSafeArea(.all)
+                }
+                
+                // 세팅 뷰
+                //            SettingView()
+                //                .offset(x: isSideMenuOpen ? 0 : UIScreen.main.bounds.width)
+                //                .animation(.easeInOut)
+                // 임시 세팅뷰
+                SideMenuView(isSideMenuOpen: $isSideMenuOpen, currentGroupPage: $currentGroupPage, isTabGroupButton: $isTabGroupButton)
+                    .offset(x: isSideMenuOpen ? 0 : UIScreen.main.bounds.width)
+                    .animation(.easeInOut, value: 1)
             }
-            
-            // 세팅 뷰
-            //            SettingView()
-            //                .offset(x: isSideMenuOpen ? 0 : UIScreen.main.bounds.width)
-            //                .animation(.easeInOut)
-            // 임시 세팅뷰
-            SideMenuView(isSideMenuOpen: $isSideMenuOpen)
-                .offset(x: isSideMenuOpen ? 0 : UIScreen.main.bounds.width)
-                .animation(.easeInOut)
+            .tint(Color.postieBlack)
         }
-        .tint(Color.init(hex: 0x1E1E1E))
     }
 }
 
 // 임시 세팅뷰
 struct SideMenuView: View {
+    @ObservedObject var authViewModel = AuthManager.shared
     @Binding var isSideMenuOpen: Bool
+    @Binding var currentGroupPage: Int
+    @Binding var isTabGroupButton: Bool
     @State private var isToggleOn = false
     
     var body: some View {
+        let user = authViewModel.currentUser
+        
         HStack {
             Spacer()
             
             VStack(alignment: .leading) {
                 HStack {
+                    Text("Setting")
+                        .font(.custom("SourceSerifPro-Black", size: 32))
+                        .foregroundStyle(Color.postieOrange)
+                    
                     Spacer()
+                    
                     Button(action: {
                         withAnimation {
                             self.isSideMenuOpen.toggle()
@@ -146,69 +127,66 @@ struct SideMenuView: View {
                     }
                 }
                 
-                Text("Setting")
-                    .font(.custom("SourceSerifPro-Black", size: 32))
-                    .foregroundStyle(Color.black)
-                
                 Text("프로필 설정")
-                    .foregroundStyle(Color.gray)
+                    .foregroundStyle(Color.postieDarkGray)
                 
-                Rectangle()
-                    .foregroundStyle(Color.gray)
-                    .frame(height: 1)
-                    .padding(.bottom)
+                DividerView()
                 
                 NavigationLink(destination: ProfileView()) {
                     HStack {
                         ZStack {
                             Circle()
                                 .frame(width: 80,height: 80)
-                                .foregroundStyle(Color(hex: 0xD1CEC7))
+                                .foregroundStyle(Color.postieGray)
                             
-                            Text("Postie")
-                                .foregroundStyle(Color.black)
+                            Image("Posty_Receiving")
+                                .resizable()
+                                .frame(width: 80,height: 80)
+                                .offset(x: -4, y: 5)
                         }
                         
                         VStack(alignment: .leading) {
-                            Text("Postie_test")
-                            Text("postie@test.com")
+                            Text(String(user?.fullName ?? ""))
+                            Text(user?.email ?? "")
                         }
                         
                         Spacer()
                         
-                        Image(systemName: "greaterthan")
-                            .foregroundStyle(Color.gray)
+                        Image(systemName: "chevron.right")
+                            .foregroundStyle(Color.postieDarkGray)
                     }
                     .padding(.bottom)
                 }
                 
                 Text("테마 설정")
-                    .foregroundStyle(Color.gray)
+                    .foregroundStyle(Color.postieDarkGray)
                 
-                Rectangle()
-                    .foregroundStyle(Color.gray)
-                    .frame(height: 1)
+                DividerView()
                 
-                Toggle("다크모드", isOn: $isToggleOn)
-                    .onChange(of: isToggleOn) { _ in
+                NavigationLink(destination: ThemeView(isTabGroupButton: $isTabGroupButton, currentGroupPage: $currentGroupPage)) {
+                    HStack {
+                        Text("테마 설정 하기")
+                        
+                        Spacer()
+                        
+                        Image(systemName: "chevron.right")
+                            .foregroundStyle(Color.postieDarkGray)
                     }
                     .padding(.bottom)
+                }
                 
                 Text("앱 설정")
-                    .foregroundStyle(Color.gray)
+                    .foregroundStyle(Color.postieDarkGray)
                 
-                Rectangle()
-                    .frame(height: 1)
-                    .foregroundStyle(Color.gray)
-                    .padding(.bottom)
+                DividerView()
                 
                 HStack {
                     Text("공지사항")
                     
                     Spacer()
                     
-                    Image(systemName: "greaterthan")
-                        .foregroundStyle(Color.gray)
+                    Image(systemName: "chevron.right")
+                        .foregroundStyle(Color.postieDarkGray)
                 }
                 .padding(.bottom)
                 
@@ -217,8 +195,8 @@ struct SideMenuView: View {
                     
                     Spacer()
                     
-                    Image(systemName: "greaterthan")
-                        .foregroundStyle(Color.gray)
+                    Image(systemName: "chevron.right")
+                        .foregroundStyle(Color.postieDarkGray)
                 }
                 .padding(.bottom)
                 
@@ -227,8 +205,8 @@ struct SideMenuView: View {
                     
                     Spacer()
                     
-                    Image(systemName: "greaterthan")
-                        .foregroundStyle(Color.gray)
+                    Image(systemName: "chevron.right")
+                        .foregroundStyle(Color.postieDarkGray)
                 }
                 .padding(.bottom)
                 
@@ -237,8 +215,8 @@ struct SideMenuView: View {
                     
                     Spacer()
                     
-                    Image(systemName: "greaterthan")
-                        .foregroundStyle(Color.gray)
+                    Image(systemName: "chevron.right")
+                        .foregroundStyle(Color.postieDarkGray)
                 }
                 .padding(.bottom)
                 
@@ -246,119 +224,56 @@ struct SideMenuView: View {
                 
                 Text("COPYRIGHT 2024 ComeOn12 RIGHTS RESERVED")
                     .font(.caption2)
-                    .foregroundStyle(Color.gray)
+                    .foregroundStyle(Color.postieDarkGray)
             }
             .padding()
             .frame(width: UIScreen.main.bounds.width - 100 , alignment: .leading)
-            .foregroundStyle(Color(hex: 0x1e1e1e))
-            .background(Color(hex: 0xF5F1E8))
+            .foregroundStyle(Color.postieBlack)
+            .background(Color.postieBeige)
         }
-        .tint(Color(hex: 0x1E1E1E))
-    }
-    
-}
-
-struct ReceiveLetterView: View {
-    let letter: Letter
-    
-    var body: some View {
-        HStack {
-            HStack {
-                VStack(alignment: .leading) {
-                    HStack {
-                        Text("From.")
-                            .font(.custom("SourceSerifPro-Black", size: 18))
-                            .foregroundColor(.black)
-                        
-                        Text("\(letter.writer)")
-                            .foregroundStyle(Color(hex: 0x1E1E1E))
-                        
-                        Spacer()
-                        
-                        Text("\(letter.date.toString())")
-                            .font(.custom("SourceSerifPro-Light", size: 18))
-                            .foregroundStyle(Color(hex: 0x1E1E1E))
-                        
-                        ZStack {
-                            Image(systemName: "water.waves")
-                                .font(.headline)
-                                .offset(x:18)
-                            
-                            Image(systemName: "sleep.circle")
-                                .font(.largeTitle)
-                        }
-                        .foregroundStyle(Color(hex: 0x979797))
-                    }
-                    
-                    Spacer()
-                    
-                    if letter.summary != "" {
-                        Text("\"\(letter.summary)\"")
-                    }
-                }
-            }
-            .padding()
-            .frame(width: 300, height: 130)
-            .background(
-                RoundedRectangle(cornerRadius: 10)
-                    .foregroundStyle(Color(hex: 0xD1CEC7).opacity(0.65))
-                    .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
-            )
-            
-            Spacer()
-        }
+        .tint(Color.postieBlack)
     }
 }
 
-struct SendLetterView: View {
-    let letter: Letter
-    
+struct AddLetterButton: View {
     var body: some View {
-        HStack {
-            Spacer()
-            
-            HStack {
-                VStack(alignment: .leading) {
-                    HStack {
-                        Text("To.")
-                            .font(.custom("SourceSerifPro-Black", size: 18))
-                            .foregroundColor(.black)
-                        
-                        Text("\(letter.writer)")
-                            .foregroundStyle(Color(hex: 0x1E1E1E))
-                        
-                        Spacer()
-                        
-                        Text("\(letter.date.toString())")
-                            .font(.custom("SourceSerifPro-Light", size: 18))
-                            .foregroundStyle(Color(hex: 0x1E1E1E))
-                        
-                        ZStack {
-                            Image(systemName: "water.waves")
-                                .font(.headline)
-                                .offset(x:18)
-                            
-                            Image(systemName: "sleep.circle")
-                                .font(.largeTitle)
-                        }
-                        .foregroundStyle(Color(hex: 0x979797))
-                    }
-                    
-                    Spacer()
-                    
-                    if letter.summary != "" {
-                        Text("\"\(letter.summary)\"")
-                    }
-                }
+        Menu {
+            NavigationLink(destination: AddLetterView(isReceived: false)) {
+                Label("나의 느린 우체통", systemImage: "envelope.open.badge.clock")
             }
-            .padding()
-            .frame(width: 300, height: 130)
-            .background(
-                RoundedRectangle(cornerRadius: 10)
-                    .foregroundStyle(Color(hex: 0xF7F7F7).opacity(0.65))
-                    .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
-            )
+            
+            NavigationLink(destination: AddLetterView(isReceived: true)) {
+                Label("받은 편지 저장", systemImage: "envelope.open")
+            }
+            
+            NavigationLink(destination: AddLetterView(isReceived: false)) {
+                Label("보낸 편지 저장", systemImage: "paperplane")
+            }
+        } label: {
+            ZStack {
+                Circle()
+                    .foregroundStyle(Color.postieOrange)
+                    .frame(width: 70, height: 70)
+                
+                Image(systemName: "envelope.open")
+                    .foregroundStyle(Color.postieWhite)
+                    .font(.title2)
+                    .offset(y: -3)
+            }
         }
+        .foregroundStyle(Color.postieLightGray)
+        .shadow(color: Color.postieBlack.opacity(0.1), radius: 3, x: 3, y: 3)
+        .imageScale(.large)
+        .padding()
+    }
+}
+
+struct DividerView: View {
+    var body: some View {
+        Rectangle()
+            .fill(Color.postieDarkGray)
+            .frame(height: 1)
+            .padding(.bottom)
     }
 }
 

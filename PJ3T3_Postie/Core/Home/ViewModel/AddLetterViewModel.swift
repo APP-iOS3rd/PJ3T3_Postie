@@ -12,12 +12,14 @@ class AddLetterViewModel: ObservableObject {
     @Published var sender: String = ""
     @Published var receiver: String = ""
     @Published var date: Date = .now
-    @Published var text: String = "사진을 등록하면 자동으로 편지 내용이 입력됩니다."
-    @Published var showConfirmationDialog: Bool = false
+    @Published var text: String = ""
+    @Published var summary: String = ""
+    @Published var images: [UIImage] = [UIImage(systemName: "photo.fill")!]
     @Published var showUIImagePicker = false
-    @Published var images: [UIImage] = []
     @Published var showLetterImageFullScreenView: Bool = false
     @Published var showTextRecognizerErrorAlert: Bool = false
+    @Published var showSummaryTextField: Bool = false
+    @Published var showSummaryAlert: Bool = false
     @Published var selectedIndex: Int = 0
 
     private(set) var imagePickerSourceType: UIImagePickerController.SourceType = .camera
