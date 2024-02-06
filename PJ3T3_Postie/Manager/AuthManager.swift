@@ -23,6 +23,7 @@ class AuthManager: ObservableObject {
     var userUid: String  = ""
     var hasAccount: Bool = true
     var authDataResult: AuthDataResult?
+    var credential: OAuthCredential?
     @Published var userSession: FirebaseAuth.User? //Firebase user object
     @Published var currentUser: PostieUser? //User Data Model
     
@@ -169,12 +170,10 @@ extension AuthManager {
         return GoogleAuthProvider.credential(withIDToken: tokens.idToken, accessToken: tokens.accessToken)
     }
     
-    func signInWithSSO(credential: AuthCredential) async throws -> AuthDataResult {
-            let authDataResult = try await Auth.auth().signIn(with: credential)
-            
-            await fetchUser()
-            
-            return authDataResult
+    func signInwithApple(user: AppleUser) {
+        self.credential = OAuthProvider.appleCredential(withIDToken: user.token,
+                                                       rawNonce: user.nonce,
+                                                       fullName: user.fullName)
     }
 }
 
