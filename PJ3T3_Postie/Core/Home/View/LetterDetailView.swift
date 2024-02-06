@@ -20,27 +20,49 @@ struct LetterDetailView: View {
             VStack {
                 Page(letter: letter)
 
+                letterSummarySection
+
                 letterImageSection
             }
             .padding()
         }
-        .navigationTitle("편지 정보")
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(Color(hex: 0xF5F1E8), for: .navigationBar)
         .toolbar {
+            ToolbarItemGroup(placement: .principal) {
+                Text(letter.isReceived ? "받은 편지" : "보낸 편지")
+                    .bold()
+                    .foregroundStyle(Color(hex: 0xFF5733))
+            }
+
             ToolbarItemGroup(placement: .topBarTrailing) {
+                Button {
+
+                } label: {
+                    Image(systemName: "heart")
+                        .foregroundStyle(.postieOrange)
+                }
+
                 Menu {
                     Button {
 
                     } label: {
-                        Text("수정")
+                        HStack {
+                            Text("수정")
+
+                            Image(systemName: "square.and.pencil")
+                        }
                     }
 
                     Button(role: .destructive) {
                         // TODO: 함수로 빼기
                         letterDetailViewModel.showDeleteAlert = true
                     } label: {
-                        Text("삭제")
+                        HStack {
+                            Text("삭제")
+
+                            Image(systemName: "trash")
+                        }
                     }
                 } label: {
                     Image(systemName: "ellipsis")
@@ -75,33 +97,56 @@ struct LetterDetailView: View {
 // MARK: - Computed Views
 
 extension LetterDetailView {
+    @ViewBuilder
+    private var letterSummarySection: some View {
+        if !letter.summary.isEmpty {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("한 줄 요약")
+
+                Text(letter.summary)
+                    .font(.letter(.nanumMyeongjo))
+                    .padding()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color(hex: 0xFFFBF2))
+                    .clipShape(RoundedRectangle(cornerRadius: 4))
+            }
+        }
+    }
+
+    @ViewBuilder
     private var letterImageSection: some View {
-        ScrollView(.horizontal) {
-            HStack(spacing: 8) {
-                if let images = letter.images {
-                    ForEach(0..<images.count, id: \.self) { index in
-                        ZStack {
-                            Button {
-                                letterDetailViewModel.selectedIndex = index
-                                letterDetailViewModel.showLetterImageFullScreenView = true
-                            } label: {
-                                Image(uiImage: images[index])
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 50, height: 50)
-                                    .clipShape(RoundedRectangle(cornerRadius: 10))
+        if let images = letter.images, !images.isEmpty {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("편지 사진")
+
+                ScrollView(.horizontal) {
+                    HStack(spacing: 8) {
+                        if let images = letter.images {
+                            ForEach(0..<images.count, id: \.self) { index in
+                                ZStack {
+                                    Button {
+                                        letterDetailViewModel.selectedIndex = index
+                                        letterDetailViewModel.showLetterImageFullScreenView = true
+                                    } label: {
+                                        Image(uiImage: images[index])
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: 50, height: 50)
+                                            .clipShape(RoundedRectangle(cornerRadius: 4))
+                                    }
+                                }
                             }
                         }
                     }
                 }
+                .scrollIndicators(.never)
             }
         }
-        .padding(.top, 8)
-        .scrollIndicators(.never)
     }
 }
+
 #Preview {
     NavigationStack {
-        LetterDetailView(letter: Letter.preview)
+        LetterDetailView(letter: Letter.preview2)
     }
 }
