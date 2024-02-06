@@ -32,8 +32,7 @@ struct MapView: View {
                     ForEach(0...1, id: \.self) { index in
                         Button(action: {
                             selectedButtonIndex = index
-//                            officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude)
-                            officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)
+//                            officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)
                         }) {
                             ZStack {
                                 if selectedButtonIndex == index {
@@ -73,9 +72,20 @@ struct MapView: View {
                 .ignoresSafeArea(.all, edges: .top)
             
             Button("현재 위치에서 \(name[selectedButtonIndex])찾기") {
-//
+                //현재 coord( 카메라 위치) 불러오기
+                //값을 불러 오기
+                print("버튼 눌림 \(coordinator.cameraLocation)")
+                coord = MyCoord(coordinator.cameraLocation?.lat ?? 37.579081, coordinator.cameraLocation?.lng ?? 126.974375 )
+                
                 officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)
-                print(coord)
+                
+//                coordinator.removeAllMakers()
+//                
+//                for result in officeInfoServiceAPI.infos {
+//                    coordinator.addMarkerAndInfoWindow(latitude: Double(result.postLat)!, longitude: Double(result.postLon)!, caption: result.postNm)
+//                }
+                
+                print("불러옵니다\(coord)")
             }
             
             Spacer()
@@ -103,15 +113,6 @@ struct MapView: View {
                 locationManager.stopUpdatingLocation()
             }
         }
-        
-        // 카메라 위치 바뀌면 그 값에 따라 좌표 실시간으로 바꾸기 구현 예정
-        //        .onChange(of: locationManager.isUpdatingLocation) { locations in
-        //            if locations {
-        //                locationManager.startUpdatingLocation()
-        //            } else {
-        //                locationManager.stopUpdatingLocation()
-        //            }
-        //        }
         .onDisappear {
             locationManager.stopUpdatingLocation()
         }

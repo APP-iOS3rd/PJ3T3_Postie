@@ -123,8 +123,8 @@ class OfficeInfoServiceAPI: ObservableObject {
         
         //postDivType 데이터 대상 null=전체대상, 1=우체국, 2=우체통
         //postGap 반경 코드 1km = 1, 0.5km = 0.5
-        let urlString = "https://www.koreapost.go.kr/koreapost/openapi/searchPostScopeList.do?serviceKey=\(apiKey)&postLatitude=\(postLatitude)&postLongitude=\(postLongitude)&postGap=10&postDivType=\(postDivType)&pageCount=20"
-//        print(apiKey)
+        let urlString = "https://www.koreapost.go.kr/koreapost/openapi/searchPostScopeList.do?serviceKey=\(apiKey)&postLatitude=\(postLatitude)&postLongitude=\(postLongitude)&postGap=1&postDivType=\(postDivType)&pageCount=20"
+        print(urlString)
         
         //URL주소로 받아와 지면 값을 url로 저장해라
         //url설정 부터 str까진 공통 작업
