@@ -7,23 +7,10 @@
 
 import AuthenticationServices
 import CryptoKit
-import SwiftUI
-
-import FirebaseAuth
-
-struct AppleUser {
-    let token: String
-    let nonce: String
-    let fullName: PersonNameComponents
-}
 
 final class AppleSignInHelper: NSObject, ObservableObject {
     static let shared = AppleSignInHelper()
-    private var currentNonce: String?
-    private var completionHandler: ((Result<AppleUser, Error>) -> Void)? = nil
-    @Published var didSignInWithApple: Bool = false
-    @Published var nonce = ""
-    @Published var credential: OAuthCredential?
+    private var nonce = ""
     
     private override init() { }
     
@@ -54,40 +41,18 @@ final class AppleSignInHelper: NSObject, ObservableObject {
             
             guard let fullName = appleIDCredential.fullName else {
                 print("Unalbe to get PersonNameComponents: \(appleIDToken.debugDescription)")
-                completionHandler?(.failure(URLError(.badServerResponse)))
                 return
             }
             
-            let credential = OAuthProvider.appleCredential(withIDToken: idTokenString,
-                                                           rawNonce: nonce,
-                                                           fullName: fullName)
+            let appleUser = AppleUser(token: idTokenString, nonce: nonce, fullName: fullName)
+            
+            AuthManager.shared.signInwithApple(user: appleUser)
         case .failure(let failure):
             print(failure.localizedDescription)
         }
     }
     
-    @MainActor
-    func startSignInWithAppleFlow(completion: @escaping (Result<AppleUser, Error>) -> Void) {
-        guard let topVC = GoogleSignInHelper.shared.topViewController() else {
-            completion(.failure(URLError(.badURL)))
-            return
-        }
-        
-        let nonce = randomNonceString()
-        currentNonce = nonce
-        completionHandler = completion
-        
-        let appleIDProvider = ASAuthorizationAppleIDProvider()
-        let request = appleIDProvider.createRequest()
-        request.requestedScopes = [.fullName, .email]
-        request.nonce = sha256(nonce)
-        
-        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
-        authorizationController.delegate = self
-        authorizationController.presentationContextProvider = topVC
-        authorizationController.performRequests()
-    }
-    
+    //난수 생성기
     private func randomNonceString(length: Int = 32) -> String {
         precondition(length > 0)
         var randomBytes = [UInt8](repeating: 0, count: length)
@@ -117,92 +82,5 @@ final class AppleSignInHelper: NSObject, ObservableObject {
         }.joined()
         
         return hashString
-    }
-}
-
-extension AppleSignInHelper: ASAuthorizationControllerDelegate {
-    func authorizationController2(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
-        if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
-            guard let nonce = currentNonce else {
-                fatalError("Invalid state: A login callback was received, but no login request was sent.")
-                completionHandler?(.failure(URLError(.badServerResponse)))
-            }
-            
-            guard let appleIDToken = appleIDCredential.identityToken else {
-                print("Unable to fetch identity token")
-                completionHandler?(.failure(URLError(.badServerResponse)))
-                return
-            }
-            
-            guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
-                print("Unable to serialize token string from data: \(appleIDToken.debugDescription)")
-                completionHandler?(.failure(URLError(.badServerResponse)))
-                return
-            }
-            
-            guard let fullName = appleIDCredential.fullName else {
-                print("Unalbe to get PersonNameComponents: \(appleIDToken.debugDescription)")
-                completionHandler?(.failure(URLError(.badServerResponse)))
-                return
-            }
-            
-            let result = AppleUser(token: idTokenString, nonce: nonce, fullName: fullName)
-            completionHandler?(.success(result))
-        }
-    }
-    
-    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
-        if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
-            guard let nonce = currentNonce else {
-                fatalError("Invalid state: A login callback was received, but no login request was sent.")
-                completionHandler?(.failure(URLError(.badServerResponse)))
-            }
-            
-            guard let appleIDToken = appleIDCredential.identityToken else {
-                print("Unable to fetch identity token")
-                completionHandler?(.failure(URLError(.badServerResponse)))
-                return
-            }
-            
-            guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
-                print("Unable to serialize token string from data: \(appleIDToken.debugDescription)")
-                completionHandler?(.failure(URLError(.badServerResponse)))
-                return
-            }
-            
-            guard let fullName = appleIDCredential.fullName else {
-                print("Unalbe to get PersonNameComponents: \(appleIDToken.debugDescription)")
-                completionHandler?(.failure(URLError(.badServerResponse)))
-                return
-            }
-            
-            let result = AppleUser(token: idTokenString, nonce: nonce, fullName: fullName)
-            completionHandler?(.success(result))
-        }
-    }
-    
-    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
-        // Handle error.
-        print("Sign in with Apple errored: \(error)")
-    }
-}
-
-extension UIViewController: ASAuthorizationControllerPresentationContextProviding {
-    public func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
-        return self.view.window!
-    }
-}
-
-//Apple로그인을 Firebase를 통해 사용하기 위해서는 UIKit을 활용해야 한다.
-struct SignInWithAppleButtonViewRepresentable: UIViewRepresentable {
-    let type: ASAuthorizationAppleIDButton.ButtonType
-    let style: ASAuthorizationAppleIDButton.Style
-    
-    func makeUIView(context: Context) -> ASAuthorizationAppleIDButton {
-        return ASAuthorizationAppleIDButton(authorizationButtonType: type, authorizationButtonStyle: style)
-    }
-    
-    func updateUIView(_ uiView: ASAuthorizationAppleIDButton, context: Context) {
-        
     }
 }
