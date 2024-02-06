@@ -13,6 +13,7 @@ struct LetterDetailView: View {
     @ObservedObject var storageManager = StorageManager.shared
 
     @Environment(\.dismiss) var dismiss
+    @State private var isFavorite = false
 
     var letter: Letter
 
@@ -41,9 +42,20 @@ struct LetterDetailView: View {
 
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button {
+                    isFavorite.toggle()
 
+                    firestoreManager.editLetter(
+                        documentId: letter.id,
+                        writer: letter.writer,
+                        recipient: letter.recipient,
+                        summary: letter.summary,
+                        date: letter.date,
+                        text: letter.text,
+                        isReceived: letter.isReceived,
+                        isFavorite: isFavorite
+                    )
                 } label: {
-                    Image(systemName: "heart")
+                    Image(systemName: isFavorite ? "heart.fill" : "heart")
                         .foregroundStyle(.postieOrange)
                 }
 
@@ -103,6 +115,8 @@ struct LetterDetailView: View {
         }
         .onAppear {
             storageManager.listAllFile(docId: letter.id)
+
+            isFavorite = letter.isFavorite
         }
         .onDisappear {
             storageManager.images.removeAll()
