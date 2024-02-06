@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct ThemeView: View {
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    
+    @Environment(\.dismiss) var dismiss
     @State private var selectedThemeButton: Bool = true
     @Binding var isThemeGroupButton: Int
     @Binding var currentColorPage: Int
@@ -229,7 +228,7 @@ struct ThemeView: View {
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button(action: {
                     currentColorPage = currentColorPage
-                    self.presentationMode.wrappedValue.dismiss()
+                    dismiss()
                 }) {
                     Text("완료")
                 }
