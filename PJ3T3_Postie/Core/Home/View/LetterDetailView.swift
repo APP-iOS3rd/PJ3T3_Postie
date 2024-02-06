@@ -113,37 +113,40 @@ extension LetterDetailView {
         }
     }
 
+    @ViewBuilder
     private var letterImageSection: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text("편지 사진")
+        if let images = letter.images, !images.isEmpty {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("편지 사진")
 
-            ScrollView(.horizontal) {
-                HStack(spacing: 8) {
-                    if let images = letter.images {
-                        ForEach(0..<images.count, id: \.self) { index in
-                            ZStack {
-                                Button {
-                                    letterDetailViewModel.selectedIndex = index
-                                    letterDetailViewModel.showLetterImageFullScreenView = true
-                                } label: {
-                                    Image(uiImage: images[index])
-                                        .resizable()
-                                        .scaledToFill()
-                                        .frame(width: 50, height: 50)
-                                        .clipShape(RoundedRectangle(cornerRadius: 4))
+                ScrollView(.horizontal) {
+                    HStack(spacing: 8) {
+                        if let images = letter.images {
+                            ForEach(0..<images.count, id: \.self) { index in
+                                ZStack {
+                                    Button {
+                                        letterDetailViewModel.selectedIndex = index
+                                        letterDetailViewModel.showLetterImageFullScreenView = true
+                                    } label: {
+                                        Image(uiImage: images[index])
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: 50, height: 50)
+                                            .clipShape(RoundedRectangle(cornerRadius: 4))
+                                    }
                                 }
                             }
                         }
                     }
                 }
+                .scrollIndicators(.never)
             }
-            .scrollIndicators(.never)
         }
     }
 }
 
 #Preview {
     NavigationStack {
-        LetterDetailView(letter: Letter.preview)
+        LetterDetailView(letter: Letter.preview2)
     }
 }
