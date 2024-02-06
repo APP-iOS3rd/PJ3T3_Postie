@@ -147,6 +147,6 @@ extension LetterDetailView {
 
 #Preview {
     NavigationStack {
-        LetterDetailView(letter: Letter.preview2)
+        LetterDetailView(letter: Letter.preview)
     }
 }
