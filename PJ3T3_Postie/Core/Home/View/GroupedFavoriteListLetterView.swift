@@ -51,7 +51,7 @@ struct GroupedFavoriteListLetterView: View {
     }
     
     @ViewBuilder
-    func favoriteLetterView(letter: Letter) -> some View {
+    private func favoriteLetterView(letter: Letter) -> some View {
         if letter.isFavorite {
             LetterItemView(letter: letter, isThemeGroupButton: $isThemeGroupButton)
         } else {

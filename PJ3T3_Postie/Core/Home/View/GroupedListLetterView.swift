@@ -53,7 +53,7 @@ struct GroupedListLetterView: View {
     }
     
     @ViewBuilder
-    func groupedLetterView(letter: Letter) -> some View {
+    private func groupedLetterView(letter: Letter) -> some View {
         if letter.recipient == recipient || letter.writer == recipient {
             LetterItemView(letter: letter, isThemeGroupButton: $isThemeGroupButton)
         } else {
