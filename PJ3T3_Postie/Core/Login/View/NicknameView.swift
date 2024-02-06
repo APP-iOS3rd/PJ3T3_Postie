@@ -29,16 +29,14 @@ struct NicknameView: View {
                     }
                 } label: {
                     HStack() {
-                        Image(systemName: "at")
+                        Image(systemName: "envelope")
                             .padding(.horizontal, 10)
                         
-                        Text("Sign in with Email")
-                            .font(.system(size: 14, weight: .semibold))
-                        
-                        Spacer()
+                        Text("Submit & Sign up")
+                            .font(.system(size: 20, weight: .semibold))
                     }
                     .foregroundColor(.white)
-                    .frame(height: 42)
+                    .frame(height: 54)
                     .frame(maxWidth: .infinity)
                 }
                 .background(.postieOrange)
