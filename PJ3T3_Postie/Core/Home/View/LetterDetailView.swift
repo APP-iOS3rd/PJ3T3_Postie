@@ -9,6 +9,7 @@ import SwiftUI
 
 struct LetterDetailView: View {
     @StateObject private var letterDetailViewModel = LetterDetailViewModel()
+    @ObservedObject var firestoreManager = FirestoreManager.shared
 
     var letter: Letter
 
@@ -84,7 +85,7 @@ struct LetterDetailView: View {
             }
 
             Button(role: .destructive) {
-                // Delete
+                firestoreManager.deleteLetter(documentId: letter.id)
             } label: {
                 Text("삭제")
             }
@@ -147,6 +148,6 @@ extension LetterDetailView {
 
 #Preview {
     NavigationStack {
-        LetterDetailView(letter: Letter.preview2)
+        LetterDetailView(letter: Letter.preview)
     }
 }
