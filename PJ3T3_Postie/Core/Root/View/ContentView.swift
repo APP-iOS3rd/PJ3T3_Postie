@@ -7,11 +7,11 @@
 
 import SwiftUI
 
-struct TestView: View {
-    var body: some View {
-        NaverMap()
-    }
-}
+//struct TestView: View {
+//    var body: some View {
+//        NaverMap(coord: coord)
+//    }
+//}
 
 struct ContentView: View {
     //ViewModels
