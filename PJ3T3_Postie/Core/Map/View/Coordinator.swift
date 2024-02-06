@@ -7,6 +7,7 @@
 
 import SwiftUI
 import UIKit
+import CoreLocation
 
 import NMapsMap
 
@@ -14,23 +15,24 @@ import NMapsMap
 // - NMFMapViewTouchDelegate 맵 터치할 때 필요한 델리게이트,
 // - CLLocationManagerDelegate 위치 관련해서 필요한 델리게이트
 
-class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate, NMFMapViewTouchDelegate, CLLocationManagerDelegate {
-    
-    //    @Published var coord: (Double, Double) = (37.5626106, 126.9775524)
-    @Published var userLocation: (Double, Double) = (37.5626106, 126.9775524)
+class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate {
     
     static let shared = Coordinator()
     
-    //    let startInfoWindow = NMFInfoWindow()
-    let view = NMFNaverMapView(frame: .zero)
+    let view = NMFNaverMapView(frame: .zero) // 지도 객체 생성
+//    let locationManager = CLLocationManager()
+//    let startInfoWindow = NMFInfoWindow()
     
     var markers: [NMFMarker] = []
-    var locationManager: CLLocationManager?
+    var coord: MyCoord = MyCoord(0.0,0.0) // 내 위치값 초기 설정
+
+    @Published var currentLocation: CLLocation?
+    @Published var isUpdatingLocation: Bool = false
     
     override init() {
         super.init()
         
-        view.mapView.positionMode = .direction
+        view.mapView.positionMode = .disabled
         
         view.mapView.zoomLevel = 15 // 기본 맵이 표시될때 줌 레벨
         view.mapView.minZoomLevel = 10 // 최소 줌 레벨
@@ -42,7 +44,13 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate, NMFMapV
         view.showScaleBar = true // 스케일 바 : 지도의 축척을 표현합니다. 지도를 조작하는 기능은 없습니다.
         
         view.mapView.addCameraDelegate(delegate: self)
-        view.mapView.touchDelegate = self
+//        view.mapView.touchDelegate = self
+        
+//         내 위치 확인
+//        locationManager.delegate = self
+//        locationManager.requestWhenInUseAuthorization()
+//        
+//        getCurrentLocation()
     }
     
     func getNaverMapView() -> NMFNaverMapView {
@@ -58,36 +66,61 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate, NMFMapV
         let center = mapView.cameraPosition.target
         
         print("change position")
-        print(center)
         // 카메라의 위치가 변경되면 호출되는 함수
     }
     
-    func fetchLocation(latitude: Double, longitude: Double, name: String) {
-        let marker = NMFMarker()
+    // 맵을 업데이트 -> 해당 위치에서 우체국 찾기 때 사용 예정
+    func updateMapView(coord: MyCoord) {
+//        self.coord = coord
+
+        // NMGLatLng: 하나의 위경도 좌표를 나타내는 클래스
+        // https://navermaps.github.io/ios-map-sdk/guide-ko/2-2.html
+        let coord = NMGLatLng(lat: coord.lat, lng: coord.lng)
         
-        //카메라가 옮겨지는 기능
-        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: latitude, lng: longitude), zoomTo: 15)
+        print(currentLocation ?? "못찾음")
+        moveCamera(coord: coord) //카메라 바로 이동
         
-        cameraUpdate.animation = .easeIn
-        cameraUpdate.animationDuration = 1
+        // 마커와 정보 창을 새롭게 추가하기 위해 기존 내용을 삭제
+        removeAllMakers()
         
+        // 위치 오버레이
+        setLocationOverlay(coord: coord)
+
+        // 정보창과 연결된 마커를 추가
+//        addMarkerAndInfoWindow(coord: coord,
+//                               caption: self.coord.name,
+//                               infoTitle: "정보 창 내용/마커를 탭하면 닫힘")
+    }
+    
+    func setLocationOverlay(coord: NMGLatLng) {
         let locationOverlay = view.mapView.locationOverlay
-        
-        locationOverlay.hidden = true
-        marker.position = NMGLatLng(lat: latitude, lng: longitude)
-        
-        marker.captionText = name
-        
-        //다른 아이콘이 필요하다면 추가 할 것
-        //marker.iconImage = NMFOverlayImage(name: "marker_icon")
-        locationOverlay.iconWidth = CGFloat(NMF_LOCATION_OVERLAY_SIZE_AUTO)
-        locationOverlay.iconHeight = CGFloat(NMF_LOCATION_OVERLAY_SIZE_AUTO)
-        locationOverlay.anchor = CGPoint(x: 0.5, y: 1)
-        
-        marker.mapView = view.mapView
+        locationOverlay.hidden = false
+        locationOverlay.location = coord
+    }
+    
+    // 카메라를 옮기는 기능
+    func moveCamera(coord: NMGLatLng, animation: NMFCameraUpdateAnimation = .none, duration: TimeInterval = 1) {
+        let cameraUpdate = NMFCameraUpdate(scrollTo: coord)
+        cameraUpdate.animation = animation
+        cameraUpdate.animationDuration = duration
         view.mapView.moveCamera(cameraUpdate)
     }
     
+    // 카메라 위치 이동
+    func moveCameraLocation(latitude: Double, longitude: Double) {
+        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: latitude, lng: longitude), zoomTo: 15)
+        view.mapView.moveCamera(cameraUpdate)
+    }
+    
+    // 현재 위치 전달
+//    func getCurrentLocation() {
+//        // https://developer.apple.com/documentation/corelocation/cllocationmanager/1620548-requestlocation
+//        locationManager.requestLocation()
+//        currentLocation = locationManager.location
+////        print(currentLocation)
+//    }
+    
+    // 마커 찍는 행위
     func addMarkerAndInfoWindow(latitude: Double, longitude: Double, caption: String) {
         let marker = NMFMarker()
         
@@ -103,6 +136,7 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate, NMFMapV
         //        infoWindow.dataSource = dataSource
     }
     
+    // 기존 마커 삭제
     func removeAllMakers() {
         markers.forEach { marker in
             marker.mapView = nil

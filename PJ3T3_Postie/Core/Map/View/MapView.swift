@@ -16,10 +16,12 @@ struct MapView: View {
     
     @StateObject var naverGeocodeAPI = NaverGeocodeAPI.shared
     @StateObject var officeInfoServiceAPI = OfficeInfoServiceAPI.shared
+    @StateObject var locationManager = LocationManager() // 지금 위치를 알기 위한 값
     @StateObject var coordinator: Coordinator = Coordinator.shared
     
     //    @State private var selectedPostDivType: Int = 1 //Dafault 우체국(1)
     @State private var selectedButtonIndex: Int = 0
+    @State var coord: MyCoord = MyCoord(37.579081, 126.974375) //Dafult값 (서울역)
     
     var body: some View {
         NavigationStack {
@@ -58,32 +60,53 @@ struct MapView: View {
                             }
                         }
                     }
+                    
                     Spacer()
                 }
                 .padding()
             }
             
-            NaverMap()
+            NaverMap(coord: coord)
                 .ignoresSafeArea(.all, edges: .top)
         }
-        // 추후 사용 예정
-        //        .navigationBarTitle("Postie Map")
-        //        .foregroundStyle(Color(hex: 0x1E1E1E))
         .onAppear() {
             CLLocationManager().requestWhenInUseAuthorization()
+            
             officeInfoServiceAPI.fetchData(postDivType: 1)
-            print(coordinator.userLocation.0)
+            
+            locationManager.startUpdatingLocation()
         }
         .onChange(of: officeInfoServiceAPI.infos) { newInfos in
             coordinator.removeAllMakers()
+            
             for result in newInfos {
                 coordinator.addMarkerAndInfoWindow(latitude: Double(result.postLat)!, longitude: Double(result.postLon)!, caption: result.postNm)
             }
         }
+        .onChange(of: locationManager.location) { newLocation in
+            if let location = newLocation {
+                coord = MyCoord(location.coordinate.latitude, location.coordinate.longitude)
+                
+                print("현재위치: \(coord)")
+            }
+        }
+        
+        // 카메라 위치 바뀌면 그 값에 따라 좌표 실시간으로 바꾸기 구현 예정
+        //        .onChange(of: locationManager.isUpdatingLocation) { locations in
+        //            if locations {
+        //                locationManager.startUpdatingLocation()
+        //            } else {
+        //                locationManager.stopUpdatingLocation()
+        //            }
+        //        }
+        .onDisappear {
+            locationManager.stopUpdatingLocation()
+        }
         .zIndex(1)
+        
     }
 }
 
-#Preview {
-    MapView()
-}
+//#Preview {
+//    MapView()
+//}
