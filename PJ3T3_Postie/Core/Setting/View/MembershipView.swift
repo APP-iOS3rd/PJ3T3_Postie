@@ -42,7 +42,7 @@ struct MembershipView: View {
                         .foregroundColor(postieColors.tintColor)
                     + Text("의 Premium회원이 되어")
                         .font(.custom("SourceSerifPro-Black", size: 23))
-                        .foregroundStyle(postieColors.tabBarTintColor)
+                        .foregroundColor(postieColors.tabBarTintColor)
                     
                     Text("아래의 혜택을 만나보세요!")
                         .font(.custom("SourceSerifPro-Black", size: 23))
