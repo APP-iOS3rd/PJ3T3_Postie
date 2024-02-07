@@ -13,7 +13,36 @@ struct ProfileEditView: View {
             Color.postieBeige
                 .ignoresSafeArea()
             
-            Text("프로필 수정뷰")
+            ScrollView {
+                VStack(alignment: .leading) {
+                    ZStack {
+                        Circle()
+                            .frame(width: 170, height: 170)
+                            .foregroundStyle(.postieGray)
+                        
+                        Image("postyReceivingBeige")
+                            .resizable()
+                            .frame(width: 170, height: 170)
+                    }
+                    
+                    Text("프로필 수정뷰")
+                }
+            }
+        }
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                Text("프로필 수정")
+                    .bold()
+                //                    .foregroundStyle(postieColors.tintColor)
+            }
+            
+            ToolbarItem(placement: .topBarLeading) {
+                Button {
+                    
+                } label: {
+                    Text("완료")
+                }
+            }
         }
     }
 }
