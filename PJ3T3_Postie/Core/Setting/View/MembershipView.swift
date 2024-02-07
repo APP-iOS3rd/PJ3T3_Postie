@@ -161,6 +161,8 @@ struct MembershipView: View {
                     
                     VStack {
                         Text(isMembershipForYear ? "연간 회원권 시작하기" : "월간 회원권 시작하기")
+                            .bold()
+                        
                         Text("무료 체험 1개월 제공")
                     }
                     .foregroundStyle(Color.white)
