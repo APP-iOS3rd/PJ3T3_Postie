@@ -8,7 +8,11 @@
 import SwiftUI
 
 struct SplashScreenView: View {
+    @Binding var isThemeGroupButton: Int
+    
     var body: some View {
+        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
+        
         ZStack {
             Color.postieBeige
                 .ignoresSafeArea()

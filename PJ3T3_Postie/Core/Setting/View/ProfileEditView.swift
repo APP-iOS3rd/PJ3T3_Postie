@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ProfileEditView: View {
     @ObservedObject var authManager = AuthManager.shared
+    @Environment(\.dismiss) var dismiss
     
     @State var name: String = " postieTest"
     @Binding var isThemeGroupButton: Int
@@ -72,7 +73,7 @@ struct ProfileEditView: View {
             
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
-                    
+                    dismiss()
                 } label: {
                     Text("완료")
                         .foregroundStyle(postieColors.tabBarTintColor)

@@ -78,6 +78,7 @@ struct ProfileView: View {
                         }
                     }
                     .fullScreenCover(isPresented: $showingMembershipView) {
+                        // 멤버십 뷰, 실제 배포시에는 사라질 수도 있음
                         MembershipView()
                     }
                     
