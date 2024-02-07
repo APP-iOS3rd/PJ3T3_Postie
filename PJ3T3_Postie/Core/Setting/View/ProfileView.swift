@@ -28,7 +28,7 @@ struct ProfileView: View {
                             .frame(width: 170, height: 170)
                             .foregroundStyle(postieColors.profileColor)
                         
-                        Image("postyReceiving")
+                        Image("postyReceivingBeige")
                             .resizable()
                             .frame(width: 170, height: 170)
                     }

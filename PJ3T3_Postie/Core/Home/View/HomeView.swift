@@ -12,10 +12,10 @@ struct HomeView: View {
     @ObservedObject var storageManager = StorageManager.shared
     
     @State private var isSideMenuOpen = false
-    @State private var isTabGroupButton = true
-    @State private var isThemeGroupButton: Int = 0
     @State private var currentGroupPage: Int = 0
     @State private var currentColorPage: Int = 0
+    @AppStorage("isTabGroupButton") private var isTabGroupButton: Bool = true
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
     var body: some View {
         let postieColors = ThemeManager.themeColors[isThemeGroupButton]
@@ -148,7 +148,7 @@ struct SideMenuView: View {
                                 .frame(width: 80,height: 80)
                                 .foregroundStyle(postieColors.profileColor)
                             
-                            Image("postyReceiving")
+                            Image("postyReceivingBeige")
                                 .resizable()
                                 .frame(width: 80,height: 80)
                         }
@@ -175,7 +175,7 @@ struct SideMenuView: View {
                 
                 NavigationLink(destination: ThemeView(isThemeGroupButton: $isThemeGroupButton, currentColorPage: $currentColorPage, isTabGroupButton: $isTabGroupButton, currentGroupPage: $currentGroupPage)) {
                     HStack {
-                        Text("테마 설정 하기")
+                        Text(" 테마 설정 하기")
                         
                         Spacer()
                         
@@ -191,7 +191,7 @@ struct SideMenuView: View {
                 DividerView(isThemeGroupButton: $isThemeGroupButton)
                 
                 HStack {
-                    Text("공지사항")
+                    Text(" 공지사항")
                     
                     Spacer()
                     
@@ -201,7 +201,7 @@ struct SideMenuView: View {
                 .padding(.bottom)
                 
                 HStack {
-                    Text("문의하기")
+                    Text(" 문의하기")
                     
                     Spacer()
                     
@@ -211,7 +211,7 @@ struct SideMenuView: View {
                 .padding(.bottom)
                 
                 HStack {
-                    Text("이용약관 및 개인정보 방침")
+                    Text(" 이용약관 및 개인정보 방침")
                     
                     Spacer()
                     
@@ -221,7 +221,7 @@ struct SideMenuView: View {
                 .padding(.bottom)
                 
                 HStack {
-                    Text("앱 정보")
+                    Text(" 앱 정보")
                     
                     Spacer()
                     
@@ -293,6 +293,10 @@ struct DividerView: View {
             .frame(height: 1)
             .padding(.bottom)
     }
+}
+
+private func getValueFromUserDefaults<T>(key: String, defaultValue: T) -> T {
+    return UserDefaults.standard.object(forKey: key) as? T ?? defaultValue
 }
 
 #Preview {

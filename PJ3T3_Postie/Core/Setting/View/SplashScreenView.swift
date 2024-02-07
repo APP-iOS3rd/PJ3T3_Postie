@@ -28,7 +28,7 @@ struct SplashScreenView: View {
                 Text("언제 어디서나")
                     .foregroundStyle(Color.postieDarkGray)
                 
-                Image("postyReceiving")
+                Image("postyReceivingBeige")
                     .resizable()
                     .frame(width: 300, height: 300)
                 
