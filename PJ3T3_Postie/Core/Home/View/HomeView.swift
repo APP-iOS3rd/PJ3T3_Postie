@@ -15,7 +15,7 @@ struct HomeView: View {
     @State private var currentGroupPage: Int = 0
     @State private var currentColorPage: Int = 0
     @AppStorage("isTabGroupButton") private var isTabGroupButton: Bool = true
-    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
+    @Binding var isThemeGroupButton: Int
     
     var body: some View {
         let postieColors = ThemeManager.themeColors[isThemeGroupButton]
@@ -299,6 +299,6 @@ private func getValueFromUserDefaults<T>(key: String, defaultValue: T) -> T {
     return UserDefaults.standard.object(forKey: key) as? T ?? defaultValue
 }
 
-#Preview {
-    HomeView()
-}
+//#Preview {
+//    HomeView()
+//}
