@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import AuthenticationServices
+
 import GoogleSignInSwift
 
 struct LoginView: View {
@@ -34,21 +36,19 @@ struct LoginView: View {
                                 .padding(.horizontal, 10)
                             
                             Text("Sign in with Email")
-                                .font(.system(size: 14, weight: .semibold))
-                            
-                            Spacer()
+                                .font(.system(size: 20, weight: .semibold))
                         }
                         .foregroundColor(.white)
-                        .frame(height: 42)
+                        .frame(height: 54)
                         .frame(maxWidth: .infinity)
                     }
                     .background(.postieOrange)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .clipShape(RoundedRectangle(cornerRadius: 5))
                     .shadow(radius: 3, x: 3, y: 3)
                     .padding(.bottom, 10)
 
                     //Google sign in Button
-                    GoogleSignInButton(viewModel: GoogleSignInButtonViewModel(scheme: .light, style: .wide, state: .normal)) {
+                    Button {
                         Task {
                             do {
                                 let credential = try await authManager.signInWithGoogle()
@@ -57,7 +57,37 @@ struct LoginView: View {
                                 print(error)
                             }
                         }
+                    } label: {
+                        Image("GoogleSignIn")
+                            .resizable()
+                            .scaledToFit()
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 5)
+                                .stroke(Color(.black), lineWidth: 0.5))
+                            .shadow(radius: 3, x: 3, y: 3)
                     }
+                    .padding(.bottom, 10)
+                    
+                    SignInWithAppleButton { request in
+                        AppleSignInHelper.shared.signInWithAppleRequest(request)
+                    } onCompletion: { result in
+                        Task {
+                            do {
+                                AppleSignInHelper.shared.signInWithAppleCompletion(result)
+                                guard let credential = authManager.credential else {
+                                    print("Unable to fetch credential")
+                                    return
+                                }
+                                authManager.authDataResult = try await AuthManager.shared.signInWithSSO(credential: credential)
+                            } catch {
+                                print(error)
+                            }
+                        }
+                    }
+                    .frame(height: 54)
+                    .signInWithAppleButtonStyle(.black)
+                    .shadow(radius: 3, x: 3, y: 3)
+                    .padding(.bottom, 10)
                 }
                 .padding(.horizontal, 32)
             }

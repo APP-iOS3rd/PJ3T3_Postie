@@ -34,7 +34,7 @@ struct MembershipView: View {
                 VStack {
                     Text("Postie")
                         .font(.custom("SourceSerifPro-Black", size: 30))
-                        .foregroundStyle(Color.postieOrange)
+                        .foregroundColor(Color.postieOrange)
                     + Text("의 Premium회원이 되어")
                         .font(.custom("SourceSerifPro-Black", size: 23))
                     
