@@ -12,6 +12,7 @@ struct ProfileView: View {
     
     @State private var isLogOutAlert: Bool = false
     @State private var isSignOutAlert: Bool = false
+    @State private var showingMembershipView = false
     @Binding var isThemeGroupButton: Int
     
     var body: some View {
@@ -62,8 +63,8 @@ struct ProfileView: View {
                     
                     DividerView(isThemeGroupButton: $isThemeGroupButton)
                     
-                    NavigationLink {
-                        MembershipView()
+                    Button {
+                        showingMembershipView = true
                     } label: {
                         HStack {
                             Text(" 일반회원")
@@ -75,6 +76,9 @@ struct ProfileView: View {
                             Image(systemName: "chevron.right")
                                 .foregroundStyle(postieColors.dividerColor)
                         }
+                    }
+                    .fullScreenCover(isPresented: $showingMembershipView) {
+                        MembershipView()
                     }
                     
                     Text("계정 관리")

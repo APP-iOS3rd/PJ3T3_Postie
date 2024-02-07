@@ -19,6 +19,18 @@ struct MembershipView: View {
                 .ignoresSafeArea()
             
             ScrollView {
+                HStack {
+                    Spacer()
+                    
+                    Button {
+                        dismiss()
+                    } label: {
+                        Image(systemName: "xmark")
+                            .font(.title2)
+                    }
+                    .padding()
+                }
+                
                 VStack {
                     Text("Postie")
                         .font(.custom("SourceSerifPro-Black", size: 30))
