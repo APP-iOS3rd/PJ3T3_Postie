@@ -8,11 +8,15 @@
 import SwiftUI
 
 struct ProfileView: View {
-    @ObservedObject var authViewModel = AuthManager.shared
+    @ObservedObject var authManager = AuthManager.shared
+    
+    @Binding var isThemeGroupButton: Int
     
     var body: some View {
+        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
+        
         ZStack {
-            Color(hex: 0xF5F1E8)
+            postieColors.backGroundColor
                 .ignoresSafeArea()
             
             VStack(alignment: .leading) {
@@ -21,89 +25,90 @@ struct ProfileView: View {
                     
                     ZStack {
                         Circle()
-                            .frame(width: 170,height: 170)
-                            .foregroundStyle(Color.init(hex: 0xD1CEC7))
+                            .frame(width: 170, height: 170)
+                            .foregroundStyle(postieColors.profileColor)
                         
-                        Text("Postie")
-                            .font(.title)
-                            .foregroundStyle(Color.black)
+                        Image("postyReceivingBeige")
+                            .resizable()
+                            .frame(width: 170, height: 170)
                     }
                     
                     Spacer()
                 }
                 
                 Text("이름")
-                    .foregroundStyle(Color.gray)
+                    .foregroundStyle(postieColors.dividerColor)
                 
-                Rectangle()
-                    .frame(height: 1)
-                    .foregroundStyle(Color.gray)
-                    .padding(.bottom)
+                DividerView(isThemeGroupButton: $isThemeGroupButton)
                 
                 Text("Postie_test")
+                    .foregroundStyle(postieColors.tabBarTintColor)
                     .font(.title3)
                     .padding(.bottom)
                 
                 Text("계정")
-                    .foregroundStyle(Color.gray)
+                    .foregroundStyle(postieColors.dividerColor)
                 
-                Rectangle()
-                    .frame(height: 1)
-                    .foregroundStyle(Color.gray)
-                    .padding(.bottom)
+                DividerView(isThemeGroupButton: $isThemeGroupButton)
                 
                 Text("postie@test.com")
+                    .foregroundStyle(postieColors.tabBarTintColor)
                     .font(.title3)
                     .padding(.bottom)
                 
                 Text("구독정보")
-                    .foregroundStyle(Color.gray)
+                    .foregroundStyle(postieColors.dividerColor)
                 
-                Rectangle()
-                    .frame(height: 1)
-                    .foregroundStyle(Color.gray)
-                    .padding(.bottom)
+                DividerView(isThemeGroupButton: $isThemeGroupButton)
                 
                 Text("일반회원")
+                    .foregroundStyle(postieColors.tabBarTintColor)
                     .font(.title3)
                     .padding(.bottom)
                 
                 Text("계정 관리")
-                    .foregroundStyle(Color.gray)
+                    .foregroundStyle(postieColors.dividerColor)
                 
-                Rectangle()
-                    .frame(height: 1)
-                    .foregroundStyle(Color.gray)
-                    .padding(.bottom)
+                DividerView(isThemeGroupButton: $isThemeGroupButton)
                 
                 Button {
-                    authViewModel.signOut()
+                    authManager.signOut()
                 } label: {
                     Text("로그아웃")
+                        .foregroundStyle(postieColors.tabBarTintColor)
                         .font(.title3)
                         .padding(.bottom)
                 }
                 
                 Text("회원탈퇴")
+                    .foregroundStyle(postieColors.tabBarTintColor)
                     .font(.title3)
                 
                 Spacer()
             }
-            .tint(Color(hex: 0x1E1E1E))
+            .tint(postieColors.tabBarTintColor)
             .padding()
         }
-        .navigationTitle("프로필 설정")
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationBarItems(trailing: (
+        .toolbar {
+            ToolbarItemGroup(placement: .principal) {
+                Text("프로필 설정")
+                    .bold()
+                    .foregroundStyle(postieColors.tintColor)
+            }
+            
+            ToolbarItemGroup(placement: .topBarTrailing) {
                 Button(action: {
                 }) {
                     Text("수정")
+                        .foregroundStyle(postieColors.tabBarTintColor)
                 }
-            ))
-        .tint(Color(hex: 0x1E1E1E))
+            }
+        }
+        .navigationBarTitleDisplayMode(.inline)
+        .tint(postieColors.tabBarTintColor)
     }
 }
 
-#Preview {
-    ProfileView()
-}
+//#Preview {
+//    ProfileView()
+//}
