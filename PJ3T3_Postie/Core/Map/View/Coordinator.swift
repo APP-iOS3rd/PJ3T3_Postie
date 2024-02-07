@@ -45,14 +45,6 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate {
         view.showScaleBar = true // 스케일 바 : 지도의 축척을 표현합니다. 지도를 조작하는 기능은 없습니다.
         
         view.mapView.addCameraDelegate(delegate: self)
-    
-//        view.mapView.touchDelegate = self
-        
-//         내 위치 확인
-//        locationManager.delegate = self
-//        locationManager.requestWhenInUseAuthorization()
-//        
-//        getCurrentLocation()
     }
     
     func getNaverMapView() -> NMFNaverMapView {
@@ -69,12 +61,10 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate {
         
 //        print("change position")
 //        print(center)
-        DispatchQueue.main.async {
-                // Coordinator 클래스에서 바인딩한 @Published 속성을 통해 값 전달
-//                self.coord = MyCoord(cameraLocation.lat, cameraLocation.lng)
-            print("바껴랏!! \(self.cameraLocation)")
-            }
-        // 카메라의 위치가 변경되면 호출되는 함수
+        // 값이 이동했는지 확인하는용
+//        DispatchQueue.main.async {
+//            print("바껴랏!! \(self.cameraLocation)")
+//            }
     }
     
     // 맵을 업데이트 -> 해당 위치에서 우체국 찾기 때 사용 예정
@@ -125,7 +115,7 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate {
 //        // https://developer.apple.com/documentation/corelocation/cllocationmanager/1620548-requestlocation
 //        locationManager.requestLocation()
 //        currentLocation = locationManager.location
-////        print(currentLocation)
+//        print(currentLocation)
 //    }
     
     // 마커 찍는 행위

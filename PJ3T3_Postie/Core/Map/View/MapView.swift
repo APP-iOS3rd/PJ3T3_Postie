@@ -32,7 +32,6 @@ struct MapView: View {
                     ForEach(0...1, id: \.self) { index in
                         Button(action: {
                             selectedButtonIndex = index
-//                            officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)
                         }) {
                             ZStack {
                                 if selectedButtonIndex == index {
@@ -75,15 +74,10 @@ struct MapView: View {
                 //현재 coord( 카메라 위치) 불러오기
                 //값을 불러 오기
                 print("버튼 눌림 \(coordinator.cameraLocation)")
+                
                 coord = MyCoord(coordinator.cameraLocation?.lat ?? 37.579081, coordinator.cameraLocation?.lng ?? 126.974375 )
                 
                 officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)
-                
-//                coordinator.removeAllMakers()
-//                
-//                for result in officeInfoServiceAPI.infos {
-//                    coordinator.addMarkerAndInfoWindow(latitude: Double(result.postLat)!, longitude: Double(result.postLon)!, caption: result.postNm)
-//                }
                 
                 print("불러옵니다\(coord)")
             }
@@ -104,12 +98,13 @@ struct MapView: View {
                 coordinator.addMarkerAndInfoWindow(latitude: Double(result.postLat)!, longitude: Double(result.postLon)!, caption: result.postNm)
             }
         }
-        //초기 화면이 열리 때 위치값을 불러온다. 
+        //초기 화면이 열리 때 위치값을 불러온다.
         .onChange(of: locationManager.location) { newLocation in
             if let location = newLocation {
                 coord = MyCoord(location.coordinate.latitude, location.coordinate.longitude)
                 
                 print("현재위치: \(coord)")
+                
                 locationManager.stopUpdatingLocation()
             }
         }
