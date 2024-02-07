@@ -11,6 +11,8 @@ struct MembershipView: View {
     @Environment(\.dismiss) var dismiss
     
     @State private var isMembershipPage = 1
+    @State private var isMembershipForYear = true
+    
     var body: some View {
         ZStack(alignment: .bottom) {
             Color.postieBeige
@@ -73,12 +75,17 @@ struct MembershipView: View {
                     .frame(height: 250)
                     
                     Button(action: {
-                        
+                        isMembershipForYear = true
                     }) {
                         ZStack {
                             Rectangle()
-                                .frame(height: 80)
+                                .frame(height: 70)
                                 .cornerRadius(20)
+                                .foregroundStyle(Color.postieWhite)
+                                .overlay(
+                                        RoundedRectangle(cornerRadius: 20)
+                                            .stroke(isMembershipForYear ? Color.postieOrange : Color.postieOrange.opacity(0), lineWidth: 1)
+                                    )
                             
                             HStack {
                                 Text("연간 회원권")
@@ -86,65 +93,45 @@ struct MembershipView: View {
                                 Spacer()
                                 
                                 VStack {
-                                    Text("₩18,000")
+                                    Text("₩ 18,000")
                                     
-                                    Text("월 ₩1,500")
+                                    Text("월 ₩ 1,500")
                                 }
-                                .background(Color.postieWhite)
-                                .padding()
                             }
-                            .background(Color.postieWhite)
+                            .foregroundStyle(Color.black)
+                            .padding()
                         }
-                        .padding()
+                        .padding(.horizontal)
                     }
                     
-                    ZStack {
-                        Rectangle()
-                            .fill(Color.postieWhite)
-                            .frame(height: 80)
-                            .border(Color.postieOrange)
-                            .cornerRadius(20)
-                            .padding()
-
-                        HStack {
-                            Text("연간 회원권")
-                                .foregroundColor(.postieOrange)
-                                .padding()
+                    Button(action: {
+                        isMembershipForYear = false
+                    }) {
+                        ZStack {
+                            Rectangle()
+                                .frame(height: 70)
+                                .cornerRadius(20)
+                                .foregroundStyle(Color.postieWhite)
+                                .overlay(
+                                        RoundedRectangle(cornerRadius: 20)
+                                            .stroke(isMembershipForYear ? Color.postieOrange.opacity(0) : Color.postieOrange, lineWidth: 1)
+                                    )
                             
-                            Spacer()
-                            
-                            VStack {
-                                Text("₩18,000")
+                            HStack {
+                                Text("월간 회원권")
                                 
-                                Text("월 ₩1,500")
+                                Spacer()
+                                
+                                Text("₩ 2,000")
                             }
+                            .foregroundStyle(Color.black)
                             .padding()
                         }
-                        .padding()
-                    }
-                    
-                    ZStack {
-                        Rectangle()
-                            .fill(Color.postieWhite)
-                            .frame(height: 80)
-                            .border(Color.postieOrange)
-                            .cornerRadius(20)
-                            .padding()
-
-                        HStack {
-                            Text("월간 회원권")
-                                .foregroundColor(.postieOrange)
-                                .padding()
-                            
-                            Spacer()
-                            
-                            Text("₩2,000")
-                                .padding()
-                        }
-                        .padding()
+                        .padding(.horizontal)
                     }
                     
                     Text("언제든 Appstore에서 구독 해지 가능합니다.")
+                        .padding()
                     
                     Rectangle()
                         .frame(height: 100)
@@ -152,11 +139,24 @@ struct MembershipView: View {
                 }
             }
             
-            Rectangle()
-                .padding()
-                .cornerRadius(20)
-                .frame(height: 100)
-                .foregroundStyle(Color.postieOrange)
+            Button(action: {
+            }) {
+                ZStack {
+                    Rectangle()
+                        .frame(height: 65)
+                        .cornerRadius(10)
+                        .foregroundStyle(Color.postieOrange)
+                    
+                    VStack {
+                        Text(isMembershipForYear ? "연간 회원권 시작하기" : "월간 회원권 시작하기")
+                        Text("무료 체험 1개월 제공")
+                    }
+                    .foregroundStyle(Color.white)
+                    .padding()
+                }
+                .padding(.horizontal)
+            }
+            .padding(.bottom)
         }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
