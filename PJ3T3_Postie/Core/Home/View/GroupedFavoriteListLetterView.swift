@@ -11,7 +11,6 @@ struct GroupedFavoriteListLetterView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
     @ObservedObject var storageManager = StorageManager.shared
     
-    @State private var showAlert: Bool = false
     @State private var isSideMenuOpen: Bool = false
     @Binding var isThemeGroupButton: Int
     

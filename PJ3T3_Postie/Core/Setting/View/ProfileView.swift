@@ -10,6 +10,8 @@ import SwiftUI
 struct ProfileView: View {
     @ObservedObject var authManager = AuthManager.shared
     
+    @State private var isLogOutAlert: Bool = false
+    @State private var isSignOutAlert: Bool = false
     @Binding var isThemeGroupButton: Int
     
     var body: some View {
@@ -42,9 +44,8 @@ struct ProfileView: View {
                     
                     DividerView(isThemeGroupButton: $isThemeGroupButton)
                     
-                    Text("Postie_test")
+                    Text(" Postie_test")
                         .foregroundStyle(postieColors.tabBarTintColor)
-                        .font(.title3)
                         .padding(.bottom)
                     
                     Text("계정")
@@ -52,9 +53,8 @@ struct ProfileView: View {
                     
                     DividerView(isThemeGroupButton: $isThemeGroupButton)
                     
-                    Text("postie@test.com")
+                    Text(" postie@test.com")
                         .foregroundStyle(postieColors.tabBarTintColor)
-                        .font(.title3)
                         .padding(.bottom)
                     
                     Text("구독정보")
@@ -62,9 +62,8 @@ struct ProfileView: View {
                     
                     DividerView(isThemeGroupButton: $isThemeGroupButton)
                     
-                    Text("일반회원")
+                    Text(" 일반회원")
                         .foregroundStyle(postieColors.tabBarTintColor)
-                        .font(.title3)
                         .padding(.bottom)
                     
                     Text("계정 관리")
@@ -73,17 +72,49 @@ struct ProfileView: View {
                     DividerView(isThemeGroupButton: $isThemeGroupButton)
                     
                     Button {
-                        authManager.signOut()
+                        isLogOutAlert = true
                     } label: {
-                        Text("로그아웃")
+                        Text(" 로그아웃")
                             .foregroundStyle(postieColors.tabBarTintColor)
-                            .font(.title3)
                             .padding(.bottom)
                     }
+                    .alert("로그아웃", isPresented: $isLogOutAlert) {
+                        Button(role: .cancel) {
+
+                        } label: {
+                            Text("취소")
+                        }
+
+                        Button(role: .destructive) {
+                            authManager.signOut()
+                        } label: {
+                            Text("확인")
+                        }
+                    } message: {
+                        Text("로그아웃 하시겠습니까??")
+                    }
                     
-                    Text("회원탈퇴")
-                        .foregroundStyle(postieColors.tabBarTintColor)
-                        .font(.title3)
+                    Button {
+                        isSignOutAlert = true
+                    } label: {
+                        Text(" 회원탈퇴")
+                            .foregroundStyle(postieColors.tabBarTintColor)
+                    }
+                    .alert("회원탈퇴", isPresented: $isSignOutAlert) {
+                        Button(role: .cancel) {
+
+                        } label: {
+                            Text("취소")
+                        }
+
+                        Button(role: .destructive) {
+                            authManager.signOut()
+                        } label: {
+                            Text("확인")
+                        }
+                    } message: {
+                        Text("회원탈퇴 하시겠습니까??")
+                    }
                     
                     Spacer()
                 }
