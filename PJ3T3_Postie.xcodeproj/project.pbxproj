@@ -98,6 +98,7 @@
 		E39C35F12B71F820001F6E5F /* ContenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E39C35F02B71F820001F6E5F /* ContenViewModel.swift */; };
 		E3B41DA42B72152200CB9E7A /* Shop.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B41DA32B72152200CB9E7A /* Shop.swift */; };
 		E3B41DA62B730E0300CB9E7A /* ProfileEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B41DA52B730E0300CB9E7A /* ProfileEditView.swift */; };
+		E3D466DB2B733B5B00DFE93F /* MembershipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D466DA2B733B5B00DFE93F /* MembershipView.swift */; };
 		E3EECAF02B5F957A00E639F2 /* SourceSerifPro-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = E3EECAEF2B5F957A00E639F2 /* SourceSerifPro-Black.otf */; };
 		E3EECAF22B5F958300E639F2 /* SourceSerifPro-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = E3EECAF12B5F958300E639F2 /* SourceSerifPro-Light.otf */; };
 		E3EECAF52B5FD2E100E639F2 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3EECAF42B5FD2E000E639F2 /* ProfileView.swift */; };
@@ -173,6 +174,7 @@
 		E39C35F02B71F820001F6E5F /* ContenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContenViewModel.swift; sourceTree = "<group>"; };
 		E3B41DA32B72152200CB9E7A /* Shop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shop.swift; sourceTree = "<group>"; };
 		E3B41DA52B730E0300CB9E7A /* ProfileEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditView.swift; sourceTree = "<group>"; };
+		E3D466DA2B733B5B00DFE93F /* MembershipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MembershipView.swift; sourceTree = "<group>"; };
 		E3EECAEF2B5F957A00E639F2 /* SourceSerifPro-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSerifPro-Black.otf"; sourceTree = "<group>"; };
 		E3EECAF12B5F958300E639F2 /* SourceSerifPro-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSerifPro-Light.otf"; sourceTree = "<group>"; };
 		E3EECAF42B5FD2E000E639F2 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
@@ -458,6 +460,7 @@
 				9E9F6AC52B5763A3003DFE83 /* SettingView.swift */,
 				E349F8702B6918B500253B02 /* ThemeView.swift */,
 				E30DED6E2B6FD25B00FA70A6 /* SplashScreenView.swift */,
+				E3D466DA2B733B5B00DFE93F /* MembershipView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -757,6 +760,7 @@
 				0E882AF02B6B79D800D8F2FC /* CoordinaterEtc.swift in Sources */,
 				0E882AEE2B6B73DE00D8F2FC /* LocationManager.swift in Sources */,
 				9E9F6AD42B576411003DFE83 /* LetterDetailView.swift in Sources */,
+				E3D466DB2B733B5B00DFE93F /* MembershipView.swift in Sources */,
 				9E9A8BF32B6CD8990072CB75 /* NicknameView.swift in Sources */,
 				CEF09E492B57BFBF00BE67E4 /* TextRecognizer.swift in Sources */,
 				E349F8862B6B672E00253B02 /* ListLetterView.swift in Sources */,

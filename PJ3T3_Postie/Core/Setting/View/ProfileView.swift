@@ -62,9 +62,20 @@ struct ProfileView: View {
                     
                     DividerView(isThemeGroupButton: $isThemeGroupButton)
                     
-                    Text(" 일반회원")
-                        .foregroundStyle(postieColors.tabBarTintColor)
-                        .padding(.bottom)
+                    NavigationLink {
+                        MembershipView()
+                    } label: {
+                        HStack {
+                            Text(" 일반회원")
+                                .foregroundStyle(postieColors.tabBarTintColor)
+                                .padding(.bottom)
+                            
+                            Spacer()
+                            
+                            Image(systemName: "chevron.right")
+                                .foregroundStyle(postieColors.dividerColor)
+                        }
+                    }
                     
                     Text("계정 관리")
                         .foregroundStyle(postieColors.dividerColor)
@@ -80,11 +91,11 @@ struct ProfileView: View {
                     }
                     .alert("로그아웃", isPresented: $isLogOutAlert) {
                         Button(role: .cancel) {
-
+                            
                         } label: {
                             Text("취소")
                         }
-
+                        
                         Button(role: .destructive) {
                             authManager.signOut()
                         } label: {
@@ -102,11 +113,11 @@ struct ProfileView: View {
                     }
                     .alert("회원탈퇴", isPresented: $isSignOutAlert) {
                         Button(role: .cancel) {
-
+                            
                         } label: {
                             Text("취소")
                         }
-
+                        
                         Button(role: .destructive) {
                             authManager.signOut()
                         } label: {
@@ -130,8 +141,9 @@ struct ProfileView: View {
             }
             
             ToolbarItemGroup(placement: .topBarTrailing) {
-                Button(action: {
-                }) {
+                NavigationLink {
+                    ProfileEditView(isThemeGroupButton: $isThemeGroupButton)
+                } label: {
                     Text("수정")
                         .foregroundStyle(postieColors.tabBarTintColor)
                 }
