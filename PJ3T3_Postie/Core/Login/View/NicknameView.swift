@@ -45,6 +45,16 @@ struct NicknameView: View {
                 .padding(.bottom, 10)
             }
             .padding(.horizontal, 32)
+            
+            VStack {
+                Spacer()
+                
+                Button {
+                    authManager.signOut()
+                } label: {
+                    Text("Back to Login Selection")
+                }
+            }
         }
     }
 }
