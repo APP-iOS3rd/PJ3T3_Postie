@@ -255,7 +255,7 @@ struct CustomImageModifier: ViewModifier {
     }
 }
 
-private func saveToUserDefaults<T>(value: T, key: String) {
+func saveToUserDefaults<T>(value: T, key: String) {
     UserDefaults.standard.set(value, forKey: key)
 }
 

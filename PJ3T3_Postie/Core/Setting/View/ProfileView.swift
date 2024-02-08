@@ -15,6 +15,8 @@ struct ProfileView: View {
     @State private var isshowingMembershipView = false
     @State private var isShowingProfileEditView = false
     @Binding var isThemeGroupButton: Int
+    @Binding var profileImage: String
+    @Binding var profileImageTemp: String
     
     var body: some View {
         let postieColors = ThemeManager.themeColors[isThemeGroupButton]
@@ -33,7 +35,7 @@ struct ProfileView: View {
                                 .frame(width: 170, height: 170)
                                 .foregroundStyle(postieColors.profileColor)
                             
-                            Image("postyReceivingBeige")
+                            Image(profileImage)
                                 .resizable()
                                 .frame(width: 170, height: 170)
                         }
@@ -154,7 +156,7 @@ struct ProfileView: View {
                         .foregroundStyle(postieColors.tabBarTintColor)
                 }
                 .sheet(isPresented: $isShowingProfileEditView) {
-                    ProfileEditView(isThemeGroupButton: $isThemeGroupButton)
+                    ProfileEditView(isThemeGroupButton: $isThemeGroupButton, profileImage: $profileImage, profileImageTemp: $profileImageTemp)
                         .padding()
                         .presentationDetents([.medium])
                 }

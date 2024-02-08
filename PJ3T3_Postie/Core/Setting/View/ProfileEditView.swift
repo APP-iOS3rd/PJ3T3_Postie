@@ -14,6 +14,8 @@ struct ProfileEditView: View {
     @State var name: String = " postieTest"
     @State private var isShowingProfileImageEditor = false
     @Binding var isThemeGroupButton: Int
+    @Binding var profileImage: String
+    @Binding var profileImageTemp: String
     
     var body: some View {
         let postieColors = ThemeManager.themeColors[isThemeGroupButton]
@@ -28,13 +30,14 @@ struct ProfileEditView: View {
                     
                     Button (action: {
                         isShowingProfileImageEditor = true
+                        print(profileImageTemp)
                     }) {
                         ZStack {
                             Circle()
                                 .frame(width: 170, height: 170)
                                 .foregroundStyle(.postieGray)
                             
-                            Image("postyReceivingBeige")
+                            Image(profileImageTemp)
                                 .resizable()
                                 .frame(width: 170, height: 170)
                             
@@ -45,7 +48,7 @@ struct ProfileEditView: View {
                         }
                     }
                     .sheet(isPresented: $isShowingProfileImageEditor) {
-                        ProfileImageEditView(isThemeGroupButton: $isThemeGroupButton)
+                        ProfileImageEditView(isThemeGroupButton: $isThemeGroupButton, profileImageTemp: $profileImageTemp)
                             .padding()
                             .presentationDetents([.medium])
                     }
@@ -69,9 +72,9 @@ struct ProfileEditView: View {
                         ZStack {
                             Rectangle()
                                 .frame(height: 50)
-                                .cornerRadius(20)
+                                .cornerRadius(10)
                                 .overlay(
-                                    RoundedRectangle(cornerRadius: 20)
+                                    RoundedRectangle(cornerRadius: 10)
                                         .foregroundStyle(postieColors.receivedLetterColor)
                                 )
                             
@@ -82,14 +85,15 @@ struct ProfileEditView: View {
                     }
                     
                     Button(action: {
+                        profileImage = profileImageTemp
                         dismiss()
                     }) {
                         ZStack {
                             Rectangle()
                                 .frame(height: 50)
-                                .cornerRadius(20)
+                                .cornerRadius(10)
                                 .overlay(
-                                    RoundedRectangle(cornerRadius: 20)
+                                    RoundedRectangle(cornerRadius: 10)
                                         .foregroundStyle(postieColors.tintColor)
                                 )
                             
@@ -97,6 +101,9 @@ struct ProfileEditView: View {
                                 .foregroundStyle(isThemeGroupButton == 4 ? .postieBlack : .postieWhite)
                                 .padding()
                         }
+                    }
+                    .onChange(of: profileImage) { newValue in
+                        saveToUserDefaults(value: newValue, key: "profileImage")
                     }
                 }
             }
@@ -106,8 +113,10 @@ struct ProfileEditView: View {
 
 struct ProfileImageEditView: View {
     @Environment(\.dismiss) var dismiss
-    @Binding var isThemeGroupButton: Int
+    
     @State private var isSelectedProfileImage = 0
+    @Binding var isThemeGroupButton: Int
+    @Binding var profileImageTemp: String
     
     var body: some View {
         let postieColors = ThemeManager.themeColors[isThemeGroupButton]
@@ -122,6 +131,7 @@ struct ProfileImageEditView: View {
                 HStack {
                     Button (action: {
                         isSelectedProfileImage = 0
+                        profileImageTemp = "postyReceivingBeige"
                     }) {
                         ZStack {
                             Circle()
@@ -140,6 +150,7 @@ struct ProfileImageEditView: View {
                     
                     Button (action: {
                         isSelectedProfileImage = 1
+                        profileImageTemp = "postySmile"
                     }) {
                         ZStack {
                             Circle()
@@ -158,6 +169,7 @@ struct ProfileImageEditView: View {
                     
                     Button (action: {
                         isSelectedProfileImage = 2
+                        profileImageTemp = "postySending"
                     }) {
                         ZStack {
                             Circle()
@@ -177,6 +189,7 @@ struct ProfileImageEditView: View {
                     
                     Button (action: {
                         isSelectedProfileImage = 3
+                        profileImageTemp = "postyReceiving"
                     }) {
                         ZStack {
                             Circle()
@@ -195,6 +208,8 @@ struct ProfileImageEditView: View {
                     
                     Button (action: {
                         isSelectedProfileImage = 4
+                        profileImageTemp = "postyTrumpet"
+                        print(profileImageTemp)
                     }) {
                         ZStack {
                             Circle()
@@ -213,6 +228,7 @@ struct ProfileImageEditView: View {
                     
                     Button (action: {
                         isSelectedProfileImage = 5
+                        profileImageTemp = "postyThinking"
                     }) {
                         ZStack {
                             Circle()
@@ -229,6 +245,9 @@ struct ProfileImageEditView: View {
                         }
                     }
                 }
+                .onChange(of: profileImageTemp) { newValue in
+                    saveToUserDefaults(value: newValue, key: "profileImageTemp")
+                }
                 .padding()
             }
             
@@ -239,9 +258,9 @@ struct ProfileImageEditView: View {
                     ZStack {
                         Rectangle()
                             .frame(height: 50)
-                            .cornerRadius(20)
+                            .cornerRadius(10)
                             .overlay(
-                                RoundedRectangle(cornerRadius: 20)
+                                RoundedRectangle(cornerRadius: 10)
                                     .foregroundStyle(postieColors.receivedLetterColor)
                             )
                         
@@ -253,13 +272,14 @@ struct ProfileImageEditView: View {
                 
                 Button(action: {
                     dismiss()
+                    print(profileImageTemp)
                 }) {
                     ZStack {
                         Rectangle()
                             .frame(height: 50)
-                            .cornerRadius(20)
+                            .cornerRadius(10)
                             .overlay(
-                                RoundedRectangle(cornerRadius: 20)
+                                RoundedRectangle(cornerRadius: 10)
                                     .foregroundStyle(postieColors.tintColor)
                             )
                         
