@@ -168,7 +168,6 @@ struct ProfileView: View {
                 }
                 .sheet(isPresented: $isShowingProfileEditView) {
                     ProfileEditView(isThemeGroupButton: $isThemeGroupButton, profileImage: $profileImage, profileImageTemp: $profileImageTemp)
-                        .padding()
                         .presentationDetents([.medium])
                 }
             }
