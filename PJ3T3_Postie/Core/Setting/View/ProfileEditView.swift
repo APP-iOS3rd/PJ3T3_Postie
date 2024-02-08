@@ -20,115 +20,128 @@ struct ProfileEditView: View {
     var body: some View {
         let postieColors = ThemeManager.themeColors[isThemeGroupButton]
         
-        ZStack {
-            postieColors.backGroundColor
-                .ignoresSafeArea()
-            
-            VStack(alignment: .leading) {
-                HStack {
-                    Spacer()
-                    
-                    Button (action: {
-                        isShowingProfileImageEditor = true
-                    }) {
-                        ZStack {
-                            Circle()
-                                .frame(width: 170, height: 170)
-                                .foregroundStyle(.postieGray)
-                            
-                            Image(profileImageTemp)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 170, height: 170)
-                                .clipShape(Circle())
-                            
-                            Image(systemName: "pencil.circle.fill")
-                                .font(.title)
-                                .foregroundColor(postieColors.tabBarTintColor)
-                                .offset(x: 60, y: 60)
-                        }
-                    }
-                    .sheet(isPresented: $isShowingProfileImageEditor) {
-                        ProfileImageEditView(isThemeGroupButton: $isThemeGroupButton, profileImage: $profileImage, profileImageTemp: $profileImageTemp)
-                            .presentationDetents([.medium])
-                    }
+        GeometryReader { geometry in
+            ZStack {
+                postieColors.backGroundColor
+                    .ignoresSafeArea()
+                
+                VStack {
+                    Text("나만의 프로필을 설정해보세요!")
+                        .bold()
+                        .font(.title2)
+                        .foregroundStyle(postieColors.tabBarTintColor)
                     
                     Spacer()
-                }
-                
-                Text("닉네임")
-                    .foregroundStyle(postieColors.dividerColor)
-                
-                DividerView(isThemeGroupButton: $isThemeGroupButton)
-                
-                TextField(" 닉네임을 입력해주세요! (12자 제한)", text: $name)
-                    .padding(.bottom)
-                    .textFieldStyle(.roundedBorder)
-                    .overlay(
-                        HStack {
-                            Spacer()
-                            if !name.isEmpty {
-                                Button(action: {
-                                    self.name = ""
-                                }) {
-                                    Image(systemName: "multiply.circle.fill")
-                                        .foregroundColor(.postieGray)
-                                }
-                                .padding(.trailing, 5)
-                                .offset(y: -8)
+                    
+                    HStack {
+                        Button (action: {
+                            isShowingProfileImageEditor = true
+                        }) {
+                            ZStack {
+                                Circle()
+                                    .frame(width: 170, height: 170)
+                                    .foregroundStyle(.postieGray)
+                                
+                                Image(profileImageTemp)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 170, height: 170)
+                                    .clipShape(Circle())
+                                
+                                Image(systemName: "pencil.circle.fill")
+                                    .font(.title)
+                                    .foregroundColor(postieColors.tabBarTintColor)
+                                    .offset(x: 60, y: 60)
                             }
                         }
-                    )
-                    .onChange(of: name) { newValue in
-                        if newValue.count > 12 {
-                            name = String(newValue.prefix(15))
-                        }
-                    }
-                
-                HStack {
-                    Button(action: {
-                        profileImageTemp = profileImage
-                        dismiss()
-                    }) {
-                        ZStack {
-                            Rectangle()
-                                .frame(height: 50)
-                                .cornerRadius(10)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .foregroundStyle(postieColors.receivedLetterColor)
-                                )
-                            
-                            Text("취소")
-                                .foregroundStyle(postieColors.tabBarTintColor)
-                                .padding()
+                        .sheet(isPresented: $isShowingProfileImageEditor) {
+                            ProfileImageEditView(isThemeGroupButton: $isThemeGroupButton, profileImage: $profileImage, profileImageTemp: $profileImageTemp)
+                                .presentationDetents(detentsValue(geometry: geometry))
                         }
                     }
                     
-                    Button(action: {
-                        profileImage = profileImageTemp
-                        dismiss()
-                    }) {
-                        ZStack {
-                            Rectangle()
-                                .frame(height: 50)
-                                .cornerRadius(10)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .foregroundStyle(postieColors.tintColor)
-                                )
-                            
-                            Text("저장")
-                                .foregroundStyle(isThemeGroupButton == 4 ? .postieBlack : .postieWhite)
-                                .padding()
+                    Spacer()
+                    
+                    HStack {
+                        Text("닉네임")
+                            .foregroundStyle(postieColors.dividerColor)
+                        
+                        Spacer()
+                    }
+                    
+                    DividerView(isThemeGroupButton: $isThemeGroupButton)
+                    
+                    TextField(" 닉네임을 입력해주세요! (12자 제한)", text: $name)
+                        .padding(.bottom)
+                        .textFieldStyle(.roundedBorder)
+                        .overlay(
+                            HStack {
+                                Spacer()
+                                if !name.isEmpty {
+                                    Button(action: {
+                                        self.name = ""
+                                    }) {
+                                        Image(systemName: "multiply.circle.fill")
+                                            .foregroundColor(.postieGray)
+                                    }
+                                    .padding(.trailing, 5)
+                                    .offset(y: -8)
+                                }
+                            }
+                        )
+                        .onChange(of: name) { newValue in
+                            if newValue.count > 12 {
+                                name = String(newValue.prefix(15))
+                            }
+                        }
+                    
+                    Spacer()
+                    
+                    HStack {
+                        Button(action: {
+                            profileImageTemp = profileImage
+                            dismiss()
+                        }) {
+                            ZStack {
+                                Rectangle()
+                                    .frame(height: 50)
+                                    .cornerRadius(10)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .foregroundStyle(postieColors.receivedLetterColor)
+                                    )
+                                
+                                Text("취소")
+                                    .foregroundStyle(postieColors.tabBarTintColor)
+                                    .padding()
+                            }
+                        }
+                        
+                        Button(action: {
+                            profileImage = profileImageTemp
+                            dismiss()
+                        }) {
+                            ZStack {
+                                Rectangle()
+                                    .frame(height: 50)
+                                    .cornerRadius(10)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .foregroundStyle(postieColors.tintColor)
+                                    )
+                                
+                                Text("저장")
+                                    .foregroundStyle(isThemeGroupButton == 4 ? .postieBlack : .postieWhite)
+                                    .padding()
+                            }
+                        }
+                        .onChange(of: profileImage) { newValue in
+                            saveToUserDefaults(value: newValue, key: "profileImage")
                         }
                     }
-                    .onChange(of: profileImage) { newValue in
-                        saveToUserDefaults(value: newValue, key: "profileImage")
-                    }
                 }
+                .padding()
             }
-            .padding()
         }
     }
 }
@@ -148,10 +161,12 @@ struct ProfileImageEditView: View {
                 .ignoresSafeArea()
             
             VStack {
-                Text("나만의 프로필을 설정해보세요!")
+                Text("프로필에 사용될 캐릭터를 선택해주세요!")
                     .bold()
                     .font(.title2)
                     .foregroundStyle(postieColors.tabBarTintColor)
+                
+                Spacer()
                 
                 ScrollView(.horizontal) {
                     HStack {
@@ -269,6 +284,8 @@ struct ProfileImageEditView: View {
                     }
                     .padding()
                 }
+                
+                Spacer()
                 
                 HStack {
                     Button(action: {
