@@ -8,25 +8,29 @@
 import SwiftUI
 
 struct SplashScreenView: View {
+    @Binding var isThemeGroupButton: Int
+    
     var body: some View {
+        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
+        
         ZStack {
-            Color.postieBeige
+            postieColors.backGroundColor
                 .ignoresSafeArea()
             
-            ToFromLabelView()
+            ToFromLabelView(isThemeGroupButton: $isThemeGroupButton)
                 .padding()
             
             VStack {
                 Text("Postie")
                     .font(.custom("SourceSerifPro-Black", size: 70))
-                    .foregroundStyle(Color.postieOrange)
+                    .foregroundStyle(postieColors.tintColor)
                     .padding()
                 
                 Text("내 손안의 편지 보관함")
-                    .foregroundStyle(Color.postieDarkGray)
+                    .foregroundStyle(postieColors.dividerColor)
                 
                 Text("언제 어디서나")
-                    .foregroundStyle(Color.postieDarkGray)
+                    .foregroundStyle(postieColors.dividerColor)
                 
                 Image("postyReceivingBeige")
                     .resizable()
@@ -41,12 +45,16 @@ struct SplashScreenView: View {
 }
 
 struct ToFromLabelView: View {
+    @Binding var isThemeGroupButton: Int
+    
     var body: some View {
+        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
+        
         VStack {
             HStack {
                 Text("To.")
                     .font(.custom("SourceSerifPro-Black", size: 35))
-                    .foregroundStyle(Color.postieBlack)
+                    .foregroundStyle(postieColors.tabBarTintColor)
                     .padding()
                 
                 Spacer()
@@ -59,13 +67,13 @@ struct ToFromLabelView: View {
                 
                 Text("From.")
                     .font(.custom("SourceSerifPro-Black", size: 35))
-                    .foregroundStyle(Color.postieBlack)
+                    .foregroundStyle(postieColors.tabBarTintColor)
                     .padding()
             }
         }
     }
 }
 
-#Preview {
-    SplashScreenView()
-}
+//#Preview {
+//    SplashScreenView()
+//}

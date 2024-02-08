@@ -18,6 +18,8 @@ struct ContentView: View {
     @ObservedObject var authViewModel = AuthManager.shared
     @StateObject private var viewModel = AppViewModel()
     
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
+    
     var body: some View {
         Group {
             // 로딩 끝나면 화면 재생
@@ -27,7 +29,7 @@ struct ContentView: View {
                 if authViewModel.userSession != nil { // userSession이 있으면 SettingView를 보여줌
                     if authViewModel.currentUser != nil {
                         TabView {
-                            HomeView()
+                            HomeView(isThemeGroupButton: $isThemeGroupButton)
                                 .tabItem {
                                     Image(systemName: "house")
                                     Text("Home")
@@ -63,7 +65,7 @@ struct ContentView: View {
                     LoginView()
                 }
             } else {
-                SplashScreenView()
+                SplashScreenView(isThemeGroupButton: $isThemeGroupButton)
             }
         }
     }
