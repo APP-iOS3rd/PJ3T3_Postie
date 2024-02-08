@@ -22,7 +22,7 @@ struct LetterDetailView: View {
                 .ignoresSafeArea()
             
             VStack {
-                Page(letter: letter)
+                Page(letter: $firestoreManager.letter)
 
                 letterSummarySection
 
@@ -95,7 +95,7 @@ struct LetterDetailView: View {
         }
         .sheet(isPresented: $letterDetailViewModel.showLetterEditSheet) {
             NavigationStack {
-                AddLetterView(isReceived: letter.isReceived, letter: letter, letterPhotos: storageManager.images)
+                AddLetterView(isReceived: letter.isReceived, letter: firestoreManager.letter, letterPhotos: storageManager.images)
             }
         }
         .alert("편지 삭제", isPresented: $letterDetailViewModel.showDeleteAlert) {
@@ -125,6 +125,8 @@ struct LetterDetailView: View {
             storageManager.listAllFile(docId: letter.id)
 
             letterDetailViewModel.isFavorite = letter.isFavorite
+
+            firestoreManager.letter = letter
         }
         .onDisappear {
             storageManager.images.removeAll()
@@ -137,11 +139,11 @@ struct LetterDetailView: View {
 extension LetterDetailView {
     @ViewBuilder
     private var letterSummarySection: some View {
-        if !letter.summary.isEmpty {
+        if !firestoreManager.letter.summary.isEmpty {
             VStack(alignment: .leading, spacing: 4) {
                 Text("한 줄 요약")
 
-                Text(letter.summary)
+                Text(firestoreManager.letter.summary)
                     .font(.letter(.nanumMyeongjo))
                     .padding()
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -153,7 +155,6 @@ extension LetterDetailView {
 
     @ViewBuilder
     private var letterImageSection: some View {
-
         if !storageManager.images.isEmpty {
             VStack(alignment: .leading, spacing: 4) {
                 Text("편지 사진")

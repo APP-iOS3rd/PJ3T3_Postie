@@ -13,8 +13,9 @@ class FirestoreManager: ObservableObject {
     var docId: String = ""
     @Published var letters: [Letter] = []
     @Published var shops: [Shop] = []
-    
-    private init() { 
+    @Published var letter: Letter = Letter(id: "", writer: "", recipient: "", summary: "", date: Date(), text: "", isReceived: false, isFavorite: false)
+
+    private init() {
         let userUid = AuthManager.shared.userUid
         self.letterColRef = Firestore.firestore().collection("users").document(userUid).collection("letters")
         fetchAllLetters()
@@ -93,7 +94,7 @@ class FirestoreManager: ObservableObject {
             }
         }
     }
-    
+
     //데이터 전체를 가지고 온다.
     func fetchAllLetters() {
         //letterColRef(특정 user의 document의 letters라는 하위 컬렉션)에 있는 모든 document를 가져옴
