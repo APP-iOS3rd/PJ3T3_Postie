@@ -119,14 +119,14 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate {
 //    }
     
     // 마커 찍는 행위
-    func addMarkerAndInfoWindow(latitude: Double, longitude: Double, caption: String, time: String) {
+    func addMarkerAndInfoWindow(latitude: Double, longitude: Double, caption: String, time: String, lunchtime: String) {
         let marker = NMFMarker()
         
         marker.captionText = caption
         marker.iconTintColor = UIColor.red
         marker.captionColor = UIColor.orange
         marker.captionTextSize = 16
-        marker.subCaptionText = "영업시간 \(time)"
+        marker.subCaptionText = "영업시간 \(time) \n 점심시간 \(lunchtime)"
         
         marker.position = NMGLatLng(lat: latitude, lng: longitude)
         marker.mapView = view.mapView

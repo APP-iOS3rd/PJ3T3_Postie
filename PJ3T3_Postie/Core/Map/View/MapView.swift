@@ -26,16 +26,26 @@ struct MapView: View {
     @State private var isSideMenuOpen = false
     @State var coord: MyCoord = MyCoord(37.579081, 126.974375) //Dafult값 (서울역)
     
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
+    
     var body: some View {
+        
         NavigationStack {
             ZStack {
-                Color.gray
+                Color.red
                     .ignoresSafeArea()
-                
+//                
                 VStack(spacing: 0) {
-                    Text("Postie Map")
-                        .font(.custom("SourceSerifPro-Black", size: 40))
-                        .foregroundStyle(Color.orange)
+                    HStack {
+                        Text("Postie Map")
+                            .font(.custom("SourceSerifPro-Black", size: 40))
+                            .foregroundStyle(Color.blue) //색상
+                        
+                        Spacer()
+                    }
+//                    background(Color.postieBeige)
+                    .padding(.horizontal)
+//                    
                     HStack(spacing: 10) {
                         ForEach(0...1, id: \.self) { index in
                             Button(action: {
@@ -46,25 +56,25 @@ struct MapView: View {
                                         Rectangle()
                                             .foregroundColor(.clear)
                                             .frame(width: 70, height: 30)
-                                            .background(Color(red: 1, green: 0.98, blue: 0.95))
+                                            .background(Color(red: 1, green: 0.98, blue: 0.95)) //색상
                                             .cornerRadius(16)
                                             .overlay(
                                                 RoundedRectangle(cornerRadius: 16)
                                                     .inset(by: 0.5)
-                                                    .stroke(Color(red: 0.45, green: 0.45, blue: 0.45), lineWidth: 1)
+                                                    .stroke(Color(red: 0.45, green: 0.45, blue: 0.45), lineWidth: 1) //색상
                                             )} else {
                                                 Rectangle()
                                                     .foregroundColor(.clear)
                                                     .frame(width: 72, height: 30)
-                                                    .background(Color(red: 1, green: 0.98, blue: 0.95))
+                                                    .background(Color(red: 1, green: 0.98, blue: 0.95)) //색상
                                                     .cornerRadius(20)
-                                                    .shadow(color: .black.opacity(0.1), radius: 3, x: 2, y: 2)
+                                                    .shadow(color: .black.opacity(0.1), radius: 3, x: 2, y: 2) //색상
                                             }
                                     
                                     Text(name[index])
                                         .font(Font.custom("SF Pro Text", size: 12))
                                         .multilineTextAlignment(.center)
-                                        .foregroundColor(Color(red: 0.12, green: 0.12, blue: 0.12))
+                                        .foregroundColor(Color(red: 0.12, green: 0.12, blue: 0.12)) //색상
                                         .frame(width: 60, alignment: .center)
                                 }
                             }
@@ -105,8 +115,9 @@ struct MapView: View {
             coordinator.removeAllMakers()
             
             for result in newInfos {
-                coordinator.addMarkerAndInfoWindow(latitude: Double(result.postLat)!, longitude: Double(result.postLon)!, caption: result.postNm, time: result.postTime)
-            }
+                let no = "없음"
+                coordinator.addMarkerAndInfoWindow(latitude: Double(result.postLat)!, longitude: Double(result.postLon)!, caption: result.postNm, time: result.postTime, lunchtime: result.lunchTime!)
+               }
         }
         //초기 화면이 열리 때 위치값을 불러온다.
         .onChange(of: locationManager.location) { newLocation in
