@@ -38,7 +38,7 @@ struct ProfileEditView: View {
                                 .resizable()
                                 .frame(width: 170, height: 170)
                             
-                            Image(systemName: "plus.circle")
+                            Image(systemName: "pencil.circle.fill")
                                 .font(.title)
                                 .foregroundColor(postieColors.tabBarTintColor)
                                 .offset(x: 60, y: 60)
@@ -46,6 +46,7 @@ struct ProfileEditView: View {
                     }
                     .sheet(isPresented: $isShowingProfileImageEditor) {
                         ProfileImageEditView(isThemeGroupButton: $isThemeGroupButton)
+                            .padding()
                             .presentationDetents([.medium])
                     }
                     
@@ -100,100 +101,173 @@ struct ProfileEditView: View {
                 }
             }
         }
-        .toolbar {
-            ToolbarItem(placement: .principal) {
-                Text("프로필 수정")
-                    .bold()
-                    .foregroundStyle(postieColors.tintColor)
-            }
-            
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    dismiss()
-                } label: {
-                    Text("완료")
-                        .foregroundStyle(postieColors.tabBarTintColor)
-                }
-            }
-        }
     }
 }
 
 struct ProfileImageEditView: View {
     @Environment(\.dismiss) var dismiss
     @Binding var isThemeGroupButton: Int
+    @State private var isSelectedProfileImage = 0
     
     var body: some View {
         let postieColors = ThemeManager.themeColors[isThemeGroupButton]
         
         VStack {
-            Text("나만의 프로필을 설정해보세요")
+            Text("나만의 프로필을 설정해보세요!")
+                .bold()
+                .font(.title2)
                 .foregroundStyle(postieColors.tabBarTintColor)
             
             ScrollView(.horizontal) {
                 HStack {
-                    ZStack {
-                        Circle()
-                            .frame(width: 170, height: 170)
-                            .foregroundStyle(postieColors.profileColor)
-                        
-                        Image("postyReceivingBeige")
-                            .resizable()
-                            .frame(width: 170, height: 170)
+                    Button (action: {
+                        isSelectedProfileImage = 0
+                    }) {
+                        ZStack {
+                            Circle()
+                                .frame(width: 172, height: 172)
+                                .foregroundStyle(isSelectedProfileImage == 0 ? postieColors.tintColor : postieColors.tintColor.opacity(0))
+                            
+                            Circle()
+                                .frame(width: 170, height: 170)
+                                .foregroundStyle(postieColors.profileColor)
+                            
+                            Image("postyReceivingBeige")
+                                .resizable()
+                                .frame(width: 170, height: 170)
+                        }
                     }
-                    ZStack {
-                        Circle()
-                            .frame(width: 170, height: 170)
-                            .foregroundStyle(postieColors.profileColor)
-                        
-                        Image("postySmile")
-                            .resizable()
-                            .frame(width: 100, height: 100)
+                    
+                    Button (action: {
+                        isSelectedProfileImage = 1
+                    }) {
+                        ZStack {
+                            Circle()
+                                .frame(width: 172, height: 172)
+                                .foregroundStyle(isSelectedProfileImage == 1 ? postieColors.tintColor : postieColors.tintColor.opacity(0))
+                            
+                            Circle()
+                                .frame(width: 170, height: 170)
+                                .foregroundStyle(postieColors.profileColor)
+                            
+                            Image("postySmile")
+                                .resizable()
+                                .frame(width: 100, height: 100)
+                        }
                     }
-                    ZStack {
-                        Circle()
-                            .frame(width: 170, height: 170)
-                            .foregroundStyle(postieColors.profileColor)
+                    
+                    Button (action: {
+                        isSelectedProfileImage = 2
+                    }) {
+                        ZStack {
+                            Circle()
+                                .frame(width: 172, height: 172)
+                                .foregroundStyle(isSelectedProfileImage == 2 ? postieColors.tintColor : postieColors.tintColor.opacity(0))
+                            
+                            Circle()
+                                .frame(width: 170, height: 170)
+                                .foregroundStyle(postieColors.profileColor)
+                            
+                            Image("postySending")
+                                .resizable()
+                                .frame(width: 150, height: 150)
+                        }
                         
-                        Image("postySending")
-                            .resizable()
-                            .frame(width: 150, height: 150)
                     }
-                    ZStack {
-                        Circle()
-                            .frame(width: 170, height: 170)
-                            .foregroundStyle(postieColors.profileColor)
-                        
-                        Image("postyReceiving")
-                            .resizable()
-                            .frame(width: 100, height: 100)
+                    
+                    Button (action: {
+                        isSelectedProfileImage = 3
+                    }) {
+                        ZStack {
+                            Circle()
+                                .frame(width: 172, height: 172)
+                                .foregroundStyle(isSelectedProfileImage == 3 ? postieColors.tintColor : postieColors.tintColor.opacity(0))
+                            
+                            Circle()
+                                .frame(width: 170, height: 170)
+                                .foregroundStyle(postieColors.profileColor)
+                            
+                            Image("postyReceiving")
+                                .resizable()
+                                .frame(width: 100, height: 100)
+                        }
                     }
-                    ZStack {
-                        Circle()
-                            .frame(width: 170, height: 170)
-                            .foregroundStyle(postieColors.profileColor)
-                        
-                        Image("postyTrumpet")
-                            .resizable()
-                            .frame(width: 100, height: 100)
+                    
+                    Button (action: {
+                        isSelectedProfileImage = 4
+                    }) {
+                        ZStack {
+                            Circle()
+                                .frame(width: 172, height: 172)
+                                .foregroundStyle(isSelectedProfileImage == 4 ? postieColors.tintColor : postieColors.tintColor.opacity(0))
+                            
+                            Circle()
+                                .frame(width: 170, height: 170)
+                                .foregroundStyle(postieColors.profileColor)
+                            
+                            Image("postyTrumpet")
+                                .resizable()
+                                .frame(width: 100, height: 100)
+                        }
                     }
-                    ZStack {
-                        Circle()
-                            .frame(width: 170, height: 170)
-                            .foregroundStyle(postieColors.profileColor)
-                        
-                        Image("postyThinking")
-                            .resizable()
-                            .frame(width: 100, height: 100)
+                    
+                    Button (action: {
+                        isSelectedProfileImage = 5
+                    }) {
+                        ZStack {
+                            Circle()
+                                .frame(width: 172, height: 172)
+                                .foregroundStyle(isSelectedProfileImage == 5 ? postieColors.tintColor : postieColors.tintColor.opacity(0))
+                            
+                            Circle()
+                                .frame(width: 170, height: 170)
+                                .foregroundStyle(postieColors.profileColor)
+                            
+                            Image("postyThinking")
+                                .resizable()
+                                .frame(width: 100, height: 100)
+                        }
                     }
                 }
                 .padding()
             }
             
             HStack {
-                Text("닫기")
+                Button(action: {
+                    dismiss()
+                }) {
+                    ZStack {
+                        Rectangle()
+                            .frame(height: 50)
+                            .cornerRadius(20)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 20)
+                                    .foregroundStyle(postieColors.receivedLetterColor)
+                            )
+                        
+                        Text("취소")
+                            .foregroundStyle(postieColors.tabBarTintColor)
+                            .padding()
+                    }
+                }
                 
-                Text("저장")
+                Button(action: {
+                    dismiss()
+                }) {
+                    ZStack {
+                        Rectangle()
+                            .frame(height: 50)
+                            .cornerRadius(20)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 20)
+                                    .foregroundStyle(postieColors.tintColor)
+                            )
+                        
+                        Text("저장")
+                            .foregroundStyle(isThemeGroupButton == 4 ? .postieBlack : .postieWhite)
+                            .padding()
+                    }
+                }
             }
         }
     }
