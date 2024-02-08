@@ -60,6 +60,9 @@ struct SearchView: View {
         .searchable(text: $searchQuery, prompt: "찾고 싶은 기억이 있나요?")
         .autocorrectionDisabled()
         .scrollDismissesKeyboard(.immediately)
+        .onTapGesture {
+            hideKeyboard()
+        }
         .customOnChange(searchQuery) { newValue in
             filterLetters(newValue)
         }

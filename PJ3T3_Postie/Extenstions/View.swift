@@ -11,6 +11,10 @@ extension View {
     func customOnChange<V>(_ value: V, action: @escaping (_ newValue: V) -> Void) -> some View where V: Equatable {
         modifier(CustomOnChange(value: value, action: action))
     }
+    
+    func hideKeyboard() {
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+        }
 }
 
 struct CustomOnChange<V: Equatable>: ViewModifier {
