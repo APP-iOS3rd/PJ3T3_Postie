@@ -29,23 +29,23 @@ struct MapView: View {
     @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
     var body: some View {
+        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
         
         NavigationStack {
             ZStack {
-                Color.red
+                postieColors.backGroundColor
                     .ignoresSafeArea()
 //                
                 VStack(spacing: 0) {
                     HStack {
                         Text("Postie Map")
                             .font(.custom("SourceSerifPro-Black", size: 40))
-                            .foregroundStyle(Color.blue) //색상
+                            .foregroundStyle(postieColors.tintColor) //색상
                         
                         Spacer()
                     }
-//                    background(Color.postieBeige)
                     .padding(.horizontal)
-//                    
+           
                     HStack(spacing: 10) {
                         ForEach(0...1, id: \.self) { index in
                             Button(action: {
@@ -115,8 +115,9 @@ struct MapView: View {
             coordinator.removeAllMakers()
             
             for result in newInfos {
-                let no = "없음"
-                coordinator.addMarkerAndInfoWindow(latitude: Double(result.postLat)!, longitude: Double(result.postLon)!, caption: result.postNm, time: result.postTime, lunchtime: result.lunchTime!)
+                coordinator.addMarkerAndInfoWindow(latitude: Double(result.postLat)!, longitude: Double(result.postLon)!, caption: result.postNm, time: result.postTime, lunchtime: result.lunchTime ?? "없음")
+                print(result.lunchTime)
+                //codingKey
                }
         }
         //초기 화면이 열리 때 위치값을 불러온다.

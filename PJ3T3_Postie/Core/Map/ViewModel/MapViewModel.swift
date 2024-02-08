@@ -50,7 +50,7 @@ struct PostItem: Codable, Hashable {
     let phoneSaleYn: String
     let partTimeYn: String
     let lunchTimeYn: String
-    let lunchTime: String?
+    let lunchTime: String? // 사용됨
     let todayDepartureYn: String
     let todayDepartureMailTime: String
     let postDesc: String?
