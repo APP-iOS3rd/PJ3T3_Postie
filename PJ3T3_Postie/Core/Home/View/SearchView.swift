@@ -16,12 +16,28 @@ struct SearchView: View {
     var body: some View {
         let postieColors = ThemeManager.themeColors[isThemeGroupButton]
         
-        ZStack(alignment: .bottomTrailing) {
+        ZStack {
             postieColors.backGroundColor
                 .ignoresSafeArea()
             
             if filteredLetters.isEmpty {
-                Text("어렴풋한 기억을 검색해보세요")
+                if searchQuery == "" {
+                    VStack {
+                        Image("postyReceiving")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 150)
+                        
+                        Text("어렴풋한 기억을 검색해보세요")
+                            .foregroundStyle(postieColors.dividerColor)
+                    }
+                } else {
+                    Image("postyReceiving")
+                        .opacity(0.03)
+                    
+                    Text("일치하는 내용의 편지가 없어요")
+                        .foregroundStyle(postieColors.dividerColor)
+                }
             } else {
                 ScrollView {
                     ForEach(filteredLetters) { letter in
