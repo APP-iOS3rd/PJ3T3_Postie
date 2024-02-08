@@ -149,11 +149,10 @@ struct ProfileView: View {
                     
                     Spacer()
                 }
+                .padding()
             }
             .tint(postieColors.tabBarTintColor)
-            .padding()
-        }
-        .toolbar {
+        }        .toolbar {
             ToolbarItemGroup(placement: .principal) {
                 Text("프로필 설정")
                     .bold()

@@ -85,7 +85,6 @@ struct ProfileEditView: View {
                             name = String(newValue.prefix(15))
                         }
                     }
-                    .padding()
                 
                 HStack {
                     Button(action: {
@@ -299,7 +298,7 @@ struct ProfileImageEditView: View {
                                     .foregroundStyle(postieColors.tintColor)
                             )
                         
-                        Text("저장")
+                        Text("선택")
                             .foregroundStyle(isThemeGroupButton == 4 ? .postieBlack : .postieWhite)
                             .padding()
                     }
