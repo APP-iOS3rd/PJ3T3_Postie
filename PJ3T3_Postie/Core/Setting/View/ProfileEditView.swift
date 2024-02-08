@@ -12,6 +12,7 @@ struct ProfileEditView: View {
     @Environment(\.dismiss) var dismiss
     
     @State var name: String = " postieTest"
+    @State private var isShowingProfileImageEditor = false
     @Binding var isThemeGroupButton: Int
     
     var body: some View {
@@ -26,14 +27,27 @@ struct ProfileEditView: View {
                     HStack {
                         Spacer()
                         
-                        ZStack {
-                            Circle()
-                                .frame(width: 170, height: 170)
-                                .foregroundStyle(.postieGray)
-                            
-                            Image("postyReceivingBeige")
-                                .resizable()
-                                .frame(width: 170, height: 170)
+                        Button (action: {
+                            isShowingProfileImageEditor = true
+                        }) {
+                            ZStack {
+                                Circle()
+                                    .frame(width: 170, height: 170)
+                                    .foregroundStyle(.postieGray)
+                                
+                                Image("postyReceivingBeige")
+                                    .resizable()
+                                    .frame(width: 170, height: 170)
+                                
+                                Image(systemName: "plus.circle")
+                                    .font(.title)
+                                    .foregroundColor(postieColors.tabBarTintColor)
+                                    .offset(x: 60, y: 60)
+                            }
+                        }
+                        .sheet(isPresented: $isShowingProfileImageEditor) {
+                            ProfileImageEditView(isThemeGroupButton: $isThemeGroupButton)
+                                .presentationDetents([.medium])
                         }
                         
                         Spacer()
@@ -46,20 +60,6 @@ struct ProfileEditView: View {
                     
                     TextField(" 닉네임을 입력하세요", text: $name)
                         .padding(.bottom)
-                    
-                    Text("계정 설정")
-                        .foregroundStyle(postieColors.dividerColor)
-                    
-                    DividerView(isThemeGroupButton: $isThemeGroupButton)
-                    
-                    HStack {
-                        Text(" postie@test.com")
-                            .foregroundStyle(postieColors.tabBarTintColor)
-                        
-                        Spacer()
-                        
-                        Image(systemName: "apple.logo")
-                    }
                 }
             }
             .padding()
@@ -78,6 +78,86 @@ struct ProfileEditView: View {
                     Text("완료")
                         .foregroundStyle(postieColors.tabBarTintColor)
                 }
+            }
+        }
+    }
+}
+
+struct ProfileImageEditView: View {
+    @Environment(\.dismiss) var dismiss
+    @Binding var isThemeGroupButton: Int
+    
+    var body: some View {
+        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
+        
+        VStack {
+            Text("나만의 프로필을 설정해보세요")
+                .foregroundStyle(postieColors.tabBarTintColor)
+            
+            ScrollView(.horizontal) {
+                HStack {
+                    ZStack {
+                        Circle()
+                            .frame(width: 170, height: 170)
+                            .foregroundStyle(postieColors.profileColor)
+                        
+                        Image("postyReceivingBeige")
+                            .resizable()
+                            .frame(width: 170, height: 170)
+                    }
+                    ZStack {
+                        Circle()
+                            .frame(width: 170, height: 170)
+                            .foregroundStyle(postieColors.profileColor)
+                        
+                        Image("postySmile")
+                            .resizable()
+                            .frame(width: 100, height: 100)
+                    }
+                    ZStack {
+                        Circle()
+                            .frame(width: 170, height: 170)
+                            .foregroundStyle(postieColors.profileColor)
+                        
+                        Image("postySending")
+                            .resizable()
+                            .frame(width: 150, height: 150)
+                    }
+                    ZStack {
+                        Circle()
+                            .frame(width: 170, height: 170)
+                            .foregroundStyle(postieColors.profileColor)
+                        
+                        Image("postyReceiving")
+                            .resizable()
+                            .frame(width: 100, height: 100)
+                    }
+                    ZStack {
+                        Circle()
+                            .frame(width: 170, height: 170)
+                            .foregroundStyle(postieColors.profileColor)
+                        
+                        Image("postyTrumpet")
+                            .resizable()
+                            .frame(width: 100, height: 100)
+                    }
+                    ZStack {
+                        Circle()
+                            .frame(width: 170, height: 170)
+                            .foregroundStyle(postieColors.profileColor)
+                        
+                        Image("postyThinking")
+                            .resizable()
+                            .frame(width: 100, height: 100)
+                    }
+                }
+                .padding()
+            }
+            
+            HStack {
+                Text("닫기")
+                
+                Text("저장")
             }
         }
     }

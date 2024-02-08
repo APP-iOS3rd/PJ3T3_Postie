@@ -12,7 +12,8 @@ struct ProfileView: View {
     
     @State private var isLogOutAlert: Bool = false
     @State private var isSignOutAlert: Bool = false
-    @State private var showingMembershipView = false
+    @State private var isshowingMembershipView = false
+    @State private var isShowingProfileEditView = false
     @Binding var isThemeGroupButton: Int
     
     var body: some View {
@@ -64,7 +65,7 @@ struct ProfileView: View {
                     DividerView(isThemeGroupButton: $isThemeGroupButton)
                     
                     Button {
-                        showingMembershipView = true
+                        isshowingMembershipView = true
                     } label: {
                         HStack {
                             Text(" 일반회원")
@@ -77,7 +78,7 @@ struct ProfileView: View {
                                 .foregroundStyle(postieColors.dividerColor)
                         }
                     }
-                    .fullScreenCover(isPresented: $showingMembershipView) {
+                    .fullScreenCover(isPresented: $isshowingMembershipView) {
                         // 멤버십 뷰, 실제 배포시에는 사라질 수도 있음
                         MembershipView(isThemeGroupButton: $isThemeGroupButton)
                     }
@@ -146,11 +147,15 @@ struct ProfileView: View {
             }
             
             ToolbarItemGroup(placement: .topBarTrailing) {
-                NavigationLink {
-                    ProfileEditView(isThemeGroupButton: $isThemeGroupButton)
-                } label: {
+                Button (action: {
+                    isShowingProfileEditView = true
+                }) {
                     Text("수정")
                         .foregroundStyle(postieColors.tabBarTintColor)
+                }
+                .sheet(isPresented: $isShowingProfileEditView) {
+                    ProfileEditView(isThemeGroupButton: $isThemeGroupButton)
+                        .presentationDetents([.medium])
                 }
             }
         }
