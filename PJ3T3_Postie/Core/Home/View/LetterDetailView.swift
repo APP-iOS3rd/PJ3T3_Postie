@@ -53,6 +53,8 @@ struct LetterDetailView: View {
                         isReceived: letter.isReceived,
                         isFavorite: letterDetailViewModel.isFavorite
                     )
+
+                    firestoreManager.fetchAllLetters()
                 } label: {
                     Image(systemName: letterDetailViewModel.isFavorite ? "heart.fill" : "heart")
                         .foregroundStyle(.postieOrange)
@@ -109,6 +111,8 @@ struct LetterDetailView: View {
                 storageManager.images.forEach { letterPhoto in
                     storageManager.deleteItem(fullPath: letterPhoto.fullPath)
                 }
+
+                firestoreManager.fetchAllLetters()
 
                 dismiss()
             } label: {
