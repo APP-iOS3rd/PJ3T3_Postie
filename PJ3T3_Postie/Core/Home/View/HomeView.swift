@@ -162,8 +162,6 @@ struct SideMenuView: View {
                         VStack(alignment: .leading) {
                             Text(String(user?.nickname ?? ""))
                             
-                            Text("")
-                            
                             Text(user?.email ?? "")
                         }
                         .foregroundStyle(postieColors.tabBarTintColor)

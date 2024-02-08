@@ -250,7 +250,7 @@ struct CustomImageModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .scaledToFit()
-            .frame(height: 550)
+            .frame(height: 500)
             .shadow(color: Color.postieBlack.opacity(0.1), radius: 3)
     }
 }
