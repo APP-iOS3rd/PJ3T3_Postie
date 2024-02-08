@@ -69,7 +69,7 @@ struct SearchView: View {
     }
     
     //searchQuery가 비어있지 않으면 recipies를 name으로 필터링한다.
-    func filterLetters(_ searchQuery: String) {
+    private func filterLetters(_ searchQuery: String) {
         //localizedCaseInsensitiveContains: 검색 내용이 비어있지 않을 때 대소문자를 무시한 결과를 필터함
         filteredLetters = firestoreManager.letters.filter {
             $0.text.localizedCaseInsensitiveContains(searchQuery) ||
@@ -78,7 +78,7 @@ struct SearchView: View {
     }
     
     //name을 받아 query와 일치하는 부분만 font 색상을 변경한다. 현재 뷰에서는 사용되지 않고 있음
-    func makeAttributedString(name: String, query: String) -> AttributedString {
+    private func makeAttributedString(name: String, query: String) -> AttributedString {
         var string = AttributedString(name)
         
         string.foregroundColor = .green
