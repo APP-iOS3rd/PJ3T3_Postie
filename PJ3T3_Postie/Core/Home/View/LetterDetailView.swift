@@ -60,7 +60,7 @@ struct LetterDetailView: View {
 
                 Menu {
                     Button {
-
+                        letterDetailViewModel.showLetterEditSheet = true
                     } label: {
                         HStack {
                             Text("수정")
@@ -90,6 +90,11 @@ struct LetterDetailView: View {
                 images: letter.images ?? [],
                 pageIndex: $letterDetailViewModel.selectedIndex
             )
+        }
+        .sheet(isPresented: $letterDetailViewModel.showLetterEditSheet) {
+            NavigationStack {
+                AddLetterView(isReceived: letter.isReceived, letter: letter, letterPhotos: storageManager.images)
+            }
         }
         .alert("편지 삭제", isPresented: $letterDetailViewModel.showDeleteAlert) {
             Button(role: .cancel) {

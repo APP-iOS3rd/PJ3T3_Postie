@@ -12,4 +12,5 @@ class LetterDetailViewModel: ObservableObject {
     @Published var showDeleteAlert = false
     @Published var selectedIndex = 0
     @Published var isFavorite = false
+    @Published var showLetterEditSheet = false
 }

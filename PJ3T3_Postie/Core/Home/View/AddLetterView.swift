@@ -19,12 +19,16 @@ struct AddLetterView: View {
     }
 
     var isReceived: Bool
+    var letter: Letter?
+    var letterPhotos: [LetterPhoto]?
 
     @FocusState private var focusField: Field?
     @Environment(\.dismiss) var dismiss
 
-    init(isReceived: Bool) {
+    init(isReceived: Bool, letter: Letter? = nil, letterPhotos: [LetterPhoto]? = nil) {
         self.isReceived = isReceived
+        self.letter = letter
+        self.letterPhotos = letterPhotos
 
         // TextEditor 패딩
         UITextView.appearance().textContainerInset = UIEdgeInsets(
@@ -63,26 +67,11 @@ struct AddLetterView: View {
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button {
                     Task {
-                        await firestoreManager.addLetter(
-                            writer: addLetterViewModel.sender,
-                            recipient: addLetterViewModel.receiver,
-                            summary: addLetterViewModel.summary,
-                            date: addLetterViewModel.date,
-                            text: addLetterViewModel.text,
-                            isReceived: isReceived,
-                            isFavorite: false
-                        )
+                        if let letter = letter {
+                            await editLetter(letter: letter)
 
-                        if !addLetterViewModel.images.isEmpty {
-                            do {
-                                try await storageManager.saveUIImage(
-                                    images: addLetterViewModel.images,
-                                    docId: firestoreManager.docId
-                                )
-                            } catch {
-                                // TODO: Error 처리 필요
-                                print("DEBUG: Failed to save UIImages to Firestore: \(error)")
-                            }
+                        } else {
+                            await addLetter()
                         }
 
                         dismiss()
@@ -131,6 +120,72 @@ struct AddLetterView: View {
             Button("AI 완성") {
                 // TODO: 네이버 클로바 API 호출
                 addLetterViewModel.showSummaryTextField = true
+            }
+        }
+        .onAppear {
+            if let letter = letter {
+                if isReceived {
+                    addLetterViewModel.sender = letter.writer
+                } else {
+                    addLetterViewModel.receiver = letter.recipient
+                }
+                addLetterViewModel.date = letter.date
+                addLetterViewModel.text = letter.text
+                addLetterViewModel.summary = letter.summary
+                addLetterViewModel.images = letterPhotos?.map { $0.image } ?? []
+            }
+        }
+    }
+
+    private func editLetter(letter: Letter) async {
+        firestoreManager.editLetter(
+            documentId: letter.id,
+            writer: addLetterViewModel.sender,
+            recipient: addLetterViewModel.receiver,
+            summary: addLetterViewModel.summary,
+            date: addLetterViewModel.date,
+            text: addLetterViewModel.text,
+            isReceived: isReceived,
+            isFavorite: letter.isFavorite
+        )
+
+        if let savedLetterPhotos = letterPhotos {
+            let savedUIImages = savedLetterPhotos.map { $0.image }
+
+            for image in addLetterViewModel.images {
+                if !savedUIImages.contains(image) {
+                    do {
+                        try await storageManager.saveUIImage(images: [image], docId: letter.id)
+                    } catch {
+                        // TODO: Error 처리 필요
+                        print("DEBUG: Failed to save UIImages to Firestore: \(error)")
+
+                    }
+                }
+            }
+        }
+    }
+
+    private func addLetter() async {
+        await firestoreManager.addLetter(
+            writer: addLetterViewModel.sender,
+            recipient: addLetterViewModel.receiver,
+            summary: addLetterViewModel.summary,
+            date: addLetterViewModel.date,
+            text: addLetterViewModel.text,
+            isReceived: isReceived,
+            isFavorite: false
+        )
+
+        if !addLetterViewModel.images.isEmpty {
+            do {
+                try await storageManager.saveUIImage(
+                    images: addLetterViewModel.images,
+                    docId: firestoreManager.docId
+                )
+            } catch {
+                // TODO: Error 처리 필요
+                print("DEBUG: Failed to save UIImages to Firestore: \(error)")
             }
         }
     }
