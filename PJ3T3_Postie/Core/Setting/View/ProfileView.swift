@@ -155,6 +155,7 @@ struct ProfileView: View {
                 }
                 .sheet(isPresented: $isShowingProfileEditView) {
                     ProfileEditView(isThemeGroupButton: $isThemeGroupButton)
+                        .padding()
                         .presentationDetents([.medium])
                 }
             }

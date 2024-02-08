@@ -22,47 +22,83 @@ struct ProfileEditView: View {
             postieColors.backGroundColor
                 .ignoresSafeArea()
             
-            ScrollView {
-                VStack(alignment: .leading) {
-                    HStack {
-                        Spacer()
-                        
-                        Button (action: {
-                            isShowingProfileImageEditor = true
-                        }) {
-                            ZStack {
-                                Circle()
-                                    .frame(width: 170, height: 170)
-                                    .foregroundStyle(.postieGray)
-                                
-                                Image("postyReceivingBeige")
-                                    .resizable()
-                                    .frame(width: 170, height: 170)
-                                
-                                Image(systemName: "plus.circle")
-                                    .font(.title)
-                                    .foregroundColor(postieColors.tabBarTintColor)
-                                    .offset(x: 60, y: 60)
-                            }
+            VStack(alignment: .leading) {
+                HStack {
+                    Spacer()
+                    
+                    Button (action: {
+                        isShowingProfileImageEditor = true
+                    }) {
+                        ZStack {
+                            Circle()
+                                .frame(width: 170, height: 170)
+                                .foregroundStyle(.postieGray)
+                            
+                            Image("postyReceivingBeige")
+                                .resizable()
+                                .frame(width: 170, height: 170)
+                            
+                            Image(systemName: "plus.circle")
+                                .font(.title)
+                                .foregroundColor(postieColors.tabBarTintColor)
+                                .offset(x: 60, y: 60)
                         }
-                        .sheet(isPresented: $isShowingProfileImageEditor) {
-                            ProfileImageEditView(isThemeGroupButton: $isThemeGroupButton)
-                                .presentationDetents([.medium])
-                        }
-                        
-                        Spacer()
+                    }
+                    .sheet(isPresented: $isShowingProfileImageEditor) {
+                        ProfileImageEditView(isThemeGroupButton: $isThemeGroupButton)
+                            .presentationDetents([.medium])
                     }
                     
-                    Text("이름")
-                        .foregroundStyle(postieColors.dividerColor)
+                    Spacer()
+                }
+                
+                Text("이름")
+                    .foregroundStyle(postieColors.dividerColor)
+                
+                DividerView(isThemeGroupButton: $isThemeGroupButton)
+                
+                TextField(" 닉네임을 입력하세요", text: $name)
+                    .padding(.bottom)
+                    .textFieldStyle(.roundedBorder)
+                
+                HStack {
+                    Button(action: {
+                        dismiss()
+                    }) {
+                        ZStack {
+                            Rectangle()
+                                .frame(height: 50)
+                                .cornerRadius(20)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 20)
+                                        .foregroundStyle(postieColors.receivedLetterColor)
+                                )
+                            
+                            Text("취소")
+                                .foregroundStyle(postieColors.tabBarTintColor)
+                                .padding()
+                        }
+                    }
                     
-                    DividerView(isThemeGroupButton: $isThemeGroupButton)
-                    
-                    TextField(" 닉네임을 입력하세요", text: $name)
-                        .padding(.bottom)
+                    Button(action: {
+                        dismiss()
+                    }) {
+                        ZStack {
+                            Rectangle()
+                                .frame(height: 50)
+                                .cornerRadius(20)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 20)
+                                        .foregroundStyle(postieColors.tintColor)
+                                )
+                            
+                            Text("저장")
+                                .foregroundStyle(isThemeGroupButton == 4 ? .postieBlack : .postieWhite)
+                                .padding()
+                        }
+                    }
                 }
             }
-            .padding()
         }
         .toolbar {
             ToolbarItem(placement: .principal) {
