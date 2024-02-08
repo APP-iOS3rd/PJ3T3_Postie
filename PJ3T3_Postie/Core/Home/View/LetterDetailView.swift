@@ -89,7 +89,7 @@ struct LetterDetailView: View {
         }
         .fullScreenCover(isPresented: $letterDetailViewModel.showLetterImageFullScreenView) {
             LetterImageFullScreenView(
-                images: letter.images ?? [],
+                images: storageManager.images.map { $0.image },
                 pageIndex: $letterDetailViewModel.selectedIndex
             )
         }
