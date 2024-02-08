@@ -8,11 +8,15 @@
 import SwiftUI
 
 struct ProfileView: View {
-    @ObservedObject var authViewModel = AuthManager.shared
+    @ObservedObject var authManager = AuthManager.shared
+    
+    @Binding var isThemeGroupButton: Int
     
     var body: some View {
+        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
+        
         ZStack {
-            Color.postieBeige
+            postieColors.backGroundColor
                 .ignoresSafeArea()
             
             VStack(alignment: .leading) {
@@ -22,84 +26,89 @@ struct ProfileView: View {
                     ZStack {
                         Circle()
                             .frame(width: 170, height: 170)
-                            .foregroundStyle(Color.postieGray)
+                            .foregroundStyle(postieColors.profileColor)
                         
-                        Image("Posty_Receiving")
+                        Image("postyReceivingBeige")
                             .resizable()
                             .frame(width: 170, height: 170)
-                            .offset(x: -8, y: 5)
                     }
                     
                     Spacer()
                 }
                 
                 Text("이름")
-                    .foregroundStyle(Color.postieDarkGray)
+                    .foregroundStyle(postieColors.dividerColor)
                 
-                DividerView()
+                DividerView(isThemeGroupButton: $isThemeGroupButton)
                 
                 Text("Postie_test")
+                    .foregroundStyle(postieColors.tabBarTintColor)
                     .font(.title3)
                     .padding(.bottom)
                 
                 Text("계정")
-                    .foregroundStyle(Color.postieDarkGray)
+                    .foregroundStyle(postieColors.dividerColor)
                 
-                DividerView()
+                DividerView(isThemeGroupButton: $isThemeGroupButton)
                 
                 Text("postie@test.com")
+                    .foregroundStyle(postieColors.tabBarTintColor)
                     .font(.title3)
                     .padding(.bottom)
                 
                 Text("구독정보")
-                    .foregroundStyle(Color.postieDarkGray)
+                    .foregroundStyle(postieColors.dividerColor)
                 
-                DividerView()
+                DividerView(isThemeGroupButton: $isThemeGroupButton)
                 
                 Text("일반회원")
+                    .foregroundStyle(postieColors.tabBarTintColor)
                     .font(.title3)
                     .padding(.bottom)
                 
                 Text("계정 관리")
-                    .foregroundStyle(Color.postieDarkGray)
+                    .foregroundStyle(postieColors.dividerColor)
                 
-                DividerView()
+                DividerView(isThemeGroupButton: $isThemeGroupButton)
                 
                 Button {
-                    authViewModel.signOut()
+                    authManager.signOut()
                 } label: {
                     Text("로그아웃")
+                        .foregroundStyle(postieColors.tabBarTintColor)
                         .font(.title3)
                         .padding(.bottom)
                 }
                 
                 Text("회원탈퇴")
+                    .foregroundStyle(postieColors.tabBarTintColor)
                     .font(.title3)
                 
                 Spacer()
             }
-            .tint(Color.postieBlack)
+            .tint(postieColors.tabBarTintColor)
             .padding()
         }
         .toolbar {
             ToolbarItemGroup(placement: .principal) {
                 Text("프로필 설정")
                     .bold()
-                    .foregroundStyle(Color.postieOrange)
+                    .foregroundStyle(postieColors.tintColor)
             }
             
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button(action: {
                 }) {
                     Text("수정")
+                        .foregroundStyle(postieColors.tabBarTintColor)
                 }
             }
         }
         .navigationBarTitleDisplayMode(.inline)
-        .tint(Color.postieBlack)
+        .tint(postieColors.tabBarTintColor)
     }
 }
 
-#Preview {
-    ProfileView()
-}
+//#Preview {
+//    ProfileView()
+//}

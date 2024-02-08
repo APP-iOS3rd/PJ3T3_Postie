@@ -10,12 +10,14 @@ import SwiftUI
 struct ListLetterView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
     
+    @Binding var isThemeGroupButton: Int
+    
     var body: some View {
         ForEach(firestoreManager.letters, id: \.self) { letter in
             NavigationLink {
                 LetterDetailView(letter: letter)
             } label: {
-                LetterItemView(letter: letter)
+                LetterItemView(letter: letter, isThemeGroupButton: $isThemeGroupButton)
             }
         }
     }
@@ -24,7 +26,11 @@ struct ListLetterView: View {
 struct LetterItemView: View {
     var letter: Letter
     
+    @Binding var isThemeGroupButton: Int
+    
     var body: some View {
+        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
+        
         HStack {
             if letter.isReceived {
                 Spacer()
@@ -35,15 +41,16 @@ struct LetterItemView: View {
                     HStack {
                         Text(letter.isReceived ? "To." : "From.")
                             .font(.custom("SourceSerifPro-Black", size: 18))
-                            .foregroundColor(Color.postieBlack)
+                            .foregroundColor(postieColors.tabBarTintColor)
                         
                         Text("\(letter.recipient)")
+                            .foregroundColor(postieColors.tabBarTintColor)
                         
                         Spacer()
                         
                         Text("\(letter.date.toString())")
                             .font(.custom("SourceSerifPro-Light", size: 18))
-                            .foregroundStyle(Color.postieBlack)
+                            .foregroundStyle(postieColors.tabBarTintColor)
                         
                         ZStack {
                             Image(systemName: "water.waves")
@@ -53,13 +60,14 @@ struct LetterItemView: View {
                             Image(systemName: "sleep.circle")
                                 .font(.largeTitle)
                         }
-                        .foregroundStyle(Color.postieDarkGray)
+                        .foregroundStyle(postieColors.dividerColor)
                     }
                     
                     Spacer()
                     
                     HStack {
                         Text("\"\(letter.summary)\"")
+                            .foregroundColor(postieColors.tabBarTintColor)
                         
                         Spacer()
                         
@@ -74,8 +82,8 @@ struct LetterItemView: View {
             .padding()
             .frame(width: 300, height: 130)
             .background(
-                RoundedRectangle(cornerRadius: 10)
-                    .foregroundStyle(letter.isReceived ? Color.postieLightGray : Color.postieWhite)
+                RoundedRectangle(cornerRadius: 4)
+                    .foregroundStyle(letter.isReceived ? postieColors.writenLetterColor : postieColors.receivedLetterColor)
                     .shadow(color: Color.postieBlack.opacity(0.1), radius: 3, x: 3, y: 3)
             )
             

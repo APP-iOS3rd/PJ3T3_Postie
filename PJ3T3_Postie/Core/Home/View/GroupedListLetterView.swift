@@ -10,22 +10,18 @@ import SwiftUI
 struct GroupedListLetterView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
     @ObservedObject var storageManager = StorageManager.shared
+
     var recipient: String
+
     @State private var showAlert = false
     @State private var isSideMenuOpen = false
-    
-    @ViewBuilder
-    func GroupedLetterView(letter: Letter) -> some View {
-        if letter.recipient == recipient || letter.writer == recipient {
-            LetterItemView(letter: letter)
-        } else {
-            EmptyView()
-        }
-    }
+    @Binding var isThemeGroupButton: Int
     
     var body: some View {
+        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
+        
         ZStack(alignment: .bottomTrailing) {
-            Color.postieBeige
+            postieColors.backGroundColor
                 .ignoresSafeArea()
             
             ScrollView {
@@ -33,7 +29,7 @@ struct GroupedListLetterView: View {
                     NavigationLink {
                         LetterDetailView(letter: letter)
                     } label: {
-                        GroupedLetterView(letter: letter)
+                        groupedLetterView(letter: letter)
                     }
                 }
                 
@@ -43,17 +39,26 @@ struct GroupedListLetterView: View {
                     .foregroundStyle(Color.postieBlack.opacity(0))
             }
             
-            AddLetterButton()
+            AddLetterButton(isThemeGroupButton: $isThemeGroupButton)
         }
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .principal) {
                 Text("\(recipient)")
                     .bold()
-                    .foregroundStyle(Color.postieOrange)
+                    .foregroundStyle(postieColors.tintColor)
             }
         }
-        .tint(Color.postieBlack)
+        .tint(postieColors.tabBarTintColor)
+    }
+    
+    @ViewBuilder
+    private func groupedLetterView(letter: Letter) -> some View {
+        if letter.recipient == recipient || letter.writer == recipient {
+            LetterItemView(letter: letter, isThemeGroupButton: $isThemeGroupButton)
+        } else {
+            EmptyView()
+        }
     }
 }
 

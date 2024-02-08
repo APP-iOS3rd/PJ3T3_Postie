@@ -10,21 +10,26 @@ import SwiftUI
 struct HomeView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
     @ObservedObject var storageManager = StorageManager.shared
+    
     @State private var isSideMenuOpen = false
-    @State private var isTabGroupButton = true
     @State private var currentGroupPage: Int = 0
+    @State private var currentColorPage: Int = 0
+    @AppStorage("isTabGroupButton") private var isTabGroupButton: Bool = true
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
     var body: some View {
+        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
+        
         NavigationStack {
             ZStack {
-                Color.postieBeige
+                postieColors.backGroundColor
                     .ignoresSafeArea()
                 
                 VStack(spacing: 0) {
                     HStack {
                         Text("Postie")
                             .font(.custom("SourceSerifPro-Black", size: 40))
-                            .foregroundStyle(Color.postieOrange)
+                            .foregroundStyle(postieColors.tintColor)
                         
                         Spacer()
                         
@@ -32,6 +37,7 @@ struct HomeView: View {
                         }) {
                             Image(systemName: "magnifyingglass")
                                 .imageScale(.large)
+                                .foregroundStyle(postieColors.tabBarTintColor)
                                 .padding(.horizontal, 5)
                         }
                         
@@ -42,33 +48,34 @@ struct HomeView: View {
                         }) {
                             Image(systemName: "line.horizontal.3")
                                 .imageScale(.large)
+                                .foregroundStyle(postieColors.tabBarTintColor)
                         }
                     }
-                    .background(Color.postieBeige)
+                    .background(postieColors.backGroundColor)
                     .padding(.horizontal)
                     
                     ZStack(alignment: .bottomTrailing) {
                         ScrollView {
-                            if currentGroupPage == 0 {
+                            if isTabGroupButton {
                                 VStack {
-                                    GroupedLetterView()
+                                    GroupedLetterView(isThemeGroupButton: $isThemeGroupButton)
                                 }
                             } else {
                                 VStack {
-                                    ListLetterView()
+                                    ListLetterView(isThemeGroupButton: $isThemeGroupButton)
                                 }
                             }
                             
                             // ScrollView margin 임시
                             Rectangle()
                                 .frame(height: 80)
-                                .foregroundStyle(Color.postieBlack.opacity(0))
+                                .foregroundStyle(postieColors.tabBarTintColor.opacity(0))
                         }
-                        .background(Color.postieBeige)
+                        .background(postieColors.backGroundColor)
                         
-                        AddLetterButton()
+                        AddLetterButton(isThemeGroupButton: $isThemeGroupButton)
                     }
-                    .preferredColorScheme(.light)
+                    .preferredColorScheme(isThemeGroupButton == 4 ? .dark : .light)
                 }
                 
                 if isSideMenuOpen {
@@ -86,25 +93,27 @@ struct HomeView: View {
                 //                .offset(x: isSideMenuOpen ? 0 : UIScreen.main.bounds.width)
                 //                .animation(.easeInOut)
                 // 임시 세팅뷰
-                SideMenuView(isSideMenuOpen: $isSideMenuOpen, currentGroupPage: $currentGroupPage, isTabGroupButton: $isTabGroupButton)
+                SideMenuView(isSideMenuOpen: $isSideMenuOpen, currentGroupPage: $currentGroupPage, isTabGroupButton: $isTabGroupButton, isThemeGroupButton: $isThemeGroupButton, currentColorPage: $currentColorPage)
                     .offset(x: isSideMenuOpen ? 0 : UIScreen.main.bounds.width)
                     .animation(.easeInOut, value: 1)
             }
-            .tint(Color.postieBlack)
         }
     }
 }
 
 // 임시 세팅뷰
 struct SideMenuView: View {
-    @ObservedObject var authViewModel = AuthManager.shared
+    @ObservedObject var authManager = AuthManager.shared
     @Binding var isSideMenuOpen: Bool
     @Binding var currentGroupPage: Int
     @Binding var isTabGroupButton: Bool
+    @Binding var isThemeGroupButton: Int
+    @Binding var currentColorPage: Int
     @State private var isToggleOn = false
     
     var body: some View {
-        let user = authViewModel.currentUser
+        let user = authManager.currentUser
+        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
         
         HStack {
             Spacer()
@@ -113,7 +122,7 @@ struct SideMenuView: View {
                 HStack {
                     Text("Setting")
                         .font(.custom("SourceSerifPro-Black", size: 32))
-                        .foregroundStyle(Color.postieOrange)
+                        .foregroundStyle(postieColors.tintColor)
                     
                     Spacer()
                     
@@ -128,95 +137,96 @@ struct SideMenuView: View {
                 }
                 
                 Text("프로필 설정")
-                    .foregroundStyle(Color.postieDarkGray)
+                    .foregroundStyle(postieColors.dividerColor)
                 
-                DividerView()
+                DividerView(isThemeGroupButton: $isThemeGroupButton)
                 
-                NavigationLink(destination: ProfileView()) {
+                NavigationLink(destination: ProfileView(isThemeGroupButton: $isThemeGroupButton)) {
                     HStack {
                         ZStack {
                             Circle()
                                 .frame(width: 80,height: 80)
-                                .foregroundStyle(Color.postieGray)
+                                .foregroundStyle(postieColors.profileColor)
                             
-                            Image("Posty_Receiving")
+                            Image("postyReceivingBeige")
                                 .resizable()
                                 .frame(width: 80,height: 80)
-                                .offset(x: -4, y: 5)
                         }
                         
                         VStack(alignment: .leading) {
                             Text(String(user?.fullName ?? ""))
+                            
                             Text(user?.email ?? "")
                         }
+                        .foregroundStyle(postieColors.tabBarTintColor)
                         
                         Spacer()
                         
                         Image(systemName: "chevron.right")
-                            .foregroundStyle(Color.postieDarkGray)
+                            .foregroundStyle(postieColors.dividerColor)
                     }
                     .padding(.bottom)
                 }
                 
                 Text("테마 설정")
-                    .foregroundStyle(Color.postieDarkGray)
+                    .foregroundStyle(postieColors.dividerColor)
                 
-                DividerView()
+                DividerView(isThemeGroupButton: $isThemeGroupButton)
                 
-                NavigationLink(destination: ThemeView(isTabGroupButton: $isTabGroupButton, currentGroupPage: $currentGroupPage)) {
+                NavigationLink(destination: ThemeView(isThemeGroupButton: $isThemeGroupButton, currentColorPage: $currentColorPage, isTabGroupButton: $isTabGroupButton, currentGroupPage: $currentGroupPage)) {
                     HStack {
-                        Text("테마 설정 하기")
+                        Text(" 테마 설정 하기")
                         
                         Spacer()
                         
                         Image(systemName: "chevron.right")
-                            .foregroundStyle(Color.postieDarkGray)
+                            .foregroundStyle(postieColors.dividerColor)
                     }
                     .padding(.bottom)
                 }
                 
                 Text("앱 설정")
-                    .foregroundStyle(Color.postieDarkGray)
+                    .foregroundStyle(postieColors.dividerColor)
                 
-                DividerView()
+                DividerView(isThemeGroupButton: $isThemeGroupButton)
                 
                 HStack {
-                    Text("공지사항")
+                    Text(" 공지사항")
                     
                     Spacer()
                     
                     Image(systemName: "chevron.right")
-                        .foregroundStyle(Color.postieDarkGray)
+                        .foregroundStyle(postieColors.dividerColor)
                 }
                 .padding(.bottom)
                 
                 HStack {
-                    Text("문의하기")
+                    Text(" 문의하기")
                     
                     Spacer()
                     
                     Image(systemName: "chevron.right")
-                        .foregroundStyle(Color.postieDarkGray)
+                        .foregroundStyle(postieColors.dividerColor)
                 }
                 .padding(.bottom)
                 
                 HStack {
-                    Text("이용약관 및 개인정보 방침")
+                    Text(" 이용약관 및 개인정보 방침")
                     
                     Spacer()
                     
                     Image(systemName: "chevron.right")
-                        .foregroundStyle(Color.postieDarkGray)
+                        .foregroundStyle(postieColors.dividerColor)
                 }
                 .padding(.bottom)
                 
                 HStack {
-                    Text("앱 정보")
+                    Text(" 앱 정보")
                     
                     Spacer()
                     
                     Image(systemName: "chevron.right")
-                        .foregroundStyle(Color.postieDarkGray)
+                        .foregroundStyle(postieColors.dividerColor)
                 }
                 .padding(.bottom)
                 
@@ -224,19 +234,23 @@ struct SideMenuView: View {
                 
                 Text("COPYRIGHT 2024 ComeOn12 RIGHTS RESERVED")
                     .font(.caption2)
-                    .foregroundStyle(Color.postieDarkGray)
+                    .foregroundStyle(postieColors.dividerColor)
             }
             .padding()
             .frame(width: UIScreen.main.bounds.width - 100 , alignment: .leading)
-            .foregroundStyle(Color.postieBlack)
-            .background(Color.postieBeige)
+            .foregroundStyle(postieColors.tabBarTintColor)
+            .background(postieColors.backGroundColor)
         }
-        .tint(Color.postieBlack)
+        .tint(postieColors.tabBarTintColor)
     }
 }
 
 struct AddLetterButton: View {
+    @Binding var isThemeGroupButton: Int
+    
     var body: some View {
+        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
+        
         Menu {
             NavigationLink(destination: AddLetterView(isReceived: false)) {
                 Label("나의 느린 우체통", systemImage: "envelope.open.badge.clock")
@@ -252,11 +266,11 @@ struct AddLetterButton: View {
         } label: {
             ZStack {
                 Circle()
-                    .foregroundStyle(Color.postieOrange)
+                    .foregroundStyle(postieColors.tintColor)
                     .frame(width: 70, height: 70)
                 
                 Image(systemName: "envelope.open")
-                    .foregroundStyle(Color.postieWhite)
+                    .foregroundStyle(isThemeGroupButton == 4 ? Color.postieBlack : Color.postieWhite)
                     .font(.title2)
                     .offset(y: -3)
             }
@@ -269,12 +283,20 @@ struct AddLetterButton: View {
 }
 
 struct DividerView: View {
+    @Binding var isThemeGroupButton: Int
+    
     var body: some View {
+        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
+        
         Rectangle()
-            .fill(Color.postieDarkGray)
+            .fill(postieColors.dividerColor)
             .frame(height: 1)
             .padding(.bottom)
     }
+}
+
+private func getValueFromUserDefaults<T>(key: String, defaultValue: T) -> T {
+    return UserDefaults.standard.object(forKey: key) as? T ?? defaultValue
 }
 
 #Preview {
