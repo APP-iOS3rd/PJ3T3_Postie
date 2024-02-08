@@ -8,11 +8,68 @@
 import SwiftUI
 
 struct SearchView: View {
+    @ObservedObject var firestoreManager = FirestoreManager.shared
+    @Binding var isThemeGroupButton: Int
+    @State var searchQuery = ""
+    @State var filteredLetters: [Letter] = []
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
+        
+        ZStack(alignment: .bottomTrailing) {
+            postieColors.backGroundColor
+                .ignoresSafeArea()
+            
+            if filteredLetters.isEmpty {
+                Text("어렴풋한 기억을 검색해보세요")
+            } else {
+                ScrollView {
+                    ForEach(filteredLetters) { letter in
+                        NavigationLink {
+                            LetterDetailView(letter: letter)
+                        } label: {
+                            LetterItemView(letter: letter, isThemeGroupButton: $isThemeGroupButton)
+                        }
+                    }
+                    
+                    // ScrollView margin 임시
+                    Rectangle()
+                        .frame(height: 70)
+                        .foregroundStyle(Color.postieBlack.opacity(0))
+                }
+                .scrollContentBackground(.hidden)
+            }
+        }
+        .navigationTitle("편지 찾기")
+        .searchable(text: $searchQuery, prompt: "찾고 싶은 기억이 있나요?")
+        .customOnChange(searchQuery) { newValue in
+            filterLetters(newValue)
+        }
+    }
+    
+    //searchQuery가 비어있지 않으면 recipies를 name으로 필터링한다.
+    func filterLetters(_ searchQuery: String) {
+        //localizedCaseInsensitiveContains: 검색 내용이 비어있지 않을 때 대소문자를 무시한 결과를 필터함
+        filteredLetters = firestoreManager.letters.filter {
+            $0.text.localizedCaseInsensitiveContains(searchQuery) ||
+            $0.summary.localizedCaseInsensitiveContains(searchQuery)
+        }
+    }
+    
+    //name을 받아 query와 일치하는 부분만 font 색상을 변경한다. 현재 뷰에서는 사용되지 않고 있음
+    func makeAttributedString(name: String, query: String) -> AttributedString {
+        var string = AttributedString(name)
+        
+        string.foregroundColor = .green
+        
+        if let range = string.range(of: query) { /// here!
+            string[range].foregroundColor = .red
+        }
+        
+        return string
     }
 }
 
 #Preview {
-    SearchView()
+    SearchView(isThemeGroupButton: .constant(0))
 }

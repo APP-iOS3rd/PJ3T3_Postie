@@ -9,7 +9,7 @@ import SwiftUI
 
 struct HomeView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
-    @ObservedObject var storageManager = StorageManager.shared
+//    @ObservedObject var storageManager = StorageManager.shared
     
     @State private var isSideMenuOpen = false
     @State private var isTabGroupButton = true
@@ -34,7 +34,7 @@ struct HomeView: View {
                         Spacer()
                         
                         NavigationLink {
-                            SearchView()
+                            SearchView(isThemeGroupButton: $isThemeGroupButton)
                         } label: {
                             Image(systemName: "magnifyingglass")
                                 .imageScale(.large)
