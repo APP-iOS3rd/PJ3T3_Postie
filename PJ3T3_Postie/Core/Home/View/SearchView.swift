@@ -42,6 +42,8 @@ struct SearchView: View {
         }
         .navigationTitle("편지 찾기")
         .searchable(text: $searchQuery, prompt: "찾고 싶은 기억이 있나요?")
+        .autocorrectionDisabled()
+        .scrollDismissesKeyboard(.immediately)
         .customOnChange(searchQuery) { newValue in
             filterLetters(newValue)
         }
