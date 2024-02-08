@@ -49,45 +49,13 @@ struct MembershipView: View {
                         .foregroundStyle(postieColors.tabBarTintColor)
                     
                     TabView(selection: $isMembershipPage) {
-                        Text("광고 제거")
-                            .padding()
-                            .background(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .frame(height: 180)
-                                    .frame(width: 300)
-                                    .foregroundStyle(postieColors.receivedLetterColor)
-                            )
-                            .tag(1)
+                        MembershipItems(text: "광고제거", tag: 1, isThemeGroupButton: $isThemeGroupButton)
                         
-                        Text("사진 저장 가능 갯수 확장")
-                            .padding()
-                            .background(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .frame(height: 180)
-                                    .frame(width: 300)
-                                    .foregroundStyle(postieColors.receivedLetterColor)
-                            )
-                            .tag(2)
+                        MembershipItems(text: "사진 저장 가능 갯수 확장", tag: 2, isThemeGroupButton: $isThemeGroupButton)
                         
-                        Text("닉네임 변경 무료 (월 1회)")
-                            .padding()
-                            .background(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .frame(height: 180)
-                                    .frame(width: 300)
-                                    .foregroundStyle(postieColors.receivedLetterColor)
-                            )
-                            .tag(3)
+                        MembershipItems(text: "닉네임 변경 무료 (월 1회)", tag: 3, isThemeGroupButton: $isThemeGroupButton)
                         
-                        Text("포스티 프리미엄 혜택은 \n점점 더 늘어갈거에요!")
-                            .padding()
-                            .background(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .frame(height: 180)
-                                    .frame(width: 300)
-                                    .foregroundStyle(postieColors.receivedLetterColor)
-                            )
-                            .tag(4)
+                        MembershipItems(text: "포스티 프리미엄 혜택은 \n점점 더 늘어갈거에요!", tag: 4, isThemeGroupButton: $isThemeGroupButton)
                     }
                     .tabViewStyle(PageTabViewStyle())
                     .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .automatic))
@@ -180,6 +148,27 @@ struct MembershipView: View {
             }
             .padding(.bottom)
         }
+    }
+}
+
+struct MembershipItems: View {
+    var text: String
+    var tag: Int
+    
+    @Binding var isThemeGroupButton: Int
+
+    var body: some View {
+        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
+        
+        Text(text)
+            .padding()
+            .background(
+                RoundedRectangle(cornerRadius: 10)
+                    .frame(height: 180)
+                    .frame(width: 300)
+                    .foregroundStyle(postieColors.receivedLetterColor)
+            )
+            .tag(tag)
     }
 }
 
