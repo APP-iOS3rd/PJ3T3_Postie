@@ -154,11 +154,15 @@ struct SideMenuView: View {
                             
                             Image(profileImage)
                                 .resizable()
-                                .frame(width: 80,height: 80)
+                                .scaledToFit()
+                                .frame(width: 80, height: 80)
+                                .clipShape(Circle())
                         }
                         
                         VStack(alignment: .leading) {
-                            Text(String(user?.fullName ?? ""))
+                            Text(String(user?.nickname ?? ""))
+                            
+                            Text("")
                             
                             Text(user?.email ?? "")
                         }

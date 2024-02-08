@@ -11,7 +11,7 @@ struct ProfileEditView: View {
     @ObservedObject var authManager = AuthManager.shared
     @Environment(\.dismiss) var dismiss
     
-    @State var name: String = " postieTest"
+    @State var name: String = "테스트 포스티"
     @State private var isShowingProfileImageEditor = false
     @Binding var isThemeGroupButton: Int
     @Binding var profileImage: String
@@ -30,7 +30,6 @@ struct ProfileEditView: View {
                     
                     Button (action: {
                         isShowingProfileImageEditor = true
-                        print(profileImageTemp)
                     }) {
                         ZStack {
                             Circle()
@@ -39,7 +38,9 @@ struct ProfileEditView: View {
                             
                             Image(profileImageTemp)
                                 .resizable()
+                                .scaledToFit()
                                 .frame(width: 170, height: 170)
+                                .clipShape(Circle())
                             
                             Image(systemName: "pencil.circle.fill")
                                 .font(.title)
@@ -48,7 +49,7 @@ struct ProfileEditView: View {
                         }
                     }
                     .sheet(isPresented: $isShowingProfileImageEditor) {
-                        ProfileImageEditView(isThemeGroupButton: $isThemeGroupButton, profileImageTemp: $profileImageTemp)
+                        ProfileImageEditView(isThemeGroupButton: $isThemeGroupButton, profileImage: $profileImage, profileImageTemp: $profileImageTemp)
                             .padding()
                             .presentationDetents([.medium])
                     }
@@ -56,17 +57,39 @@ struct ProfileEditView: View {
                     Spacer()
                 }
                 
-                Text("이름")
+                Text("닉네임")
                     .foregroundStyle(postieColors.dividerColor)
                 
                 DividerView(isThemeGroupButton: $isThemeGroupButton)
                 
-                TextField(" 닉네임을 입력하세요", text: $name)
+                TextField(" 닉네임을 입력해주세요! (12자 제한)", text: $name)
                     .padding(.bottom)
                     .textFieldStyle(.roundedBorder)
+                    .overlay(
+                        HStack {
+                            Spacer()
+                            if !name.isEmpty {
+                                Button(action: {
+                                    self.name = ""
+                                }) {
+                                    Image(systemName: "multiply.circle.fill")
+                                        .foregroundColor(.postieGray)
+                                }
+                                .padding(.trailing, 5)
+                                .offset(y: -8)
+                            }
+                        }
+                    )
+                    .onChange(of: name) { newValue in
+                        if newValue.count > 12 {
+                            name = String(newValue.prefix(15))
+                        }
+                    }
+                    .padding()
                 
                 HStack {
                     Button(action: {
+                        profileImageTemp = profileImage
                         dismiss()
                     }) {
                         ZStack {
@@ -114,8 +137,8 @@ struct ProfileEditView: View {
 struct ProfileImageEditView: View {
     @Environment(\.dismiss) var dismiss
     
-    @State private var isSelectedProfileImage = 0
     @Binding var isThemeGroupButton: Int
+    @Binding var profileImage: String
     @Binding var profileImageTemp: String
     
     var body: some View {
@@ -130,13 +153,12 @@ struct ProfileImageEditView: View {
             ScrollView(.horizontal) {
                 HStack {
                     Button (action: {
-                        isSelectedProfileImage = 0
                         profileImageTemp = "postyReceivingBeige"
                     }) {
                         ZStack {
                             Circle()
                                 .frame(width: 172, height: 172)
-                                .foregroundStyle(isSelectedProfileImage == 0 ? postieColors.tintColor : postieColors.tintColor.opacity(0))
+                                .foregroundStyle(profileImageTemp == "postyReceivingBeige" ? postieColors.tintColor : postieColors.tintColor.opacity(0))
                             
                             Circle()
                                 .frame(width: 170, height: 170)
@@ -149,13 +171,12 @@ struct ProfileImageEditView: View {
                     }
                     
                     Button (action: {
-                        isSelectedProfileImage = 1
                         profileImageTemp = "postySmile"
                     }) {
                         ZStack {
                             Circle()
                                 .frame(width: 172, height: 172)
-                                .foregroundStyle(isSelectedProfileImage == 1 ? postieColors.tintColor : postieColors.tintColor.opacity(0))
+                                .foregroundStyle(profileImageTemp == "postySmile" ? postieColors.tintColor : postieColors.tintColor.opacity(0))
                             
                             Circle()
                                 .frame(width: 170, height: 170)
@@ -168,13 +189,12 @@ struct ProfileImageEditView: View {
                     }
                     
                     Button (action: {
-                        isSelectedProfileImage = 2
                         profileImageTemp = "postySending"
                     }) {
                         ZStack {
                             Circle()
                                 .frame(width: 172, height: 172)
-                                .foregroundStyle(isSelectedProfileImage == 2 ? postieColors.tintColor : postieColors.tintColor.opacity(0))
+                                .foregroundStyle(profileImageTemp == "postySending" ? postieColors.tintColor : postieColors.tintColor.opacity(0))
                             
                             Circle()
                                 .frame(width: 170, height: 170)
@@ -188,13 +208,12 @@ struct ProfileImageEditView: View {
                     }
                     
                     Button (action: {
-                        isSelectedProfileImage = 3
                         profileImageTemp = "postyReceiving"
                     }) {
                         ZStack {
                             Circle()
                                 .frame(width: 172, height: 172)
-                                .foregroundStyle(isSelectedProfileImage == 3 ? postieColors.tintColor : postieColors.tintColor.opacity(0))
+                                .foregroundStyle(profileImageTemp == "postyReceiving" ? postieColors.tintColor : postieColors.tintColor.opacity(0))
                             
                             Circle()
                                 .frame(width: 170, height: 170)
@@ -207,14 +226,12 @@ struct ProfileImageEditView: View {
                     }
                     
                     Button (action: {
-                        isSelectedProfileImage = 4
                         profileImageTemp = "postyTrumpet"
-                        print(profileImageTemp)
                     }) {
                         ZStack {
                             Circle()
                                 .frame(width: 172, height: 172)
-                                .foregroundStyle(isSelectedProfileImage == 4 ? postieColors.tintColor : postieColors.tintColor.opacity(0))
+                                .foregroundStyle(profileImageTemp == "postyTrumpet" ? postieColors.tintColor : postieColors.tintColor.opacity(0))
                             
                             Circle()
                                 .frame(width: 170, height: 170)
@@ -227,13 +244,12 @@ struct ProfileImageEditView: View {
                     }
                     
                     Button (action: {
-                        isSelectedProfileImage = 5
                         profileImageTemp = "postyThinking"
                     }) {
                         ZStack {
                             Circle()
                                 .frame(width: 172, height: 172)
-                                .foregroundStyle(isSelectedProfileImage == 5 ? postieColors.tintColor : postieColors.tintColor.opacity(0))
+                                .foregroundStyle(profileImageTemp == "postyThinking" ? postieColors.tintColor : postieColors.tintColor.opacity(0))
                             
                             Circle()
                                 .frame(width: 170, height: 170)
@@ -253,6 +269,7 @@ struct ProfileImageEditView: View {
             
             HStack {
                 Button(action: {
+                    profileImageTemp = profileImage
                     dismiss()
                 }) {
                     ZStack {
@@ -272,7 +289,6 @@ struct ProfileImageEditView: View {
                 
                 Button(action: {
                     dismiss()
-                    print(profileImageTemp)
                 }) {
                     ZStack {
                         Rectangle()

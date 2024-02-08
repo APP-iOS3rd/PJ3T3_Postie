@@ -19,6 +19,7 @@ struct ProfileView: View {
     @Binding var profileImageTemp: String
     
     var body: some View {
+        let user = authManager.currentUser
         let postieColors = ThemeManager.themeColors[isThemeGroupButton]
         
         ZStack {
@@ -37,7 +38,9 @@ struct ProfileView: View {
                             
                             Image(profileImage)
                                 .resizable()
+                                .scaledToFit()
                                 .frame(width: 170, height: 170)
+                                .clipShape(Circle())
                         }
                         
                         Spacer()
@@ -48,7 +51,16 @@ struct ProfileView: View {
                     
                     DividerView(isThemeGroupButton: $isThemeGroupButton)
                     
-                    Text(" Postie_test")
+                    Text(String(user?.fullName ?? ""))
+                        .foregroundStyle(postieColors.tabBarTintColor)
+                        .padding(.bottom)
+                    
+                    Text("닉네임")
+                        .foregroundStyle(postieColors.dividerColor)
+                    
+                    DividerView(isThemeGroupButton: $isThemeGroupButton)
+                    
+                    Text(String(user?.nickname ?? ""))
                         .foregroundStyle(postieColors.tabBarTintColor)
                         .padding(.bottom)
                     
