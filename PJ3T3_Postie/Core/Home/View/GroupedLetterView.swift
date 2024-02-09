@@ -14,6 +14,7 @@ struct GroupedLetterView: View {
     var letterReceivedGrouped: [String] = []
     var letterWritedGrouped: [String] = []
     var letterGrouped: [String] = []
+    var homeWidth: CGFloat
     
     @Binding var isThemeGroupButton: Int
     
@@ -70,7 +71,7 @@ struct GroupedLetterView: View {
                 GroupedFavoriteListLetterView(isThemeGroupButton: $isThemeGroupButton)
             } label: {
                 HStack {
-                    VStack(alignment: .leading) {
+                    VStack {
                         HStack {
                             Text("My Favorite.")
                                 .font(.custom("SourceSerifPro-Black", size: 18))
@@ -98,25 +99,39 @@ struct GroupedLetterView: View {
                         
                         Spacer()
                         
-                        HStack {
-                            Text("\"좋아하는 편지 꾸러미\"")
-                                .foregroundStyle(postieColors.tabBarTintColor)
+                        ZStack {
+                            HStack {
+                                Spacer()
+                                
+                                Text("\"")
+                                    .font(.custom("SourceSerifPro-Black", size: 17))
+                                
+                                Text("좋아하는 편지 꾸러미")
+                                    .foregroundStyle(postieColors.tabBarTintColor)
+                                
+                                Text("\"")
+                                    .font(.custom("SourceSerifPro-Black", size: 17))
+                                
+                                Spacer()
+                            }
                             
-                            Spacer()
-                            
-                            Image(systemName: "heart.fill")
-                                .font(.title2)
-                                .foregroundStyle(Color.postieOrange)
+                            HStack {
+                                Spacer()
+                                
+                                Image(systemName: "heart.fill")
+                                    .font(.title2)
+                                    .foregroundStyle(Color.postieOrange)
+                            }
                         }
                     }
                     .padding()
-                    .frame(width: 350, height: 130)
+                    .frame(width:homeWidth * 0.9, height: 130)
                     .background(
                         RoundedRectangle(cornerRadius: 4)
                             .foregroundStyle(postieColors.receivedLetterColor)
                             .shadow(color: .black.opacity(0.1), radius: 3, x: 3, y: 3)
                     )
-                    .modifier(StackedRoundedRectangleModifier(count: favoriteLetters.count, isThemeGroupButton: $isThemeGroupButton))
+                    .modifier(StackedRoundedRectangleModifier(count: favoriteLetters.count, groupWidth: homeWidth, isThemeGroupButton: $isThemeGroupButton))
                 }
                 
                 Spacer()
@@ -135,7 +150,7 @@ struct GroupedLetterView: View {
                 } label: {
                     HStack {
                         ZStack {
-                            VStack(alignment: .leading) {
+                            VStack {
                                 HStack {
                                     Text("With.")
                                         .font(.custom("SourceSerifPro-Black", size: 18))
@@ -163,16 +178,28 @@ struct GroupedLetterView: View {
                                 
                                 Spacer()
                                 
-                                Text("\"\(recipient)님과 주고받은 편지 꾸러미\"")
+                                HStack {
+                                    Spacer()
+                                    
+                                    Text("\"")
+                                        .font(.custom("SourceSerifPro-Black", size: 17))
+                                        
+                                    Text("\(recipient)님과 주고받은 편지 꾸러미")
+                                    
+                                    Text("\"")
+                                        .font(.custom("SourceSerifPro-Black", size: 17))
+                                    
+                                    Spacer()
+                                }
                             }
                             .padding()
-                            .frame(width: 350, height: 130)
+                            .frame(width: homeWidth * 0.9, height: 130)
                             .background(
                                 RoundedRectangle(cornerRadius: 4)
                                     .foregroundStyle(postieColors.receivedLetterColor)
                                     .shadow(color: .black.opacity(0.1), radius: 3, x: 3, y: 3)
                             )
-                            .modifier(StackedRoundedRectangleModifier(count: countOfMatchingRecipients + countOfMatchingWriters, isThemeGroupButton: $isThemeGroupButton))
+                            .modifier(StackedRoundedRectangleModifier(count: countOfMatchingRecipients + countOfMatchingWriters, groupWidth: homeWidth, isThemeGroupButton: $isThemeGroupButton))
                         }
                         .padding(.horizontal)
                         .padding(.bottom, 8)
@@ -183,11 +210,13 @@ struct GroupedLetterView: View {
             }
         }
         .tint(postieColors.tabBarTintColor)
+        
     }
 }
 
 struct StackedRoundedRectangleModifier: ViewModifier {
     let count: Int
+    var groupWidth: CGFloat
     
     @Binding var isThemeGroupButton: Int
     
@@ -198,7 +227,7 @@ struct StackedRoundedRectangleModifier: ViewModifier {
             if count > 2 {
                 RoundedRectangle(cornerRadius: 4)
                     .foregroundStyle(postieColors.receivedLetterColor)
-                    .frame(width: 350, height: 130)
+                    .frame(width: groupWidth * 0.9, height: 130)
                     .offset(x: 10, y: 10)
                     .shadow(color: .black.opacity(0.1), radius: 3, x: 3, y: 3)
             }
@@ -206,7 +235,7 @@ struct StackedRoundedRectangleModifier: ViewModifier {
             if count > 1 {
                 RoundedRectangle(cornerRadius: 4)
                     .foregroundStyle(postieColors.receivedLetterColor)
-                    .frame(width: 350, height: 130)
+                    .frame(width: groupWidth * 0.9, height: 130)
                     .offset(x: 5, y: 5)
                     .shadow(color: .black.opacity(0.1), radius: 3, x: 3, y: 3)
             }

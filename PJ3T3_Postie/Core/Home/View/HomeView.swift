@@ -23,81 +23,83 @@ struct HomeView: View {
         let postieColors = ThemeManager.themeColors[isThemeGroupButton]
         
         NavigationStack {
-            ZStack {
-                postieColors.backGroundColor
-                    .ignoresSafeArea()
-                
-                VStack(spacing: 0) {
-                    HStack {
-                        Text("Postie")
-                            .font(.custom("SourceSerifPro-Black", size: 40))
-                            .foregroundStyle(postieColors.tintColor)
-                        
-                        Spacer()
-                        
-                        Button(action: {
-                        }) {
-                            Image(systemName: "magnifyingglass")
-                                .imageScale(.large)
-                                .foregroundStyle(postieColors.tabBarTintColor)
-                                .padding(.horizontal, 5)
-                        }
-                        
-                        Button(action: {
-                            withAnimation {
-                                self.isSideMenuOpen.toggle()
-                            }
-                        }) {
-                            Image(systemName: "line.horizontal.3")
-                                .imageScale(.large)
-                                .foregroundStyle(postieColors.tabBarTintColor)
-                        }
-                    }
-                    .background(postieColors.backGroundColor)
-                    .padding(.horizontal)
+            GeometryReader { geometry in
+                ZStack {
+                    postieColors.backGroundColor
+                        .ignoresSafeArea()
                     
-                    ZStack(alignment: .bottomTrailing) {
-                        ScrollView {
-                            if isTabGroupButton {
-                                VStack {
-                                    GroupedLetterView(isThemeGroupButton: $isThemeGroupButton)
-                                }
-                            } else {
-                                VStack {
-                                    ListLetterView(isThemeGroupButton: $isThemeGroupButton)
-                                }
+                    VStack(spacing: 0) {
+                        HStack {
+                            Text("Postie")
+                                .font(.custom("SourceSerifPro-Black", size: 40))
+                                .foregroundStyle(postieColors.tintColor)
+                            
+                            Spacer()
+                            
+                            Button(action: {
+                            }) {
+                                Image(systemName: "magnifyingglass")
+                                    .imageScale(.large)
+                                    .foregroundStyle(postieColors.tabBarTintColor)
+                                    .padding(.horizontal, 5)
                             }
                             
-                            // ScrollView margin 임시
-                            Rectangle()
-                                .frame(height: 80)
-                                .foregroundStyle(postieColors.tabBarTintColor.opacity(0))
-                        }
-                        .background(postieColors.backGroundColor)
-                        
-                        AddLetterButton(isThemeGroupButton: $isThemeGroupButton)
-                    }
-                    .preferredColorScheme(isThemeGroupButton == 4 ? .dark : .light)
-                }
-                
-                if isSideMenuOpen {
-                    Color.black.opacity(0.5)
-                        .onTapGesture {
-                            withAnimation {
-                                self.isSideMenuOpen.toggle()
+                            Button(action: {
+                                withAnimation {
+                                    self.isSideMenuOpen.toggle()
+                                }
+                            }) {
+                                Image(systemName: "line.horizontal.3")
+                                    .imageScale(.large)
+                                    .foregroundStyle(postieColors.tabBarTintColor)
                             }
                         }
-                        .edgesIgnoringSafeArea(.all)
+                        .background(postieColors.backGroundColor)
+                        .padding(.horizontal)
+                        
+                        ZStack(alignment: .bottomTrailing) {
+                            ScrollView {
+                                if isTabGroupButton {
+                                    VStack {
+                                        GroupedLetterView(homeWidth: geometry.size.width, isThemeGroupButton: $isThemeGroupButton)
+                                    }
+                                } else {
+                                    VStack {
+                                        ListLetterView(isThemeGroupButton: $isThemeGroupButton)
+                                    }
+                                }
+                                
+                                // ScrollView margin 임시
+                                Rectangle()
+                                    .frame(height: 80)
+                                    .foregroundStyle(postieColors.tabBarTintColor.opacity(0))
+                            }
+                            .background(postieColors.backGroundColor)
+                            
+                            AddLetterButton(isThemeGroupButton: $isThemeGroupButton)
+                        }
+                        .preferredColorScheme(isThemeGroupButton == 4 ? .dark : .light)
+                    }
+                    
+                    if isSideMenuOpen {
+                        Color.black.opacity(0.5)
+                            .onTapGesture {
+                                withAnimation {
+                                    self.isSideMenuOpen.toggle()
+                                }
+                            }
+                            .edgesIgnoringSafeArea(.all)
+                    }
+                    
+                    // 세팅 뷰
+                    //            SettingView()
+                    //                .offset(x: isSideMenuOpen ? 0 : UIScreen.main.bounds.width)
+                    //                .animation(.easeInOut)
+                    // 임시 세팅뷰
+                    SideMenuView(isSideMenuOpen: $isSideMenuOpen, currentGroupPage: $currentGroupPage, isTabGroupButton: $isTabGroupButton, isThemeGroupButton: $isThemeGroupButton, currentColorPage: $currentColorPage, profileImage: $profileImage, profileImageTemp: $profileImageTemp)
+                        .offset(x: isSideMenuOpen ? 0 : UIScreen.main.bounds.width)
+                        .animation(.easeInOut, value: 1)
                 }
-                
-                // 세팅 뷰
-                //            SettingView()
-                //                .offset(x: isSideMenuOpen ? 0 : UIScreen.main.bounds.width)
-                //                .animation(.easeInOut)
-                // 임시 세팅뷰
-                SideMenuView(isSideMenuOpen: $isSideMenuOpen, currentGroupPage: $currentGroupPage, isTabGroupButton: $isTabGroupButton, isThemeGroupButton: $isThemeGroupButton, currentColorPage: $currentColorPage, profileImage: $profileImage, profileImageTemp: $profileImageTemp)
-                    .offset(x: isSideMenuOpen ? 0 : UIScreen.main.bounds.width)
-                    .animation(.easeInOut, value: 1)
             }
         }
     }
