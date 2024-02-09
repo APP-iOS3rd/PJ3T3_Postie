@@ -248,6 +248,10 @@ struct SideMenuView: View {
             .background(postieColors.backGroundColor)
         }
         .tint(postieColors.tabBarTintColor)
+        .onAppear {
+            currentColorPage = isThemeGroupButton
+            currentGroupPage = isTabGroupButton ? 0 : 1
+        }
     }
 }
 

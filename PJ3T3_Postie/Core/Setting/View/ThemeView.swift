@@ -235,7 +235,6 @@ struct ThemeView: View {
                 
                 ToolbarItemGroup(placement: .topBarTrailing) {
                     Button(action: {
-                        currentColorPage = isThemeGroupButton
                         dismiss()
                     }) {
                         Text("완료")
@@ -244,6 +243,8 @@ struct ThemeView: View {
             }
             .navigationBarTitleDisplayMode(.inline)
             .tint(postieColors.tabBarTintColor)
+        }
+        .onAppear {
         }
     }
 }
