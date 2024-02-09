@@ -170,22 +170,13 @@ struct ProfileView: View {
                     }
                     .sheet(isPresented: $isShowingProfileEditView) {
                         ProfileEditView(isThemeGroupButton: $isThemeGroupButton, profileImage: $profileImage, profileImageTemp: $profileImageTemp)
-                            .presentationDetents(detentsValue(geometry: geometry))
+                            .presentationDetents([.medium])
                     }
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
             .tint(postieColors.tabBarTintColor)
         }
-    }
-}
-
-func detentsValue(geometry: GeometryProxy) -> Set<PresentationDetent> {
-    if geometry.size.height < 800 {
-        // SE3면 크게
-        return [.large]
-    } else {
-        return [.medium]
     }
 }
 

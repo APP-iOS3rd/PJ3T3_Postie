@@ -25,10 +25,10 @@ struct ProfileEditView: View {
                 postieColors.backGroundColor
                     .ignoresSafeArea()
                 
-                VStack {
+                VStack(spacing: 0) {
                     Text("나만의 프로필을 설정해보세요!")
                         .bold()
-                        .font(.title2)
+                        .font(geometry.size.height < 400 ? .title3 : .title2)
                         .foregroundStyle(postieColors.tabBarTintColor)
                     
                     Spacer()
@@ -39,24 +39,24 @@ struct ProfileEditView: View {
                         }) {
                             ZStack {
                                 Circle()
-                                    .frame(width: 170, height: 170)
+                                    .frame(width: geometry.size.height < 400 ? 140 : 170, height: geometry.size.height < 400 ? 140 : 170)
                                     .foregroundStyle(.postieGray)
                                 
                                 Image(profileImageTemp)
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(width: 170, height: 170)
+                                    .frame(width: geometry.size.height < 400 ? 140 : 170, height: geometry.size.height < 400 ? 140 : 170)
                                     .clipShape(Circle())
                                 
                                 Image(systemName: "pencil.circle.fill")
-                                    .font(.title)
+                                    .font(geometry.size.height < 400 ? .title3 : .title2)
                                     .foregroundColor(postieColors.tabBarTintColor)
-                                    .offset(x: 60, y: 60)
+                                    .offset(x: geometry.size.height < 400 ? 50 : 60, y: geometry.size.height < 400 ? 50 : 60)
                             }
                         }
                         .sheet(isPresented: $isShowingProfileImageEditor) {
                             ProfileImageEditView(isThemeGroupButton: $isThemeGroupButton, profileImage: $profileImage, profileImageTemp: $profileImageTemp)
-                                .presentationDetents(detentsValue(geometry: geometry))
+                                .presentationDetents([.medium])
                         }
                     }
                     
@@ -68,11 +68,14 @@ struct ProfileEditView: View {
                         
                         Spacer()
                     }
+                    .padding(.bottom, geometry.size.height < 400 ? 8 : 10)
                     
-                    DividerView(isThemeGroupButton: $isThemeGroupButton)
+                    Rectangle()
+                        .fill(postieColors.dividerColor)
+                        .frame(height: 1)
+                        .padding(.bottom, geometry.size.height < 400 ? 8 : 10)
                     
                     TextField(" 닉네임을 입력해주세요! (12자 제한)", text: $name)
-                        .padding(.bottom)
                         .textFieldStyle(.roundedBorder)
                         .overlay(
                             HStack {
@@ -85,7 +88,6 @@ struct ProfileEditView: View {
                                             .foregroundColor(.postieGray)
                                     }
                                     .padding(.trailing, 5)
-                                    .offset(y: -8)
                                 }
                             }
                         )
@@ -104,7 +106,7 @@ struct ProfileEditView: View {
                         }) {
                             ZStack {
                                 Rectangle()
-                                    .frame(height: 50)
+                                    .frame(height: geometry.size.height < 400 ? 40 : 50)
                                     .cornerRadius(10)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 10)
@@ -123,7 +125,7 @@ struct ProfileEditView: View {
                         }) {
                             ZStack {
                                 Rectangle()
-                                    .frame(height: 50)
+                                    .frame(height: geometry.size.height < 400 ? 40 : 50)
                                     .cornerRadius(10)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 10)
@@ -132,6 +134,7 @@ struct ProfileEditView: View {
                                 
                                 Text("저장")
                                     .foregroundStyle(isThemeGroupButton == 4 ? .postieBlack : .postieWhite)
+                                    .bold()
                                     .padding()
                             }
                         }
@@ -321,6 +324,7 @@ struct ProfileImageEditView: View {
                             
                             Text("선택")
                                 .foregroundStyle(isThemeGroupButton == 4 ? .postieBlack : .postieWhite)
+                                .bold()
                                 .padding()
                         }
                     }
