@@ -106,7 +106,7 @@ struct ProfileEditView: View {
                         }) {
                             ZStack {
                                 Rectangle()
-                                    .frame(height: geometry.size.height < 400 ? 40 : 50)
+                                    .frame(height: 50)
                                     .cornerRadius(10)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 10)
@@ -125,7 +125,7 @@ struct ProfileEditView: View {
                         }) {
                             ZStack {
                                 Rectangle()
-                                    .frame(height: geometry.size.height < 400 ? 40 : 50)
+                                    .frame(height: 50)
                                     .cornerRadius(10)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 10)
@@ -166,7 +166,7 @@ struct ProfileImageEditView: View {
             VStack {
                 Text("프로필에 사용될 캐릭터를 선택해주세요!")
                     .bold()
-                    .font(.title2)
+                    .font(.title3)
                     .foregroundStyle(postieColors.tabBarTintColor)
                 
                 Spacer()
