@@ -16,17 +16,18 @@ struct GroupedFavoriteListLetterView: View {
     
     var body: some View {
         let postieColors = ThemeManager.themeColors[isThemeGroupButton]
+        let favoriteLetters = firestoreManager.letters.filter { $0.isFavorite }
         
         ZStack(alignment: .bottomTrailing) {
             postieColors.backGroundColor
                 .ignoresSafeArea()
             
             ScrollView {
-                ForEach(firestoreManager.letters, id: \.self) { letter in
+                ForEach(favoriteLetters, id: \.self) { letter in
                     NavigationLink {
                         LetterDetailView(letter: letter)
                     } label: {
-                        favoriteLetterView(letter: letter)
+                        LetterItemView(letter: letter, isThemeGroupButton: $isThemeGroupButton)
                     }
                 }
                 
@@ -47,15 +48,6 @@ struct GroupedFavoriteListLetterView: View {
                     .bold()
                     .foregroundStyle(postieColors.tintColor)
             }
-        }
-    }
-    
-    @ViewBuilder
-    private func favoriteLetterView(letter: Letter) -> some View {
-        if letter.isFavorite {
-            LetterItemView(letter: letter, isThemeGroupButton: $isThemeGroupButton)
-        } else {
-            EmptyView()
         }
     }
 }
