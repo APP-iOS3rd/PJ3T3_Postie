@@ -40,6 +40,7 @@ struct GroupedListLetterView: View {
             
             AddLetterButton(isThemeGroupButton: $isThemeGroupButton)
         }
+        .toolbarBackground(postieColors.backGroundColor, for: .navigationBar)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .principal) {

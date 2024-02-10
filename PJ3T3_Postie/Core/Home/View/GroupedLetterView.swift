@@ -209,6 +209,7 @@ struct GroupedLetterView: View {
                 }
             }
         }
+        .toolbarBackground(postieColors.backGroundColor, for: .navigationBar)
         .tint(postieColors.tabBarTintColor)
         
     }

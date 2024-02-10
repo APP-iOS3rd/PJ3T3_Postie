@@ -226,6 +226,7 @@ struct ThemeView: View {
                     }
                 }
             }
+//            .toolbar(.hidden, for: .tabBar)
             .toolbar {
                 ToolbarItemGroup(placement: .principal) {
                     Text("테마 설정")
@@ -243,8 +244,6 @@ struct ThemeView: View {
             }
             .navigationBarTitleDisplayMode(.inline)
             .tint(postieColors.tabBarTintColor)
-        }
-        .onAppear {
         }
     }
 }

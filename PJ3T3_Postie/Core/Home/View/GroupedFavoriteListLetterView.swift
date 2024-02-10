@@ -38,6 +38,7 @@ struct GroupedFavoriteListLetterView: View {
             
             AddLetterButton(isThemeGroupButton: $isThemeGroupButton)
         }
+        .toolbarBackground(postieColors.backGroundColor, for: .navigationBar)
         .tint(postieColors.tabBarTintColor)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

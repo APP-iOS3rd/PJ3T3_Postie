@@ -174,6 +174,7 @@ struct ProfileView: View {
                     }
                 }
             }
+            .toolbarBackground(postieColors.backGroundColor, for: .navigationBar)
             .navigationBarTitleDisplayMode(.inline)
             .tint(postieColors.tabBarTintColor)
         }
