@@ -158,6 +158,7 @@ struct ProfileImageEditView: View {
     
     var body: some View {
         let postieColors = ThemeManager.themeColors[isThemeGroupButton]
+        let profileImages = ["postySmileSketch", "postySmileLine", "postySmileLineColor", "postyThinkingSketch", "postyThinkingLine", "postyThinkingLineColor", "postySendingSketch", "postySendingLine", "postySendingLineColor", "postyReceivingSketch", "postyReceivingLine", "postyReceivingLineColor", "postyHeartSketch", "postyHeartLine", "postyHeartLineColor", "postyTrumpetSketch", "postyTrumpetLine", "postyTrumpetLineColor", "postyQuestionSketch", "postyQuestionLine", "postyQuestionLineColor", "postyNormalSketch", "postyNormalLine", "postyNormalLineColor", "postyWinkSketch", "postyWinkLine", "postyWinkLineColor", "postySleepingSketch", "postySleepingLine", "postySleepingLineColor", "postyNotGoodSketch", "postyNotGoodLine", "postyNotGoodLineColor"]
         
         ZStack {
             postieColors.backGroundColor
@@ -173,112 +174,24 @@ struct ProfileImageEditView: View {
                 
                 ScrollView(.horizontal) {
                     HStack {
-                        Button (action: {
-                            profileImageTemp = "postyReceivingBeige"
-                        }) {
-                            ZStack {
-                                Circle()
-                                    .frame(width: 172, height: 172)
-                                    .foregroundStyle(profileImageTemp == "postyReceivingBeige" ? postieColors.tintColor : postieColors.tintColor.opacity(0))
-                                
-                                Circle()
-                                    .frame(width: 170, height: 170)
-                                    .foregroundStyle(postieColors.profileColor)
-                                
-                                Image("postyReceivingBeige")
-                                    .resizable()
-                                    .frame(width: 170, height: 170)
-                            }
-                        }
-                        
-                        Button (action: {
-                            profileImageTemp = "postySmile"
-                        }) {
-                            ZStack {
-                                Circle()
-                                    .frame(width: 172, height: 172)
-                                    .foregroundStyle(profileImageTemp == "postySmile" ? postieColors.tintColor : postieColors.tintColor.opacity(0))
-                                
-                                Circle()
-                                    .frame(width: 170, height: 170)
-                                    .foregroundStyle(postieColors.profileColor)
-                                
-                                Image("postySmile")
-                                    .resizable()
-                                    .frame(width: 100, height: 100)
-                            }
-                        }
-                        
-                        Button (action: {
-                            profileImageTemp = "postySending"
-                        }) {
-                            ZStack {
-                                Circle()
-                                    .frame(width: 172, height: 172)
-                                    .foregroundStyle(profileImageTemp == "postySending" ? postieColors.tintColor : postieColors.tintColor.opacity(0))
-                                
-                                Circle()
-                                    .frame(width: 170, height: 170)
-                                    .foregroundStyle(postieColors.profileColor)
-                                
-                                Image("postySending")
-                                    .resizable()
-                                    .frame(width: 150, height: 150)
-                            }
-                            
-                        }
-                        
-                        Button (action: {
-                            profileImageTemp = "postyReceiving"
-                        }) {
-                            ZStack {
-                                Circle()
-                                    .frame(width: 172, height: 172)
-                                    .foregroundStyle(profileImageTemp == "postyReceiving" ? postieColors.tintColor : postieColors.tintColor.opacity(0))
-                                
-                                Circle()
-                                    .frame(width: 170, height: 170)
-                                    .foregroundStyle(postieColors.profileColor)
-                                
-                                Image("postyReceiving")
-                                    .resizable()
-                                    .frame(width: 100, height: 100)
-                            }
-                        }
-                        
-                        Button (action: {
-                            profileImageTemp = "postyTrumpet"
-                        }) {
-                            ZStack {
-                                Circle()
-                                    .frame(width: 172, height: 172)
-                                    .foregroundStyle(profileImageTemp == "postyTrumpet" ? postieColors.tintColor : postieColors.tintColor.opacity(0))
-                                
-                                Circle()
-                                    .frame(width: 170, height: 170)
-                                    .foregroundStyle(postieColors.profileColor)
-                                
-                                Image("postyTrumpet")
-                                    .resizable()
-                                    .frame(width: 100, height: 100)
-                            }
-                        }
-                        
-                        Button (action: {
-                            profileImageTemp = "postyThinking"
-                        }) {
-                            ZStack {
-                                Circle()
-                                    .frame(width: 172, height: 172)
-                                    .foregroundStyle(profileImageTemp == "postyThinking" ? postieColors.tintColor : postieColors.tintColor.opacity(0))
-                                
-                                Circle()
-                                    .frame(width: 170, height: 170)
-                                    .foregroundStyle(postieColors.profileColor)
-                                
-                                Image("postyThinking")
-                                    .resizable()
-                                    .frame(width: 100, height: 100)
+                        ForEach(profileImages, id: \.self) { imageName in
+                            Button(action: {
+                                profileImageTemp = imageName
+                            }) {
+                                ZStack {
+                                    Circle()
+                                        .frame(width: 172, height: 172)
+                                        .foregroundStyle(profileImageTemp == imageName ? postieColors.tintColor : postieColors.tintColor.opacity(0))
+                                    
+                                    Circle()
+                                        .frame(width: 170, height: 170)
+                                        .foregroundStyle(postieColors.profileColor)
+                                    
+                                    Image(imageName)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 100, height: 100)
+                                }
                             }
                         }
                     }
