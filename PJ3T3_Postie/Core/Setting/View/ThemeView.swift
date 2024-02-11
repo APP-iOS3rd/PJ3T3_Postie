@@ -11,6 +11,8 @@ struct ThemeView: View {
     @Environment(\.dismiss) var dismiss
     
     @State private var selectedThemeButton: Bool = true
+    @State private var isClicked = true
+    @State private var isClicked2 = true
     @Binding var isThemeGroupButton: Int
     @Binding var currentColorPage: Int
     @Binding var isTabGroupButton: Bool
@@ -85,6 +87,22 @@ struct ThemeView: View {
                         }
                         
                         Spacer()
+                        
+                        if selectedThemeButton {
+                            Button(action: {
+                                isClicked.toggle()
+                            }) {
+                                Image(systemName: isClicked ? "square.split.2x1" : "list.bullet")
+                                Text(isClicked ? "목록" : "나열")
+                            }
+                        } else {
+                            Button(action: {
+                                isClicked2.toggle()
+                            }) {
+                                Image(systemName: isClicked2 ? "square.split.2x1" : "list.bullet")
+                                Text(isClicked ? "목록" : "나열")
+                            }
+                        }
                     }
                     .padding()
                     

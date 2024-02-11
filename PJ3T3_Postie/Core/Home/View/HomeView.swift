@@ -183,7 +183,9 @@ struct SideMenuView: View {
                 
                 NavigationLink(destination: ThemeView(isThemeGroupButton: $isThemeGroupButton, currentColorPage: $currentColorPage, isTabGroupButton: $isTabGroupButton, currentGroupPage: $currentGroupPage)) {
                     HStack {
-                        Text(" 테마 설정 하기")
+                        Image(systemName: "paintpalette")
+                        
+                        Text("테마 설정 하기")
                         
                         Spacer()
                         
@@ -199,7 +201,9 @@ struct SideMenuView: View {
                 DividerView(isThemeGroupButton: $isThemeGroupButton)
                 
                 HStack {
-                    Text(" 공지사항")
+                    Image(systemName: "megaphone")
+                    
+                    Text("공지사항")
                     
                     Spacer()
                     
@@ -209,7 +213,9 @@ struct SideMenuView: View {
                 .padding(.bottom)
                 
                 HStack {
-                    Text(" 문의하기")
+                    Image(systemName: "questionmark.circle")
+                    
+                    Text("문의하기")
                     
                     Spacer()
                     
@@ -219,7 +225,9 @@ struct SideMenuView: View {
                 .padding(.bottom)
                 
                 HStack {
-                    Text(" 이용약관 및 개인정보 방침")
+                    Image(systemName: "exclamationmark.circle")
+                    
+                    Text("이용약관 및 개인정보 방침")
                     
                     Spacer()
                     
@@ -229,7 +237,9 @@ struct SideMenuView: View {
                 .padding(.bottom)
                 
                 HStack {
-                    Text(" 앱 정보")
+                    Image(systemName: "info.circle")
+                    
+                    Text("앱 정보")
                     
                     Spacer()
                     
