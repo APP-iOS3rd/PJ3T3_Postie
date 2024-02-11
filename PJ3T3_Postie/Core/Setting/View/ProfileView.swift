@@ -48,6 +48,7 @@ struct ProfileView: View {
                         }
                         
                         Text("이름")
+                            .font(.subheadline)
                             .foregroundStyle(postieColors.dividerColor)
                         
                         DividerView(isThemeGroupButton: $isThemeGroupButton)
@@ -57,6 +58,7 @@ struct ProfileView: View {
                             .padding(.bottom)
                         
                         Text("닉네임")
+                            .font(.subheadline)
                             .foregroundStyle(postieColors.dividerColor)
                         
                         DividerView(isThemeGroupButton: $isThemeGroupButton)
@@ -66,6 +68,7 @@ struct ProfileView: View {
                             .padding(.bottom)
                         
                         Text("계정")
+                            .font(.subheadline)
                             .foregroundStyle(postieColors.dividerColor)
                         
                         DividerView(isThemeGroupButton: $isThemeGroupButton)
@@ -75,6 +78,7 @@ struct ProfileView: View {
                             .padding(.bottom)
                         
                         Text("구독정보")
+                            .font(.subheadline)
                             .foregroundStyle(postieColors.dividerColor)
                         
                         DividerView(isThemeGroupButton: $isThemeGroupButton)
@@ -99,6 +103,7 @@ struct ProfileView: View {
                         }
                         
                         Text("계정 관리")
+                            .font(.subheadline)
                             .foregroundStyle(postieColors.dividerColor)
                         
                         DividerView(isThemeGroupButton: $isThemeGroupButton)

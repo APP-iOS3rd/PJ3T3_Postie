@@ -104,14 +104,17 @@ struct ThemeView: View {
                                     Image(systemName: "square.split.2x1")
                                     
                                     Text("스플릿")
+                                        .font(.subheadline)
                                 } else if selectedLayoutMode == 1 {
                                     Image(systemName: "square.grid.2x2")
                                     
                                     Text("그리드")
+                                        .font(.subheadline)
                                 } else {
                                     Image(systemName: "list.bullet")
                                     
                                     Text("리스트")
+                                        .font(.subheadline)
                                 }
                             }
                         } else {
@@ -122,10 +125,12 @@ struct ThemeView: View {
                                     Image(systemName: "square.split.2x1")
                                     
                                     Text("스플릿")
+                                        .font(.subheadline)
                                 } else {
                                     Image(systemName: "list.bullet")
                                     
                                     Text("리스트")
+                                        .font(.subheadline)
                                 }
                             }
                         }

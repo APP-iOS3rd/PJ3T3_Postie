@@ -143,6 +143,7 @@ struct SideMenuView: View {
                 }
                 
                 Text("프로필 설정")
+                    .font(.subheadline)
                     .foregroundStyle(postieColors.dividerColor)
                 
                 DividerView(isThemeGroupButton: $isThemeGroupButton)
@@ -177,6 +178,7 @@ struct SideMenuView: View {
                 }
                 
                 Text("테마 설정")
+                    .font(.subheadline)
                     .foregroundStyle(postieColors.dividerColor)
                 
                 DividerView(isThemeGroupButton: $isThemeGroupButton)
@@ -196,57 +198,52 @@ struct SideMenuView: View {
                 }
                 
                 Text("앱 설정")
+                    .font(.subheadline)
                     .foregroundStyle(postieColors.dividerColor)
                 
                 DividerView(isThemeGroupButton: $isThemeGroupButton)
                 
-                HStack {
-                    Image(systemName: "megaphone")
-                    
-                    Text("공지사항")
-                    
-                    Spacer()
-                    
-                    Image(systemName: "chevron.right")
-                        .foregroundStyle(postieColors.dividerColor)
+                NavigationLink(destination: NoticeView(isThemeGroupButton: $isThemeGroupButton)) {
+                    HStack {
+                        Image(systemName: "megaphone")
+                        
+                        Text("공지사항")
+                        
+                        Spacer()
+                        
+                        Image(systemName: "chevron.right")
+                            .foregroundStyle(postieColors.dividerColor)
+                    }
+                    .padding(.bottom)
                 }
-                .padding(.bottom)
                 
-                HStack {
-                    Image(systemName: "questionmark.circle")
-                    
-                    Text("문의하기")
-                    
-                    Spacer()
-                    
-                    Image(systemName: "chevron.right")
-                        .foregroundStyle(postieColors.dividerColor)
+                NavigationLink(destination: QuestionView(isThemeGroupButton: $isThemeGroupButton)) {
+                    HStack {
+                        Image(systemName: "questionmark.circle")
+                        
+                        Text("문의하기")
+                        
+                        Spacer()
+                        
+                        Image(systemName: "chevron.right")
+                            .foregroundStyle(postieColors.dividerColor)
+                    }
+                    .padding(.bottom)
                 }
-                .padding(.bottom)
                 
-                HStack {
-                    Image(systemName: "exclamationmark.circle")
-                    
-                    Text("이용약관 및 개인정보 방침")
-                    
-                    Spacer()
-                    
-                    Image(systemName: "chevron.right")
-                        .foregroundStyle(postieColors.dividerColor)
+                NavigationLink(destination: InformationView(isThemeGroupButton: $isThemeGroupButton)) {
+                    HStack {
+                        Image(systemName: "info.circle")
+                        
+                        Text("앱 정보")
+                        
+                        Spacer()
+                        
+                        Image(systemName: "chevron.right")
+                            .foregroundStyle(postieColors.dividerColor)
+                    }
+                    .padding(.bottom)
                 }
-                .padding(.bottom)
-                
-                HStack {
-                    Image(systemName: "info.circle")
-                    
-                    Text("앱 정보")
-                    
-                    Spacer()
-                    
-                    Image(systemName: "chevron.right")
-                        .foregroundStyle(postieColors.dividerColor)
-                }
-                .padding(.bottom)
                 
                 Spacer()
                 
