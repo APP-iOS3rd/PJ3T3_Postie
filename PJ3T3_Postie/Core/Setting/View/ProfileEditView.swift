@@ -172,10 +172,11 @@ struct ProfileImageEditView: View {
                         .bold()
                         .font(.title3)
                         .foregroundStyle(postieColors.tabBarTintColor)
+                        .padding()
                     
                     Spacer()
                     ScrollView(.horizontal) {
-                        if geometry.size.height > 800 {
+                        if geometry.size.height > 710 {
                             LazyHGrid(rows: rows3, alignment: .top) {
                                 ForEach(profileImages, id: \.self) { imageName in
                                     ProfileImageItemView(imageName: imageName, isThemeGroupButton: $isThemeGroupButton, profileImageTemp: $profileImageTemp)
