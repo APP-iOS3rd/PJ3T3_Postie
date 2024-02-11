@@ -61,6 +61,7 @@ struct ContentView: View {
                                 Text("Setting")
                             }
                     }
+                    .accentColor(ThemeManager.themeColors[isThemeGroupButton].tabBarTintColor)
                 } else {
                     if authViewModel.hasAccount {
                         ProgressView()
