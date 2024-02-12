@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ThemeView: View {
     @Environment(\.dismiss) var dismiss
+    
     @State private var selectedThemeButton: Bool = true
     @Binding var isThemeGroupButton: Int
     @Binding var currentColorPage: Int
@@ -254,7 +255,7 @@ struct CustomImageModifier: ViewModifier {
     }
 }
 
-private func saveToUserDefaults<T>(value: T, key: String) {
+func saveToUserDefaults<T>(value: T, key: String) {
     UserDefaults.standard.set(value, forKey: key)
 }
 

@@ -15,7 +15,9 @@ struct HomeView: View {
     @State private var currentGroupPage: Int = 0
     @State private var currentColorPage: Int = 0
     @AppStorage("isTabGroupButton") private var isTabGroupButton: Bool = true
-    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
+    @AppStorage("profileImage") private var profileImage: String = "postyReceivingBeige"
+    @AppStorage("profileImageTemp") private var profileImageTemp: String = ""
+    @Binding var isThemeGroupButton: Int
     
     var body: some View {
         let postieColors = ThemeManager.themeColors[isThemeGroupButton]
@@ -93,7 +95,7 @@ struct HomeView: View {
                 //                .offset(x: isSideMenuOpen ? 0 : UIScreen.main.bounds.width)
                 //                .animation(.easeInOut)
                 // 임시 세팅뷰
-                SideMenuView(isSideMenuOpen: $isSideMenuOpen, currentGroupPage: $currentGroupPage, isTabGroupButton: $isTabGroupButton, isThemeGroupButton: $isThemeGroupButton, currentColorPage: $currentColorPage)
+                SideMenuView(isSideMenuOpen: $isSideMenuOpen, currentGroupPage: $currentGroupPage, isTabGroupButton: $isTabGroupButton, isThemeGroupButton: $isThemeGroupButton, currentColorPage: $currentColorPage, profileImage: $profileImage, profileImageTemp: $profileImageTemp)
                     .offset(x: isSideMenuOpen ? 0 : UIScreen.main.bounds.width)
                     .animation(.easeInOut, value: 1)
             }
@@ -109,6 +111,8 @@ struct SideMenuView: View {
     @Binding var isTabGroupButton: Bool
     @Binding var isThemeGroupButton: Int
     @Binding var currentColorPage: Int
+    @Binding var profileImage: String
+    @Binding var profileImageTemp: String
     @State private var isToggleOn = false
     
     var body: some View {
@@ -141,20 +145,24 @@ struct SideMenuView: View {
                 
                 DividerView(isThemeGroupButton: $isThemeGroupButton)
                 
-                NavigationLink(destination: ProfileView(isThemeGroupButton: $isThemeGroupButton)) {
+                NavigationLink(destination: ProfileView(isThemeGroupButton: $isThemeGroupButton, profileImage: $profileImage, profileImageTemp: $profileImageTemp)) {
                     HStack {
                         ZStack {
                             Circle()
                                 .frame(width: 80,height: 80)
                                 .foregroundStyle(postieColors.profileColor)
                             
-                            Image("postyReceivingBeige")
+                            Image(profileImage)
                                 .resizable()
-                                .frame(width: 80,height: 80)
+                                .scaledToFit()
+                                .frame(width: 80, height: 80)
+                                .clipShape(Circle())
                         }
                         
                         VStack(alignment: .leading) {
-                            Text(String(user?.fullName ?? ""))
+                            Text(String(user?.nickname ?? ""))
+                            
+                            Text("")
                             
                             Text(user?.email ?? "")
                         }
@@ -299,6 +307,6 @@ private func getValueFromUserDefaults<T>(key: String, defaultValue: T) -> T {
     return UserDefaults.standard.object(forKey: key) as? T ?? defaultValue
 }
 
-#Preview {
-    HomeView()
-}
+//#Preview {
+//    HomeView()
+//}
