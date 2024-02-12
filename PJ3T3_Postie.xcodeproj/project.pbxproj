@@ -17,6 +17,8 @@
 		0E882AEE2B6B73DE00D8F2FC /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E882AED2B6B73DE00D8F2FC /* LocationManager.swift */; };
 		0E882AF02B6B79D800D8F2FC /* CoordinaterEtc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E882AEF2B6B79D800D8F2FC /* CoordinaterEtc.swift */; };
 		0E882AF12B6B907200D8F2FC /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9F6ACD2B5763CA003DFE83 /* AuthManager.swift */; };
+		0E97E2802B73DF8E00895EF9 /* AppleUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E078CBF2B7207660072E5FC /* AppleUser.swift */; };
+		0E97E2832B73E1BF00895EF9 /* Shop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E97E2822B73E1BF00895EF9 /* Shop.swift */; };
 		9E0FA11C2B54D27A001CEEB9 /* PJ3T3_PostieApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0FA11B2B54D27A001CEEB9 /* PJ3T3_PostieApp.swift */; };
 		9E0FA11E2B54D27A001CEEB9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0FA11D2B54D27A001CEEB9 /* ContentView.swift */; };
 		9E0FA1202B54D27C001CEEB9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E0FA11F2B54D27C001CEEB9 /* Assets.xcassets */; };
@@ -108,6 +110,7 @@
 		0E29F0DF2B602E3D005B86FB /* MyCoord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCoord.swift; sourceTree = "<group>"; };
 		0E882AED2B6B73DE00D8F2FC /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		0E882AEF2B6B79D800D8F2FC /* CoordinaterEtc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinaterEtc.swift; sourceTree = "<group>"; };
+		0E97E2822B73E1BF00895EF9 /* Shop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shop.swift; sourceTree = "<group>"; };
 		0E9815FB2B6A23B500C9F5BA /* Shop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shop.swift; sourceTree = "<group>"; };
 		19068E0481D2E4323D4AC3E2 /* Pods_PJ3T3_Postie.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PJ3T3_Postie.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		23E14589945C36E243AAF134 /* Pods-PJ3T3_Postie.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PJ3T3_Postie.debug.xcconfig"; path = "Target Support Files/Pods-PJ3T3_Postie/Pods-PJ3T3_Postie.debug.xcconfig"; sourceTree = "<group>"; };
@@ -270,7 +273,7 @@
 				9E9F6ADB2B57643F003DFE83 /* Letter.swift */,
 				9EA106762B63C5C90033E7A8 /* LetterPhoto.swift */,
 				9E9A8BF02B6B85640072CB75 /* PostieUser.swift */,
-				E3B41DA32B72152200CB9E7A /* Shop.swift */,
+				0E97E2822B73E1BF00895EF9 /* Shop.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -754,6 +757,7 @@
 				9E9A8BF32B6CD8990072CB75 /* NicknameView.swift in Sources */,
 				CEF09E492B57BFBF00BE67E4 /* TextRecognizer.swift in Sources */,
 				E349F8862B6B672E00253B02 /* ListLetterView.swift in Sources */,
+				0E97E2832B73E1BF00895EF9 /* Shop.swift in Sources */,
 				E3EECAF52B5FD2E100E639F2 /* ProfileView.swift in Sources */,
 				9EBAFDC42B70ED900020EE6F /* AppleSignInHelper.swift in Sources */,
 				9E9F6ABE2B576358003DFE83 /* MapViewModel.swift in Sources */,
@@ -767,7 +771,7 @@
 				9E9F6ACA2B5763B8003DFE83 /* LoginView.swift in Sources */,
 				E349F8882B6B673C00253B02 /* GroupedLetterView.swift in Sources */,
 				9E9F6AB82B5762EF003DFE83 /* HomeViewModel.swift in Sources */,
-				E3B41DA42B72152200CB9E7A /* Shop.swift in Sources */,
+				E3B41DA42B72152200CB9E7A /* (null) in Sources */,
 				9E9F6ADC2B57643F003DFE83 /* Letter.swift in Sources */,
 				9E9F6AC62B5763A3003DFE83 /* SettingView.swift in Sources */,
 			);
@@ -906,7 +910,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"PJ3T3_Postie/Preview Content\"";
-				DEVELOPMENT_TEAM = Y6QXM3Q994;
+				DEVELOPMENT_TEAM = 42QG6C4AF4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "PJ3T3-Postie-Info.plist";
@@ -925,7 +929,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.jes.e.0927.PJ3T3Postie;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wonny1012.postie;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -943,7 +947,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"PJ3T3_Postie/Preview Content\"";
-				DEVELOPMENT_TEAM = Y6QXM3Q994;
+				DEVELOPMENT_TEAM = 42QG6C4AF4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "PJ3T3-Postie-Info.plist";
@@ -961,7 +965,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.jes.e.0927.PJ3T3Postie;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wonny1012.postie;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
