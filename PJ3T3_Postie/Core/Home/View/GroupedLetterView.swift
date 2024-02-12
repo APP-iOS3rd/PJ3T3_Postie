@@ -114,7 +114,7 @@ struct GroupedLetterView: View {
                     .background(
                         RoundedRectangle(cornerRadius: 4)
                             .foregroundStyle(postieColors.receivedLetterColor)
-                            .shadow(color: Color.postieBlack.opacity(0.1), radius: 3, x: 3, y: 3)
+                            .shadow(color: .black.opacity(0.1), radius: 3, x: 3, y: 3)
                     )
                     .modifier(StackedRoundedRectangleModifier(count: favoriteLetters.count, isThemeGroupButton: $isThemeGroupButton))
                 }
@@ -170,7 +170,7 @@ struct GroupedLetterView: View {
                             .background(
                                 RoundedRectangle(cornerRadius: 4)
                                     .foregroundStyle(postieColors.receivedLetterColor)
-                                    .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
+                                    .shadow(color: .black.opacity(0.1), radius: 3, x: 3, y: 3)
                             )
                             .modifier(StackedRoundedRectangleModifier(count: countOfMatchingRecipients + countOfMatchingWriters, isThemeGroupButton: $isThemeGroupButton))
                         }
@@ -200,7 +200,7 @@ struct StackedRoundedRectangleModifier: ViewModifier {
                     .foregroundStyle(postieColors.receivedLetterColor)
                     .frame(width: 350, height: 130)
                     .offset(x: 10, y: 10)
-                    .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
+                    .shadow(color: .black.opacity(0.1), radius: 3, x: 3, y: 3)
             }
             
             if count > 1 {
@@ -208,7 +208,7 @@ struct StackedRoundedRectangleModifier: ViewModifier {
                     .foregroundStyle(postieColors.receivedLetterColor)
                     .frame(width: 350, height: 130)
                     .offset(x: 5, y: 5)
-                    .shadow(color: Color.black.opacity(0.1), radius: 3, x: 3, y: 3)
+                    .shadow(color: .black.opacity(0.1), radius: 3, x: 3, y: 3)
             }
             
             content
