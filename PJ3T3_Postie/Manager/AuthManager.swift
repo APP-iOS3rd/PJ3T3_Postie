@@ -204,6 +204,21 @@ extension AuthManager {
                                                        rawNonce: user.nonce,
                                                        fullName: user.fullName)
     }
+    
+    func deleteAppleAccount(authCodeString: String) async {
+        do {
+            guard let credential = self.credential else {
+                print(#function, "Failed to get credential")
+                return
+            }
+            
+            try await self.userSession?.reauthenticate(with: credential)
+            try await Auth.auth().revokeToken(withAuthorizationCode: authCodeString)
+            self.deleteAccount()
+        } catch {
+            print(#function, "Failed to delete Apple account: \(error)")
+        }
+    }
 }
 
 // MARK: Sign in Email
