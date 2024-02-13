@@ -248,4 +248,16 @@ extension AuthManager {
         
         try await createUser(authDataResult: authDataResult, nickname: nickname)
     }
+    
+    func deleteEmailUser(email: String, password: String) async {
+        do {
+            let credential = EmailAuthProvider.credential(withEmail: email, password: password)
+            
+            try await self.userSession?.reauthenticate(with: credential)
+        } catch {
+            print(#function, "Failed to reauth: \(error)")
+        }
+        
+        self.deleteAccount()
+    }
 }

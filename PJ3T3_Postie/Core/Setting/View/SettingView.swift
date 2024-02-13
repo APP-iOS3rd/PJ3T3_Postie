@@ -86,9 +86,14 @@ struct SettingView: View {
                                 Button("계정 삭제", role: .destructive) {
                                     switch authManager.provider {
                                     case .email:
-                                        print("Delete Email account")
-                                        showLoading = true
-//                                        LoadingIndicator.showLoading(text: "계정을 삭제하는 중이에요", isThemeGroupButton: .constant(0))
+                                        Task {
+                                            print("Delete Email account")
+                                            //회원 탈퇴를 위해 재로그인하는 과정이 필요합니다.
+                                            //기능 구현여부 테스트를 위해 하드코딩 하였다가 주석처리 했습니다.
+//                                            await authManager.deleteEmailUser(email: "eunice@test.com", password: "123456")
+//                                            showLoading = true
+//                                            LoadingIndicator.showLoading(text: "계정을 삭제하는 중이에요", isThemeGroupButton: .constant(0))
+                                        }
                                     case .google:
                                         print("Delete Google account")
                                     case .apple:
