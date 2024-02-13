@@ -263,10 +263,10 @@ extension AuthManager {
             let credential = EmailAuthProvider.credential(withEmail: email, password: password)
             
             try await self.userSession?.reauthenticate(with: credential)
+            self.deleteAccount()
         } catch {
             print(#function, "Failed to reauth: \(error)")
         }
         
-        self.deleteAccount()
     }
 }
