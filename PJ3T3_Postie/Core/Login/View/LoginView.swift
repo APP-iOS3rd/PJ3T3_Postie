@@ -12,7 +12,7 @@ import GoogleSignInSwift
 
 struct LoginView: View {
     @ObservedObject var authManager = AuthManager.shared
-    @StateObject var appleSignInHelper = AppleSignInHelper()
+    @ObservedObject var appleSignInHelper = AppleSignInHelper.shared
     
     var body: some View {
         NavigationStack {
