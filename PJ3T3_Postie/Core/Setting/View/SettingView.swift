@@ -15,6 +15,7 @@ struct SettingView: View {
     //Colors
     private let profileBackgroundColor: Color = .gray
     private let signOutIconColor: Color = Color(uiColor: .lightGray)
+    @State private var isDeleteAccountDialogPresented = false
     
     var body: some View {
         NavigationStack {
@@ -75,20 +76,28 @@ struct SettingView: View {
                         }
                         
                         Button {
-                            switch authManager.provider {
-                            case .email:
-                                print("Delete Email account")
-                            case .google:
-                                print("Delete Google account")
-                            case .apple:
-                                print("Delete Apple account")
-                                appleSignInHelper.deleteCurrentAppleUser()
-                            default:
-                                print("Delete account")
-                            }
+                            isDeleteAccountDialogPresented = true
                         } label: {
                             SettingsRowView(imageName: "xmark.circle.fill", title: "Delete Account", tintColor: signOutIconColor)
                         }
+                        .confirmationDialog("포스티를 떠나시나요?", isPresented: $isDeleteAccountDialogPresented, titleVisibility: .visible) {
+                            Button("계정 삭제", role: .destructive) {
+                                switch authManager.provider {
+                                case .email:
+                                    print("Delete Email account")
+                                case .google:
+                                    print("Delete Google account")
+                                case .apple:
+                                    print("Delete Apple account")
+                                    appleSignInHelper.deleteCurrentAppleUser()
+                                default:
+                                    print("Delete account")
+                                }
+                            }
+                        } message: {
+                            Text("회원 탈퇴시 계정 및 프로필 정보, 등록된 모든 편지와 편지 이미지가 삭제됩니다.")
+                        }
+
                     }
                     
                     AddDataSectionView()
