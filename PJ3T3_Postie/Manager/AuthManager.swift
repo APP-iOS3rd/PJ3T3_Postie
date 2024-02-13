@@ -167,6 +167,7 @@ extension AuthManager {
     func signInWithGoogle() async throws -> AuthCredential {
         let helper = GoogleSignInHelper()
         let tokens = try await helper.googleHelperSingIn()
+        
         return GoogleAuthProvider.credential(withIDToken: tokens.idToken, accessToken: tokens.accessToken)
     }
     

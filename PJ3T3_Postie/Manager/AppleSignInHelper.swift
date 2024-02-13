@@ -57,6 +57,7 @@ final class AppleSignInHelper: NSObject, ObservableObject {
         precondition(length > 0)
         var randomBytes = [UInt8](repeating: 0, count: length)
         let errorCode = SecRandomCopyBytes(kSecRandomDefault, randomBytes.count, &randomBytes)
+        
         if errorCode != errSecSuccess {
             fatalError(
                 "Unable to generate nonce. SecRandomCopyBytes failed with OSStatus \(errorCode)"
