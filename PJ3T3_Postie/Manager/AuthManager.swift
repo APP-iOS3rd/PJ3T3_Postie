@@ -29,7 +29,28 @@ class AuthManager: ObservableObject {
     
     private init() {
         Task {
+            checkAppLaunch()
             await fetchUser()
+        }
+    }
+    
+    func checkAppLaunch() {
+        let userDefaults = UserDefaults.standard
+        
+        print("UserDefault", userDefaults.value(forKey: "appFirstTimeOpend"))
+        
+        //앱이 설치된 후 처음 실행 되는 것이라면 nil이다.
+        if userDefaults.value(forKey: "appFirstTimeOpend") == nil {
+            userDefaults.setValue(true, forKey: "appFirstTimeOpend")
+            do {
+                try Auth.auth().signOut()
+            } catch {
+                print("Failed to signOut")
+                self.userSession = nil
+                self.currentUser = nil
+            }
+        } else {
+            print("앱 설치 후 최초 실행이 아닙니다.")
         }
     }
     
