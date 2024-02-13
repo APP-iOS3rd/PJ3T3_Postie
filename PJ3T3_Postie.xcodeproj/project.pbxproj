@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		019035552B7B36340080B370 /* AppleUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E078CBF2B7207660072E5FC /* AppleUser.swift */; };
+		019035582B7B38080080B370 /* Shop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019035572B7B38080080B370 /* Shop.swift */; };
+		0190355A2B7B38690080B370 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 019035592B7B38690080B370 /* GoogleService-Info.plist */; };
 		02DCDCD8D590DE7D9E6F06F9 /* Pods_PJ3T3_Postie.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 19068E0481D2E4323D4AC3E2 /* Pods_PJ3T3_Postie.framework */; };
 		0E29F0D32B5ED136005B86FB /* MapApiKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0E29F0D22B5ED136005B86FB /* MapApiKeys.plist */; };
 		0E29F0D62B5EDC30005B86FB /* XMLCoder in Frameworks */ = {isa = PBXBuildFile; productRef = 0E29F0D52B5EDC30005B86FB /* XMLCoder */; };
@@ -95,8 +98,7 @@
 		E349F88A2B6B7DA500253B02 /* GroupedListLetterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E349F8892B6B7DA500253B02 /* GroupedListLetterView.swift */; };
 		E35C10152B720FFE0007DE8C /* GroupedFavoriteListLetterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35C10142B720FFE0007DE8C /* GroupedFavoriteListLetterView.swift */; };
 		E39C35F12B71F820001F6E5F /* ContenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E39C35F02B71F820001F6E5F /* ContenViewModel.swift */; };
-		E3B41DA62B730E0300CB9E7A /* ProfileEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B41DA52B730E0300CB9E7A /* ProfileEditView.swift */; };
-		E3D466DB2B733B5B00DFE93F /* MembershipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D466DA2B733B5B00DFE93F /* MembershipView.swift */; };
+		E3B41DA42B72152200CB9E7A /* (null) in Sources */ = {isa = PBXBuildFile; };
 		E3EECAF02B5F957A00E639F2 /* SourceSerifPro-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = E3EECAEF2B5F957A00E639F2 /* SourceSerifPro-Black.otf */; };
 		E3EECAF22B5F958300E639F2 /* SourceSerifPro-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = E3EECAF12B5F958300E639F2 /* SourceSerifPro-Light.otf */; };
 		E3EECAF52B5FD2E100E639F2 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3EECAF42B5FD2E000E639F2 /* ProfileView.swift */; };
@@ -104,6 +106,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		019035572B7B38080080B370 /* Shop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shop.swift; sourceTree = "<group>"; };
+		019035592B7B38690080B370 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		0E29F0D22B5ED136005B86FB /* MapApiKeys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = MapApiKeys.plist; sourceTree = "<group>"; };
 		0E29F0D72B5FA2FC005B86FB /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		0E29F0DA2B5FDC0F005B86FB /* NaverMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverMap.swift; sourceTree = "<group>"; };
@@ -240,6 +244,7 @@
 		9E0FA11A2B54D27A001CEEB9 /* PJ3T3_Postie */ = {
 			isa = PBXGroup;
 			children = (
+				019035592B7B38690080B370 /* GoogleService-Info.plist */,
 				9E9F6AA42B5761DE003DFE83 /* App */,
 				9E9F6AA32B5761D7003DFE83 /* Components */,
 				9E9F6AA22B5761CD003DFE83 /* Core */,
@@ -272,7 +277,7 @@
 				9E9F6ADB2B57643F003DFE83 /* Letter.swift */,
 				9EA106762B63C5C90033E7A8 /* LetterPhoto.swift */,
 				9E9A8BF02B6B85640072CB75 /* PostieUser.swift */,
-				9E93042C2B745DF1000B7F75 /* Shop.swift */,
+				019035572B7B38080080B370 /* Shop.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -489,7 +494,10 @@
 		E349F8802B6AA98B00253B02 /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
-				CE5FF9242B6CF4A600DDA5BF /* PJ3T3-Postie-Info.plist */,
+				0E9815FB2B6A23B500C9F5BA /* Shop.swift */,
+				E349F87C2B6A1A2400253B02 /* Shop.swift */,
+				E30DED6A2B6DF9D000FA70A6 /* GoogleService-Info.plist */,
+				9E5889E62B730FEC00B4AD20 /* GroupedFavoriteListLetterView.swift */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -637,7 +645,7 @@
 				CE5FF9252B6CF4A600DDA5BF /* PJ3T3-Postie-Info.plist in Resources */,
 				E3EECAF02B5F957A00E639F2 /* SourceSerifPro-Black.otf in Resources */,
 				9E0FA1232B54D27C001CEEB9 /* Preview Assets.xcassets in Resources */,
-				9E25C2C72B7A79E000B04BA1 /* GoogleService-Info.plist in Resources */,
+				0190355A2B7B38690080B370 /* GoogleService-Info.plist in Resources */,
 				9E0FA1202B54D27C001CEEB9 /* Assets.xcassets in Resources */,
 				E3EECAF22B5F958300E639F2 /* SourceSerifPro-Light.otf in Resources */,
 			);
@@ -715,7 +723,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9E078CC02B7207660072E5FC /* AppleUser.swift in Sources */,
+				019035552B7B36340080B370 /* AppleUser.swift in Sources */,
 				0E882AF12B6B907200D8F2FC /* AuthManager.swift in Sources */,
 				E349F8712B6918B500253B02 /* ThemeView.swift in Sources */,
 				CE7E50782B579D6800955F31 /* AddLetterViewModel.swift in Sources */,
@@ -757,6 +765,7 @@
 				9E9A8BF32B6CD8990072CB75 /* NicknameView.swift in Sources */,
 				CEF09E492B57BFBF00BE67E4 /* TextRecognizer.swift in Sources */,
 				E349F8862B6B672E00253B02 /* ListLetterView.swift in Sources */,
+				019035582B7B38080080B370 /* Shop.swift in Sources */,
 				E3EECAF52B5FD2E100E639F2 /* ProfileView.swift in Sources */,
 				9EBAFDC42B70ED900020EE6F /* AppleSignInHelper.swift in Sources */,
 				9E9F6ABE2B576358003DFE83 /* MapViewModel.swift in Sources */,
@@ -772,6 +781,7 @@
 				E349F8882B6B673C00253B02 /* GroupedLetterView.swift in Sources */,
 				9E5889E32B72221B00B4AD20 /* SearchView.swift in Sources */,
 				9E9F6AB82B5762EF003DFE83 /* HomeViewModel.swift in Sources */,
+				E3B41DA42B72152200CB9E7A /* (null) in Sources */,
 				9E9F6ADC2B57643F003DFE83 /* Letter.swift in Sources */,
 				9E9F6AC62B5763A3003DFE83 /* SettingView.swift in Sources */,
 			);
