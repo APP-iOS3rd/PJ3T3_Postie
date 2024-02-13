@@ -152,7 +152,14 @@ class AuthManager: ObservableObject {
     
     
     func deleteAccount() {
-
+        self.userSession?.delete { error in
+            if let error = error {
+                print("DEBUG: Failed to remove account with error \(error.localizedDescription)")
+            } else {
+                self.userSession = nil
+                self.currentUser = nil
+            }
+        }
     }
     
     //google.com, password
