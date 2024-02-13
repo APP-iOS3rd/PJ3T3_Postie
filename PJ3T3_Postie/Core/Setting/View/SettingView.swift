@@ -88,7 +88,7 @@ struct SettingView: View {
                                     case .email:
                                         print("Delete Email account")
                                         showLoading = true
-                                        //                                    LoadingIndicator.showLoading(text: "계정을 삭제하는 중이에요", isThemeGroupButton: .constant(0))
+//                                        LoadingIndicator.showLoading(text: "계정을 삭제하는 중이에요", isThemeGroupButton: .constant(0))
                                     case .google:
                                         print("Delete Google account")
                                     case .apple:
