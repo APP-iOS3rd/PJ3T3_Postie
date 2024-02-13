@@ -67,14 +67,10 @@ struct AddLetterView: View {
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button {
                     Task {
-                        if let letter = letter {
-                            await addLetterViewModel.editLetter(letter: letter, letterPhotos: letterPhotos)
-                        } else {
-                            await addLetterViewModel.addLetter(isReceived: isReceived)
-                        }
-
-                        dismiss()
+                        await addLetterViewModel.updateLetterChanges(letter: letter, letterPhotos: letterPhotos, isReceived: isReceived)
                     }
+
+                    dismiss()
                 } label : {
                     Text("완료")
                 }
@@ -91,7 +87,7 @@ struct AddLetterView: View {
             }
         }
         .toolbar(.hidden, for: .tabBar)
-        .fullScreenCover(isPresented: $addLetterViewModel.showLetterImageFullScreenView) {
+        .fullScreenCover(isPresented: $addLetterViewModel.showingLetterImageFullScreenView) {
             LetterImageFullScreenView(
                 images: addLetterViewModel.images,
                 pageIndex: $addLetterViewModel.selectedIndex
@@ -110,15 +106,14 @@ struct AddLetterView: View {
         } message: {
             Text("문자 인식에 실패했습니다. 다시 시도해 주세요.")
         }
-        .alert("한 줄 요약", isPresented: $addLetterViewModel.showSummaryAlert) {
+        .alert("한 줄 요약", isPresented: $addLetterViewModel.showingSummaryAlert) {
             Button("직접 작성") {
-                // TODO: 함수로 빼기
-                addLetterViewModel.showSummaryTextField = true
+                addLetterViewModel.showSummaryTextField()
             }
 
             Button("AI 완성") {
                 // TODO: 네이버 클로바 API 호출
-                addLetterViewModel.showSummaryTextField = true
+                addLetterViewModel.showSummaryTextField()
             }
         }
         .onAppear {
@@ -209,8 +204,7 @@ extension AddLetterView {
                         ForEach(0..<addLetterViewModel.images.count, id: \.self) { index in
                             ZStack(alignment: .topTrailing) {
                                 Button {
-                                    addLetterViewModel.selectedIndex = index
-                                    addLetterViewModel.showLetterImageFullScreenView = true
+                                    addLetterViewModel.showLetterImageFullScreenView(at: index)
                                 } label: {
                                     Image(uiImage: addLetterViewModel.images[index])
                                         .resizable()
@@ -280,13 +274,13 @@ extension AddLetterView {
                 Spacer()
 
                 Button {
-                    addLetterViewModel.showSummaryAlert = true
+                    addLetterViewModel.showSummaryAlert()
                 } label: {
                     Image(systemName: "plus")
                 }
             }
 
-            if addLetterViewModel.showSummaryTextField || !addLetterViewModel.summary.isEmpty {
+            if addLetterViewModel.showingSummaryTextField || !addLetterViewModel.summary.isEmpty {
                 TextField("", text: $addLetterViewModel.summary)
                     .padding(6)
                     .background(Color(hex: 0xFCFBF7))

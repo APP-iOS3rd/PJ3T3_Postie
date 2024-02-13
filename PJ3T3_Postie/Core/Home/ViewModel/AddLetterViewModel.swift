@@ -16,12 +16,12 @@ final class AddLetterViewModel: ObservableObject {
     @Published var date: Date = .now
     @Published var text: String = ""
     @Published var summary: String = ""
-    @Published var images: [UIImage] = [UIImage(systemName: "photo.fill")!]
+    @Published var images: [UIImage] = []
     @Published var showUIImagePicker = false
-    @Published var showLetterImageFullScreenView: Bool = false
+    @Published var showingLetterImageFullScreenView: Bool = false
     @Published var showTextRecognizerErrorAlert: Bool = false
-    @Published var showSummaryTextField: Bool = false
-    @Published var showSummaryAlert: Bool = false
+    @Published var showingSummaryTextField: Bool = false
+    @Published var showingSummaryAlert: Bool = false
     @Published var selectedIndex: Int = 0
 
     private(set) var imagePickerSourceType: UIImagePickerController.SourceType = .camera
@@ -141,5 +141,26 @@ final class AddLetterViewModel: ObservableObject {
         text = letter.text
         summary = letter.summary
         images = letterPhotos?.map { $0.image } ?? []
+    }
+
+    func updateLetterChanges(letter: Letter?, letterPhotos: [LetterPhoto]?, isReceived: Bool) async  {
+        if let letter = letter {
+            await editLetter(letter: letter, letterPhotos: letterPhotos)
+        } else {
+            await addLetter(isReceived: isReceived)
+        }
+    }
+
+    func showSummaryTextField() {
+        showingSummaryTextField = true
+    }
+
+    func showLetterImageFullScreenView(at index: Int) {
+        selectedIndex = index
+        showingLetterImageFullScreenView = true
+    }
+
+    func showSummaryAlert() {
+        showingSummaryAlert = true
     }
 }
