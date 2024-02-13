@@ -75,7 +75,7 @@ struct PageViewController: UIViewControllerRepresentable {
 }
 
 struct Page: View {
-    let letter: Letter
+    @Binding var letter: Letter
 
     var body: some View {
         ScrollView {
