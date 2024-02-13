@@ -32,23 +32,22 @@ final class AppleSignInHelper: NSObject, ObservableObject {
         switch result {
         case .success(let user):
             guard let appleIDCredential = user.credential as? ASAuthorizationAppleIDCredential else {
-                print("Credential 23")
+                print(#function, "Unable to retrieve AppleIDCredential")
                 return
             }
             
             guard let appleIDToken = appleIDCredential.identityToken else {
-                print("Error with token 27")
+                print(#function, "Unable to fetch identity token")
                 return
             }
             
             guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
-                print("Error with tokenstring 31")
-                print("Unable to serialize token string from data: \(appleIDToken.debugDescription)")
+                print(#function, "Unable to serialize token string from data: \(appleIDToken.debugDescription)")
                 return
             }
             
             guard let fullName = appleIDCredential.fullName else {
-                print("Unalbe to get PersonNameComponents: \(appleIDToken.debugDescription)")
+                print(#function, "Unalbe to get PersonNameComponents: \(appleIDToken.debugDescription)")
                 return
             }
             
