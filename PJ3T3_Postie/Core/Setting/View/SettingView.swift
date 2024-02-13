@@ -74,17 +74,32 @@ struct SettingView: View {
                             SettingsRowView(imageName: "arrow.left.circle.fill", title: "Sign Out", tintColor: signOutIconColor)
                         }
                         
-                        Button {
-                            print("Delete account")
-                        } label: {
-                            SettingsRowView(imageName: "xmark.circle.fill", title: "Delete Account", tintColor: signOutIconColor)
-                        }
-                        
-                        Button {
-                            print("Delete Apple account")
-                            appleSignInHelper.deleteCurrentAppleUser()
-                        } label: {
-                            SettingsRowView(imageName: "xmark.circle.fill", title: "Delete Apple Account", tintColor: signOutIconColor)
+                        switch authManager.provider {
+                        case .email:
+                            Button {
+                                print("Delete account")
+                            } label: {
+                                SettingsRowView(imageName: "xmark.circle.fill", title: "Delete Account", tintColor: signOutIconColor)
+                            }
+                        case .google:
+                            Button {
+                                print("Delete Google account")
+                            } label: {
+                                SettingsRowView(imageName: "xmark.circle.fill", title: "Delete Google Account", tintColor: signOutIconColor)
+                            }
+                        case .apple:
+                            Button {
+                                print("Delete Apple account")
+                                appleSignInHelper.deleteCurrentAppleUser()
+                            } label: {
+                                SettingsRowView(imageName: "xmark.circle.fill", title: "Delete Apple Account", tintColor: signOutIconColor)
+                            }
+                        default:
+                            Button {
+                                print("Delete account")
+                            } label: {
+                                SettingsRowView(imageName: "xmark.circle.fill", title: "Delete Account", tintColor: signOutIconColor)
+                            }
                         }
                     }
                     
