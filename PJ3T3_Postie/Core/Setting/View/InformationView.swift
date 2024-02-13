@@ -20,34 +20,37 @@ struct InformationView: View {
             ScrollView {
                 HStack {
                     Text("버전정보")
+                        .foregroundStyle(postieColors.tabBarTintColor)
                     
                     Spacer()
                     
                     Text("1.0.0")
+                        .foregroundStyle(postieColors.dividerColor)
                 }
-                .foregroundStyle(postieColors.dividerColor)
                 
                 DividerView(isThemeGroupButton: $isThemeGroupButton)
                 
                 HStack {
                     Text("이용약관")
+                        .foregroundStyle(postieColors.tabBarTintColor)
                     
                     Spacer()
                     
                     Image(systemName: "chevron.right")
+                        .foregroundStyle(postieColors.dividerColor)
                 }
-                .foregroundStyle(postieColors.dividerColor)
                 
                 DividerView(isThemeGroupButton: $isThemeGroupButton)
                 
                 HStack {
                     Text("개인정보 처리방침")
+                        .foregroundStyle(postieColors.tabBarTintColor)
                     
                     Spacer()
                     
                     Image(systemName: "chevron.right")
+                        .foregroundStyle(postieColors.dividerColor)
                 }
-                .foregroundStyle(postieColors.dividerColor)
             }
             .padding()
         }

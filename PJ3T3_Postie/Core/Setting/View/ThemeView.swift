@@ -97,40 +97,79 @@ struct ThemeView: View {
                         Spacer()
                         
                         if selectedThemeButton {
-                            Button(action: {
-                                selectedLayoutMode = (selectedLayoutMode + 1) % 3
-                            }) {
-                                if selectedLayoutMode == 0 {
-                                    Image(systemName: "square.split.2x1")
-                                    
-                                    Text("스플릿")
-                                        .font(.subheadline)
-                                } else if selectedLayoutMode == 1 {
-                                    Image(systemName: "square.grid.2x2")
-                                    
-                                    Text("그리드")
-                                        .font(.subheadline)
-                                } else {
-                                    Image(systemName: "list.bullet")
-                                    
-                                    Text("리스트")
-                                        .font(.subheadline)
+                            Menu {
+                                Button(action: {
+                                    selectedLayoutMode = 0
+                                }) {
+                                    HStack {
+                                        Text("스플릿")
+                                        
+                                        Image(systemName: selectedLayoutMode == 0 ? "checkmark" : "")
+                                    }
+                                }
+                                
+                                Button(action: {
+                                    selectedLayoutMode = 1
+                                }) {
+                                    HStack {
+                                        Text("그리드")
+                                        
+                                        Image(systemName: selectedLayoutMode == 1 ? "checkmark" : "")
+                                    }
+                                }
+                                
+                                Button(action: {
+                                    selectedLayoutMode = 2
+                                }) {
+                                    HStack {
+                                        Text("리스트")
+                                        
+                                        Image(systemName: selectedLayoutMode == 2 ? "checkmark" : "")
+                                    }
+                                }
+                            } label: {
+                                Label {
+                                    Image(systemName: "chevron.down")
+                                } icon: {
+                                    switch selectedLayoutMode {
+                                        
+                                    case 0:
+                                        Image(systemName: "square.split.2x1")
+                                        
+                                    case 1:
+                                        Image(systemName: "square.grid.2x2")
+                                        
+                                    default:
+                                        Image(systemName: "list.bullet")
+                                    }
                                 }
                             }
                         } else {
-                            Button(action: {
-                                isSplitLayout.toggle()
-                            }) {
-                                if isSplitLayout {
-                                    Image(systemName: "square.split.2x1")
-                                    
-                                    Text("스플릿")
-                                        .font(.subheadline)
-                                } else {
-                                    Image(systemName: "list.bullet")
-                                    
-                                    Text("리스트")
-                                        .font(.subheadline)
+                            Menu {
+                                Button(action: {
+                                    isSplitLayout = true
+                                }) {
+                                    HStack {
+                                        Text("스플릿")
+                                        
+                                        Image(systemName: isSplitLayout ? "checkmark" : "")
+                                    }
+                                }
+                                
+                                Button(action: {
+                                    isSplitLayout = false
+                                }) {
+                                    HStack {
+                                        Text("리스트")
+                                        
+                                        Image(systemName: !isSplitLayout ? "checkmark" : "")
+                                    }
+                                }
+                            } label: {
+                                Label {
+                                    Image(systemName: "chevron.down")
+                                } icon: {
+                                    Image(systemName: isSplitLayout ? "square.split.2x1" : "list.bullet")
                                 }
                             }
                         }
@@ -327,7 +366,7 @@ struct ThemeView: View {
                                 }
                                 .padding()
                             }
-                        
+                            
                         }
                     }
                 }
@@ -337,14 +376,6 @@ struct ThemeView: View {
                     Text("테마 설정")
                         .bold()
                         .foregroundStyle(postieColors.tintColor)
-                }
-                
-                ToolbarItemGroup(placement: .topBarTrailing) {
-                    Button(action: {
-                        dismiss()
-                    }) {
-                        Text("완료")
-                    }
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
