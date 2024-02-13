@@ -16,6 +16,7 @@ protocol AuthenticationProtocol {
 enum AuthProviderOption: String {
     case email = "password"
     case google = "google.com"
+    case apple = "apple.com"
 }
 
 class AuthManager: ObservableObject {
@@ -24,6 +25,7 @@ class AuthManager: ObservableObject {
     var hasAccount: Bool = true
     var authDataResult: AuthDataResult?
     var credential: OAuthCredential?
+    var provider: AuthProviderOption?
     @Published var userSession: FirebaseAuth.User? //Firebase user object
     @Published var currentUser: PostieUser? //User Data Model
     
@@ -112,6 +114,7 @@ class AuthManager: ObservableObject {
             }
         }
         
+        self.getProviders()
         FirestoreManager.shared.fetchReference()
         StorageManager.shared.fetchReference()
     }
@@ -162,23 +165,20 @@ class AuthManager: ObservableObject {
         }
     }
     
-    //google.com, password
-    func getProviders() throws -> [AuthProviderOption] {
+    func getProviders() {
         guard let providerData = Auth.auth().currentUser?.providerData else {
-            throw URLError(.badServerResponse)
+            print(#function, "Failed to get provider")
+            return
         }
         
-        var providers: [AuthProviderOption] = []
         for provider in providerData {
             if let option = AuthProviderOption(rawValue: provider.providerID) {
-                providers.append(option)
+                self.provider = option
             } else {
-//                fatalError() //앱이 종료되므로 사용하지 않기를 권장한다.
-                assertionFailure("Provider option not found: \(provider.providerID)") //fatalError, preconditionFailure와의 차이점은?
+                //fatalError()는 앱이 종료되므로 사용하지 않기를 권장한다. fatalError, preconditionFailure와의 차이점은?
+                assertionFailure("Provider option not found: \(provider.providerID)")
             }
         }
-        
-        return providers
     }
 }
 
