@@ -9,10 +9,8 @@ import AuthenticationServices
 import CryptoKit
 
 final class AppleSignInHelper: NSObject, ObservableObject {
-    static let shared = AppleSignInHelper()
     private var nonce = ""
     
-    private override init() { }
     
     func signInWithAppleRequest(_ request: ASAuthorizationOpenIDRequest) {
         nonce = randomNonceString()
