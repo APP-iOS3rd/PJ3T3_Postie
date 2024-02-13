@@ -9,7 +9,6 @@ import Foundation
 import SwiftUI
 import UIKit
 
-
 final class AddLetterViewModel: ObservableObject {
     @Published var sender: String = ""
     @Published var receiver: String = ""
@@ -25,6 +24,15 @@ final class AddLetterViewModel: ObservableObject {
     @Published var selectedIndex: Int = 0
 
     private(set) var imagePickerSourceType: UIImagePickerController.SourceType = .camera
+    let isReceived: Bool
+    var letter: Letter?
+    var letterPhotos: [LetterPhoto]?
+
+    init(isReceived: Bool, letter: Letter?, letterPhotos: [LetterPhoto]?) {
+        self.isReceived = isReceived
+        self.letter = letter
+        self.letterPhotos = letterPhotos
+    }
 
     func removeImage(at index: Int) {
         images.remove(at: index)
@@ -37,13 +45,12 @@ final class AddLetterViewModel: ObservableObject {
     }
 
     /// 이미 작성된 편지를 수정합니다.
-    /// - Parameter letter: 작성된 편지
     ///
     /// 1. Firestore에 저장된 편지 데이터를 수정
     /// 2. Firestorage에 저장된 편지 이미지를 수정 후 불러와 데이터 상태 업데이트
     /// 3. FirestoreManager의 @Published letter 변수 업데이트 ( AddView, DetailView 연동을 위해서 )
     /// 4. `firestoreManager.fetchAllLetters()`을 홈뷰, 디테일뷰 데이터 상태 업데이트
-    func editLetter(letter: Letter, letterPhotos: [LetterPhoto]?) async {
+    func editLetter(letter: Letter) async {
         FirestoreManager.shared.editLetter(
             documentId: letter.id,
             writer: sender,
@@ -102,7 +109,7 @@ final class AddLetterViewModel: ObservableObject {
     /// 1. Firestore에 편지 추가
     /// 2. 편지 이미지 값이 존재하면 Firestorage에 이미지 추가
     /// 3. 모든 편지 불러와서 상태 업데이트
-    func addLetter(isReceived: Bool) async {
+    func addLetter() async {
         await FirestoreManager.shared.addLetter(
             writer: isReceived ? sender : AuthManager.shared.currentUser?.fullName ?? "유저",
             recipient: isReceived ? AuthManager.shared.currentUser?.fullName ?? "유저" : receiver,
@@ -128,7 +135,7 @@ final class AddLetterViewModel: ObservableObject {
         FirestoreManager.shared.fetchAllLetters()
     }
     
-    func updateLetterInfoFromLetter(_ letter: Letter?, isReceived: Bool, letterPhotos: [LetterPhoto]?) {
+    func updateLetterInfoFromLetter() {
         guard let letter = letter else { return }
 
         if isReceived {
@@ -143,11 +150,11 @@ final class AddLetterViewModel: ObservableObject {
         images = letterPhotos?.map { $0.image } ?? []
     }
 
-    func updateLetterChanges(letter: Letter?, letterPhotos: [LetterPhoto]?, isReceived: Bool) async  {
+    func saveLetterChanges() async {
         if let letter = letter {
-            await editLetter(letter: letter, letterPhotos: letterPhotos)
+            await editLetter(letter: letter)
         } else {
-            await addLetter(isReceived: isReceived)
+            await addLetter()
         }
     }
 

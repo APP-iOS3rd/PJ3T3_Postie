@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AddLetterView: View {
-    @StateObject private var addLetterViewModel = AddLetterViewModel()
+    @StateObject private var addLetterViewModel: AddLetterViewModel
     @ObservedObject var firestoreManager = FirestoreManager.shared
     @ObservedObject var storageManager = StorageManager.shared
 
@@ -18,17 +18,14 @@ struct AddLetterView: View {
         case text
     }
 
-    var isReceived: Bool
-    var letter: Letter?
-    var letterPhotos: [LetterPhoto]?
-
     @FocusState private var focusField: Field?
     @Environment(\.dismiss) var dismiss
-
-    init(isReceived: Bool, letter: Letter? = nil, letterPhotos: [LetterPhoto]? = nil) {
-        self.isReceived = isReceived
-        self.letter = letter
-        self.letterPhotos = letterPhotos
+    
+    /// 편지를 추가할 때 사용할 이니셜라이저
+    /// - Parameters:
+    ///   - isReceived: 받은 편지면 True, 보낸 편지면 False
+    init(isReceived: Bool) {
+        _addLetterViewModel = StateObject(wrappedValue: AddLetterViewModel(isReceived: isReceived, letter: nil, letterPhotos: nil))
 
         // TextEditor 패딩
         UITextView.appearance().textContainerInset = UIEdgeInsets(
@@ -39,6 +36,14 @@ struct AddLetterView: View {
         )
     }
     
+    /// 편지를 수정할 때 사용할 이니셜라이저
+    /// - Parameters:
+    ///   - letter: 수정하고 싶은 편지
+    ///   - letterPhotos: 수정하고 싶은 편지의 이미지
+    init(letter: Letter, letterPhotos: [LetterPhoto]?) {
+        _addLetterViewModel = StateObject(wrappedValue: AddLetterViewModel(isReceived: letter.isReceived, letter: letter, letterPhotos: letterPhotos))
+    }
+
     var body: some View {
         ZStack {
             Color(hex: 0xF5F1E8)
@@ -59,7 +64,7 @@ struct AddLetterView: View {
         .toolbarBackground(Color(hex: 0xF5F1E8), for: .navigationBar)
         .toolbar {
             ToolbarItemGroup(placement: .principal) {
-                Text(isReceived ? "받은 편지 기록" : "보낸 편지 기록")
+                Text(addLetterViewModel.isReceived ? "받은 편지 기록" : "보낸 편지 기록")
                     .bold()
                     .foregroundStyle(Color(hex: 0xFF5733))
             }
@@ -67,7 +72,7 @@ struct AddLetterView: View {
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button {
                     Task {
-                        await addLetterViewModel.updateLetterChanges(letter: letter, letterPhotos: letterPhotos, isReceived: isReceived)
+                        await addLetterViewModel.saveLetterChanges()
                     }
 
                     dismiss()
@@ -117,7 +122,7 @@ struct AddLetterView: View {
             }
         }
         .onAppear {
-            addLetterViewModel.updateLetterInfoFromLetter(letter, isReceived: isReceived, letterPhotos: letterPhotos)
+            addLetterViewModel.updateLetterInfoFromLetter()
         }
     }
 }
@@ -129,10 +134,10 @@ extension AddLetterView {
     private var letterInfoSection: some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
-                Text(isReceived ? "보낸 사람" : "받는 사람")
+                Text(addLetterViewModel.isReceived ? "보낸 사람" : "받는 사람")
 
                 TextField("",
-                          text: isReceived ?
+                          text: addLetterViewModel.isReceived ?
                           $addLetterViewModel.sender : $addLetterViewModel.receiver)
                 .padding(6)
                 .background(Color(hex: 0xFCFBF7))
@@ -142,7 +147,7 @@ extension AddLetterView {
             .frame(maxWidth: .infinity)
 
             VStack(alignment: .leading, spacing: 4) {
-                Text(isReceived ? "받은 날짜" : "보낸 날짜")
+                Text(addLetterViewModel.isReceived ? "받은 날짜" : "보낸 날짜")
 
                 DatePicker(
                     "",
