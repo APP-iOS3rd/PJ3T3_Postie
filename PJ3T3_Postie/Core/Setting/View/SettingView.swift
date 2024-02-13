@@ -101,6 +101,7 @@ struct SettingView: View {
                                         appleSignInHelper.deleteCurrentAppleUser()
                                     default:
                                         print("Delete account")
+                                        //alert 창 구현
                                     }
                                 }
                             } message: {
