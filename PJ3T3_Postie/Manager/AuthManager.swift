@@ -153,7 +153,6 @@ class AuthManager: ObservableObject {
         }
     }
     
-    
     func deleteAccount() {
         self.userSession?.delete { error in
             if let error = error {
@@ -197,6 +196,16 @@ extension AuthManager {
         let tokens = try await helper.googleHelperSingIn()
         
         return GoogleAuthProvider.credential(withIDToken: tokens.idToken, accessToken: tokens.accessToken)
+    }
+    
+    func deleteGoogleAccount() async {
+        do {
+            let credential = try await signInWithGoogle()
+            try await self.userSession?.reauthenticate(with: credential)
+            self.deleteAccount()
+        } catch {
+            print(#function, "Failed to delete Google account: \(error)")
+        }
     }
     
     func signInwithApple(user: AppleUser) {
