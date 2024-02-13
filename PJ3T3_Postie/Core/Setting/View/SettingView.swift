@@ -16,104 +16,113 @@ struct SettingView: View {
     private let profileBackgroundColor: Color = .gray
     private let signOutIconColor: Color = Color(uiColor: .lightGray)
     @State private var isDeleteAccountDialogPresented = false
+    @State private var showLoading = false
     
     var body: some View {
         NavigationStack {
-            if let user = authManager.currentUser {
-                List {
-                    Section {
-                        HStack {
-                            if let profileImageUrl = user.profileImageUrl {
-                                AsyncImage(url: URL(string: profileImageUrl), content: { image in
-                                    image
-                                        .resizable()
-                                        .frame(width: 72, height: 72)
-                                }, placeholder: {
-                                    ZStack {
-                                        Circle()
-                                            .foregroundStyle(.postieGray)
+            ZStack {
+                if let user = authManager.currentUser {
+                    List {
+                        Section {
+                            HStack {
+                                if let profileImageUrl = user.profileImageUrl {
+                                    AsyncImage(url: URL(string: profileImageUrl), content: { image in
+                                        image
+                                            .resizable()
                                             .frame(width: 72, height: 72)
-                                        
-                                        ProgressView()
-                                    }
-                                })
-                            } else {
-                                Circle()
-                                    .foregroundStyle(.postieGray)
-                                    .frame(width: 72, height: 72)
-                            }
-                            
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(user.fullName)
-                                    .font(.subheadline)
-                                    .fontWeight(.semibold)
-                                    .padding(.top, 4)
+                                    }, placeholder: {
+                                        ZStack {
+                                            Circle()
+                                                .foregroundStyle(.postieGray)
+                                                .frame(width: 72, height: 72)
+                                            
+                                            ProgressView()
+                                        }
+                                    })
+                                } else {
+                                    Circle()
+                                        .foregroundStyle(.postieGray)
+                                        .frame(width: 72, height: 72)
+                                }
                                 
-                                Text(user.email)
-                                    .font(.footnote)
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(user.fullName)
+                                        .font(.subheadline)
+                                        .fontWeight(.semibold)
+                                        .padding(.top, 4)
+                                    
+                                    Text(user.email)
+                                        .font(.footnote)
+                                        .foregroundStyle(profileBackgroundColor)
+                                }
+                            }
+                        }
+                        
+                        Section("General") {
+                            HStack {
+                                SettingsRowView(imageName: "gear", title: "Version", tintColor: profileBackgroundColor)
+                                
+                                Spacer()
+                                
+                                Text("1.0.0")
+                                    .font(.subheadline)
                                     .foregroundStyle(profileBackgroundColor)
                             }
                         }
-                    }
-                    
-                    Section("General") {
-                        HStack {
-                            SettingsRowView(imageName: "gear", title: "Version", tintColor: profileBackgroundColor)
+                        
+                        Section("Account") {
+                            Button {
+                                authManager.signOut()
+                            } label: {
+                                SettingsRowView(imageName: "arrow.left.circle.fill", title: "Sign Out", tintColor: signOutIconColor)
+                            }
                             
-                            Spacer()
+                            Button {
+                                isDeleteAccountDialogPresented = true
+                            } label: {
+                                SettingsRowView(imageName: "xmark.circle.fill", title: "Delete Account", tintColor: signOutIconColor)
+                            }
+                            .confirmationDialog("포스티를 떠나시나요?", isPresented: $isDeleteAccountDialogPresented, titleVisibility: .visible) {
+                                Button("계정 삭제", role: .destructive) {
+                                    switch authManager.provider {
+                                    case .email:
+                                        print("Delete Email account")
+                                        showLoading = true
+                                        //                                    LoadingIndicator.showLoading(text: "계정을 삭제하는 중이에요", isThemeGroupButton: .constant(0))
+                                    case .google:
+                                        print("Delete Google account")
+                                    case .apple:
+                                        print("Delete Apple account")
+                                        appleSignInHelper.deleteCurrentAppleUser()
+                                    default:
+                                        print("Delete account")
+                                    }
+                                }
+                            } message: {
+                                Text("회원 탈퇴시 계정 및 프로필 정보, 등록된 모든 편지와 편지 이미지가 삭제됩니다.")
+                            }
                             
-                            Text("1.0.0")
-                                .font(.subheadline)
-                                .foregroundStyle(profileBackgroundColor)
-                        }
-                    }
-                    
-                    Section("Account") {
-                        Button {
-                            authManager.signOut()
-                        } label: {
-                            SettingsRowView(imageName: "arrow.left.circle.fill", title: "Sign Out", tintColor: signOutIconColor)
                         }
                         
-                        Button {
-                            isDeleteAccountDialogPresented = true
-                        } label: {
-                            SettingsRowView(imageName: "xmark.circle.fill", title: "Delete Account", tintColor: signOutIconColor)
-                        }
-                        .confirmationDialog("포스티를 떠나시나요?", isPresented: $isDeleteAccountDialogPresented, titleVisibility: .visible) {
-                            Button("계정 삭제", role: .destructive) {
-                                switch authManager.provider {
-                                case .email:
-                                    print("Delete Email account")
-                                case .google:
-                                    print("Delete Google account")
-                                case .apple:
-                                    print("Delete Apple account")
-                                    appleSignInHelper.deleteCurrentAppleUser()
-                                default:
-                                    print("Delete account")
-                                }
-                            }
-                        } message: {
-                            Text("회원 탈퇴시 계정 및 프로필 정보, 등록된 모든 편지와 편지 이미지가 삭제됩니다.")
-                        }
-
+                        AddDataSectionView()
+                        
+                        LetterDataListView()
+                        
+                        ShopListView()
+                        
                     }
-                    
-                    AddDataSectionView()
-                    
-                    LetterDataListView()
-                    
-                    ShopListView()
-                    
+                    .navigationTitle("Setting")
+                } else {
+                    ProgressView() //로그인 중
                 }
-                .navigationTitle("Setting")
-            } else {
-                ProgressView() //로그인 중
+                
+                if showLoading {
+                    TestLoadingVIew(text: "계정을 삭제하는 중이에요", isThemeGroupButton: .constant(0))
+                }
             }
-        }
-        .onAppear {
-            appleSignInHelper.window = window
+            .onAppear {
+                appleSignInHelper.window = window
+            }
         }
     }
 }
