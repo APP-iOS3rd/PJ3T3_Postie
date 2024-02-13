@@ -21,6 +21,8 @@ struct MapView: View {
     
     //    @State private var selectedPostDivType: Int = 1 //Dafault 우체국(1)
     @State private var selectedButtonIndex: Int = 0
+    @State private var postLatitude: Double = 37.56
+    @State private var postLongitude: Double = 126.98
     @State var coord: MyCoord = MyCoord(37.579081, 126.974375) //Dafult값 (서울역)
     
     var body: some View {
@@ -30,7 +32,7 @@ struct MapView: View {
                     ForEach(0...1, id: \.self) { index in
                         Button(action: {
                             selectedButtonIndex = index
-                            officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1)
+//                            officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)
                         }) {
                             ZStack {
                                 if selectedButtonIndex == index {
@@ -68,11 +70,30 @@ struct MapView: View {
             
             NaverMap(coord: coord)
                 .ignoresSafeArea(.all, edges: .top)
+            
+            Button("현재 위치에서 \(name[selectedButtonIndex])찾기") {
+                //현재 coord( 카메라 위치) 불러오기
+                //값을 불러 오기
+                print("버튼 눌림 \(coordinator.cameraLocation)")
+                coord = MyCoord(coordinator.cameraLocation?.lat ?? 37.579081, coordinator.cameraLocation?.lng ?? 126.974375 )
+                
+                officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)
+                
+//                coordinator.removeAllMakers()
+//                
+//                for result in officeInfoServiceAPI.infos {
+//                    coordinator.addMarkerAndInfoWindow(latitude: Double(result.postLat)!, longitude: Double(result.postLon)!, caption: result.postNm)
+//                }
+                
+                print("불러옵니다\(coord)")
+            }
+            
+            Spacer()
         }
         .onAppear() {
             CLLocationManager().requestWhenInUseAuthorization()
             
-            officeInfoServiceAPI.fetchData(postDivType: 1)
+            officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)
             
             locationManager.startUpdatingLocation()
         }
@@ -83,22 +104,15 @@ struct MapView: View {
                 coordinator.addMarkerAndInfoWindow(latitude: Double(result.postLat)!, longitude: Double(result.postLon)!, caption: result.postNm)
             }
         }
+        //초기 화면이 열리 때 위치값을 불러온다. 
         .onChange(of: locationManager.location) { newLocation in
             if let location = newLocation {
                 coord = MyCoord(location.coordinate.latitude, location.coordinate.longitude)
                 
                 print("현재위치: \(coord)")
+                locationManager.stopUpdatingLocation()
             }
         }
-        
-        // 카메라 위치 바뀌면 그 값에 따라 좌표 실시간으로 바꾸기 구현 예정
-        //        .onChange(of: locationManager.isUpdatingLocation) { locations in
-        //            if locations {
-        //                locationManager.startUpdatingLocation()
-        //            } else {
-        //                locationManager.stopUpdatingLocation()
-        //            }
-        //        }
         .onDisappear {
             locationManager.stopUpdatingLocation()
         }
