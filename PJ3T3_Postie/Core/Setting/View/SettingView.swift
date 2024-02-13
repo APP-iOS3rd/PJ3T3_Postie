@@ -9,7 +9,9 @@ import SwiftUI
 import PhotosUI //Storage test를 위한 import로 이후 삭제 예정
 
 struct SettingView: View {
+    @Environment(\.window) var window: UIWindow?
     @ObservedObject var authManager = AuthManager.shared
+    @ObservedObject var appleSignInHelper = AppleSignInHelper.shared
     //Colors
     private let profileBackgroundColor: Color = .gray
     private let signOutIconColor: Color = Color(uiColor: .lightGray)
@@ -77,6 +79,13 @@ struct SettingView: View {
                         } label: {
                             SettingsRowView(imageName: "xmark.circle.fill", title: "Delete Account", tintColor: signOutIconColor)
                         }
+                        
+                        Button {
+                            print("Delete Apple account")
+                            appleSignInHelper.deleteCurrentAppleUser()
+                        } label: {
+                            SettingsRowView(imageName: "xmark.circle.fill", title: "Delete Apple Account", tintColor: signOutIconColor)
+                        }
                     }
                     
                     AddDataSectionView()
@@ -90,6 +99,9 @@ struct SettingView: View {
             } else {
                 ProgressView() //로그인 중
             }
+        }
+        .onAppear {
+            appleSignInHelper.window = window
         }
     }
 }
