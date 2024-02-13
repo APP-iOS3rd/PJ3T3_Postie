@@ -30,6 +30,7 @@ struct ShopView: View {
     @State private var safariURL: String?
     @State private var selectedButtonIndex: Int = 0
     @State private var showDetails = false
+    @State private var randomHeight: CGFloat = 200
     
     var body: some View {
         NavigationStack {
@@ -39,6 +40,7 @@ struct ShopView: View {
                     HStack(spacing: 10) {
                         ForEach(0...4, id: \.self) { index in
                             Button(action: {
+                                randomHeight = CGFloat.random(in: 150...300)
                                 selectedButtonIndex = index
                             }) {
                                 ZStack {
@@ -83,8 +85,10 @@ struct ShopView: View {
                                 Image(character)
                                     .resizable()
                                     .scaledToFit() //이미지 비율 조정
-                                    .frame(width: 157, height: 180)
-                                    .padding()
+                                    .frame(width: 157, height: randomHeight)
+                                    .padding(.bottom)
+                                    .padding(.top)
+                                    .background(.red)
                             }
                             .sheet(item: $safariURL) { url in
                                 if let url = URL(string: url) {
