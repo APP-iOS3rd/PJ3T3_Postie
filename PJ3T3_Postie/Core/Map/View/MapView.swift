@@ -88,29 +88,30 @@ struct MapView: View {
                     }
                     .padding()
                     
-                    ZStack(alignment: .leading){
-                        NaverMap(coord: coord)
-                            .ignoresSafeArea(.all, edges: .top)
-                        VStack {
-                            HStack {
-                                Spacer()
-                                
-                                Button("현재 위치에서 \(name[selectedButtonIndex])찾기") {
-                                    //현재 coord( 카메라 위치) 불러오기
-                                    //값을 불러 오기
-                                    print("버튼 눌림 \(coordinator.cameraLocation)")
-                                    
-                                    coord = MyCoord(coordinator.cameraLocation?.lat ?? 37.579081, coordinator.cameraLocation?.lng ?? 126.974375 )
-                                    
-                                    officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)
-                                    
-                                    print("불러옵니다\(coord)")
-                                }
-                                
-                                Spacer()
-                            }
-                        }
-                    }
+//                    ZStack(alignment: .leading){
+//                        NaverMap(coord: coord)
+//                            .ignoresSafeArea(.all, edges: .top)
+//                        VStack {
+//                            HStack {
+//                                Spacer()
+//                                
+//
+//                                Button("현재 위치에서 \(name[selectedButtonIndex])찾기") {
+//                                    //현재 coord( 카메라 위치) 불러오기
+//                                    //값을 불러 오기
+//                                    print("버튼 눌림 \(coordinator.cameraLocation)")
+//                                    
+//                                    coord = MyCoord(coordinator.cameraLocation?.lat ?? 37.579081, coordinator.cameraLocation?.lng ?? 126.974375 )
+//                                    
+//                                    officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)
+//                                    
+//                                    print("불러옵니다\(coord)")
+//                                }
+//                                
+//                                Spacer()
+//                            }
+//                        }
+//                    }
                     
            ZStack(alignment: .top) {
                     NaverMap(coord: coord)
@@ -118,26 +119,34 @@ struct MapView: View {
 //                   .edgesIgnoringSafeArea(.all, edges:)
                     
                     VStack {
-                        Spacer()
                         
                         Button(action: {
                             print("현재 위치에서 \(name[selectedButtonIndex]) 찾기 버튼 눌림")
-                            // 여기에 버튼 클릭 시 실행할 코드 추가
+                            coord = MyCoord(coordinator.cameraLocation?.lat ?? 37.579081, coordinator.cameraLocation?.lng ?? 126.974375 )
+                            
+                            officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)
                         }) {
-                            Text("현재 위치에서 \(name[selectedButtonIndex]) 찾기")
-                                .padding()
-                                .foregroundColor(.white)
-                                .background(Color.blue)
-                                .cornerRadius(10)
+                            //goforward. arrow.clockwise
+//                            Text("현재 위치에서 \(name[selectedButtonIndex]) 찾기")
+                            HStack {
+                                Image(systemName: "arrow.clockwise")
+                                    .frame(height: 20)
+                                Text("현 지도에서 검색")
+                                    .font(Font.custom("SF Pro Text", size: 12))
+                            }
+                            .padding()
+                            .foregroundColor(.blue)
+                            .background(Color.white)
+                            .cornerRadius(16)
+                            .frame(width: 200, height: 20)
+//                            .frame(width: 200)
                         }
-                        .padding(.horizontal)
-                        .padding(.bottom, 20)
+                        
+                        Spacer()
                     }
                 }
                     
-                    
-                    
-                    
+                
                 }
                 Spacer()
             }
