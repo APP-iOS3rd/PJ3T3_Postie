@@ -460,13 +460,14 @@
 		9E9F6AB42B5762C8003DFE83 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				E3D466DA2B733B5B00DFE93F /* MembershipView.swift */,
 				E3EECAF42B5FD2E000E639F2 /* ProfileView.swift */,
 				E3B41DA52B730E0300CB9E7A /* ProfileEditView.swift */,
 				9E9F6AD12B5763F3003DFE83 /* SettingsRowView.swift */,
 				9E9F6AC52B5763A3003DFE83 /* SettingView.swift */,
-				E349F8702B6918B500253B02 /* ThemeView.swift */,
 				E30DED6E2B6FD25B00FA70A6 /* SplashScreenView.swift */,
-				E3D466DA2B733B5B00DFE93F /* MembershipView.swift */,
+				9E46837B2B7BBBA100EFB90B /* TestLoadingView.swift */,
+				E349F8702B6918B500253B02 /* ThemeView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -493,7 +494,6 @@
 				9E9F6AD72B57642D003DFE83 /* FirestoreManager.swift */,
 				9E9A8BE82B6B704E0072CB75 /* GoogleSignInHelper.swift */,
 				9E7F8C772B5E69B000F1A6BF /* StorageManager.swift */,
-				9E46837B2B7BBBA100EFB90B /* TestLoadingView.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
