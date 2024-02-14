@@ -22,6 +22,22 @@ struct GroupedFavoriteListLetterView: View {
             postieColors.backGroundColor
                 .ignoresSafeArea()
             
+            if firestoreManager.letters.isEmpty {
+                VStack {
+                    Image("postyHeartSketch")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 300)
+                        .opacity(0.5)
+                    
+                    Text("\n좋아하는 편지가 없어요 ㅠ.ㅠ 저장한 편지에서 하트를 눌러보세요!")
+                        .font(.callout)
+                        .foregroundStyle(postieColors.dividerColor)
+                }
+                .offset(x: -20, y: -150)
+                .padding()
+            }
+                
             ScrollView {
                 ForEach(favoriteLetters, id: \.self) { letter in
                     NavigationLink {
