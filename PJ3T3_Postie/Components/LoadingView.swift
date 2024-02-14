@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TestLoadingView: View {
+struct LoadingView: View {
     @ObservedObject private var counter = Counter(interval: 1)
     let images: [Image] = [Image("postyReceiving"), Image("postyReceivingBeige"), Image("postyReceivingOrange")]
     var text: String
@@ -41,7 +41,7 @@ struct TestLoadingView: View {
 }
 
 #Preview {
-    TestLoadingView(text: "프리뷰", isThemeGroupButton: .constant(0))
+    LoadingView(text: "프리뷰", isThemeGroupButton: .constant(0))
 }
 
 private class Counter: ObservableObject {
