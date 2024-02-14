@@ -13,12 +13,6 @@ protocol AuthenticationProtocol {
     var formIsValid: Bool { get }
 }
 
-enum AuthProviderOption: String {
-    case email = "password"
-    case google = "google.com"
-    case apple = "apple.com"
-}
-
 class AuthManager: ObservableObject {
     static let shared = AuthManager()
     var userUid: String  = ""
@@ -205,9 +199,17 @@ extension AuthManager {
     }
     
     func deleteGoogleAccount() async throws {
+        do {
             let credential = try await signInWithGoogle()
             try await self.userSession?.reauthenticate(with: credential)
             self.deleteAccount()
+        } catch let error as NSError {
+            if error.code == GIDSignInErrorCode.canceled.rawValue {
+                throw GIDSignInErrorCode.canceled
+            } else {
+                print(#function, "Failed to delete Google account: \(error)")
+            }
+        }
     }
     
     func signInwithApple(user: AppleUser) {
