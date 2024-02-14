@@ -220,11 +220,9 @@ extension AuthManager {
     }
     
     func signInwithApple(user: AppleUser) {
-        DispatchQueue.main.async {
-            self.credential = OAuthProvider.appleCredential(withIDToken: user.token,
-                                                            rawNonce: user.nonce,
-                                                            fullName: user.fullName)
-        }
+        self.credential = OAuthProvider.appleCredential(withIDToken: user.token,
+                                                        rawNonce: user.nonce,
+                                                        fullName: user.fullName)
     }
     
     func deleteAppleAccount(authCodeString: String) async {
