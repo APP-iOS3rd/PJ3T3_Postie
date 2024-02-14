@@ -92,9 +92,30 @@ class FirestoreManager: ObservableObject {
         
         docRef.delete() { error in
             if let error = error {
-                print("Error writing document: ", error)
+                print(#function, "Error deleting document: ", error)
             } else {
-                print("\(documentId) delete success")
+                print(#function, "\(documentId) delete success")
+            }
+        }
+    }
+    
+    func deleteUserDocument(userUid: String) {
+        let userDocRef = Firestore.firestore().collection("users").document(userUid)
+        var letterQty = 0
+        
+        for letter in letters {
+                self.deleteLetter(documentId: letter.id)
+                StorageManager.shared.deleteFolder(docId: letter.id)
+            letterQty += 1
+        }
+        
+        print("Deleted \(letterQty)letters")
+        
+        userDocRef.delete { error in
+            if let error = error {
+                print(#function, "Error deleting document: ", error)
+            } else {
+                print(#function, "\(userUid) delete success")
             }
         }
     }

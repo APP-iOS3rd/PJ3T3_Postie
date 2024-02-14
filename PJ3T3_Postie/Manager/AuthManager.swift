@@ -158,6 +158,12 @@ class AuthManager: ObservableObject {
             if let error = error {
                 print("DEBUG: Failed to remove account with error \(error.localizedDescription)")
             } else {
+                guard let userUid = self.userSession?.uid else {
+                    print(#function, "Cannot get userUid from userSession")
+                    return
+                }
+                
+                FirestoreManager.shared.deleteUserDocument(userUid: userUid)
                 self.userSession = nil
                 self.currentUser = nil
             }

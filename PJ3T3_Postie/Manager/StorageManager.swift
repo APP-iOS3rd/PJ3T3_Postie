@@ -104,6 +104,30 @@ final class StorageManager: ObservableObject {
             for (index, item) in self.images.enumerated() where fullPath == item.fullPath {
                 self.images.remove(at: index)
             }
+            
+            print(#function, "Success deleting images: \(fullPath)")
+        }
+    }
+    
+    func deleteFolder(docId: String) {
+        let folderRef = userReference.child(docId)
+        let deleteDataGroup = DispatchGroup()
+        
+        deleteDataGroup.enter()
+        
+        folderRef.listAll { result, error in
+            guard let result = result, error == nil else {
+                print("Error while getting list of file: ", error ?? "Undefined error")
+                return
+            }
+            
+            print("Total items in list: \(String(describing: result.items.count))")
+            
+            result.items.forEach { item in
+                deleteDataGroup.enter()
+                self.deleteItem(fullPath: item.fullPath)
+                deleteDataGroup.leave()
+            }
         }
     }
 }
