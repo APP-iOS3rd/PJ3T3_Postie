@@ -9,6 +9,10 @@ import SwiftUI
 
 struct LetterDetailView: View {
     @StateObject private var letterDetailViewModel = LetterDetailViewModel()
+    @ObservedObject var firestoreManager = FirestoreManager.shared
+    @ObservedObject var storageManager = StorageManager.shared
+
+    @Environment(\.dismiss) var dismiss
 
     var letter: Letter
 
@@ -18,7 +22,7 @@ struct LetterDetailView: View {
                 .ignoresSafeArea()
             
             VStack {
-                Page(letter: letter)
+                Page(letter: $firestoreManager.letter)
 
                 letterSummarySection
 
@@ -37,15 +41,28 @@ struct LetterDetailView: View {
 
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button {
+                    letterDetailViewModel.isFavorite.toggle()
 
+                    firestoreManager.editLetter(
+                        documentId: letter.id,
+                        writer: letter.writer,
+                        recipient: letter.recipient,
+                        summary: letter.summary,
+                        date: letter.date,
+                        text: letter.text,
+                        isReceived: letter.isReceived,
+                        isFavorite: letterDetailViewModel.isFavorite
+                    )
+
+                    firestoreManager.fetchAllLetters()
                 } label: {
-                    Image(systemName: "heart")
+                    Image(systemName: letterDetailViewModel.isFavorite ? "heart.fill" : "heart")
                         .foregroundStyle(.postieOrange)
                 }
 
                 Menu {
                     Button {
-
+                        letterDetailViewModel.showLetterEditSheet = true
                     } label: {
                         HStack {
                             Text("수정")
@@ -72,9 +89,14 @@ struct LetterDetailView: View {
         }
         .fullScreenCover(isPresented: $letterDetailViewModel.showLetterImageFullScreenView) {
             LetterImageFullScreenView(
-                images: letter.images ?? [],
+                images: storageManager.images.map { $0.image },
                 pageIndex: $letterDetailViewModel.selectedIndex
             )
+        }
+        .sheet(isPresented: $letterDetailViewModel.showLetterEditSheet) {
+            NavigationStack {
+                AddLetterView(isReceived: letter.isReceived, letter: firestoreManager.letter, letterPhotos: storageManager.images)
+            }
         }
         .alert("편지 삭제", isPresented: $letterDetailViewModel.showDeleteAlert) {
             Button(role: .cancel) {
@@ -84,12 +106,30 @@ struct LetterDetailView: View {
             }
 
             Button(role: .destructive) {
-                // Delete
+                firestoreManager.deleteLetter(documentId: letter.id)
+
+                storageManager.images.forEach { letterPhoto in
+                    storageManager.deleteItem(fullPath: letterPhoto.fullPath)
+                }
+
+                firestoreManager.fetchAllLetters()
+
+                dismiss()
             } label: {
                 Text("삭제")
             }
         } message: {
             Text("편지를 삭제하시겠습니까?")
+        }
+        .onAppear {
+            storageManager.listAllFile(docId: letter.id)
+
+            letterDetailViewModel.isFavorite = letter.isFavorite
+
+            firestoreManager.letter = letter
+        }
+        .onDisappear {
+            storageManager.images.removeAll()
         }
     }
 }
@@ -99,11 +139,11 @@ struct LetterDetailView: View {
 extension LetterDetailView {
     @ViewBuilder
     private var letterSummarySection: some View {
-        if !letter.summary.isEmpty {
+        if !firestoreManager.letter.summary.isEmpty {
             VStack(alignment: .leading, spacing: 4) {
                 Text("한 줄 요약")
 
-                Text(letter.summary)
+                Text(firestoreManager.letter.summary)
                     .font(.letter(.nanumMyeongjo))
                     .padding()
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -115,24 +155,29 @@ extension LetterDetailView {
 
     @ViewBuilder
     private var letterImageSection: some View {
-        if let images = letter.images, !images.isEmpty {
+        if !storageManager.images.isEmpty {
             VStack(alignment: .leading, spacing: 4) {
                 Text("편지 사진")
 
                 ScrollView(.horizontal) {
                     HStack(spacing: 8) {
-                        if let images = letter.images {
-                            ForEach(0..<images.count, id: \.self) { index in
-                                ZStack {
-                                    Button {
-                                        letterDetailViewModel.selectedIndex = index
-                                        letterDetailViewModel.showLetterImageFullScreenView = true
-                                    } label: {
-                                        Image(uiImage: images[index])
+                        ForEach(0..<storageManager.images.count, id: \.self) { index in
+                            ZStack {
+                                Button {
+                                    letterDetailViewModel.selectedIndex = index
+                                    letterDetailViewModel.showLetterImageFullScreenView = true
+                                } label: {
+                                    AsyncImage(
+                                        url: URL(string: storageManager.images[index].urlString)
+                                    ) { image in
+                                        image
                                             .resizable()
                                             .scaledToFill()
                                             .frame(width: 50, height: 50)
                                             .clipShape(RoundedRectangle(cornerRadius: 4))
+                                    } placeholder: {
+                                        ProgressView()
+                                            .frame(width: 50, height: 50)
                                     }
                                 }
                             }

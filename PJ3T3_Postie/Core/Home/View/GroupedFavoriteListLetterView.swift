@@ -34,7 +34,7 @@ struct GroupedFavoriteListLetterView: View {
                         .font(.callout)
                         .foregroundStyle(postieColors.dividerColor)
                 }
-                .offset(x: -20, y: -150)
+                .offset(x: -30, y: -150)
                 .padding()
             }
                 
