@@ -1,5 +1,5 @@
 //
-//  TestLoadingVIew.swift
+//  TestLoadingView.swift
 //  PJ3T3_Postie
 //
 //  Created by Eunsu JEONG on 2/14/24.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TestLoadingVIew: View {
+struct TestLoadingView: View {
     @ObservedObject private var counter = Counter(interval: 1)
     let images: [Image] = [Image("postyReceiving"), Image("postyReceivingBeige"), Image("postyReceivingOrange")]
     var text: String
@@ -41,7 +41,7 @@ struct TestLoadingVIew: View {
 }
 
 #Preview {
-    TestLoadingVIew(text: "프리뷰", isThemeGroupButton: .constant(0))
+    TestLoadingView(text: "프리뷰", isThemeGroupButton: .constant(0))
 }
 
 private class Counter: ObservableObject {

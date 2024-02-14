@@ -126,7 +126,7 @@ struct SettingView: View {
             appleSignInHelper.window = window
         }
         .fullScreenCover(isPresented: $showLoading) {
-            TestLoadingVIew(text: "계정을 삭제하는 중이에요", isThemeGroupButton: .constant(0))
+            TestLoadingView(text: "계정을 삭제하는 중이에요", isThemeGroupButton: .constant(0))
                 .background(ClearBackground())
         }
     }
