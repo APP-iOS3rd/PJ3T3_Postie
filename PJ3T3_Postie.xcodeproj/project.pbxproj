@@ -27,7 +27,6 @@
 		9E25C2C72B7A79E000B04BA1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9E25C2C62B7A79DF00B04BA1 /* GoogleService-Info.plist */; };
 		9E25C2CD2B7B454000B04BA1 /* EnvironmentValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E25C2CC2B7B454000B04BA1 /* EnvironmentValues.swift */; };
 		9E25C2D12B7B8F8A00B04BA1 /* CryptoUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E25C2D02B7B8F8A00B04BA1 /* CryptoUtils.swift */; };
-		9E46837A2B7BB82700EFB90B /* LoadingIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E4683792B7BB82700EFB90B /* LoadingIndicator.swift */; };
 		9E46837C2B7BBBA100EFB90B /* TestLoadingVIew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E46837B2B7BBBA100EFB90B /* TestLoadingVIew.swift */; };
 		9E5889E32B72221B00B4AD20 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5889E22B72221B00B4AD20 /* SearchView.swift */; };
 		9E7E05792B7C465D00ACF177 /* ClearBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7E05782B7C465D00ACF177 /* ClearBackground.swift */; };
@@ -130,7 +129,6 @@
 		9E25C2C62B7A79DF00B04BA1 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		9E25C2CC2B7B454000B04BA1 /* EnvironmentValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvironmentValues.swift; sourceTree = "<group>"; };
 		9E25C2D02B7B8F8A00B04BA1 /* CryptoUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoUtils.swift; sourceTree = "<group>"; };
-		9E4683792B7BB82700EFB90B /* LoadingIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingIndicator.swift; sourceTree = "<group>"; };
 		9E46837B2B7BBBA100EFB90B /* TestLoadingVIew.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestLoadingVIew.swift; sourceTree = "<group>"; };
 		9E5889E22B72221B00B4AD20 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		9E7E05782B7C465D00ACF177 /* ClearBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearBackground.swift; sourceTree = "<group>"; };
@@ -494,7 +492,6 @@
 				9E25C2D02B7B8F8A00B04BA1 /* CryptoUtils.swift */,
 				9E9F6AD72B57642D003DFE83 /* FirestoreManager.swift */,
 				9E9A8BE82B6B704E0072CB75 /* GoogleSignInHelper.swift */,
-				9E4683792B7BB82700EFB90B /* LoadingIndicator.swift */,
 				9E7F8C772B5E69B000F1A6BF /* StorageManager.swift */,
 				9E46837B2B7BBBA100EFB90B /* TestLoadingVIew.swift */,
 			);
@@ -736,7 +733,6 @@
 				CE7E50782B579D6800955F31 /* AddLetterViewModel.swift in Sources */,
 				CE60AACD2B6F907500D6717A /* Font.swift in Sources */,
 				CE6E08452B5E09D900CFBF2A /* LetterDetailViewModel.swift in Sources */,
-				9E46837A2B7BB82700EFB90B /* LoadingIndicator.swift in Sources */,
 				E35C10152B720FFE0007DE8C /* GroupedFavoriteListLetterView.swift in Sources */,
 				9E9F6AB62B5762E5003DFE83 /* HomeView.swift in Sources */,
 				9E9A8BEB2B6B79870072CB75 /* EmailLoginView.swift in Sources */,
