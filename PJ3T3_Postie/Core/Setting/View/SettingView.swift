@@ -112,7 +112,7 @@ struct SettingView: View {
                                 }
                             }
                         } message: {
-                            Text("회원 탈퇴 시에는 계정과 프로필 정보, 그리고 등록된 모든 편지와 편지 이미지가 삭제됩니다. 계정 삭제를 위해서는 재인증을 통해 다시 로그인 해야 합니다.")
+                            Text("회원 탈퇴 시에는 계정과 프로필 정보, 그리고 등록된 모든 편지와 편지 이미지가 삭제되며 복구할 수 없습니다. 계정 삭제를 위해서는 재인증을 통해 다시 로그인 해야 합니다.")
                         }
                     }
                     
@@ -131,7 +131,7 @@ struct SettingView: View {
             appleSignInHelper.window = window
         }
         .fullScreenCover(isPresented: $showLoading) {
-            TestLoadingView(text: "계정을 삭제하는 중이에요", isThemeGroupButton: .constant(0))
+            TestLoadingView(text: "저장된 편지들을 안전하게 삭제하는 중이에요", isThemeGroupButton: .constant(0))
                 .background(ClearBackground())
         }
     }
