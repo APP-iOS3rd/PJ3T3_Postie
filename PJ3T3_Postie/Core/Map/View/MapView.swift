@@ -14,6 +14,10 @@ import NMapsMap
 struct MapView: View {
     private let name = ["우체국", "우체통"]
     
+    
+    
+    //햄버거 구현하기
+    
     @StateObject var naverGeocodeAPI = NaverGeocodeAPI.shared
     @StateObject var officeInfoServiceAPI = OfficeInfoServiceAPI.shared
     @StateObject var locationManager = LocationManager() // 지금 위치를 알기 위한 값
@@ -84,23 +88,57 @@ struct MapView: View {
                     }
                     .padding()
                     
+                    ZStack(alignment: .leading){
+                        NaverMap(coord: coord)
+                            .ignoresSafeArea(.all, edges: .top)
+                        VStack {
+                            HStack {
+                                Spacer()
+                                
+                                Button("현재 위치에서 \(name[selectedButtonIndex])찾기") {
+                                    //현재 coord( 카메라 위치) 불러오기
+                                    //값을 불러 오기
+                                    print("버튼 눌림 \(coordinator.cameraLocation)")
+                                    
+                                    coord = MyCoord(coordinator.cameraLocation?.lat ?? 37.579081, coordinator.cameraLocation?.lng ?? 126.974375 )
+                                    
+                                    officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)
+                                    
+                                    print("불러옵니다\(coord)")
+                                }
+                                
+                                Spacer()
+                            }
+                        }
+                    }
                     
+           ZStack(alignment: .top) {
                     NaverMap(coord: coord)
-                        .ignoresSafeArea(.all, edges: .top)
+                   .ignoresSafeArea(.all, edges: .top)
+//                   .edgesIgnoringSafeArea(.all, edges:)
                     
-                    Button("현재 위치에서 \(name[selectedButtonIndex])찾기") {
-                        //현재 coord( 카메라 위치) 불러오기
-                        //값을 불러 오기
-                        print("버튼 눌림 \(coordinator.cameraLocation)")
+                    VStack {
+                        Spacer()
                         
-                        coord = MyCoord(coordinator.cameraLocation?.lat ?? 37.579081, coordinator.cameraLocation?.lng ?? 126.974375 )
-                        
-                        officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)
-                        
-                        print("불러옵니다\(coord)")
+                        Button(action: {
+                            print("현재 위치에서 \(name[selectedButtonIndex]) 찾기 버튼 눌림")
+                            // 여기에 버튼 클릭 시 실행할 코드 추가
+                        }) {
+                            Text("현재 위치에서 \(name[selectedButtonIndex]) 찾기")
+                                .padding()
+                                .foregroundColor(.white)
+                                .background(Color.blue)
+                                .cornerRadius(10)
+                        }
+                        .padding(.horizontal)
+                        .padding(.bottom, 20)
                     }
                 }
-                
+                    
+                    
+                    
+                    
+                }
                 Spacer()
             }
         }
@@ -115,8 +153,14 @@ struct MapView: View {
             coordinator.removeAllMakers()
             
             for result in newInfos {
-                coordinator.addMarkerAndInfoWindow(latitude: Double(result.postLat)!, longitude: Double(result.postLon)!, caption: result.postNm, time: result.postTime, lunchtime: result.lunchTime ?? "없음")
-                print(result.lunchTime)
+                var lunchtime: String = ""
+                if result.lunchTime == "null" {
+                    lunchtime = "없음"
+                } else {
+                    lunchtime = result.lunchTime!
+                }
+                coordinator.addMarkerAndInfoWindow(latitude: Double(result.postLat)!, longitude: Double(result.postLon)!, caption: result.postNm, time: result.postTime, lunchtime: lunchtime)
+                print(result.lunchTime,lunchtime)
                 //codingKey
                }
         }
