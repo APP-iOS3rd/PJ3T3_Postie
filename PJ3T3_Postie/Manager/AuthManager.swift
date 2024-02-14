@@ -18,10 +18,10 @@ class AuthManager: ObservableObject {
     var userUid: String  = ""
     var hasAccount: Bool = true
     var authDataResult: AuthDataResult?
-    var credential: OAuthCredential?
     var provider: AuthProviderOption?
     @Published var userSession: FirebaseAuth.User? //Firebase user object
     @Published var currentUser: PostieUser? //User Data Model
+    @Published var credential: OAuthCredential?
     
     private init() {
         Task {
@@ -160,6 +160,10 @@ class AuthManager: ObservableObject {
                 FirestoreManager.shared.deleteUserDocument(userUid: userUid)
                 self.userSession = nil
                 self.currentUser = nil
+                
+                DispatchQueue.main.async {
+                    self.credential = nil
+                }
             }
         }
     }
@@ -184,11 +188,14 @@ class AuthManager: ObservableObject {
 // MARK: Sign in SSO
 extension AuthManager {
     func signInWithSSO(credential: AuthCredential) async throws -> AuthDataResult {
-            let authDataResult = try await Auth.auth().signIn(with: credential)
-            
-            await fetchUser()
-            
-            return authDataResult
+        let authDataResult = try await Auth.auth().signIn(with: credential)
+        await fetchUser()
+        
+        DispatchQueue.main.async {
+            self.credential = nil
+        }
+        
+        return authDataResult
     }
     
     func signInWithGoogle() async throws -> AuthCredential {
@@ -213,9 +220,11 @@ extension AuthManager {
     }
     
     func signInwithApple(user: AppleUser) {
-        self.credential = OAuthProvider.appleCredential(withIDToken: user.token,
-                                                       rawNonce: user.nonce,
-                                                       fullName: user.fullName)
+        DispatchQueue.main.async {
+            self.credential = OAuthProvider.appleCredential(withIDToken: user.token,
+                                                            rawNonce: user.nonce,
+                                                            fullName: user.fullName)
+        }
     }
     
     func deleteAppleAccount(authCodeString: String) async {

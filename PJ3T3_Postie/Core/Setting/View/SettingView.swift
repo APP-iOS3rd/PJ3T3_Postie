@@ -111,6 +111,14 @@ struct SettingView: View {
                                     //alert 창 구현
                                 }
                             }
+                            .onChange(of: authManager.credential) { newValue in
+                                if authManager.credential == nil {
+                                    print(#function, "Canceled to delete account")
+                                    showLoading = false
+                                } else {
+                                    showLoading = true
+                                }
+                            }
                         } message: {
                             Text("회원 탈퇴 시에는 계정과 프로필 정보, 그리고 등록된 모든 편지와 편지 이미지가 삭제되며 복구할 수 없습니다. 계정 삭제를 위해서는 재인증을 통해 다시 로그인 해야 합니다.")
                         }
