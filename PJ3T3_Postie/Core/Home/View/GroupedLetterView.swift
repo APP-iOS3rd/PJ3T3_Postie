@@ -66,8 +66,7 @@ struct GroupedLetterView: View {
         // letterReceivedGrouped와 letterWritedGrouped를 합친 후 중복 제거
         let letterGrouped: [String] = Array(Set(letterReceivedGrouped + letterWritedGrouped))
         // 본인 이름 항목 제거
-        // "me" << 추후에는 authManager.currentUser?.nickName 로 해야함
-        let filteredLetterGrouped: [String] = letterGrouped.filter { $0 != "me" }
+        let filteredLetterGrouped: [String] = letterGrouped.filter { $0 != authManager.currentUser?.nickname }
         // 숫자, 한글, 알파벳 순서대로 정렬
         let sortedRecipients = customSort(recipients: filteredLetterGrouped)
         

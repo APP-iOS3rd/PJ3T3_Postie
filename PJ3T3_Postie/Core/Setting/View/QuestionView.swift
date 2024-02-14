@@ -9,6 +9,7 @@ import SwiftUI
 
 struct QuestionView: View {
     @Binding var isThemeGroupButton: Int
+    
     var body: some View {
         let postieColors = ThemeManager.themeColors[isThemeGroupButton]
         
@@ -17,7 +18,9 @@ struct QuestionView: View {
                 .ignoresSafeArea()
             
             ScrollView {
-                Text("Hello, World!")
+                VStack {
+                    Text("Hello, World!")
+                }
             }
         }
         .toolbar {

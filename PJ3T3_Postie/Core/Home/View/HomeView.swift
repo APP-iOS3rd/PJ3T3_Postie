@@ -203,6 +203,20 @@ struct SideMenuView: View {
                 
                 DividerView(isThemeGroupButton: $isThemeGroupButton)
                 
+                NavigationLink(destination: AlertView(isThemeGroupButton: $isThemeGroupButton)) {
+                    HStack {
+                        Image(systemName: "bell")
+                        
+                        Text("알림설정")
+                        
+                        Spacer()
+                        
+                        Image(systemName: "chevron.right")
+                            .foregroundStyle(postieColors.dividerColor)
+                    }
+                    .padding(.bottom)
+                }
+                
                 NavigationLink(destination: NoticeView(isThemeGroupButton: $isThemeGroupButton)) {
                     HStack {
                         Image(systemName: "megaphone")
