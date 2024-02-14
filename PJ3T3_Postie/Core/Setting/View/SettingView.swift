@@ -95,8 +95,13 @@ struct SettingView: View {
                                 case .google:
                                     print("Delete Google account")
                                     Task {
-                                        await authManager.deleteGoogleAccount()
-                                        showLoading = true
+                                        do {
+                                            try await authManager.deleteGoogleAccount()
+                                            showLoading = true
+                                        } catch {
+                                            print(#function, "Failed to delete Google account: \(error)")
+                                            showLoading = false
+                                        }
                                     }
                                 case .apple:
                                     print("Delete Apple account")

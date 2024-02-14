@@ -204,14 +204,10 @@ extension AuthManager {
         return GoogleAuthProvider.credential(withIDToken: tokens.idToken, accessToken: tokens.accessToken)
     }
     
-    func deleteGoogleAccount() async {
-        do {
+    func deleteGoogleAccount() async throws {
             let credential = try await signInWithGoogle()
             try await self.userSession?.reauthenticate(with: credential)
             self.deleteAccount()
-        } catch {
-            print(#function, "Failed to delete Google account: \(error)")
-        }
     }
     
     func signInwithApple(user: AppleUser) {
