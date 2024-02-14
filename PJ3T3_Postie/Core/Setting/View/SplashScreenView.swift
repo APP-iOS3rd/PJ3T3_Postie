@@ -12,6 +12,7 @@ struct SplashScreenView: View {
     
     var body: some View {
         let postieColors = ThemeManager.themeColors[isThemeGroupButton]
+        let random_number = Int.random(in: 1...5)
         
         ZStack {
             postieColors.backGroundColor
@@ -32,9 +33,27 @@ struct SplashScreenView: View {
                 Text("언제 어디서나")
                     .foregroundStyle(postieColors.dividerColor)
                 
-                Image("postyReceivingBeige")
-                    .resizable()
-                    .frame(width: 300, height: 300)
+                if random_number == 1 {
+                    Image("postyReceivingLineColor")
+                        .resizable()
+                        .frame(width: 300, height: 300)
+                } else if random_number == 2 {
+                    Image("postySendingLineColor")
+                        .resizable()
+                        .frame(width: 300, height: 300)
+                } else if random_number == 3 {
+                    Image("postySmileLineColor")
+                        .resizable()
+                        .frame(width: 300, height: 300)
+                } else if random_number == 4 {
+                    Image("postyTrumpetLineColor")
+                        .resizable()
+                        .frame(width: 300, height: 300)
+                } else {
+                    Image("postyHeartLineColor")
+                        .resizable()
+                        .frame(width: 300, height: 300)
+                }
                 
                 ProgressView()
                     .offset(y: -40)

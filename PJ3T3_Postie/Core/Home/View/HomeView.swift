@@ -173,8 +173,8 @@ struct SideMenuView: View {
                             Image(profileImage)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 80, height: 80)
-                                .clipShape(Circle())
+                                .frame(width: 50, height: 50)
+                                .offset(y: -7)
                         }
                         
                         VStack(alignment: .leading) {

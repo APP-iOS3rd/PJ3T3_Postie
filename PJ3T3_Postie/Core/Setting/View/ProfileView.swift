@@ -40,8 +40,8 @@ struct ProfileView: View {
                                 Image(profileImage)
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(width: 170, height: 170)
-                                    .clipShape(Circle())
+                                    .frame(width: 110, height: 110)
+                                    .offset(y: -15)
                             }
                             
                             Spacer()
@@ -53,7 +53,7 @@ struct ProfileView: View {
                         
                         DividerView(isThemeGroupButton: $isThemeGroupButton)
                         
-                        Text(String(user?.fullName ?? ""))
+                        Text(" \(String(user?.fullName ?? ""))")
                             .foregroundStyle(postieColors.tabBarTintColor)
                             .padding(.bottom)
                         
@@ -63,7 +63,7 @@ struct ProfileView: View {
                         
                         DividerView(isThemeGroupButton: $isThemeGroupButton)
                         
-                        Text(String(user?.nickname ?? ""))
+                        Text(" \(String(user?.nickname ?? ""))")
                             .foregroundStyle(postieColors.tabBarTintColor)
                             .padding(.bottom)
                         
@@ -73,7 +73,7 @@ struct ProfileView: View {
                         
                         DividerView(isThemeGroupButton: $isThemeGroupButton)
                         
-                        Text(" postie@test.com")
+                        Text(" \(String(user?.email ?? ""))")
                             .foregroundStyle(postieColors.tabBarTintColor)
                             .padding(.bottom)
                         
