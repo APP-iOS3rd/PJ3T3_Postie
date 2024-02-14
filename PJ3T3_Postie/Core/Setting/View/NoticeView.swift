@@ -10,6 +10,7 @@ import SwiftUI
 struct NoticeView: View {
     @Binding var isThemeGroupButton: Int
     @State private var isExpanded = false
+    
     var body: some View {
         let postieColors = ThemeManager.themeColors[isThemeGroupButton]
         let posts = [

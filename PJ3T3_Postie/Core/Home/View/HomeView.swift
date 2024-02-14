@@ -81,6 +81,21 @@ struct HomeView: View {
                         .preferredColorScheme(isThemeGroupButton == 4 ? .dark : .light)
                     }
                     
+                    if firestoreManager.letters.isEmpty {
+                        VStack {
+                            Image("postySmileSketch")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: geometry.size.width * 0.7)
+                                .opacity(0.5)
+                            
+                            Text("\n저장된 편지가 없어요! 플로팅 버튼을 이용해 주고받은 편지를 저장해주세요!")
+                                .font(.callout)
+                                .foregroundStyle(postieColors.dividerColor)
+                        }
+                        .padding()
+                    }
+                    
                     if isSideMenuOpen {
                         Color.black.opacity(0.5)
                             .onTapGesture {
@@ -220,6 +235,7 @@ struct SideMenuView: View {
                 NavigationLink(destination: NoticeView(isThemeGroupButton: $isThemeGroupButton)) {
                     HStack {
                         Image(systemName: "megaphone")
+                            .font(.subheadline)
                         
                         Text("공지사항")
                         
