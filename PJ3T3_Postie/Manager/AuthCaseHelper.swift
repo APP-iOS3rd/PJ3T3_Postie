@@ -7,6 +7,12 @@
 
 import Foundation
 
+enum AuthProviderOption: String {
+    case email = "password"
+    case google = "google.com"
+    case apple = "apple.com"
+}
+
 enum GIDSignInErrorCode: NSInteger, Error {
     case unknown = -1 //Indicates an unknown error has occurred.
     case keychain = -2 //Indicates a problem reading or writing to the application keychain.
