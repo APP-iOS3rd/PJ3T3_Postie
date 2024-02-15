@@ -12,16 +12,32 @@ struct NicknameView: View {
     @State var nickname: String = ""
     @State var isTappable: Bool = false
     @State var isTapped: Bool = false
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
     var body: some View {
+        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
+        
         ZStack {
             Color(.postieBeige)
                 .ignoresSafeArea()
             
             VStack {
-                LoginInputView(title: "Nickname",
-                               placeholder: "Enter your nickname",
-                               text: $nickname)
+                Image("postyReceivingLine")
+                    .resizable()
+                    .scaledToFit()
+                    .padding(.horizontal, 100)
+                    .padding(.bottom, 20)
+                
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("Nickname")
+                        .foregroundStyle(postieColors.tintColor)
+                        .fontWeight(.semibold)
+                        .font(.footnote)
+                    
+                    TextField("앱에서 사용할 닉네임을 입력 해 주세요", text: $nickname)
+                    
+                    Divider()
+                }
                 
                 Button {
                     isTappable = false
@@ -34,20 +50,20 @@ struct NicknameView: View {
                 } label: {
                     HStack() {
                         if isTapped {
-                            ProgressView()
+                            LoadingView(text: "포스티 만나러 가는 중")
                         } else {
                             Image(systemName: "envelope")
                                 .padding(.horizontal, 10)
                             
-                            Text("Submit & Sign up")
-                                .font(.system(size: 20, weight: .semibold))
+                            Text("포스티 시작하기")
+                                .font(.system(size: 18, weight: .semibold))
                         }
                     }
-                    .foregroundColor(.white)
+                    .foregroundColor(postieColors.writenLetterColor)
                     .frame(height: 54)
                     .frame(maxWidth: .infinity)
                 }
-                .background(isTappable ? .postieOrange : .postieGray)
+                .background(isTappable ? postieColors.tintColor : postieColors.profileColor)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
                 .shadow(radius: 3, x: 3, y: 3)
                 .padding(.bottom, 10)
@@ -61,6 +77,7 @@ struct NicknameView: View {
                 }
             }
             .padding(.horizontal, 32)
+            .padding(.bottom, 100)
             
             VStack {
                 Spacer()
