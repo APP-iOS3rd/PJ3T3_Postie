@@ -389,13 +389,13 @@ struct NoticeTestView: View {
     var body: some View {
         VStack {            
             Section {
-                ForEach(firestoreNoticeManager.notice, id:\.self) { notice in
+                ForEach(firestoreNoticeManager.notices, id:\.self) { notice in
                     Text(notice.title)
                 }
             }
         }
         .onAppear {
-            if firestoreNoticeManager.notice.isEmpty {
+            if firestoreNoticeManager.notices.isEmpty {
                 firestoreNoticeManager.fetchAllNotices()
             }
         }

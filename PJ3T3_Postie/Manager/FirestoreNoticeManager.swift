@@ -9,8 +9,8 @@ import FirebaseFirestore
 
 final class FirestoreNoticeManager: ObservableObject {
     static let shared = FirestoreNoticeManager()
-    @Published var notice: [OfficialLetter] = []
-    @Published var faq: [OfficialLetter] = []
+    @Published var notices: [OfficialLetter] = []
+    @Published var faqs: [OfficialLetter] = []
     
     private init() { }
     
@@ -23,7 +23,7 @@ final class FirestoreNoticeManager: ObservableObject {
                 return
             }
             
-            self.notice.removeAll()
+            self.notices.removeAll()
             
             guard let snapshot = snapshot else {
                 print("\(#function): No snapshot \(String(describing: error?.localizedDescription))")
@@ -34,7 +34,7 @@ final class FirestoreNoticeManager: ObservableObject {
                 do {
                     let data = try document.data(as: OfficialLetter.self)
                     
-                    self.notice.append(data)
+                    self.notices.append(data)
                 } catch {
                     print(#function, error.localizedDescription)
                 }
