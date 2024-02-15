@@ -15,25 +15,30 @@ struct LetterImageFullScreenView: View {
 
     var body: some View {
         NavigationStack {
-            TabView(selection: $pageIndex) {
-                ForEach(0..<images.count, id: \.self) { index in
-                    Image(uiImage: images[index])
-                        .resizable()
-                        .scaledToFit()
-                        .tag(index)
+            ZStack {
+                Color.black
+                    .ignoresSafeArea()
+
+                TabView(selection: $pageIndex) {
+                    ForEach(0..<images.count, id: \.self) { index in
+                        Image(uiImage: images[index])
+                            .resizable()
+                            .scaledToFit()
+                            .tag(index)
+                    }
                 }
-            }
-            .tabViewStyle(.page)
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button {
-                        dismiss()
-                    } label: {
-                        Image(systemName: "xmark")
+                .tabViewStyle(.page)
+                .toolbar {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button {
+                            dismiss()
+                        } label: {
+                            Image(systemName: "xmark")
+                        }
                     }
                 }
             }
-        }
+            }
     }
 }
 
