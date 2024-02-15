@@ -12,6 +12,7 @@ import FirebaseStorage
 final class StorageManager: ObservableObject {
     static let shared = StorageManager()
     var userReference: StorageReference = Storage.storage().reference()
+    var imageFullPath: String = ""
     @Published var images: [LetterPhoto] = []
     
     private init() { 
@@ -54,6 +55,12 @@ final class StorageManager: ObservableObject {
             }
             
             let returnedMetaData = try await fileReference.putDataAsync(data, metadata: meta)
+            guard let testFullPath = returnedMetaData.path else {
+                print("Failed to get image full path")
+                return
+            }
+            
+            self.imageFullPath = testFullPath
             currentImageNo += 1
         }
         
