@@ -42,15 +42,16 @@ struct LetterDetailView: View {
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button {
                     letterDetailViewModel.isFavorite.toggle()
-
+                    
+                    // TODO: 하나만 업데이트 하는 함수로 변경
                     firestoreManager.editLetter(
                         documentId: letter.id,
-                        writer: letter.writer,
-                        recipient: letter.recipient,
-                        summary: letter.summary,
-                        date: letter.date,
-                        text: letter.text,
-                        isReceived: letter.isReceived,
+                        writer: firestoreManager.letter.writer,
+                        recipient: firestoreManager.letter.recipient,
+                        summary: firestoreManager.letter.summary,
+                        date: firestoreManager.letter.date,
+                        text: firestoreManager.letter.text,
+                        isReceived: firestoreManager.letter.isReceived,
                         isFavorite: letterDetailViewModel.isFavorite
                     )
 
