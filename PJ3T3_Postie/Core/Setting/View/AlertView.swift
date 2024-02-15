@@ -11,8 +11,7 @@ struct AlertView: View {
     @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     @State private var slowAlert = true
     @State private var allAlert = true
-    @State private var alert1 = true
-    @State private var alert2 = true
+    @State private var todayAlert = true
     
     var body: some View {
         ZStack {
@@ -21,18 +20,45 @@ struct AlertView: View {
             
             ScrollView {
                 VStack {
-                    Toggle("전체 알림", isOn: $allAlert)
+                    Toggle(isOn: $allAlert) {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text("전체 알림")
+                                .foregroundStyle(postieColors.tabBarTintColor)
+                            
+                            Text("편지 알림을 받을 수 있습니다.")
+                                .font(.caption)
+                                .foregroundColor(postieColors.dividerColor)
+                        }
+                    }
                         .padding(.bottom)
                     
                     DividerView()
                         .padding(.bottom)
                     
-                    Toggle("옛 편지 알림", isOn: $slowAlert)
-                        .disabled(!allAlert)
-                        .padding(.bottom)
+                    Toggle(isOn: $slowAlert) {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text("옛 편지 알림")
+                                .foregroundStyle(postieColors.tabBarTintColor)
+                            
+                            Text("N년전 오늘 적었던 편지 알림을 받을 수 있습니다.")
+                                .font(.caption)
+                                .foregroundColor(postieColors.dividerColor)
+                        }
+                    }
+                    .disabled(!allAlert)
+                    .padding(.bottom)
                     
-                    Toggle("오늘의 편지 알림", isOn: $alert1)
-                        .disabled(!allAlert)
+                    Toggle(isOn: $todayAlert) {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text("오늘의 편지 알림")
+                                .foregroundStyle(postieColors.tabBarTintColor)
+                            
+                            Text("매일 새로운 편지 알림을 받을 수 있습니다.")
+                                .font(.caption)
+                                .foregroundColor(postieColors.dividerColor)
+                        }
+                    }
+                    .disabled(!allAlert)
                 }
                 .padding()
             }
