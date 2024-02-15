@@ -88,6 +88,7 @@ struct AddLetterView: View {
             }
         }
         .toolbar(.hidden, for: .tabBar)
+        .scrollDismissesKeyboard(.interactively)
         .fullScreenCover(isPresented: $addLetterViewModel.showLetterImageFullScreenView) {
             LetterImageFullScreenView(
                 images: addLetterViewModel.images,
