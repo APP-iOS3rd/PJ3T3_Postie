@@ -39,7 +39,7 @@ struct MapView: View {
             ZStack {
                 postieColors.backGroundColor
                     .ignoresSafeArea()
-//                
+                //
                 VStack(spacing: 0) {
                     HStack {
                         Text("Postie Map")
@@ -49,7 +49,7 @@ struct MapView: View {
                         Spacer()
                     }
                     .padding(.horizontal)
-           
+                    
                     HStack(spacing: 10) {
                         ForEach(0...1, id: \.self) { index in
                             Button(action: {
@@ -88,65 +88,43 @@ struct MapView: View {
                     }
                     .padding()
                     
-//                    ZStack(alignment: .leading){
-//                        NaverMap(coord: coord)
-//                            .ignoresSafeArea(.all, edges: .top)
-//                        VStack {
-//                            HStack {
-//                                Spacer()
-//                                
-//
-//                                Button("현재 위치에서 \(name[selectedButtonIndex])찾기") {
-//                                    //현재 coord( 카메라 위치) 불러오기
-//                                    //값을 불러 오기
-//                                    print("버튼 눌림 \(coordinator.cameraLocation)")
-//                                    
-//                                    coord = MyCoord(coordinator.cameraLocation?.lat ?? 37.579081, coordinator.cameraLocation?.lng ?? 126.974375 )
-//                                    
-//                                    officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)
-//                                    
-//                                    print("불러옵니다\(coord)")
-//                                }
-//                                
-//                                Spacer()
-//                            }
-//                        }
-//                    }
-                    
-           ZStack(alignment: .top) {
-                    NaverMap(coord: coord)
-                   .ignoresSafeArea(.all, edges: .top)
-//                   .edgesIgnoringSafeArea(.all, edges:)
-                    
-                    VStack {
+                    ZStack(alignment: .top) {
+                        NaverMap(coord: coord)
+                            .ignoresSafeArea(.all, edges: .top)
+                        //                   .edgesIgnoringSafeArea(.all, edges:)
                         
-                        Button(action: {
-                            print("현재 위치에서 \(name[selectedButtonIndex]) 찾기 버튼 눌림")
-                            coord = MyCoord(coordinator.cameraLocation?.lat ?? 37.579081, coordinator.cameraLocation?.lng ?? 126.974375 )
+                        VStack {
                             
-                            officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)
-                        }) {
-                            //goforward. arrow.clockwise
-//                            Text("현재 위치에서 \(name[selectedButtonIndex]) 찾기")
-                            HStack {
-                                Image(systemName: "arrow.clockwise")
-                                    .frame(height: 20)
-                                Text("현 지도에서 검색")
-                                    .font(Font.custom("SF Pro Text", size: 12))
+                            Button(action: {
+                                print("현재 위치에서 \(name[selectedButtonIndex]) 찾기 버튼 눌림")
+                                coord = MyCoord(coordinator.cameraLocation?.lat ?? 37.579081, coordinator.cameraLocation?.lng ?? 126.974375 )
+                                
+                                officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)
+                            }) {
+                                ZStack {
+                                    Rectangle()
+                                        .foregroundColor(.clear)
+                                        .frame(width: 150, height: 35)
+                                        .background(Color.white) //색상
+                                        .cornerRadius(16)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 16)
+                                                .stroke(Color.gray, lineWidth: 0.3))
+                                    
+                                    HStack {
+                                        Image(systemName: "arrow.clockwise")
+                                            .frame(height: 10)
+                                        Text("현 지도에서 검색")
+                                            .font(Font.custom("SF Pro Text", size: 15))
+                                    }
+                                    .padding()
+                                    .foregroundColor(.blue)
+                                }
                             }
-                            .padding()
-                            .foregroundColor(.blue)
-                            .background(Color.white)
-                            .cornerRadius(16)
-                            .frame(width: 200, height: 20)
-//                            .frame(width: 200)
+                            Spacer()
                         }
-                        
-                        Spacer()
+                        .padding()
                     }
-                }
-                    
-                
                 }
                 Spacer()
             }
@@ -171,7 +149,7 @@ struct MapView: View {
                 coordinator.addMarkerAndInfoWindow(latitude: Double(result.postLat)!, longitude: Double(result.postLon)!, caption: result.postNm, time: result.postTime, lunchtime: lunchtime)
                 print(result.lunchTime,lunchtime)
                 //codingKey
-               }
+            }
         }
         //초기 화면이 열리 때 위치값을 불러온다.
         .onChange(of: locationManager.location) { newLocation in
@@ -190,7 +168,3 @@ struct MapView: View {
         
     }
 }
-
-//#Preview {
-//    MapView()
-//}

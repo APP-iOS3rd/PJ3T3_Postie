@@ -7,12 +7,6 @@
 
 import SwiftUI
 
-//struct TestView: View {
-//    var body: some View {
-//        NaverMap(coord: coord)
-//    }
-//}
-
 struct TabItemContent: View {
     let image: String
     let text: String
