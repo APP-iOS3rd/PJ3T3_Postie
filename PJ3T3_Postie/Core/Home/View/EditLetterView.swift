@@ -68,6 +68,8 @@ struct EditLetterView: View {
                         await editLetter(letter: letter)
                     }
 
+                    updateImages()
+
                     dismiss()
                 } label : {
                     Text("완료")
@@ -95,7 +97,7 @@ struct EditLetterView: View {
         .sheet(isPresented: $editLetterViewModel.showUIImagePicker) {
             UIImagePicker(
                 sourceType: editLetterViewModel.imagePickerSourceType,
-                selectedImages: $editLetterViewModel.images,
+                selectedImages: $editLetterViewModel.newImages,
                 text: $editLetterViewModel.text,
                 showTextRecognizerErrorAlert: $editLetterViewModel.showTextRecognizerErrorAlert
             )
@@ -127,6 +129,8 @@ struct EditLetterView: View {
             editLetterViewModel.images = letterPhotos.map { $0.image }
 
             editLetterViewModel.showSummaryTextField = !letter.summary.isEmpty
+
+            editLetterViewModel.currentLetterPhoto = StorageManager.shared.images
         }
     }
 
@@ -161,6 +165,34 @@ struct EditLetterView: View {
         )
 
         FirestoreManager.shared.fetchAllLetters()
+    }
+
+    func updateImages() {
+        print("Update Images started")
+        print(editLetterViewModel.deleteCandidatesFromCurrentLetterPhoto.count)
+        for deleteCandidate in editLetterViewModel.deleteCandidatesFromCurrentLetterPhoto {
+            if let index = StorageManager.shared.images.firstIndex(of: deleteCandidate) {
+
+                StorageManager.shared.images.remove(at: index)
+
+                StorageManager.shared.deleteItem(fullPath: deleteCandidate.fullPath)
+            }
+        }
+        
+        for newImage in editLetterViewModel.newImages {
+            Task {
+                do {
+                    let imageFullPath = try await StorageManager.shared.uploadUIImage(image: newImage, docId: letter.id)
+
+                    let newLetterPhoto = try await StorageManager.shared.formatToLetterPhoto(fullPath: imageFullPath, uiImage: newImage)
+
+                    StorageManager.shared.images.append(newLetterPhoto)
+                } catch {
+                    print("Failed To upload Image: \(error)")
+                }
+            }
+        }
+
     }
 }
 
@@ -233,8 +265,7 @@ extension EditLetterView {
                     Image(systemName: "plus")
                 }
             }
-
-            if StorageManager.shared.images.isEmpty {
+            if editLetterViewModel.currentLetterPhoto.isEmpty && editLetterViewModel.newImages.isEmpty {
                 Label("사진을 추가해주세요.", systemImage: "photo.on.rectangle")
                     .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].dividerColor)
                     .frame(maxWidth: .infinity)
@@ -243,7 +274,7 @@ extension EditLetterView {
             } else {
                 ScrollView(.horizontal) {
                     HStack(spacing: 8) {
-                        ForEach(0..<StorageManager.shared.images.count, id: \.self) { index in
+                        ForEach(0..<editLetterViewModel.currentLetterPhoto.count, id: \.self) { index in
                             ZStack(alignment: .topTrailing) {
                                 Button {
                                     editLetterViewModel.selectedIndex = index
@@ -257,9 +288,37 @@ extension EditLetterView {
                                 }
 
                                 Button {
+                                    print("Delete Button Tapped")
+                                    let deletedLetterPhoto = editLetterViewModel.currentLetterPhoto[index]
+                                    print("Delete Button Tapped: index \(index)")
+                                    editLetterViewModel.currentLetterPhoto.remove(at: index)
+
+                                    editLetterViewModel.deleteCandidatesFromCurrentLetterPhoto.append(deletedLetterPhoto)
+                                } label: {
+                                    Image(systemName: "xmark.circle.fill")
+                                        .symbolRenderingMode(.palette)
+                                        .foregroundStyle(.white, ThemeManager.themeColors[isThemeGroupButton].tintColor)
+                                }
+                                .offset(x: 8, y: -8)
+                            }
+                        }
+
+                        ForEach(0..<editLetterViewModel.newImages.count, id: \.self) { index in
+                            ZStack(alignment: .topTrailing) {
+                                Button {
+                                    editLetterViewModel.selectedIndex = index
+                                    editLetterViewModel.showLetterImageFullScreenView = true
+                                } label: {
+                                    Image(uiImage: editLetterViewModel.newImages[index])
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width: 100, height: 100)
+                                        .clipShape(RoundedRectangle(cornerRadius: 4))
+                                }
+
+                                Button {
                                     withAnimation {
-                                        let selectedLetterPhoto = StorageManager.shared.images[index]
-                                        StorageManager.shared.deleteItem(fullPath: selectedLetterPhoto.fullPath)
+                                        editLetterViewModel.removeImage(at: index)
                                     }
                                 } label: {
                                     Image(systemName: "xmark.circle.fill")

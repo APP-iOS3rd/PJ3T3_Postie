@@ -32,4 +32,12 @@ class EditLetterViewModel: ObservableObject {
         imagePickerSourceType = sourceType
         showUIImagePicker = true
     }
+
+    // MARK: - Images
+
+    @Published var currentLetterPhoto: [LetterPhoto] = []
+    var deleteCandidatesFromCurrentLetterPhoto: [LetterPhoto] = []
+
+    @Published var newImages: [UIImage] = [] 
 }
+
