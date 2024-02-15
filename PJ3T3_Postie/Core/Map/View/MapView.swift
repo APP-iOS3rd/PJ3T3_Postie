@@ -13,9 +13,6 @@ import NMapsMap
 
 struct MapView: View {
     private let name = ["우체국", "우체통"]
-    
-    
-    
     //햄버거 구현하기
     
     @StateObject var naverGeocodeAPI = NaverGeocodeAPI.shared
@@ -83,7 +80,6 @@ struct MapView: View {
                                 }
                             }
                         }
-                        
                         Spacer()
                     }
                     .padding()
@@ -91,10 +87,8 @@ struct MapView: View {
                     ZStack(alignment: .top) {
                         NaverMap(coord: coord)
                             .ignoresSafeArea(.all, edges: .top)
-                        //                   .edgesIgnoringSafeArea(.all, edges:)
                         
                         VStack {
-                            
                             Button(action: {
                                 print("현재 위치에서 \(name[selectedButtonIndex]) 찾기 버튼 눌림")
                                 coord = MyCoord(coordinator.cameraLocation?.lat ?? 37.579081, coordinator.cameraLocation?.lng ?? 126.974375 )
@@ -165,6 +159,5 @@ struct MapView: View {
             locationManager.stopUpdatingLocation()
         }
         .zIndex(1)
-        
     }
 }
