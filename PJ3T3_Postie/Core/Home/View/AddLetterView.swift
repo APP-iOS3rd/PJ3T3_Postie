@@ -137,8 +137,8 @@ struct AddLetterView: View {
     /// 3. 모든 편지 불러와서 상태 업데이트
     private func addLetter() async {
         await firestoreManager.addLetter(
-            writer: isReceived ? addLetterViewModel.sender : AuthManager.shared.currentUser?.fullName ?? "유저",
-            recipient: isReceived ? AuthManager.shared.currentUser?.fullName ?? "유저" : addLetterViewModel.receiver,
+            writer: isReceived ? addLetterViewModel.sender : AuthManager.shared.currentUser?.nickname ?? "유저",
+            recipient: isReceived ? AuthManager.shared.currentUser?.nickname ?? "유저" : addLetterViewModel.receiver,
             summary: addLetterViewModel.summary,
             date: addLetterViewModel.date,
             text: addLetterViewModel.text,
