@@ -51,6 +51,7 @@ struct ProfileView: View {
                             .foregroundStyle(postieColors.dividerColor)
                         
                         DividerView()
+                            .padding(.bottom)
                         
                         Text(" \(String(user?.fullName ?? ""))")
                             .foregroundStyle(postieColors.tabBarTintColor)
@@ -61,6 +62,7 @@ struct ProfileView: View {
                             .foregroundStyle(postieColors.dividerColor)
                         
                         DividerView()
+                            .padding(.bottom)
                         
                         Text(" \(String(user?.nickname ?? ""))")
                             .foregroundStyle(postieColors.tabBarTintColor)
@@ -71,6 +73,7 @@ struct ProfileView: View {
                             .foregroundStyle(postieColors.dividerColor)
                         
                         DividerView()
+                            .padding(.bottom)
                         
                         Text(" \(String(user?.email ?? ""))")
                             .foregroundStyle(postieColors.tabBarTintColor)
@@ -81,6 +84,7 @@ struct ProfileView: View {
                             .foregroundStyle(postieColors.dividerColor)
                         
                         DividerView()
+                            .padding(.bottom)
                         
                         Button {
                             isshowingMembershipView = true
@@ -106,6 +110,7 @@ struct ProfileView: View {
                             .foregroundStyle(postieColors.dividerColor)
                         
                         DividerView()
+                            .padding(.bottom)
                         
                         Button {
                             isLogOutAlert = true

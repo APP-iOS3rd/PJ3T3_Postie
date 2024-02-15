@@ -25,6 +25,7 @@ struct AlertView: View {
                         .padding(.bottom)
                     
                     DividerView()
+                        .padding(.bottom)
                     
                     Toggle("옛 편지 알림", isOn: $slowAlert)
                         .disabled(!allAlert)

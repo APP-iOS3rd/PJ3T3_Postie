@@ -155,6 +155,7 @@ struct SideMenuView: View {
                     .foregroundStyle(postieColors.dividerColor)
                 
                 DividerView()
+                    .padding(.bottom)
                 
                 NavigationLink(destination: ProfileView(profileImage: $profileImage, profileImageTemp: $profileImageTemp)) {
                     HStack {
@@ -190,6 +191,7 @@ struct SideMenuView: View {
                     .foregroundStyle(postieColors.dividerColor)
                 
                 DividerView()
+                    .padding(.bottom)
                 
                 NavigationLink(destination: ThemeView(currentColorPage: $currentColorPage, isTabGroupButton: $isTabGroupButton, currentGroupPage: $currentGroupPage)) {
                     HStack {
@@ -210,6 +212,7 @@ struct SideMenuView: View {
                     .foregroundStyle(postieColors.dividerColor)
                 
                 DividerView()
+                    .padding(.bottom)
                 
                 NavigationLink(destination: AlertView()) {
                     HStack {
@@ -327,7 +330,6 @@ struct DividerView: View {
         Rectangle()
             .fill(postieColors.dividerColor)
             .frame(height: 1)
-            .padding(.bottom)
     }
 }
 

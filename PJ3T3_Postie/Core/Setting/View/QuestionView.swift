@@ -32,6 +32,7 @@ struct QuestionView: View {
                         .foregroundStyle(postieColors.dividerColor)
                     
                     DividerView()
+                        .padding(.bottom)
                     
                     ForEach(questions, id: \.id) { questions in
                         DisclosureGroup {
@@ -65,11 +66,13 @@ struct QuestionView: View {
                         .padding(.bottom)
                         
                         DividerView()
+                            .padding(.bottom)
                     }
                     
                     Text("도움말을 통해 문제를 해결하지 못했나요?")
                         .font(.title2)
                         .bold()
+                        .padding(.top)
                     
                     Button(action: {
                                 let email = "postie@gmail.com"
