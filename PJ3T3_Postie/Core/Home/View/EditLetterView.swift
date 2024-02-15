@@ -125,6 +125,8 @@ struct EditLetterView: View {
             editLetterViewModel.text = letter.text
             editLetterViewModel.summary = letter.summary
             editLetterViewModel.images = letterPhotos.map { $0.image }
+
+            editLetterViewModel.showSummaryTextField = !letter.summary.isEmpty
         }
     }
 
