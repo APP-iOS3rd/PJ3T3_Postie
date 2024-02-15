@@ -13,12 +13,14 @@ struct LetterDetailView: View {
     @ObservedObject var storageManager = StorageManager.shared
 
     @Environment(\.dismiss) var dismiss
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
 
     var letter: Letter
 
     var body: some View {
+        
         ZStack {
-            Color(hex: 0xF5F1E8)
+            ThemeManager.themeColors[isThemeGroupButton].backGroundColor
                 .ignoresSafeArea()
             
             VStack {
@@ -31,12 +33,12 @@ struct LetterDetailView: View {
             .padding()
         }
         .navigationBarTitleDisplayMode(.inline)
-        .toolbarBackground(Color(hex: 0xF5F1E8), for: .navigationBar)
+        .toolbarBackground(ThemeManager.themeColors[isThemeGroupButton].backGroundColor, for: .navigationBar)
         .toolbar {
             ToolbarItemGroup(placement: .principal) {
                 Text(letter.isReceived ? "받은 편지" : "보낸 편지")
                     .bold()
-                    .foregroundStyle(Color(hex: 0xFF5733))
+                    .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].tintColor)
             }
 
             ToolbarItemGroup(placement: .topBarTrailing) {
@@ -148,7 +150,7 @@ extension LetterDetailView {
                     .font(.letter(.nanumMyeongjo))
                     .padding()
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color(hex: 0xFFFBF2))
+                    .background(ThemeManager.themeColors[isThemeGroupButton].receivedLetterColor)
                     .clipShape(RoundedRectangle(cornerRadius: 4))
             }
         }

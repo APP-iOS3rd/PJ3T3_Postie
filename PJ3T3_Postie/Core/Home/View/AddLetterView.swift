@@ -23,6 +23,7 @@ struct AddLetterView: View {
 
     @FocusState private var focusField: Field?
     @Environment(\.dismiss) var dismiss
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
 
     init(isReceived: Bool) {
         self.isReceived = isReceived
@@ -36,9 +37,9 @@ struct AddLetterView: View {
         )
     }
     
-    var body: some View {
+    var body: some View {        
         ZStack {
-            Color(hex: 0xF5F1E8)
+            ThemeManager.themeColors[isThemeGroupButton].backGroundColor
                 .ignoresSafeArea()
 
             ScrollView {
@@ -53,12 +54,12 @@ struct AddLetterView: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
-        .toolbarBackground(Color(hex: 0xF5F1E8), for: .navigationBar)
+        .toolbarBackground(ThemeManager.themeColors[isThemeGroupButton].backGroundColor, for: .navigationBar)
         .toolbar {
             ToolbarItemGroup(placement: .principal) {
                 Text(isReceived ? "받은 편지 기록" : "보낸 편지 기록")
                     .bold()
-                    .foregroundStyle(Color(hex: 0xFF5733))
+                    .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].tintColor)
             }
 
             ToolbarItemGroup(placement: .topBarTrailing) {
@@ -174,7 +175,7 @@ extension AddLetterView {
                           text: isReceived ?
                           $addLetterViewModel.sender : $addLetterViewModel.receiver)
                 .padding(6)
-                .background(Color(hex: 0xFCFBF7))
+                .background(ThemeManager.themeColors[isThemeGroupButton].receivedLetterColor)
                 .clipShape(RoundedRectangle(cornerRadius: 4))
                 .focused($focusField, equals: .sender)
             }
@@ -233,7 +234,7 @@ extension AddLetterView {
 
             if addLetterViewModel.images.isEmpty {
                 Label("사진을 추가해주세요.", systemImage: "photo.on.rectangle")
-                    .foregroundStyle(Color(hex: 0xAAAAAA))
+                    .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].dividerColor)
                     .frame(maxWidth: .infinity)
                     .frame(height: 100)
                     .frame(alignment: .center)
@@ -260,7 +261,7 @@ extension AddLetterView {
                                 } label: {
                                     Image(systemName: "xmark.circle.fill")
                                         .symbolRenderingMode(.palette)
-                                        .foregroundStyle(.white, Color(hex: 0xFF5733))
+                                        .foregroundStyle(.white, ThemeManager.themeColors[isThemeGroupButton].tintColor)
                                 }
                                 .offset(x: 8, y: -8)
                             }
@@ -282,7 +283,7 @@ extension AddLetterView {
                 if addLetterViewModel.text.isEmpty {
                     TextEditor(text: .constant("사진을 등록하면 자동으로 편지 내용이 입력됩니다."))
                         .scrollContentBackground(.hidden)
-                        .background(Color(hex: 0xFCFBF7))
+                        .background(ThemeManager.themeColors[isThemeGroupButton].receivedLetterColor)
                         .lineSpacing(5)
                         .clipShape(RoundedRectangle(cornerRadius: 4))
                         .frame(maxWidth: .infinity)
@@ -292,7 +293,7 @@ extension AddLetterView {
 
                 TextEditor(text: $addLetterViewModel.text)
                     .scrollContentBackground(.hidden)
-                    .background(Color(hex: 0xFCFBF7))
+                    .background(ThemeManager.themeColors[isThemeGroupButton].receivedLetterColor)
                     .lineSpacing(5)
                     .clipShape(RoundedRectangle(cornerRadius: 4))
                     .overlay(
@@ -323,12 +324,12 @@ extension AddLetterView {
             if addLetterViewModel.showSummaryTextField || !addLetterViewModel.summary.isEmpty {
                 TextField("", text: $addLetterViewModel.summary)
                     .padding(6)
-                    .background(Color(hex: 0xFCFBF7))
+                    .background(ThemeManager.themeColors[isThemeGroupButton].receivedLetterColor)
                     .clipShape(RoundedRectangle(cornerRadius: 4))
                     .focused($focusField, equals: .summary)
             } else {
                 Label("편지를 요약해드릴게요.", systemImage: "text.quote.rtl")
-                    .foregroundStyle(Color(hex: 0xAAAAAA))
+                    .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].dividerColor)
                     .frame(maxWidth: .infinity)
                     .frame(height: 30)
                     .frame(alignment: .center)
