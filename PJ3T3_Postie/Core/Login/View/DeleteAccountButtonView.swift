@@ -8,11 +8,47 @@
 import SwiftUI
 
 struct DeleteAccountButtonView: View {
+    @ObservedObject var authManager = AuthManager.shared
+    @Binding var showLoading: Bool
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Button("계정 삭제", role: .destructive) {
+            switch authManager.provider {
+            case .email:
+                Task {
+                    print("Cannot delete Email account")
+                    authManager.signOut()
+                }
+            case .google:
+                print("Delete Google account")
+                Task {
+                    do {
+                        try await authManager.deleteGoogleAccount()
+                        showLoading = true
+                    } catch {
+                        print(#function, "Failed to delete Google account: \(error)")
+                        showLoading = false
+                    }
+                }
+            case .apple:
+                print("Delete Apple account")
+                AppleSignInHelper.shared.deleteCurrentAppleUser()
+            default:
+                print("Delete account")
+                //alert 창 구현
+            }
+        }
+        .customOnChange(authManager.credential) { newValue in
+            if authManager.credential == nil {
+                print(#function, "Canceled to delete account")
+                showLoading = false
+            } else {
+                showLoading = true
+            }
+        }
     }
 }
 
 #Preview {
-    DeleteAccountButtonView()
+    DeleteAccountButtonView(showLoading: .constant(false))
 }
