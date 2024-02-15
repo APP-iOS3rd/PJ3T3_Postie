@@ -26,11 +26,12 @@ struct ContentView: View {
     @StateObject private var viewModel = AppViewModel()
     
     init() {
-            let tbAppearance: UITabBarAppearance = UITabBarAppearance()
-            tbAppearance.backgroundColor = UIColor.systemBackground
-            UITabBar.appearance().scrollEdgeAppearance = tbAppearance
-            UITabBar.appearance().standardAppearance = tbAppearance
-        }
+        let tbAppearance: UITabBarAppearance = UITabBarAppearance()
+        tbAppearance.backgroundColor = UIColor.systemBackground
+        UITabBar.appearance().scrollEdgeAppearance = tbAppearance
+        UITabBar.appearance().standardAppearance = tbAppearance
+    }
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
     var body: some View {
         // 로딩 끝나면 화면 재생
@@ -41,7 +42,7 @@ struct ContentView: View {
                 if authViewModel.currentUser != nil {
                     Group {
                         TabView {
-                            HomeView()
+                            HomeView(isThemeGroupButton: $isThemeGroupButton)
                                 .tabItem {
                                     TabItemContent(image: "house", text: "Home")
                                 }
@@ -65,11 +66,11 @@ struct ContentView: View {
                         }
                     }
                     .accentColor(.red)
-//
-//                    .onAppear() {
-//                                    UITabBar.appearance().barTintColor = .blue
-//                                }
-//                    .background(Color.red)
+                    //
+                    //                    .onAppear() {
+                    //                                    UITabBar.appearance().barTintColor = .blue
+                    //                                }
+                    //                    .background(Color.red)
                 } else {
                     if authViewModel.hasAccount {
                         ProgressView()
@@ -81,10 +82,10 @@ struct ContentView: View {
                 LoginView()
             }
         } else {
-            SplashScreenView()
+            SplashScreenView(isThemeGroupButton: $isThemeGroupButton)
         }
     }
-
+    
 }
 
 #Preview {

@@ -13,7 +13,6 @@ struct GroupedListLetterView: View {
 
     var recipient: String
 
-    @State private var showAlert = false
     @State private var isSideMenuOpen = false
     @Binding var isThemeGroupButton: Int
     
