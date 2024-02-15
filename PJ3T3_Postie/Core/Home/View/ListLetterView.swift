@@ -9,7 +9,6 @@ import SwiftUI
 
 struct ListLetterView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
-    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
     var body: some View {
         ForEach(firestoreManager.letters, id: \.self) { letter in
@@ -25,11 +24,7 @@ struct ListLetterView: View {
 struct LetterItemView: View {
     var letter: Letter
     
-    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
-    
     var body: some View {
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
-        
         HStack {
             if !letter.isReceived {
                 Spacer()

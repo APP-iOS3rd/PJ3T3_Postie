@@ -30,7 +30,7 @@ struct GroupedLetterView: View {
                 
                 return false
             }
-
+            
             func isKoreanSyllable(_ string: String) -> Bool {
                 for scalar in string.unicodeScalars {
                     if scalar.value >= 0xAC00 && scalar.value <= 0xD7A3 {
@@ -74,7 +74,6 @@ struct GroupedLetterView: View {
     }
     
     var body: some View {
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
         // 편지 데이터 정렬
         let sortedRecipients = sortedLetterData()
         // 좋아하는 편지들만 필터
@@ -197,7 +196,7 @@ struct GroupedLetterView: View {
                                     
                                     Text("\"")
                                         .font(.custom("SourceSerifPro-Black", size: 17))
-                                        
+                                    
                                     Text("\(recipient)님과 주고받은 편지 꾸러미")
                                     
                                     Text("\"")
@@ -232,11 +231,7 @@ struct StackedRoundedRectangleModifier: ViewModifier {
     let count: Int
     var groupWidth: CGFloat
     
-    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
-    
     func body(content: Content) -> some View {
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
-        
         ZStack {
             if count > 2 {
                 RoundedRectangle(cornerRadius: 4)

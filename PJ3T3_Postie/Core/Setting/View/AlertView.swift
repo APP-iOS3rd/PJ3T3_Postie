@@ -15,8 +15,6 @@ struct AlertView: View {
     @State private var alert2 = true
     
     var body: some View {
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
-        
         ZStack {
             postieColors.backGroundColor
                 .ignoresSafeArea()

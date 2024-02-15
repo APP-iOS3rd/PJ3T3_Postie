@@ -11,7 +11,6 @@ struct InformationView: View {
     @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
     var body: some View {
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
         var appVersion: String {
                 if let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String,
                    let build = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String {
@@ -91,8 +90,6 @@ struct TermOfUserView: View {
     @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
     var body: some View {
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
-        
         ZStack {
             postieColors.backGroundColor
                 .ignoresSafeArea()
@@ -161,8 +158,6 @@ struct PrivacyView: View {
     @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
     var body: some View {
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
-        
         ZStack {
             postieColors.backGroundColor
                 .ignoresSafeArea()

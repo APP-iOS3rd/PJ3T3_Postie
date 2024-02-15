@@ -12,7 +12,6 @@ struct NoticeView: View {
     @State private var isExpanded = false
     
     var body: some View {
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
         let posts = [
             Post(title: "언제나 변함없는 편지 앱, 포스티가 시작했습니다. 1.0 업데이트 안내", content: "언제나 변함없는 편지 앱, 포스티가 베타 테스트를 시작했습니다!", date: Date(), imageURL: nil),
             Post(title: "시작은 작은 한걸음 부터. 1.0.2 업데이트 안내", content: "편지 수정 기능을 강화했습니다.", date: Date(), imageURL: nil)

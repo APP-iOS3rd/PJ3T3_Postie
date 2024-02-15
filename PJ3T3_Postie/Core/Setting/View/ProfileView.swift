@@ -20,7 +20,6 @@ struct ProfileView: View {
     
     var body: some View {
         let user = authManager.currentUser
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
         
         GeometryReader { geometry in
             ZStack {

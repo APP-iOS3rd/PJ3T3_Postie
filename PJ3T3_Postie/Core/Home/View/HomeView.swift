@@ -19,8 +19,6 @@ struct HomeView: View {
     @State private var currentColorPage: Int = 0
     
     var body: some View {
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
-        
         NavigationStack {
             GeometryReader { geometry in
                 ZStack {
@@ -36,7 +34,7 @@ struct HomeView: View {
                             Spacer()
                             
                             NavigationLink {
-                                SearchView(isThemeGroupButton: $isThemeGroupButton)
+                                SearchView()
                             } label: {
                                 Image(systemName: "magnifyingglass")
                                     .imageScale(.large)
@@ -136,7 +134,6 @@ struct SideMenuView: View {
     
     var body: some View {
         let user = authManager.currentUser
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
         
         HStack {
             Spacer()
@@ -300,8 +297,6 @@ struct AddLetterButton: View {
     @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
     var body: some View {
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
-        
         Menu {
             NavigationLink(destination: AddLetterView(isReceived: false)) {
                 Label("나의 느린 우체통", systemImage: "envelope.open.badge.clock")
@@ -334,11 +329,7 @@ struct AddLetterButton: View {
 }
 
 struct DividerView: View {
-    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
-    
     var body: some View {
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
-        
         Rectangle()
             .fill(postieColors.dividerColor)
             .frame(height: 1)

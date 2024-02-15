@@ -14,7 +14,6 @@ struct QuestionView: View {
     @State private var isExpanded = false
     
     var body: some View {
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
         let questions = [
             Question(title: "이 앱은 뭔가요?", content: "'포스티'라는 앱은, 그동안 주고 받았던 편지를 간편하게 휴대폰으로 저장해서 언제 어디서나 확인할수 있는 앱이에요!\n편지를 오래 주고 받다보면, 받은 편지들을 관리하기 힘들어지고 가끔 잃어버리는경우도 있죠. 그리고 보냈던 편지를 보관할 방법도 딱히 없고요.\n\n이럴 때 '포스티'를 사용해보세요!\n보낸 편지든, 받았던 편지든, 하나의 앱에 저장 해서 언제 어디서나 확인 할 수 있답니다!\n지금 당장 홈 화면에서 주고 받았던 편지를 저장해보세요!"),
             Question(title: "편지 저장이 안돼요.", content: "'포스티'앱은 모든 편지를 외부 클라우드에 저장하고, 불러오는 방식으로 편지들을 보여줘요.\n혹시나 스마트폰의 네트워크 상태가 좋은지 확인해보시고, 네트워크 상태가 좋은데도 저장이 안되면 현재 화면 하단의 '문의하기'를 통해 현재 상태를 포함해서 상세하게 문의 해주시면 빠른 시일내에 답변드릴게요!"),

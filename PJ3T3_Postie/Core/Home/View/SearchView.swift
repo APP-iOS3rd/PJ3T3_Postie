@@ -9,13 +9,10 @@ import SwiftUI
 
 struct SearchView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
-    @Binding var isThemeGroupButton: Int
     @State var searchQuery = ""
     @State var filteredLetters: [Letter] = []
     
     var body: some View {
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
-        
         ZStack {
             postieColors.backGroundColor
                 .ignoresSafeArea()
@@ -92,5 +89,5 @@ struct SearchView: View {
 }
 
 #Preview {
-    SearchView(isThemeGroupButton: .constant(0))
+    SearchView()
 }

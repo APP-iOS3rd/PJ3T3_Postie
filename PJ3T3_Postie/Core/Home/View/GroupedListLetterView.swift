@@ -17,7 +17,6 @@ struct GroupedListLetterView: View {
     @State private var isSideMenuOpen = false
     
     var body: some View {
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
         let filteredLetters = firestoreManager.letters.filter { $0.recipient == recipient || $0.writer == recipient }
         
         ZStack(alignment: .bottomTrailing) {

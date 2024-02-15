@@ -11,11 +11,9 @@ struct GroupedFavoriteListLetterView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
     @ObservedObject var storageManager = StorageManager.shared
     
-    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     @State private var isSideMenuOpen: Bool = false
     
     var body: some View {
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
         let favoriteLetters = firestoreManager.letters.filter { $0.isFavorite }
         
         ZStack(alignment: .bottomTrailing) {

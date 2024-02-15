@@ -19,7 +19,6 @@ struct ThemeView: View {
     @Binding var currentGroupPage: Int
     
     var body: some View {
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
         let items = ["포스티 오렌지", "포스티 옐로우", "포스티 그린", "포스티 블루", "포스티 블랙"]
         let listImages = ["postieListOrange", "postieListYellow", "postieListGreen", "postieListBlue", "postieListBlack"]
         let groupImages = ["postieGroupOrange", "postieGroupYellow", "postieGroupGreen", "postieGroupBlue", "postieGroupBlack"]
@@ -185,6 +184,7 @@ struct ThemeView: View {
                                     Button (action: {
                                         isThemeGroupButton = index
                                         currentColorPage = isThemeGroupButton
+                                        ThemeManager.shared.updateTheme(index: index)
                                     }) {
                                         VStack {
                                             HStack {
@@ -216,6 +216,7 @@ struct ThemeView: View {
                                     ForEach(Array(zip(items.indices, items)), id: \.0) { index, item in
                                         Button (action: {
                                             isThemeGroupButton = index
+                                            ThemeManager.shared.updateTheme(index: index)
                                         }) {
                                             VStack {
                                                 Image(isTabGroupButton ? groupImages[index] : listImages[index])
@@ -243,6 +244,7 @@ struct ThemeView: View {
                                 ForEach(Array(zip(items.indices, items)), id: \.0) { index, item in
                                     Button (action: {
                                         isThemeGroupButton = index
+                                        ThemeManager.shared.updateTheme(index: index)
                                     }) {
                                         VStack {
                                             HStack {

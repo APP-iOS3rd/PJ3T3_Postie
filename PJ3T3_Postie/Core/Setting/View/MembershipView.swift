@@ -15,8 +15,6 @@ struct MembershipView: View {
     @State private var isMembershipForYear = true
     
     var body: some View {
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
-        
         ZStack(alignment: .bottom) {
             postieColors.backGroundColor
                 .ignoresSafeArea()
@@ -157,8 +155,6 @@ struct MembershipItems: View {
     @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
 
     var body: some View {
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
-        
         Text(text)
             .padding()
             .background(

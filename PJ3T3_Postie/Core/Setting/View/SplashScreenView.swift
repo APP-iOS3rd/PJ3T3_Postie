@@ -11,7 +11,6 @@ struct SplashScreenView: View {
     @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
     var body: some View {
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
         let random_number = Int.random(in: 1...5)
         
         ZStack {
@@ -67,8 +66,6 @@ struct ToFromLabelView: View {
     @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
     var body: some View {
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
-        
         VStack {
             HStack {
                 Text("To.")
