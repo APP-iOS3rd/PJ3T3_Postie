@@ -64,7 +64,7 @@ struct ContentView: View {
                     .accentColor(ThemeManager.themeColors[isThemeGroupButton].tabBarTintColor)
                 } else {
                     if authViewModel.hasAccount {
-                        ProgressView()
+                        LoadingView(text: "포스티 시작하는 중")
                     } else {
                         NicknameView()
                     }
