@@ -144,6 +144,17 @@ struct EditLetterView: View {
             isFavorite: letter.isFavorite
         )
 
+        FirestoreManager.shared.letter = Letter(
+            id: letter.id,
+            writer: editLetterViewModel.sender,
+            recipient: editLetterViewModel.receiver,
+            summary: editLetterViewModel.summary,
+            date: editLetterViewModel.date,
+            text: editLetterViewModel.text,
+            isReceived: letter.isReceived,
+            isFavorite: letter.isFavorite
+        )
+
         FirestoreManager.shared.fetchAllLetters()
     }
 }
