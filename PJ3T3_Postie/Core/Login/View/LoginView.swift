@@ -12,6 +12,7 @@ import GoogleSignInSwift
 
 struct LoginView: View {
     @ObservedObject var authManager = AuthManager.shared
+    @ObservedObject var appleSignInHelper = AppleSignInHelper.shared
     
     var body: some View {
         NavigationStack {
@@ -69,11 +70,11 @@ struct LoginView: View {
                     .padding(.bottom, 10)
                     
                     SignInWithAppleButton { request in
-                        AppleSignInHelper.shared.signInWithAppleRequest(request)
+                        appleSignInHelper.signInWithAppleRequest(request)
                     } onCompletion: { result in
                         Task {
                             do {
-                                AppleSignInHelper.shared.signInWithAppleCompletion(result)
+                                appleSignInHelper.signInWithAppleCompletion(result)
                                 guard let credential = authManager.credential else {
                                     print("Unable to fetch credential")
                                     return

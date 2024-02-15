@@ -13,12 +13,14 @@ struct LetterDetailView: View {
     @ObservedObject var storageManager = StorageManager.shared
 
     @Environment(\.dismiss) var dismiss
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
 
     var letter: Letter
 
     var body: some View {
+        
         ZStack {
-            Color(hex: 0xF5F1E8)
+            ThemeManager.themeColors[isThemeGroupButton].backGroundColor
                 .ignoresSafeArea()
             
             VStack {
@@ -31,26 +33,27 @@ struct LetterDetailView: View {
             .padding()
         }
         .navigationBarTitleDisplayMode(.inline)
-        .toolbarBackground(Color(hex: 0xF5F1E8), for: .navigationBar)
+        .toolbarBackground(ThemeManager.themeColors[isThemeGroupButton].backGroundColor, for: .navigationBar)
         .toolbar {
             ToolbarItemGroup(placement: .principal) {
                 Text(letter.isReceived ? "받은 편지" : "보낸 편지")
                     .bold()
-                    .foregroundStyle(Color(hex: 0xFF5733))
+                    .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].tintColor)
             }
 
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button {
                     letterDetailViewModel.isFavorite.toggle()
-
+                    
+                    // TODO: 하나만 업데이트 하는 함수로 변경
                     firestoreManager.editLetter(
                         documentId: letter.id,
-                        writer: letter.writer,
-                        recipient: letter.recipient,
-                        summary: letter.summary,
-                        date: letter.date,
-                        text: letter.text,
-                        isReceived: letter.isReceived,
+                        writer: firestoreManager.letter.writer,
+                        recipient: firestoreManager.letter.recipient,
+                        summary: firestoreManager.letter.summary,
+                        date: firestoreManager.letter.date,
+                        text: firestoreManager.letter.text,
+                        isReceived: firestoreManager.letter.isReceived,
                         isFavorite: letterDetailViewModel.isFavorite
                     )
 
@@ -95,7 +98,7 @@ struct LetterDetailView: View {
         }
         .sheet(isPresented: $letterDetailViewModel.showLetterEditSheet) {
             NavigationStack {
-                AddLetterView(isReceived: letter.isReceived, letter: firestoreManager.letter, letterPhotos: storageManager.images)
+                EditLetterView(letter: firestoreManager.letter, letterPhotos: StorageManager.shared.images)
             }
         }
         .alert("편지 삭제", isPresented: $letterDetailViewModel.showDeleteAlert) {
@@ -147,7 +150,7 @@ extension LetterDetailView {
                     .font(.letter(.nanumMyeongjo))
                     .padding()
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color(hex: 0xFFFBF2))
+                    .background(ThemeManager.themeColors[isThemeGroupButton].receivedLetterColor)
                     .clipShape(RoundedRectangle(cornerRadius: 4))
             }
         }
@@ -167,18 +170,11 @@ extension LetterDetailView {
                                     letterDetailViewModel.selectedIndex = index
                                     letterDetailViewModel.showLetterImageFullScreenView = true
                                 } label: {
-                                    AsyncImage(
-                                        url: URL(string: storageManager.images[index].urlString)
-                                    ) { image in
-                                        image
-                                            .resizable()
-                                            .scaledToFill()
-                                            .frame(width: 50, height: 50)
-                                            .clipShape(RoundedRectangle(cornerRadius: 4))
-                                    } placeholder: {
-                                        ProgressView()
-                                            .frame(width: 50, height: 50)
-                                    }
+                                    Image(uiImage: storageManager.images.map({$0.image})[index])
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width: 50, height: 50)
+                                        .clipShape(RoundedRectangle(cornerRadius: 4))
                                 }
                             }
                         }

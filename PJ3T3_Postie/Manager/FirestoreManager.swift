@@ -12,12 +12,10 @@ class FirestoreManager: ObservableObject {
     var letterColRef: CollectionReference = Firestore.firestore().collection("users")
     var docId: String = ""
     @Published var letters: [Letter] = []
-    @Published var shops: [Shop] = []
     @Published var letter: Letter = Letter(id: "", writer: "", recipient: "", summary: "", date: Date(), text: "", isReceived: false, isFavorite: false)
 
     private init() { 
         fetchReference()
-        fetchAllShops()
     }
     
     func fetchReference() {
@@ -92,9 +90,30 @@ class FirestoreManager: ObservableObject {
         
         docRef.delete() { error in
             if let error = error {
-                print("Error writing document: ", error)
+                print(#function, "Error deleting document: ", error)
             } else {
-                print("\(documentId) delete success")
+                print(#function, "\(documentId) delete success")
+            }
+        }
+    }
+    
+    func deleteUserDocument(userUid: String) {
+        let userDocRef = Firestore.firestore().collection("users").document(userUid)
+        var letterQty = 0
+        
+        for letter in letters {
+                self.deleteLetter(documentId: letter.id)
+                StorageManager.shared.deleteFolder(docId: letter.id)
+            letterQty += 1
+        }
+        
+        print("Deleted \(letterQty)letters")
+        
+        userDocRef.delete { error in
+            if let error = error {
+                print(#function, "Error deleting document: ", error)
+            } else {
+                print(#function, "\(userUid) delete success")
             }
         }
     }
@@ -153,36 +172,6 @@ class FirestoreManager: ObservableObject {
             }
             
             print("Letter fetch success")
-        }
-    }
-    
-    func fetchAllShops() {
-        let docRef = Firestore.firestore().collection("shops")
-        
-        docRef.getDocuments { snapshot, error in
-            guard error == nil else {
-                print(error?.localizedDescription ?? "Undefined error")
-                return
-            }
-            
-            self.shops.removeAll()
-            
-            guard let snapshot = snapshot else {
-                print("\(#function): No snapshot \(String(describing: error?.localizedDescription))")
-                return
-            }
-            
-            for document in snapshot.documents {
-                do {
-                    let data = try document.data(as: Shop.self)
-                    
-                    self.shops.append(data)
-                } catch {
-                    print(#function, error.localizedDescription)
-                }
-            }
-            
-            print("Shop fetch success")
         }
     }
 }
