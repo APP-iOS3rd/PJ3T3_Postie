@@ -10,53 +10,14 @@ import SwiftUI
 struct GroupedLetterView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
     @ObservedObject var authManager = AuthManager.shared
+    @StateObject private var grouedLetterViewModel = GroupedLetterViewModel()
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
     var letterReceivedGrouped: [String] = []
     var letterWritedGrouped: [String] = []
     var letterGrouped: [String] = []
     var homeWidth: CGFloat
-    
-    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
-    
-    // 숫자, 한글, 알파벳 순서대로 정렬
-    func customSort(recipients: [String]) -> [String] {
-        return recipients.sorted { (lhs: String, rhs: String) -> Bool in
-            func isKoreanConsonant(_ string: String) -> Bool {
-                for scalar in string.unicodeScalars {
-                    if scalar.value >= 0x3131 && scalar.value <= 0x314E {
-                        return true
-                    }
-                }
-                
-                return false
-            }
-            
-            func isKoreanSyllable(_ string: String) -> Bool {
-                for scalar in string.unicodeScalars {
-                    if scalar.value >= 0xAC00 && scalar.value <= 0xD7A3 {
-                        return true
-                    }
-                }
-                
-                return false
-            }
-            
-            // 우선순위 -> 숫자: 0, 한글 초성: 1, 한글 음절: 2, 그 외: 3
-            let lhsPriority = isKoreanConsonant(lhs) ? 1 : isKoreanSyllable(lhs) ? 2 : 3
-            let rhsPriority = isKoreanConsonant(rhs) ? 1 : isKoreanSyllable(rhs) ? 2 : 3
-            
-            if lhsPriority == rhsPriority {
-                if lhsPriority == 1 || lhsPriority == 2 {
-                    return lhs < rhs
-                } else {
-                    return lhs.lowercased() < rhs.lowercased()
-                }
-            } else {
-                return lhsPriority < rhsPriority
-            }
-        }
-    }
-    
+
     // 편지 데이터 정렬
     func sortedLetterData() -> [String] {
         // recipient 에서 중복 된것을 제외 후 letterReceivedGrouped 에 삽입
@@ -68,7 +29,7 @@ struct GroupedLetterView: View {
         // 본인 이름 항목 제거
         let filteredLetterGrouped: [String] = letterGrouped.filter { $0 != authManager.currentUser?.nickname }
         // 숫자, 한글, 알파벳 순서대로 정렬
-        let sortedRecipients = customSort(recipients: filteredLetterGrouped)
+        let sortedRecipients = grouedLetterViewModel.customSort(recipients: filteredLetterGrouped)
         
         return sortedRecipients
     }
@@ -228,6 +189,8 @@ struct GroupedLetterView: View {
 }
 
 struct StackedRoundedRectangleModifier: ViewModifier {
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
+    
     let count: Int
     var groupWidth: CGFloat
     
