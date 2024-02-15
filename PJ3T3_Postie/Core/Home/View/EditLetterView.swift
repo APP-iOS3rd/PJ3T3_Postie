@@ -90,7 +90,7 @@ struct EditLetterView: View {
         .scrollDismissesKeyboard(.interactively)
         .fullScreenCover(isPresented: $editLetterViewModel.showLetterImageFullScreenView) {
             LetterImageFullScreenView(
-                images: editLetterViewModel.images,
+                images: editLetterViewModel.currentLetterPhotosAndNewImages,
                 pageIndex: $editLetterViewModel.selectedIndex
             )
         }
@@ -306,7 +306,7 @@ extension EditLetterView {
                         ForEach(0..<editLetterViewModel.newImages.count, id: \.self) { index in
                             ZStack(alignment: .topTrailing) {
                                 Button {
-                                    editLetterViewModel.selectedIndex = index
+                                    editLetterViewModel.selectedIndex = index + editLetterViewModel.currentLetterPhoto.count
                                     editLetterViewModel.showLetterImageFullScreenView = true
                                 } label: {
                                     Image(uiImage: editLetterViewModel.newImages[index])

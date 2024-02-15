@@ -25,7 +25,7 @@ class EditLetterViewModel: ObservableObject {
     private(set) var imagePickerSourceType: UIImagePickerController.SourceType = .camera
 
     func removeImage(at index: Int) {
-        images.remove(at: index)
+        newImages.remove(at: index)
     }
 
     func showUIImagePicker(sourceType: UIImagePickerController.SourceType) {
@@ -39,5 +39,9 @@ class EditLetterViewModel: ObservableObject {
     var deleteCandidatesFromCurrentLetterPhoto: [LetterPhoto] = []
 
     @Published var newImages: [UIImage] = [] 
+
+    var currentLetterPhotosAndNewImages: [UIImage] {
+        currentLetterPhoto.map({ $0.image }) + newImages
+    }
 }
 
