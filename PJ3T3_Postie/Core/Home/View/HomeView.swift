@@ -10,10 +10,11 @@ import SwiftUI
 struct HomeView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
     @AppStorage("isTabGroupButton") private var isTabGroupButton: Bool = true
-    @AppStorage("profileImage") private var profileImage: String = "postyReceivingBeige"
+    @AppStorage("profileImage") private var profileImage: String = "postyReceivingLineColor"
     @AppStorage("profileImageTemp") private var profileImageTemp: String = ""
     @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
+    @State private var isMenuActive = false
     @State private var isSideMenuOpen = false
     @State private var currentGroupPage: Int = 0
     @State private var currentColorPage: Int = 0
@@ -41,6 +42,7 @@ struct HomeView: View {
                                     .foregroundStyle(postieColors.tabBarTintColor)
                                     .padding(.horizontal, 5)
                             }
+                            .disabled(isMenuActive)
                             
                             Button(action: {
                                 withAnimation {
@@ -53,17 +55,18 @@ struct HomeView: View {
                             }
                         }
                         .background(postieColors.backGroundColor)
+                        .disabled(isMenuActive)
                         .padding(.horizontal)
                         
                         ZStack(alignment: .bottomTrailing) {
                             ScrollView {
                                 if isTabGroupButton {
                                     VStack {
-                                        GroupedLetterView(homeWidth: geometry.size.width)
+                                        GroupedLetterView(isMenuActive: $isMenuActive, homeWidth: geometry.size.width)
                                     }
                                 } else {
                                     VStack {
-                                        ListLetterView()
+                                        ListLetterView(isMenuActive: $isMenuActive)
                                     }
                                 }
                                 
@@ -74,7 +77,7 @@ struct HomeView: View {
                             }
                             .background(postieColors.backGroundColor)
                             
-                            AddLetterButton()
+                            AddLetterButton(isMenuActive: $isMenuActive)
                         }
                         .preferredColorScheme(isThemeGroupButton == 4 ? .dark : .light)
                     }
@@ -107,6 +110,11 @@ struct HomeView: View {
                     SideMenuView(isSideMenuOpen: $isSideMenuOpen, currentGroupPage: $currentGroupPage, isTabGroupButton: $isTabGroupButton, currentColorPage: $currentColorPage, profileImage: $profileImage, profileImageTemp: $profileImageTemp)
                         .offset(x: isSideMenuOpen ? 0 : UIScreen.main.bounds.width)
                         .animation(.easeInOut, value: 1)
+                }
+                .onTapGesture {
+                    if self.isMenuActive {
+                        self.isMenuActive = false
+                    }
                 }
             }
         }
@@ -292,6 +300,7 @@ struct SideMenuView: View {
 
 struct AddLetterButton: View {
     @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
+    @Binding var isMenuActive: Bool
     
     var body: some View {
         Menu {
@@ -321,6 +330,9 @@ struct AddLetterButton: View {
         .foregroundStyle(Color.postieLightGray)
         .shadow(color: Color.postieBlack.opacity(0.1), radius: 3, x: 3, y: 3)
         .imageScale(.large)
+        .onTapGesture {
+            self.isMenuActive.toggle()
+        }
         .padding()
     }
 }

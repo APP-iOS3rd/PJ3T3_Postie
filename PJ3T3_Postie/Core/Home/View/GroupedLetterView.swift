@@ -12,6 +12,7 @@ struct GroupedLetterView: View {
     @ObservedObject var authManager = AuthManager.shared
     @StateObject private var grouedLetterViewModel = GroupedLetterViewModel()
     @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
+    @Binding var isMenuActive: Bool
     
     var letterReceivedGrouped: [String] = []
     var letterWritedGrouped: [String] = []
@@ -42,7 +43,7 @@ struct GroupedLetterView: View {
         
         VStack {
             NavigationLink { // 좋아하는 편지 뷰
-                GroupedFavoriteListLetterView()
+                GroupedFavoriteListLetterView(isMenuActive: $isMenuActive)
             } label: {
                 HStack {
                     GroupedLetterItemView(firstWord: "My favorite", title: "좋아하는 편지", content: "좋아하는 편지 꾸러미", isFavorite: true)
@@ -68,7 +69,7 @@ struct GroupedLetterView: View {
                 let countOfMatchingWriters = firestoreManager.letters.filter { $0.writer == recipient }.count
                 
                 NavigationLink {
-                    GroupedListLetterView(recipient: recipient)
+                    GroupedListLetterView(isMenuActive: $isMenuActive, recipient: recipient)
                 } label: {
                     HStack {
                         ZStack {
@@ -88,6 +89,7 @@ struct GroupedLetterView: View {
                         Spacer()
                     }
                 }
+                .disabled(isMenuActive)
             }
         }
         .toolbarBackground(postieColors.backGroundColor, for: .navigationBar)

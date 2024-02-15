@@ -10,7 +10,7 @@ import SwiftUI
 struct GroupedFavoriteListLetterView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
     @ObservedObject var storageManager = StorageManager.shared
-    
+    @Binding var isMenuActive: Bool
     @State private var isSideMenuOpen: Bool = false
     
     var body: some View {
@@ -43,6 +43,7 @@ struct GroupedFavoriteListLetterView: View {
                     } label: {
                         LetterItemView(letter: letter)
                     }
+                    .disabled(isMenuActive)
                 }
                 
                 // ScrollView margin 임시
@@ -51,7 +52,7 @@ struct GroupedFavoriteListLetterView: View {
                     .foregroundStyle(Color.postieBlack.opacity(0))
             }
             
-            AddLetterButton()
+            AddLetterButton(isMenuActive: $isMenuActive)
         }
         .toolbarBackground(postieColors.backGroundColor, for: .navigationBar)
         .tint(postieColors.tabBarTintColor)

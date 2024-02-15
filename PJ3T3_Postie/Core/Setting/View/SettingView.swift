@@ -83,8 +83,6 @@ struct SettingView: View {
                             }}, label: {
                                 Text("요약하기")
                             })
-                        .padding(5)
-                        .background(Color.yellow)
                     }
                     
                     Section("Account") {

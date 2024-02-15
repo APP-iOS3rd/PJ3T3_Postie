@@ -32,33 +32,35 @@ struct SplashScreenView: View {
                 Text("언제 어디서나")
                     .foregroundStyle(postieColors.dividerColor)
                 
-                if random_number == 1 {
-                    Image("postyReceivingLineColor")
-                        .resizable()
-                        .frame(width: 300, height: 300)
-                } else if random_number == 2 {
-                    Image("postySendingLineColor")
-                        .resizable()
-                        .frame(width: 300, height: 300)
-                } else if random_number == 3 {
-                    Image("postySmileLineColor")
-                        .resizable()
-                        .frame(width: 300, height: 300)
-                } else if random_number == 4 {
-                    Image("postyTrumpetLineColor")
-                        .resizable()
-                        .frame(width: 300, height: 300)
-                } else {
-                    Image("postyHeartLineColor")
-                        .resizable()
-                        .frame(width: 300, height: 300)
-                }
+                let imageName: String = {
+                    switch random_number {
+                    case 1: 
+                        return "postyReceivingLineColor"
+                    case 2: 
+                        return "postySendingLineColor"
+                    case 3: 
+                        return "postySmileLineColor"
+                    case 4: 
+                        return "postyTrumpetLineColor"
+                    default: 
+                        return "postyHeartLineColor"
+                    }
+                }()
                 
-                ProgressView()
-                    .offset(y: -40)
+                PostyImageView(imageName: imageName)
             }
             .padding()
         }
+    }
+}
+
+struct PostyImageView: View {
+    let imageName: String
+    
+    var body: some View {
+        Image(imageName)
+            .resizable()
+            .frame(width: 250, height: 250)
     }
 }
 

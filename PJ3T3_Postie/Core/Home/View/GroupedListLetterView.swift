@@ -10,7 +10,8 @@ import SwiftUI
 struct GroupedListLetterView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
     @ObservedObject var storageManager = StorageManager.shared
-
+    @Binding var isMenuActive: Bool
+    
     var recipient: String
     
     @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
@@ -30,6 +31,7 @@ struct GroupedListLetterView: View {
                     } label: {
                         LetterItemView(letter: letter)
                     }
+                    .disabled(isMenuActive)
                 }
                 
                 // ScrollView margin 임시
@@ -38,7 +40,7 @@ struct GroupedListLetterView: View {
                     .foregroundStyle(Color.postieBlack.opacity(0))
             }
             
-            AddLetterButton()
+            AddLetterButton(isMenuActive: $isMenuActive)
         }
         .toolbarBackground(postieColors.backGroundColor, for: .navigationBar)
         .navigationBarTitleDisplayMode(.inline)

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ListLetterView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
+    @Binding var isMenuActive: Bool
     
     var body: some View {
         ForEach(firestoreManager.letters, id: \.self) { letter in
@@ -17,6 +18,7 @@ struct ListLetterView: View {
             } label: {
                 LetterItemView(letter: letter)
             }
+            .disabled(isMenuActive)
         }
     }
 }
