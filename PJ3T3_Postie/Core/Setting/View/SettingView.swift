@@ -9,10 +9,14 @@ import SwiftUI
 import PhotosUI //Storage test를 위한 import로 이후 삭제 예정
 
 struct SettingView: View {
+    @Environment(\.window) var window: UIWindow?
     @ObservedObject var authManager = AuthManager.shared
+    @ObservedObject var appleSignInHelper = AppleSignInHelper.shared
     //Colors
     private let profileBackgroundColor: Color = .gray
     private let signOutIconColor: Color = Color(uiColor: .lightGray)
+    @State private var isDeleteAccountDialogPresented = false
+    @State private var showLoading = false
     
     var body: some View {
         NavigationStack {
@@ -73,23 +77,72 @@ struct SettingView: View {
                         }
                         
                         Button {
-                            print("Delete account")
+                            isDeleteAccountDialogPresented = true
                         } label: {
                             SettingsRowView(imageName: "xmark.circle.fill", title: "Delete Account", tintColor: signOutIconColor)
                         }
+                        .confirmationDialog("포스티를 떠나시나요?", isPresented: $isDeleteAccountDialogPresented, titleVisibility: .visible) {
+                            Button("계정 삭제", role: .destructive) {
+                                switch authManager.provider {
+                                case .email:
+                                    Task {
+                                        print("Delete Email account")
+                                        //회원 탈퇴를 위해 재로그인하는 과정이 필요합니다.
+                                        //기능 구현여부 테스트를 위해 하드코딩 하였다가 주석처리 했습니다.
+//                                        await authManager.deleteEmailUser(email: "eunice@test.com", password: "123456")
+//                                        showLoading = true
+                                    }
+                                case .google:
+                                    print("Delete Google account")
+                                    Task {
+                                        do {
+                                            try await authManager.deleteGoogleAccount()
+                                            showLoading = true
+                                        } catch {
+                                            print(#function, "Failed to delete Google account: \(error)")
+                                            showLoading = false
+                                        }
+                                    }
+                                case .apple:
+                                    print("Delete Apple account")
+                                    appleSignInHelper.deleteCurrentAppleUser()
+                                default:
+                                    print("Delete account")
+                                    //alert 창 구현
+                                }
+                            }
+                            .onChange(of: authManager.credential) { newValue in
+                                if authManager.credential == nil {
+                                    print(#function, "Canceled to delete account")
+                                    showLoading = false
+                                } else {
+                                    showLoading = true
+                                }
+                            }
+                        } message: {
+                            Text("회원 탈퇴 시에는 계정과 프로필 정보, 그리고 등록된 모든 편지와 편지 이미지가 삭제되며 복구할 수 없습니다. 계정 삭제를 위해서는 재인증을 통해 다시 로그인 해야 합니다.")
+                        }
                     }
+                    
+                    NoticeTestView()
                     
                     AddDataSectionView()
                     
                     LetterDataListView()
                     
                     ShopListView()
-                    
                 }
                 .navigationTitle("Setting")
             } else {
                 ProgressView() //로그인 중
             }
+        }
+        .onAppear {
+            appleSignInHelper.window = window
+        }
+        .fullScreenCover(isPresented: $showLoading) {
+            LoadingView(text: "저장된 편지들을 안전하게 삭제하는 중이에요", isThemeGroupButton: .constant(0))
+                .background(ClearBackground())
         }
     }
 }
@@ -311,10 +364,10 @@ struct TestImageView: View {
 }
 
 struct ShopListView: View {
-    @ObservedObject var firestoreManager = FirestoreManager.shared
+    @ObservedObject var firestoreShopManager = FirestoreShopManager.shared
     
     var body: some View {
-        ForEach(firestoreManager.shops, id: \.self) { shop in
+        ForEach(firestoreShopManager.shops, id: \.self) { shop in
             HStack {
                 Text(shop.title)
                 
@@ -325,6 +378,25 @@ struct ShopListView: View {
                 } placeholder: {
                     ProgressView()
                 }
+            }
+        }
+    }
+}
+
+struct NoticeTestView: View {
+    @ObservedObject var firestoreNoticeManager = FirestoreNoticeManager.shared
+    
+    var body: some View {
+        VStack {            
+            Section {
+                ForEach(firestoreNoticeManager.notices, id:\.self) { notice in
+                    Text(notice.title)
+                }
+            }
+        }
+        .onAppear {
+            if firestoreNoticeManager.notices.isEmpty {
+                firestoreNoticeManager.fetchAllNotices()
             }
         }
     }
