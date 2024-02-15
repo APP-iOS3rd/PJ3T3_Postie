@@ -104,15 +104,9 @@ struct HomeView: View {
                             .edgesIgnoringSafeArea(.all)
                     }
                     
-                    // 세팅 뷰
-                    //            SettingView()
-                    //                .offset(x: isSideMenuOpen ? 0 : UIScreen.main.bounds.width)
-                    //                .animation(.easeInOut)
-                    // 임시 세팅뷰
                     SideMenuView(isSideMenuOpen: $isSideMenuOpen, currentGroupPage: $currentGroupPage, isTabGroupButton: $isTabGroupButton, currentColorPage: $currentColorPage, profileImage: $profileImage, profileImageTemp: $profileImageTemp)
                         .offset(x: isSideMenuOpen ? 0 : UIScreen.main.bounds.width)
                         .animation(.easeInOut, value: 1)
-                    
                 }
             }
         }
