@@ -502,8 +502,8 @@
 				9E9F6ACD2B5763CA003DFE83 /* AuthManager.swift */,
 				9E25C2D02B7B8F8A00B04BA1 /* CryptoUtils.swift */,
 				9E9F6AD72B57642D003DFE83 /* FirestoreManager.swift */,
-				9E7E05B42B7DE54200ACF177 /* FirestoreShopManager.swift */,
 				9E7E05B82B7DE6D200ACF177 /* FirestoreNoticeManager.swift */,
+				9E7E05B42B7DE54200ACF177 /* FirestoreShopManager.swift */,
 				9E9A8BE82B6B704E0072CB75 /* GoogleSignInHelper.swift */,
 				9E7F8C772B5E69B000F1A6BF /* StorageManager.swift */,
 			);
