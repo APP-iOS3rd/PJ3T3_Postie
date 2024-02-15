@@ -14,6 +14,9 @@ struct NicknameView: View {
     @State var isTapped: Bool = false
     @State private var isDialogPresented = false
     @State private var showLoading = false
+    @State private var dialogTitle = ""
+    @State private var dialogMessage = ""
+    @State private var loadingText = ""
     @FocusState private var focusField: String?
     @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
@@ -50,22 +53,28 @@ struct NicknameView: View {
                 Button {
                     isTappable = false
                     isTapped = true
+                    
                     Task {
-                        if let authDataResult = authManager.authDataResult {
-                            try await authManager.createUser(authDataResult: authDataResult, nickname: nickname)
+                        guard let authDataResult = authManager.authDataResult else {
+                            dialogTitle = "계정 정보를 가져오는데 실패했습니다."
+                            dialogMessage = "재인증을 통해 로그인 정보를 삭제한 다음 다시 회원가입 해 주세요."
+                            loadingText = "계정을 안전하게 삭제하는 중이에요"
+                            isDialogPresented = true
+                            nickname = ""
+                            return
                         }
+                        
+                        loadingText = "포스티에 오신 것을 환영합니다!"
+                        showLoading = true
+                        try await authManager.createUser(authDataResult: authDataResult, nickname: nickname)
                     }
                 } label: {
                     HStack() {
-                        if isTapped {
-                            LoadingView(text: "포스티 만나러 가는 중")
-                        } else {
-                            Image(systemName: "envelope")
-                                .padding(.horizontal, 10)
-                            
-                            Text("포스티 시작하기")
-                                .font(.system(size: 18, weight: .semibold))
-                        }
+                        Image(systemName: "envelope")
+                            .padding(.horizontal, 10)
+                        
+                        Text("포스티 시작하기")
+                            .font(.system(size: 18, weight: .semibold))
                     }
                     .foregroundColor(postieColors.writenLetterColor)
                     .frame(height: 54)
@@ -91,53 +100,28 @@ struct NicknameView: View {
                 Spacer()
                 
                 Button {
+                    dialogTitle = "이미 존재하는 계정입니다."
+                    dialogMessage = "계정 삭제를 위해서는 재인증을 통해 다시 로그인 해야 합니다."
+                    loadingText = "계정을 안전하게 삭제하는 중이에요"
                     isDialogPresented = true
                 } label: {
                     Text("Back to Login Selection")
-                }
-                .confirmationDialog("이미 존재하는 계정입니다.", isPresented: $isDialogPresented, titleVisibility: .visible) {
-                    Button("계정 삭제", role: .destructive) {
-                        switch authManager.provider {
-                        case .email:
-                            Task {
-                                print("Cannot delete Email account")
-                                authManager.signOut()
-                            }
-                        case .google:
-                            print("Delete Google account")
-                            Task {
-                                do {
-                                    try await authManager.deleteGoogleAccount()
-                                    showLoading = true
-                                } catch {
-                                    print(#function, "Failed to delete Google account: \(error)")
-                                    showLoading = false
-                                }
-                            }
-                        case .apple:
-                            print("Delete Apple account")
-                            AppleSignInHelper.shared.deleteCurrentAppleUser()
-                        default:
-                            print("Delete account")
-                            //alert 창 구현
-                        }
-                    }
-                    .onChange(of: authManager.credential) { newValue in
-                        if authManager.credential == nil {
-                            print(#function, "Canceled to delete account")
-                            showLoading = false
-                        } else {
-                            showLoading = true
-                        }
-                    }
-                } message: {
-                    Text("계정 삭제를 위해서는 재인증을 통해 다시 로그인 해야 합니다.")
-                        .multilineTextAlignment(.center)
+                        .foregroundStyle(postieColors.tintColor)
                 }
             }
         }
         .onTapGesture {
             hideKeyboard()
+        }
+        .confirmationDialog(dialogTitle, isPresented: $isDialogPresented, titleVisibility: .visible) {
+            DeleteAccountButtonView(showLoading: $showLoading)
+        } message: {
+            Text(dialogMessage)
+                .multilineTextAlignment(.center)
+        }
+        .fullScreenCover(isPresented: $showLoading) {
+            LoadingView(text: loadingText)
+                .background(ClearBackground())
         }
     }
 }
