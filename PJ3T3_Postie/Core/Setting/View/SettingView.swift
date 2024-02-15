@@ -395,7 +395,9 @@ struct NoticeTestView: View {
             }
         }
         .onAppear {
-            firestoreNoticeManager.fetchAllNotices()
+            if firestoreNoticeManager.notice.isEmpty {
+                firestoreNoticeManager.fetchAllNotices()
+            }
         }
     }
 }
