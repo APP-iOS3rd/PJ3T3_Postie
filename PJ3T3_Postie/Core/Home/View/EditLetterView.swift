@@ -14,6 +14,7 @@ struct EditLetterView: View {
         case sender
         case receiver
         case text
+        case summary
     }
 
     let letter: Letter
@@ -108,11 +109,13 @@ struct EditLetterView: View {
             Button("직접 작성") {
                 // TODO: 함수로 빼기
                 editLetterViewModel.showSummaryTextField = true
+                focusField = .summary
             }
 
             Button("AI 완성") {
                 // TODO: 네이버 클로바 API 호출
                 editLetterViewModel.showSummaryTextField = true
+                focusField = .summary
             }
         }
         .onAppear {
@@ -324,7 +327,7 @@ extension EditLetterView {
                     .padding(6)
                     .background(Color(hex: 0xFCFBF7))
                     .clipShape(RoundedRectangle(cornerRadius: 4))
-                    .focused($focusField, equals: .receiver)
+                    .focused($focusField, equals: .summary)
             } else {
                 Label("편지를 요약해드릴게요.", systemImage: "text.quote.rtl")
                     .foregroundStyle(Color(hex: 0xAAAAAA))

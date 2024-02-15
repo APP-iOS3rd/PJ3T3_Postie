@@ -16,6 +16,7 @@ struct AddLetterView: View {
         case sender
         case receiver
         case text
+        case summary
     }
 
     var isReceived: Bool
@@ -110,11 +111,13 @@ struct AddLetterView: View {
             Button("직접 작성") {
                 // TODO: 함수로 빼기
                 addLetterViewModel.showSummaryTextField = true
+                focusField = .summary
             }
 
             Button("AI 완성") {
                 // TODO: 네이버 클로바 API 호출
                 addLetterViewModel.showSummaryTextField = true
+                focusField = .summary
             }
         }
         .alert("편지 정보 부족", isPresented: $addLetterViewModel.showingNotEnoughInfoAlert) {
@@ -320,7 +323,7 @@ extension AddLetterView {
                     .padding(6)
                     .background(Color(hex: 0xFCFBF7))
                     .clipShape(RoundedRectangle(cornerRadius: 4))
-                    .focused($focusField, equals: .receiver)
+                    .focused($focusField, equals: .summary)
             } else {
                 Label("편지를 요약해드릴게요.", systemImage: "text.quote.rtl")
                     .foregroundStyle(Color(hex: 0xAAAAAA))
