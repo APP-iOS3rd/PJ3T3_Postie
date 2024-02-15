@@ -12,6 +12,8 @@ struct NicknameView: View {
     @State var nickname: String = ""
     @State var isTappable: Bool = false
     @State var isTapped: Bool = false
+    @State private var isDialogPresented = false
+    @State private var showLoading = false
     @FocusState private var focusField: String?
     @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
@@ -89,9 +91,48 @@ struct NicknameView: View {
                 Spacer()
                 
                 Button {
-                    authManager.signOut()
+                    isDialogPresented = true
                 } label: {
                     Text("Back to Login Selection")
+                }
+                .confirmationDialog("이미 존재하는 계정입니다.", isPresented: $isDialogPresented, titleVisibility: .visible) {
+                    Button("계정 삭제", role: .destructive) {
+                        switch authManager.provider {
+                        case .email:
+                            Task {
+                                print("Cannot delete Email account")
+                                authManager.signOut()
+                            }
+                        case .google:
+                            print("Delete Google account")
+                            Task {
+                                do {
+                                    try await authManager.deleteGoogleAccount()
+                                    showLoading = true
+                                } catch {
+                                    print(#function, "Failed to delete Google account: \(error)")
+                                    showLoading = false
+                                }
+                            }
+                        case .apple:
+                            print("Delete Apple account")
+                            AppleSignInHelper.shared.deleteCurrentAppleUser()
+                        default:
+                            print("Delete account")
+                            //alert 창 구현
+                        }
+                    }
+                    .onChange(of: authManager.credential) { newValue in
+                        if authManager.credential == nil {
+                            print(#function, "Canceled to delete account")
+                            showLoading = false
+                        } else {
+                            showLoading = true
+                        }
+                    }
+                } message: {
+                    Text("계정 삭제를 위해서는 재인증을 통해 다시 로그인 해야 합니다.")
+                        .multilineTextAlignment(.center)
                 }
             }
         }
