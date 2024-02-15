@@ -9,7 +9,7 @@ import SwiftUI
 
 struct HomeView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
-//    @ObservedObject var storageManager = StorageManager.shared
+    //    @ObservedObject var storageManager = StorageManager.shared
     
     @State private var isSideMenuOpen = false
     @State private var currentGroupPage: Int = 0
@@ -23,82 +23,100 @@ struct HomeView: View {
         let postieColors = ThemeManager.themeColors[isThemeGroupButton]
         
         NavigationStack {
-            ZStack {
-                postieColors.backGroundColor
-                    .ignoresSafeArea()
-                
-                VStack(spacing: 0) {
-                    HStack {
-                        Text("Postie")
-                            .font(.custom("SourceSerifPro-Black", size: 40))
-                            .foregroundStyle(postieColors.tintColor)
-                        
-                        Spacer()
-                        
-                        NavigationLink {
-                            SearchView(isThemeGroupButton: $isThemeGroupButton)
-                        } label: {
-                            Image(systemName: "magnifyingglass")
-                                .imageScale(.large)
-                                .foregroundStyle(postieColors.tabBarTintColor)
-                                .padding(.horizontal, 5)
-                        }
-                        
-                        Button(action: {
-                            withAnimation {
-                                self.isSideMenuOpen.toggle()
-                            }
-                        }) {
-                            Image(systemName: "line.horizontal.3")
-                                .imageScale(.large)
-                                .foregroundStyle(postieColors.tabBarTintColor)
-                        }
-                    }
-                    .background(postieColors.backGroundColor)
-                    .padding(.horizontal)
+            GeometryReader { geometry in
+                ZStack {
+                    postieColors.backGroundColor
+                        .ignoresSafeArea()
                     
-                    ZStack(alignment: .bottomTrailing) {
-                        ScrollView {
-                            if isTabGroupButton {
-                                VStack {
-                                    GroupedLetterView(isThemeGroupButton: $isThemeGroupButton)
-                                }
-                            } else {
-                                VStack {
-                                    ListLetterView(isThemeGroupButton: $isThemeGroupButton)
-                                }
+                    VStack(spacing: 0) {
+                        HStack {
+                            Text("Postie")
+                                .font(.custom("SourceSerifPro-Black", size: 40))
+                                .foregroundStyle(postieColors.tintColor)
+                            
+                            Spacer()
+                            
+                            NavigationLink {
+                                SearchView(isThemeGroupButton: $isThemeGroupButton)
+                            } label: {
+                                Image(systemName: "magnifyingglass")
+                                    .imageScale(.large)
+                                    .foregroundStyle(postieColors.tabBarTintColor)
+                                    .padding(.horizontal, 5)
                             }
                             
-                            // ScrollView margin 임시
-                            Rectangle()
-                                .frame(height: 80)
-                                .foregroundStyle(postieColors.tabBarTintColor.opacity(0))
-                        }
-                        .background(postieColors.backGroundColor)
-                        
-                        AddLetterButton(isThemeGroupButton: $isThemeGroupButton)
-                    }
-                    .preferredColorScheme(isThemeGroupButton == 4 ? .dark : .light)
-                }
-                
-                if isSideMenuOpen {
-                    Color.black.opacity(0.5)
-                        .onTapGesture {
-                            withAnimation {
-                                self.isSideMenuOpen.toggle()
+                            Button(action: {
+                                withAnimation {
+                                    self.isSideMenuOpen.toggle()
+                                }
+                            }) {
+                                Image(systemName: "line.horizontal.3")
+                                    .imageScale(.large)
+                                    .foregroundStyle(postieColors.tabBarTintColor)
                             }
                         }
-                        .edgesIgnoringSafeArea(.all)
+                        .background(postieColors.backGroundColor)
+                        .padding(.horizontal)
+                        
+                        ZStack(alignment: .bottomTrailing) {
+                            ScrollView {
+                                if isTabGroupButton {
+                                    VStack {
+                                        GroupedLetterView(homeWidth: geometry.size.width, isThemeGroupButton: $isThemeGroupButton)
+                                    }
+                                } else {
+                                    VStack {
+                                        ListLetterView(isThemeGroupButton: $isThemeGroupButton)
+                                    }
+                                }
+                                
+                                // ScrollView margin 임시
+                                Rectangle()
+                                    .frame(height: 80)
+                                    .foregroundStyle(postieColors.tabBarTintColor.opacity(0))
+                            }
+                            .background(postieColors.backGroundColor)
+                            
+                            AddLetterButton(isThemeGroupButton: $isThemeGroupButton)
+                        }
+                        .preferredColorScheme(isThemeGroupButton == 4 ? .dark : .light)
+                    }
+                    
+                    if firestoreManager.letters.isEmpty {
+                        VStack {
+                            Image("postySmileSketch")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: geometry.size.width * 0.7)
+                                .opacity(0.5)
+                            
+                            Text("\n저장된 편지가 없어요! 플로팅 버튼을 이용해 주고받은 편지를 저장해주세요!")
+                                .font(.callout)
+                                .foregroundStyle(postieColors.dividerColor)
+                        }
+                        .padding()
+                    }
+                    
+                    if isSideMenuOpen {
+                        Color.black.opacity(0.5)
+                            .onTapGesture {
+                                withAnimation {
+                                    self.isSideMenuOpen.toggle()
+                                }
+                            }
+                            .edgesIgnoringSafeArea(.all)
+                    }
+                    
+                    // 세팅 뷰
+                    //            SettingView()
+                    //                .offset(x: isSideMenuOpen ? 0 : UIScreen.main.bounds.width)
+                    //                .animation(.easeInOut)
+                    // 임시 세팅뷰
+                    SideMenuView(isSideMenuOpen: $isSideMenuOpen, currentGroupPage: $currentGroupPage, isTabGroupButton: $isTabGroupButton, isThemeGroupButton: $isThemeGroupButton, currentColorPage: $currentColorPage, profileImage: $profileImage, profileImageTemp: $profileImageTemp)
+                        .offset(x: isSideMenuOpen ? 0 : UIScreen.main.bounds.width)
+                        .animation(.easeInOut, value: 1)
+                    
                 }
-                
-                // 세팅 뷰
-                //            SettingView()
-                //                .offset(x: isSideMenuOpen ? 0 : UIScreen.main.bounds.width)
-                //                .animation(.easeInOut)
-                // 임시 세팅뷰
-                SideMenuView(isSideMenuOpen: $isSideMenuOpen, currentGroupPage: $currentGroupPage, isTabGroupButton: $isTabGroupButton, isThemeGroupButton: $isThemeGroupButton, currentColorPage: $currentColorPage, profileImage: $profileImage, profileImageTemp: $profileImageTemp)
-                    .offset(x: isSideMenuOpen ? 0 : UIScreen.main.bounds.width)
-                    .animation(.easeInOut, value: 1)
             }
         }
     }
@@ -142,6 +160,7 @@ struct SideMenuView: View {
                 }
                 
                 Text("프로필 설정")
+                    .font(.subheadline)
                     .foregroundStyle(postieColors.dividerColor)
                 
                 DividerView(isThemeGroupButton: $isThemeGroupButton)
@@ -156,14 +175,12 @@ struct SideMenuView: View {
                             Image(profileImage)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 80, height: 80)
-                                .clipShape(Circle())
+                                .frame(width: 50, height: 50)
+                                .offset(y: -7)
                         }
                         
                         VStack(alignment: .leading) {
                             Text(String(user?.nickname ?? ""))
-                            
-                            Text("")
                             
                             Text(user?.email ?? "")
                         }
@@ -178,13 +195,16 @@ struct SideMenuView: View {
                 }
                 
                 Text("테마 설정")
+                    .font(.subheadline)
                     .foregroundStyle(postieColors.dividerColor)
                 
                 DividerView(isThemeGroupButton: $isThemeGroupButton)
                 
                 NavigationLink(destination: ThemeView(isThemeGroupButton: $isThemeGroupButton, currentColorPage: $currentColorPage, isTabGroupButton: $isTabGroupButton, currentGroupPage: $currentGroupPage)) {
                     HStack {
-                        Text(" 테마 설정 하기")
+                        Image(systemName: "paintpalette")
+                        
+                        Text("테마 설정 하기")
                         
                         Spacer()
                         
@@ -195,49 +215,67 @@ struct SideMenuView: View {
                 }
                 
                 Text("앱 설정")
+                    .font(.subheadline)
                     .foregroundStyle(postieColors.dividerColor)
                 
                 DividerView(isThemeGroupButton: $isThemeGroupButton)
                 
-                HStack {
-                    Text(" 공지사항")
-                    
-                    Spacer()
-                    
-                    Image(systemName: "chevron.right")
-                        .foregroundStyle(postieColors.dividerColor)
+                NavigationLink(destination: AlertView(isThemeGroupButton: $isThemeGroupButton)) {
+                    HStack {
+                        Image(systemName: "bell")
+                        
+                        Text("알림설정")
+                        
+                        Spacer()
+                        
+                        Image(systemName: "chevron.right")
+                            .foregroundStyle(postieColors.dividerColor)
+                    }
+                    .padding(.bottom)
                 }
-                .padding(.bottom)
                 
-                HStack {
-                    Text(" 문의하기")
-                    
-                    Spacer()
-                    
-                    Image(systemName: "chevron.right")
-                        .foregroundStyle(postieColors.dividerColor)
+                NavigationLink(destination: NoticeView(isThemeGroupButton: $isThemeGroupButton)) {
+                    HStack {
+                        Image(systemName: "megaphone")
+                            .font(.subheadline)
+                        
+                        Text("공지사항")
+                        
+                        Spacer()
+                        
+                        Image(systemName: "chevron.right")
+                            .foregroundStyle(postieColors.dividerColor)
+                    }
+                    .padding(.bottom)
                 }
-                .padding(.bottom)
                 
-                HStack {
-                    Text(" 이용약관 및 개인정보 방침")
-                    
-                    Spacer()
-                    
-                    Image(systemName: "chevron.right")
-                        .foregroundStyle(postieColors.dividerColor)
+                NavigationLink(destination: QuestionView(isThemeGroupButton: $isThemeGroupButton)) {
+                    HStack {
+                        Image(systemName: "questionmark.circle")
+                        
+                        Text("문의하기")
+                        
+                        Spacer()
+                        
+                        Image(systemName: "chevron.right")
+                            .foregroundStyle(postieColors.dividerColor)
+                    }
+                    .padding(.bottom)
                 }
-                .padding(.bottom)
                 
-                HStack {
-                    Text(" 앱 정보")
-                    
-                    Spacer()
-                    
-                    Image(systemName: "chevron.right")
-                        .foregroundStyle(postieColors.dividerColor)
+                NavigationLink(destination: InformationView(isThemeGroupButton: $isThemeGroupButton)) {
+                    HStack {
+                        Image(systemName: "info.circle")
+                        
+                        Text("앱 정보")
+                        
+                        Spacer()
+                        
+                        Image(systemName: "chevron.right")
+                            .foregroundStyle(postieColors.dividerColor)
+                    }
+                    .padding(.bottom)
                 }
-                .padding(.bottom)
                 
                 Spacer()
                 
@@ -251,6 +289,10 @@ struct SideMenuView: View {
             .background(postieColors.backGroundColor)
         }
         .tint(postieColors.tabBarTintColor)
+        .onAppear {
+            currentColorPage = isThemeGroupButton
+            currentGroupPage = isTabGroupButton ? 0 : 1
+        }
     }
 }
 

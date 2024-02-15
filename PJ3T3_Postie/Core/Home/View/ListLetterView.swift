@@ -32,7 +32,7 @@ struct LetterItemView: View {
         let postieColors = ThemeManager.themeColors[isThemeGroupButton]
         
         HStack {
-            if letter.isReceived {
+            if !letter.isReceived {
                 Spacer()
             }
             
@@ -87,7 +87,7 @@ struct LetterItemView: View {
                     .shadow(color: Color.postieBlack.opacity(0.1), radius: 3, x: 3, y: 3)
             )
             
-            if !letter.isReceived {
+            if letter.isReceived {
                 Spacer()
             }
         }

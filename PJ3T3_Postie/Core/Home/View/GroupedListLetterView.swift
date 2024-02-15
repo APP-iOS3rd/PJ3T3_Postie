@@ -18,17 +18,18 @@ struct GroupedListLetterView: View {
     
     var body: some View {
         let postieColors = ThemeManager.themeColors[isThemeGroupButton]
+        let filteredLetters = firestoreManager.letters.filter { $0.recipient == recipient || $0.writer == recipient }
         
         ZStack(alignment: .bottomTrailing) {
             postieColors.backGroundColor
                 .ignoresSafeArea()
             
             ScrollView {
-                ForEach(firestoreManager.letters, id: \.self) { letter in
+                ForEach(filteredLetters, id: \.self) { letter in
                     NavigationLink {
                         LetterDetailView(letter: letter)
                     } label: {
-                        groupedLetterView(letter: letter)
+                        LetterItemView(letter: letter, isThemeGroupButton: $isThemeGroupButton)
                     }
                 }
                 
@@ -40,6 +41,7 @@ struct GroupedListLetterView: View {
             
             AddLetterButton(isThemeGroupButton: $isThemeGroupButton)
         }
+        .toolbarBackground(postieColors.backGroundColor, for: .navigationBar)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .principal) {
@@ -49,15 +51,6 @@ struct GroupedListLetterView: View {
             }
         }
         .tint(postieColors.tabBarTintColor)
-    }
-    
-    @ViewBuilder
-    private func groupedLetterView(letter: Letter) -> some View {
-        if letter.recipient == recipient || letter.writer == recipient {
-            LetterItemView(letter: letter, isThemeGroupButton: $isThemeGroupButton)
-        } else {
-            EmptyView()
-        }
     }
 }
 
