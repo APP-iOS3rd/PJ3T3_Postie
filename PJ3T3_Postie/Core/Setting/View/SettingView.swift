@@ -124,6 +124,8 @@ struct SettingView: View {
                         }
                     }
                     
+                    NoticeTestView()
+                    
                     AddDataSectionView()
                     
                     LetterDataListView()
@@ -362,10 +364,10 @@ struct TestImageView: View {
 }
 
 struct ShopListView: View {
-    @ObservedObject var firestoreManager = FirestoreManager.shared
+    @ObservedObject var firestoreShopManager = FirestoreShopManager.shared
     
     var body: some View {
-        ForEach(firestoreManager.shops, id: \.self) { shop in
+        ForEach(firestoreShopManager.shops, id: \.self) { shop in
             HStack {
                 Text(shop.title)
                 
@@ -377,6 +379,23 @@ struct ShopListView: View {
                     ProgressView()
                 }
             }
+        }
+    }
+}
+
+struct NoticeTestView: View {
+    @ObservedObject var firestoreNoticeManager = FirestoreNoticeManager.shared
+    
+    var body: some View {
+        VStack {            
+            Section {
+                ForEach(firestoreNoticeManager.notice, id:\.self) { notice in
+                    Text(notice.title)
+                }
+            }
+        }
+        .onAppear {
+            firestoreNoticeManager.fetchAllNotices()
         }
     }
 }
