@@ -70,7 +70,7 @@ struct HomeView: View {
                                     }
                                 }
                                 
-                                // ScrollView margin 임시
+                                // ScrollView margin
                                 Rectangle()
                                     .frame(height: 80)
                                     .foregroundStyle(postieColors.tabBarTintColor.opacity(0))
@@ -89,8 +89,9 @@ struct HomeView: View {
                                 .scaledToFit()
                                 .frame(width: geometry.size.width * 0.7)
                                 .opacity(0.5)
+                                .padding(.bottom)
                             
-                            Text("\n저장된 편지가 없어요! 플로팅 버튼을 이용해 주고받은 편지를 저장해주세요!")
+                            Text("저장된 편지가 없어요! 플로팅 버튼을 이용해 주고받은 편지를 저장해주세요!")
                                 .font(.callout)
                                 .foregroundStyle(postieColors.dividerColor)
                         }
@@ -202,17 +203,7 @@ struct SideMenuView: View {
                     .padding(.bottom)
                 
                 NavigationLink(destination: ThemeView(currentColorPage: $currentColorPage, isTabGroupButton: $isTabGroupButton, currentGroupPage: $currentGroupPage)) {
-                    HStack {
-                        Image(systemName: "paintpalette")
-                        
-                        Text("테마 설정 하기")
-                        
-                        Spacer()
-                        
-                        Image(systemName: "chevron.right")
-                            .foregroundStyle(postieColors.dividerColor)
-                    }
-                    .padding(.bottom)
+                    SettingItemsView(imageName: "paintpalette", title: "테마 설정")
                 }
                 
                 Text("앱 설정")
@@ -223,60 +214,19 @@ struct SideMenuView: View {
                     .padding(.bottom)
                 
                 NavigationLink(destination: AlertView()) {
-                    HStack {
-                        Image(systemName: "bell")
-                        
-                        Text("알림설정")
-                        
-                        Spacer()
-                        
-                        Image(systemName: "chevron.right")
-                            .foregroundStyle(postieColors.dividerColor)
-                    }
-                    .padding(.bottom)
+                    SettingItemsView(imageName: "bell", title: "알림 설정")
                 }
                 
                 NavigationLink(destination: NoticeView()) {
-                    HStack {
-                        Image(systemName: "megaphone")
-                            .font(.subheadline)
-                        
-                        Text("공지사항")
-                        
-                        Spacer()
-                        
-                        Image(systemName: "chevron.right")
-                            .foregroundStyle(postieColors.dividerColor)
-                    }
-                    .padding(.bottom)
+                    SettingItemsView(imageName: "megaphone", title: "공지사항")
                 }
                 
                 NavigationLink(destination: QuestionView()) {
-                    HStack {
-                        Image(systemName: "questionmark.circle")
-                        
-                        Text("문의하기")
-                        
-                        Spacer()
-                        
-                        Image(systemName: "chevron.right")
-                            .foregroundStyle(postieColors.dividerColor)
-                    }
-                    .padding(.bottom)
+                    SettingItemsView(imageName: "questionmark.circle", title: "문의하기")
                 }
                 
                 NavigationLink(destination: InformationView()) {
-                    HStack {
-                        Image(systemName: "info.circle")
-                        
-                        Text("앱 정보")
-                        
-                        Spacer()
-                        
-                        Image(systemName: "chevron.right")
-                            .foregroundStyle(postieColors.dividerColor)
-                    }
-                    .padding(.bottom)
+                    SettingItemsView(imageName: "info.circle", title: "앱 정보")
                 }
                 
                 Spacer()
@@ -295,6 +245,26 @@ struct SideMenuView: View {
             currentColorPage = isThemeGroupButton
             currentGroupPage = isTabGroupButton ? 0 : 1
         }
+    }
+}
+
+struct SettingItemsView: View {
+    var imageName: String
+    var title: String
+    
+    var body: some View {
+        HStack {
+            Image(systemName: imageName)
+                .font(imageName == "megaphone" ? .callout : .body)
+            
+            Text(title)
+            
+            Spacer()
+            
+            Image(systemName: "chevron.right")
+                .foregroundStyle(postieColors.dividerColor)
+        }
+        .padding(.bottom)
     }
 }
 

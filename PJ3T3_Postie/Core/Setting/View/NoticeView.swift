@@ -26,6 +26,7 @@ struct NoticeView: View {
                                 
                                 VStack(alignment: .leading) {
                                     Text("안녕하세요 포스티팀입니다.\n")
+                                        .font(.callout)
                                     
 //                                    if let imageURL = post.imageURL {
 //                                        Image(systemName: "photo")
@@ -34,13 +35,15 @@ struct NoticeView: View {
 //                                    }
                                     
                                     Text("\(notice.content.replacingOccurrences(of: "\\n", with: "\n"))\n")
+                                        .font(.callout)
                                     
                                     HStack {
                                         Spacer()
                                         
                                         Text("From. ")
-                                            .font(.custom("SourceSerifPro-Black", size: 15))
+                                            .font(.custom("SourceSerifPro-Black", size: 16))
                                         + Text("포스티팀")
+                                            .font(.callout)
                                     }
                                 }
                                 .padding()

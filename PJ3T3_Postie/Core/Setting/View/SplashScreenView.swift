@@ -48,6 +48,11 @@ struct SplashScreenView: View {
                 }()
                 
                 PostyImageView(imageName: imageName)
+                
+                // 이미지 상단 배치
+                Rectangle()
+                    .frame(height: 50)
+                    .foregroundStyle(postieColors.tabBarTintColor.opacity(0))
             }
             .padding()
         }

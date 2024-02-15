@@ -51,7 +51,7 @@ struct LetterItemView: View {
                         ZStack {
                             Image(systemName: "water.waves")
                                 .font(.headline)
-                                .offset(x:18)
+                                .offset(x: 18)
                             
                             Image(systemName: "sleep.circle")
                                 .font(.largeTitle)
