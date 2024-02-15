@@ -11,9 +11,9 @@ struct ProfileEditView: View {
     @ObservedObject var authManager = AuthManager.shared
     @Environment(\.dismiss) var dismiss
     
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     @State var name: String = "테스트 포스티"
     @State private var isShowingProfileImageEditor = false
-    @Binding var isThemeGroupButton: Int
     @Binding var profileImage: String
     @Binding var profileImageTemp: String
     
@@ -54,7 +54,7 @@ struct ProfileEditView: View {
                             }
                         }
                         .sheet(isPresented: $isShowingProfileImageEditor) {
-                            ProfileImageEditView(isThemeGroupButton: $isThemeGroupButton, profileImage: $profileImage, profileImageTemp: $profileImageTemp)
+                            ProfileImageEditView(profileImage: $profileImage, profileImageTemp: $profileImageTemp)
                                 .presentationDetents([.medium, .large])
                         }
                     }
@@ -151,7 +151,7 @@ struct ProfileEditView: View {
 struct ProfileImageEditView: View {
     @Environment(\.dismiss) var dismiss
     
-    @Binding var isThemeGroupButton: Int
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     @Binding var profileImage: String
     @Binding var profileImageTemp: String
     
@@ -178,19 +178,19 @@ struct ProfileImageEditView: View {
                         if geometry.size.height > 710 {
                             LazyHGrid(rows: rows3, alignment: .top) {
                                 ForEach(profileImages, id: \.self) { imageName in
-                                    ProfileImageItemView(imageName: imageName, isThemeGroupButton: $isThemeGroupButton, profileImageTemp: $profileImageTemp)
+                                    ProfileImageItemView(imageName: imageName, profileImageTemp: $profileImageTemp)
                                 }
                             }
                         } else if geometry.size.height > 600 && geometry.size.height < 800  {
                             LazyHGrid(rows: rows2, alignment: .top) {
                                 ForEach(profileImages, id: \.self) { imageName in
-                                    ProfileImageItemView(imageName: imageName, isThemeGroupButton: $isThemeGroupButton, profileImageTemp: $profileImageTemp)
+                                    ProfileImageItemView(imageName: imageName, profileImageTemp: $profileImageTemp)
                                 }
                             }
                         } else {
                             HStack {
                                 ForEach(profileImages, id: \.self) { imageName in
-                                    ProfileImageItemView(imageName: imageName, isThemeGroupButton: $isThemeGroupButton, profileImageTemp: $profileImageTemp)
+                                    ProfileImageItemView(imageName: imageName, profileImageTemp: $profileImageTemp)
                                 }
                             }
                             .onChange(of: profileImageTemp) { newValue in
@@ -251,7 +251,7 @@ struct ProfileImageEditView: View {
 struct ProfileImageItemView: View {
     let imageName: String
     
-    @Binding var isThemeGroupButton: Int
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     @Binding var profileImageTemp: String
     
     var body: some View {

@@ -44,7 +44,7 @@ struct SearchView: View {
                         NavigationLink {
                             LetterDetailView(letter: letter)
                         } label: {
-                            LetterItemView(letter: letter, isThemeGroupButton: $isThemeGroupButton)
+                            LetterItemView(letter: letter)
                         }
                     }
                     

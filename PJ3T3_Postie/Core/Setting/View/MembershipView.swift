@@ -10,10 +10,9 @@ import SwiftUI
 // 멤버십 뷰, 실제 배포시에는 사라질 수도 있음
 struct MembershipView: View {
     @Environment(\.dismiss) var dismiss
-    
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     @State private var isMembershipPage = 1
     @State private var isMembershipForYear = true
-    @Binding var isThemeGroupButton: Int
     
     var body: some View {
         let postieColors = ThemeManager.themeColors[isThemeGroupButton]
@@ -49,13 +48,13 @@ struct MembershipView: View {
                         .foregroundStyle(postieColors.tabBarTintColor)
                     
                     TabView(selection: $isMembershipPage) {
-                        MembershipItems(text: "광고제거", tag: 1, isThemeGroupButton: $isThemeGroupButton)
+                        MembershipItems(text: "광고제거", tag: 1)
                         
-                        MembershipItems(text: "사진 저장 가능 갯수 확장", tag: 2, isThemeGroupButton: $isThemeGroupButton)
+                        MembershipItems(text: "사진 저장 가능 갯수 확장", tag: 2)
                         
-                        MembershipItems(text: "닉네임 변경 무료 (월 1회)", tag: 3, isThemeGroupButton: $isThemeGroupButton)
+                        MembershipItems(text: "닉네임 변경 무료 (월 1회)", tag: 3)
                         
-                        MembershipItems(text: "포스티 프리미엄 혜택은 \n점점 더 늘어갈거에요!", tag: 4, isThemeGroupButton: $isThemeGroupButton)
+                        MembershipItems(text: "포스티 프리미엄 혜택은 \n점점 더 늘어갈거에요!", tag: 4)
                     }
                     .tabViewStyle(PageTabViewStyle())
                     .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .automatic))
@@ -155,7 +154,7 @@ struct MembershipItems: View {
     var text: String
     var tag: Int
     
-    @Binding var isThemeGroupButton: Int
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
 
     var body: some View {
         let postieColors = ThemeManager.themeColors[isThemeGroupButton]

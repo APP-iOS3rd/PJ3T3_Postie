@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AlertView: View {
-    @Binding var isThemeGroupButton: Int
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     @State private var slowAlert = true
     @State private var allAlert = true
     @State private var alert1 = true
@@ -26,7 +26,7 @@ struct AlertView: View {
                     Toggle("전체 알림", isOn: $allAlert)
                         .padding(.bottom)
                     
-                    DividerView(isThemeGroupButton: $isThemeGroupButton)
+                    DividerView()
                     
                     Toggle("옛 편지 알림", isOn: $slowAlert)
                         .disabled(!allAlert)

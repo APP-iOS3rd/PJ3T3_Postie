@@ -9,15 +9,14 @@ import SwiftUI
 
 struct ListLetterView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
-    
-    @Binding var isThemeGroupButton: Int
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
     var body: some View {
         ForEach(firestoreManager.letters, id: \.self) { letter in
             NavigationLink {
                 LetterDetailView(letter: letter)
             } label: {
-                LetterItemView(letter: letter, isThemeGroupButton: $isThemeGroupButton)
+                LetterItemView(letter: letter)
             }
         }
     }
@@ -26,7 +25,7 @@ struct ListLetterView: View {
 struct LetterItemView: View {
     var letter: Letter
     
-    @Binding var isThemeGroupButton: Int
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
     var body: some View {
         let postieColors = ThemeManager.themeColors[isThemeGroupButton]

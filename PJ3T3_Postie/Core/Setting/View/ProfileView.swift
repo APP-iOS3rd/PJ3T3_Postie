@@ -10,11 +10,11 @@ import SwiftUI
 struct ProfileView: View {
     @ObservedObject var authManager = AuthManager.shared
     
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     @State private var isLogOutAlert: Bool = false
     @State private var isSignOutAlert: Bool = false
     @State private var isshowingMembershipView = false
     @State private var isShowingProfileEditView = false
-    @Binding var isThemeGroupButton: Int
     @Binding var profileImage: String
     @Binding var profileImageTemp: String
     
@@ -51,7 +51,7 @@ struct ProfileView: View {
                             .font(.subheadline)
                             .foregroundStyle(postieColors.dividerColor)
                         
-                        DividerView(isThemeGroupButton: $isThemeGroupButton)
+                        DividerView()
                         
                         Text(" \(String(user?.fullName ?? ""))")
                             .foregroundStyle(postieColors.tabBarTintColor)
@@ -61,7 +61,7 @@ struct ProfileView: View {
                             .font(.subheadline)
                             .foregroundStyle(postieColors.dividerColor)
                         
-                        DividerView(isThemeGroupButton: $isThemeGroupButton)
+                        DividerView()
                         
                         Text(" \(String(user?.nickname ?? ""))")
                             .foregroundStyle(postieColors.tabBarTintColor)
@@ -71,7 +71,7 @@ struct ProfileView: View {
                             .font(.subheadline)
                             .foregroundStyle(postieColors.dividerColor)
                         
-                        DividerView(isThemeGroupButton: $isThemeGroupButton)
+                        DividerView()
                         
                         Text(" \(String(user?.email ?? ""))")
                             .foregroundStyle(postieColors.tabBarTintColor)
@@ -81,7 +81,7 @@ struct ProfileView: View {
                             .font(.subheadline)
                             .foregroundStyle(postieColors.dividerColor)
                         
-                        DividerView(isThemeGroupButton: $isThemeGroupButton)
+                        DividerView()
                         
                         Button {
                             isshowingMembershipView = true
@@ -99,14 +99,14 @@ struct ProfileView: View {
                         }
                         .fullScreenCover(isPresented: $isshowingMembershipView) {
                             // 멤버십 뷰, 실제 배포시에는 사라질 수도 있음
-                            MembershipView(isThemeGroupButton: $isThemeGroupButton)
+                            MembershipView()
                         }
                         
                         Text("계정 관리")
                             .font(.subheadline)
                             .foregroundStyle(postieColors.dividerColor)
                         
-                        DividerView(isThemeGroupButton: $isThemeGroupButton)
+                        DividerView()
                         
                         Button {
                             isLogOutAlert = true
@@ -174,7 +174,7 @@ struct ProfileView: View {
                             .foregroundStyle(postieColors.tabBarTintColor)
                     }
                     .sheet(isPresented: $isShowingProfileEditView) {
-                        ProfileEditView(isThemeGroupButton: $isThemeGroupButton, profileImage: $profileImage, profileImageTemp: $profileImageTemp)
+                        ProfileEditView(profileImage: $profileImage, profileImageTemp: $profileImageTemp)
                             .presentationDetents([.medium])
                     }
                 }

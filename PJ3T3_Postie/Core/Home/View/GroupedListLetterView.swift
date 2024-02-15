@@ -12,9 +12,9 @@ struct GroupedListLetterView: View {
     @ObservedObject var storageManager = StorageManager.shared
 
     var recipient: String
-
+    
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     @State private var isSideMenuOpen = false
-    @Binding var isThemeGroupButton: Int
     
     var body: some View {
         let postieColors = ThemeManager.themeColors[isThemeGroupButton]
@@ -29,7 +29,7 @@ struct GroupedListLetterView: View {
                     NavigationLink {
                         LetterDetailView(letter: letter)
                     } label: {
-                        LetterItemView(letter: letter, isThemeGroupButton: $isThemeGroupButton)
+                        LetterItemView(letter: letter)
                     }
                 }
                 
@@ -39,7 +39,7 @@ struct GroupedListLetterView: View {
                     .foregroundStyle(Color.postieBlack.opacity(0))
             }
             
-            AddLetterButton(isThemeGroupButton: $isThemeGroupButton)
+            AddLetterButton()
         }
         .toolbarBackground(postieColors.backGroundColor, for: .navigationBar)
         .navigationBarTitleDisplayMode(.inline)

@@ -16,7 +16,7 @@ struct GroupedLetterView: View {
     var letterGrouped: [String] = []
     var homeWidth: CGFloat
     
-    @Binding var isThemeGroupButton: Int
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
     // 숫자, 한글, 알파벳 순서대로 정렬
     func customSort(recipients: [String]) -> [String] {
@@ -82,7 +82,7 @@ struct GroupedLetterView: View {
         
         VStack {
             NavigationLink { // 좋아하는 편지 뷰
-                GroupedFavoriteListLetterView(isThemeGroupButton: $isThemeGroupButton)
+                GroupedFavoriteListLetterView()
             } label: {
                 HStack {
                     VStack {
@@ -145,7 +145,7 @@ struct GroupedLetterView: View {
                             .foregroundStyle(postieColors.receivedLetterColor)
                             .shadow(color: .black.opacity(0.1), radius: 3, x: 3, y: 3)
                     )
-                    .modifier(StackedRoundedRectangleModifier(count: favoriteLetters.count, groupWidth: homeWidth, isThemeGroupButton: $isThemeGroupButton))
+                    .modifier(StackedRoundedRectangleModifier(count: favoriteLetters.count, groupWidth: homeWidth))
                 }
                 
                 Spacer()
@@ -160,7 +160,7 @@ struct GroupedLetterView: View {
                 let countOfMatchingWriters = firestoreManager.letters.filter { $0.writer == recipient }.count
                 
                 NavigationLink {
-                    GroupedListLetterView(recipient: recipient, isThemeGroupButton: $isThemeGroupButton)
+                    GroupedListLetterView(recipient: recipient)
                 } label: {
                     HStack {
                         ZStack {
@@ -213,7 +213,7 @@ struct GroupedLetterView: View {
                                     .foregroundStyle(postieColors.receivedLetterColor)
                                     .shadow(color: .black.opacity(0.1), radius: 3, x: 3, y: 3)
                             )
-                            .modifier(StackedRoundedRectangleModifier(count: countOfMatchingRecipients + countOfMatchingWriters, groupWidth: homeWidth, isThemeGroupButton: $isThemeGroupButton))
+                            .modifier(StackedRoundedRectangleModifier(count: countOfMatchingRecipients + countOfMatchingWriters, groupWidth: homeWidth))
                         }
                         .padding(.horizontal)
                         .padding(.bottom, 8)
@@ -225,7 +225,6 @@ struct GroupedLetterView: View {
         }
         .toolbarBackground(postieColors.backGroundColor, for: .navigationBar)
         .tint(postieColors.tabBarTintColor)
-        
     }
 }
 
@@ -233,7 +232,7 @@ struct StackedRoundedRectangleModifier: ViewModifier {
     let count: Int
     var groupWidth: CGFloat
     
-    @Binding var isThemeGroupButton: Int
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
     func body(content: Content) -> some View {
         let postieColors = ThemeManager.themeColors[isThemeGroupButton]

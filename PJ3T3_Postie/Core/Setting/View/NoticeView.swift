@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct NoticeView: View {
-    @Binding var isThemeGroupButton: Int
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     @State private var isExpanded = false
     
     var body: some View {
@@ -62,7 +62,7 @@ struct NoticeView: View {
                             }
                         }
                         
-                        DividerView(isThemeGroupButton: $isThemeGroupButton)
+                        DividerView()
                     }
                 }
             }

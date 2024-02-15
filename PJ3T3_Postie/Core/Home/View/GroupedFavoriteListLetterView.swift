@@ -11,8 +11,8 @@ struct GroupedFavoriteListLetterView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
     @ObservedObject var storageManager = StorageManager.shared
     
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     @State private var isSideMenuOpen: Bool = false
-    @Binding var isThemeGroupButton: Int
     
     var body: some View {
         let postieColors = ThemeManager.themeColors[isThemeGroupButton]
@@ -43,7 +43,7 @@ struct GroupedFavoriteListLetterView: View {
                     NavigationLink {
                         LetterDetailView(letter: letter)
                     } label: {
-                        LetterItemView(letter: letter, isThemeGroupButton: $isThemeGroupButton)
+                        LetterItemView(letter: letter)
                     }
                 }
                 
@@ -53,7 +53,7 @@ struct GroupedFavoriteListLetterView: View {
                     .foregroundStyle(Color.postieBlack.opacity(0))
             }
             
-            AddLetterButton(isThemeGroupButton: $isThemeGroupButton)
+            AddLetterButton()
         }
         .toolbarBackground(postieColors.backGroundColor, for: .navigationBar)
         .tint(postieColors.tabBarTintColor)

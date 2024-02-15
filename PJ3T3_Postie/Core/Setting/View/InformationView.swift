@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct InformationView: View {
-    @Binding var isThemeGroupButton: Int
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
     var body: some View {
         let postieColors = ThemeManager.themeColors[isThemeGroupButton]
         var appVersion: String {
                 if let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String,
                    let build = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String {
-                    return "\(version) (\(build))"
+                    return "\(version)"
                 }
                 return "버전 정보 없음"
             }
@@ -29,7 +29,7 @@ struct InformationView: View {
                     Text("앱 정보")
                         .foregroundStyle(postieColors.dividerColor)
                     
-                    DividerView(isThemeGroupButton: $isThemeGroupButton)
+                    DividerView()
                     
                     HStack {
                         Text("버전정보")
@@ -45,9 +45,9 @@ struct InformationView: View {
                     Text("법률 조항")
                         .foregroundStyle(postieColors.dividerColor)
                     
-                    DividerView(isThemeGroupButton: $isThemeGroupButton)
+                    DividerView()
                     
-                    NavigationLink(destination: TermOfUserView(isThemeGroupButton: $isThemeGroupButton)) {
+                    NavigationLink(destination: TermOfUserView()) {
                         HStack {
                             Text("이용약관")
                                 .foregroundStyle(postieColors.tabBarTintColor)
@@ -60,7 +60,7 @@ struct InformationView: View {
                         .padding(.bottom)
                     }
                     
-                    NavigationLink(destination: PrivacyView(isThemeGroupButton : $isThemeGroupButton)) {
+                    NavigationLink(destination: PrivacyView()) {
                         HStack {
                             Text("개인정보 처리방침")
                                 .foregroundStyle(postieColors.tabBarTintColor)
@@ -88,7 +88,7 @@ struct InformationView: View {
 }
 
 struct TermOfUserView: View {
-    @Binding var isThemeGroupButton: Int
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
     var body: some View {
         let postieColors = ThemeManager.themeColors[isThemeGroupButton]
@@ -158,7 +158,7 @@ struct TermOfUserView: View {
 }
 
 struct PrivacyView: View {
-    @Binding var isThemeGroupButton: Int
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
     var body: some View {
         let postieColors = ThemeManager.themeColors[isThemeGroupButton]

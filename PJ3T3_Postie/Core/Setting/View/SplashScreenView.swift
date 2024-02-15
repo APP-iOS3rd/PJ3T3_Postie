@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SplashScreenView: View {
-    @Binding var isThemeGroupButton: Int
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
     var body: some View {
         let postieColors = ThemeManager.themeColors[isThemeGroupButton]
@@ -18,7 +18,7 @@ struct SplashScreenView: View {
             postieColors.backGroundColor
                 .ignoresSafeArea()
             
-            ToFromLabelView(isThemeGroupButton: $isThemeGroupButton)
+            ToFromLabelView()
                 .padding()
             
             VStack {
@@ -64,7 +64,7 @@ struct SplashScreenView: View {
 }
 
 struct ToFromLabelView: View {
-    @Binding var isThemeGroupButton: Int
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
     var body: some View {
         let postieColors = ThemeManager.themeColors[isThemeGroupButton]

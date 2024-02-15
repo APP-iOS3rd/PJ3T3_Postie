@@ -10,8 +10,8 @@ import SwiftUI
 struct QuestionView: View {
     @Environment(\.openURL) var openURL
     
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     @State private var isExpanded = false
-    @Binding var isThemeGroupButton: Int
     
     var body: some View {
         let postieColors = ThemeManager.themeColors[isThemeGroupButton]
@@ -32,7 +32,7 @@ struct QuestionView: View {
                         .font(.footnote)
                         .foregroundStyle(postieColors.dividerColor)
                     
-                    DividerView(isThemeGroupButton: $isThemeGroupButton)
+                    DividerView()
                     
                     ForEach(questions, id: \.id) { questions in
                         DisclosureGroup {
@@ -65,7 +65,7 @@ struct QuestionView: View {
                         }
                         .padding(.bottom)
                         
-                        DividerView(isThemeGroupButton: $isThemeGroupButton)
+                        DividerView()
                     }
                     
                     Text("도움말을 통해 문제를 해결하지 못했나요?")

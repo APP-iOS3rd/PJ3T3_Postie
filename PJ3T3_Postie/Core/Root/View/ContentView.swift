@@ -20,12 +20,19 @@ struct ContentView: View {
     
     @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
+//    init() {
+//        UITabBar.appearance().shadowImage = UIImage()
+//        UITabBar.appearance().backgroundImage = UIImage()
+//        UITabBar.appearance().isTranslucent = true
+//        UITabBar.appearance().backgroundColor = UIColor(ThemeManager.themeColors[isThemeGroupButton].backGroundColor)
+//    }
+    
     init() {
-//        UITabBar.appearance().barTintColor = UIColor(ThemeManager.themeColors[isThemeGroupButton].backGroundColor)
-        UITabBar.appearance().shadowImage = UIImage()
-        UITabBar.appearance().backgroundImage = UIImage()
-        UITabBar.appearance().isTranslucent = true
-        UITabBar.appearance().backgroundColor = UIColor(ThemeManager.themeColors[isThemeGroupButton].backGroundColor)
+        var tbAppearance: UITabBarAppearance = UITabBarAppearance()
+        tbAppearance.backgroundColor = UIColor.systemBackground
+        UITabBar.appearance().scrollEdgeAppearance = tbAppearance
+        UITabBar.appearance().standardAppearance = tbAppearance
+//        UITabBar.appearance().backgroundColor = UIColor(ThemeManager.themeColors[isThemeGroupButton].backGroundColor)
     }
     
     var body: some View { Group {
@@ -36,7 +43,7 @@ struct ContentView: View {
             if authViewModel.userSession != nil { // userSession이 있으면 SettingView를 보여줌
                 if authViewModel.currentUser != nil {
                     TabView {
-                        HomeView(isThemeGroupButton: $isThemeGroupButton)
+                        HomeView()
                             .tabItem {
                                 Image(systemName: "house")
                                 Text("Home")
@@ -73,7 +80,7 @@ struct ContentView: View {
                 LoginView()
             }
         } else {
-            SplashScreenView(isThemeGroupButton: $isThemeGroupButton)
+            SplashScreenView()
         }
     }
     }
