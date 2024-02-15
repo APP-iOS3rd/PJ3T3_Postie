@@ -65,12 +65,11 @@ struct EditLetterView: View {
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button {
                     Task {
+                        await editLetter(letter: letter)
 
-                        Task {
-                            await editLetter(letter: letter)
-                        }
-                        dismiss()
                     }
+
+                    dismiss()
                 } label : {
                     Text("완료")
                 }
