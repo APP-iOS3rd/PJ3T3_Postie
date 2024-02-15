@@ -17,7 +17,7 @@ struct GroupedLetterView: View {
     var letterWritedGrouped: [String] = []
     var letterGrouped: [String] = []
     var homeWidth: CGFloat
-
+    
     // 편지 데이터 정렬
     func sortedLetterData() -> [String] {
         // recipient 에서 중복 된것을 제외 후 letterReceivedGrouped 에 삽입
@@ -45,67 +45,15 @@ struct GroupedLetterView: View {
                 GroupedFavoriteListLetterView()
             } label: {
                 HStack {
-                    VStack {
-                        HStack {
-                            Text("My Favorite.")
-                                .font(.custom("SourceSerifPro-Black", size: 18))
-                                .foregroundColor(postieColors.tabBarTintColor)
-                            
-                            Text("\("좋아하는 편지 ")")
-                                .foregroundStyle(postieColors.tabBarTintColor)
-                            
-                            Spacer()
-                            
-                            Text(" ") // date
-                                .font(.custom("SourceSerifPro-Light", size: 18))
-                                .foregroundStyle(postieColors.tabBarTintColor)
-                            
-                            ZStack {
-                                Image(systemName: "water.waves")
-                                    .font(.headline)
-                                    .offset(x:18)
-                                
-                                Image(systemName: "sleep.circle")
-                                    .font(.largeTitle)
-                            }
-                            .foregroundStyle(postieColors.dividerColor)
-                        }
-                        
-                        Spacer()
-                        
-                        ZStack {
-                            HStack {
-                                Spacer()
-                                
-                                Text("\"")
-                                    .font(.custom("SourceSerifPro-Black", size: 17))
-                                
-                                Text("좋아하는 편지 꾸러미")
-                                    .foregroundStyle(postieColors.tabBarTintColor)
-                                
-                                Text("\"")
-                                    .font(.custom("SourceSerifPro-Black", size: 17))
-                                
-                                Spacer()
-                            }
-                            
-                            HStack {
-                                Spacer()
-                                
-                                Image(systemName: "heart.fill")
-                                    .font(.title2)
-                                    .foregroundStyle(Color.postieOrange)
-                            }
-                        }
-                    }
-                    .padding()
-                    .frame(width:homeWidth * 0.9, height: 130)
-                    .background(
-                        RoundedRectangle(cornerRadius: 4)
-                            .foregroundStyle(postieColors.receivedLetterColor)
-                            .shadow(color: .black.opacity(0.1), radius: 3, x: 3, y: 3)
-                    )
-                    .modifier(StackedRoundedRectangleModifier(count: favoriteLetters.count, groupWidth: homeWidth))
+                    GroupedLetterItemView(firstWord: "My favorite", title: "좋아하는 편지", content: "좋아하는 편지 꾸러미", isFavorite: true)
+                        .padding()
+                        .frame(width:homeWidth * 0.9, height: 130)
+                        .background(
+                            RoundedRectangle(cornerRadius: 4)
+                                .foregroundStyle(postieColors.receivedLetterColor)
+                                .shadow(color: .black.opacity(0.1), radius: 3, x: 3, y: 3)
+                        )
+                        .modifier(StackedRoundedRectangleModifier(count: favoriteLetters.count, groupWidth: homeWidth))
                 }
                 
                 Spacer()
@@ -124,56 +72,15 @@ struct GroupedLetterView: View {
                 } label: {
                     HStack {
                         ZStack {
-                            VStack {
-                                HStack {
-                                    Text("With.")
-                                        .font(.custom("SourceSerifPro-Black", size: 18))
-                                        .foregroundColor(postieColors.tabBarTintColor)
-                                    
-                                    Text("\(recipient)")
-                                        .foregroundColor(postieColors.tabBarTintColor)
-                                    
-                                    Spacer()
-                                    
-                                    Text(" ") // date
-                                        .font(.custom("SourceSerifPro-Light", size: 18))
-                                        .foregroundStyle(postieColors.tabBarTintColor)
-                                    
-                                    ZStack {
-                                        Image(systemName: "water.waves")
-                                            .font(.headline)
-                                            .offset(x:18)
-                                        
-                                        Image(systemName: "sleep.circle")
-                                            .font(.largeTitle)
-                                    }
-                                    .foregroundStyle(postieColors.dividerColor)
-                                }
-                                
-                                Spacer()
-                                
-                                HStack {
-                                    Spacer()
-                                    
-                                    Text("\"")
-                                        .font(.custom("SourceSerifPro-Black", size: 17))
-                                    
-                                    Text("\(recipient)님과 주고받은 편지 꾸러미")
-                                    
-                                    Text("\"")
-                                        .font(.custom("SourceSerifPro-Black", size: 17))
-                                    
-                                    Spacer()
-                                }
-                            }
-                            .padding()
-                            .frame(width: homeWidth * 0.9, height: 130)
-                            .background(
-                                RoundedRectangle(cornerRadius: 4)
-                                    .foregroundStyle(postieColors.receivedLetterColor)
-                                    .shadow(color: .black.opacity(0.1), radius: 3, x: 3, y: 3)
-                            )
-                            .modifier(StackedRoundedRectangleModifier(count: countOfMatchingRecipients + countOfMatchingWriters, groupWidth: homeWidth))
+                            GroupedLetterItemView(firstWord: "With", title: recipient, content: "\(recipient)님과 주고받은 편지 꾸러미", isFavorite: false)
+                                .padding()
+                                .frame(width: homeWidth * 0.9, height: 130)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 4)
+                                        .foregroundStyle(postieColors.receivedLetterColor)
+                                        .shadow(color: .black.opacity(0.1), radius: 3, x: 3, y: 3)
+                                )
+                                .modifier(StackedRoundedRectangleModifier(count: countOfMatchingRecipients + countOfMatchingWriters, groupWidth: homeWidth))
                         }
                         .padding(.horizontal)
                         .padding(.bottom, 8)
@@ -185,6 +92,71 @@ struct GroupedLetterView: View {
         }
         .toolbarBackground(postieColors.backGroundColor, for: .navigationBar)
         .tint(postieColors.tabBarTintColor)
+    }
+}
+
+struct GroupedLetterItemView: View {
+    var firstWord: String
+    var title: String
+    var content: String
+    var isFavorite: Bool
+    
+    var body: some View {
+        VStack {
+            HStack {
+                Text(firstWord)
+                    .font(.custom("SourceSerifPro-Black", size: 18))
+                    .foregroundColor(postieColors.tabBarTintColor)
+                
+                Text(title)
+                    .foregroundStyle(postieColors.tabBarTintColor)
+                
+                Spacer()
+                
+                Text(" ") // date
+                    .font(.custom("SourceSerifPro-Light", size: 18))
+                    .foregroundStyle(postieColors.tabBarTintColor)
+                
+                ZStack {
+                    Image(systemName: "water.waves")
+                        .font(.headline)
+                        .offset(x:18)
+                    
+                    Image(systemName: "sleep.circle")
+                        .font(.largeTitle)
+                }
+                .foregroundStyle(postieColors.dividerColor)
+            }
+            
+            Spacer()
+            
+            ZStack {
+                HStack {
+                    Spacer()
+                    
+                    Text("\"")
+                        .font(.custom("SourceSerifPro-Black", size: 17))
+                    
+                    Text(content)
+                        .foregroundStyle(postieColors.tabBarTintColor)
+                    
+                    Text("\"")
+                        .font(.custom("SourceSerifPro-Black", size: 17))
+                    
+                    Spacer()
+                }
+                
+                if isFavorite {
+                    HStack {
+                        Spacer()
+                        
+                        Image(systemName: "heart.fill")
+                            .font(.title2)
+                            .foregroundStyle(Color.postieOrange)
+                    }
+                }
+            }
+        }
     }
 }
 
