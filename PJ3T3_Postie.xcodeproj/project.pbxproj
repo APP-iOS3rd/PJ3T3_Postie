@@ -32,6 +32,8 @@
 		9E7E05792B7C465D00ACF177 /* ClearBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7E05782B7C465D00ACF177 /* ClearBackground.swift */; };
 		9E7E057B2B7CC37800ACF177 /* AuthCaseHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7E057A2B7CC37800ACF177 /* AuthCaseHelper.swift */; };
 		9E7E05B52B7DE54200ACF177 /* FirestoreShopManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7E05B42B7DE54200ACF177 /* FirestoreShopManager.swift */; };
+		9E7E05B92B7DE6D200ACF177 /* FirestoreNoticeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7E05B82B7DE6D200ACF177 /* FirestoreNoticeManager.swift */; };
+		9E7E05BB2B7DE96500ACF177 /* OfficialLetter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7E05BA2B7DE96500ACF177 /* OfficialLetter.swift */; };
 		9E7F8C782B5E69B000F1A6BF /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7F8C772B5E69B000F1A6BF /* StorageManager.swift */; };
 		9E93042D2B745DF1000B7F75 /* Shop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E93042C2B745DF1000B7F75 /* Shop.swift */; };
 		9E93042F2B74A4B5000B7F75 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E93042E2B74A4B5000B7F75 /* View.swift */; };
@@ -136,6 +138,8 @@
 		9E7E05782B7C465D00ACF177 /* ClearBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearBackground.swift; sourceTree = "<group>"; };
 		9E7E057A2B7CC37800ACF177 /* AuthCaseHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthCaseHelper.swift; sourceTree = "<group>"; };
 		9E7E05B42B7DE54200ACF177 /* FirestoreShopManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreShopManager.swift; sourceTree = "<group>"; };
+		9E7E05B82B7DE6D200ACF177 /* FirestoreNoticeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreNoticeManager.swift; sourceTree = "<group>"; };
+		9E7E05BA2B7DE96500ACF177 /* OfficialLetter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfficialLetter.swift; sourceTree = "<group>"; };
 		9E7F8C772B5E69B000F1A6BF /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		9E93042C2B745DF1000B7F75 /* Shop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shop.swift; sourceTree = "<group>"; };
 		9E93042E2B74A4B5000B7F75 /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
@@ -283,6 +287,7 @@
 				9E9A8BEE2B6B81050072CB75 /* GoogleUser.swift */,
 				9E9F6ADB2B57643F003DFE83 /* Letter.swift */,
 				9EA106762B63C5C90033E7A8 /* LetterPhoto.swift */,
+				9E7E05BA2B7DE96500ACF177 /* OfficialLetter.swift */,
 				9E9A8BF02B6B85640072CB75 /* PostieUser.swift */,
 				9E93042C2B745DF1000B7F75 /* Shop.swift */,
 			);
@@ -498,6 +503,7 @@
 				9E25C2D02B7B8F8A00B04BA1 /* CryptoUtils.swift */,
 				9E9F6AD72B57642D003DFE83 /* FirestoreManager.swift */,
 				9E7E05B42B7DE54200ACF177 /* FirestoreShopManager.swift */,
+				9E7E05B82B7DE6D200ACF177 /* FirestoreNoticeManager.swift */,
 				9E9A8BE82B6B704E0072CB75 /* GoogleSignInHelper.swift */,
 				9E7F8C772B5E69B000F1A6BF /* StorageManager.swift */,
 			);
@@ -753,6 +759,7 @@
 				9E9F6ADF2B5765DE003DFE83 /* Color.swift in Sources */,
 				0E29F0D82B5FA2FC005B86FB /* Button.swift in Sources */,
 				9E9F6ABA2B5762FC003DFE83 /* MapView.swift in Sources */,
+				9E7E05B92B7DE6D200ACF177 /* FirestoreNoticeManager.swift in Sources */,
 				9E9F6ACC2B5763C3003DFE83 /* RegistrationView.swift in Sources */,
 				9E9F6ABC2B576351003DFE83 /* MapCoordinator.swift in Sources */,
 				9E7E05792B7C465D00ACF177 /* ClearBackground.swift in Sources */,
@@ -791,6 +798,7 @@
 				9E9F6AC02B576368003DFE83 /* ShopView.swift in Sources */,
 				E39C35F12B71F820001F6E5F /* ContenViewModel.swift in Sources */,
 				9E9F6ACA2B5763B8003DFE83 /* LoginView.swift in Sources */,
+				9E7E05BB2B7DE96500ACF177 /* OfficialLetter.swift in Sources */,
 				E349F8882B6B673C00253B02 /* GroupedLetterView.swift in Sources */,
 				9E25C2CD2B7B454000B04BA1 /* EnvironmentValues.swift in Sources */,
 				9E46837C2B7BBBA100EFB90B /* LoadingView.swift in Sources */,
