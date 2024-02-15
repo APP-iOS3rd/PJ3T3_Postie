@@ -95,7 +95,7 @@ struct LetterDetailView: View {
         }
         .sheet(isPresented: $letterDetailViewModel.showLetterEditSheet) {
             NavigationStack {
-                AddLetterView(isReceived: letter.isReceived, letter: firestoreManager.letter, letterPhotos: storageManager.images)
+                EditLetterView(letter: letter, letterPhotos: StorageManager.shared.images)
             }
         }
         .alert("편지 삭제", isPresented: $letterDetailViewModel.showDeleteAlert) {
@@ -167,18 +167,11 @@ extension LetterDetailView {
                                     letterDetailViewModel.selectedIndex = index
                                     letterDetailViewModel.showLetterImageFullScreenView = true
                                 } label: {
-                                    AsyncImage(
-                                        url: URL(string: storageManager.images[index].urlString)
-                                    ) { image in
-                                        image
-                                            .resizable()
-                                            .scaledToFill()
-                                            .frame(width: 50, height: 50)
-                                            .clipShape(RoundedRectangle(cornerRadius: 4))
-                                    } placeholder: {
-                                        ProgressView()
-                                            .frame(width: 50, height: 50)
-                                    }
+                                    Image(uiImage: storageManager.images.map({$0.image})[index])
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width: 50, height: 50)
+                                        .clipShape(RoundedRectangle(cornerRadius: 4))
                                 }
                             }
                         }
