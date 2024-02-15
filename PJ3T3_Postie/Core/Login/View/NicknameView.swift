@@ -136,6 +136,9 @@ struct NicknameView: View {
                 }
             }
         }
+        .onTapGesture {
+            hideKeyboard()
+        }
     }
 }
 
