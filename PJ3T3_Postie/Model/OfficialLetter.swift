@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+struct OfficialLetter: Identifiable, Hashable, Codable {
+    let id: String
+    let title: String
+    let content: String
+}
