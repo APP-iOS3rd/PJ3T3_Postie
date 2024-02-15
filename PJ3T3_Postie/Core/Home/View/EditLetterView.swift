@@ -99,6 +99,7 @@ struct EditLetterView: View {
                 text: $editLetterViewModel.text,
                 showTextRecognizerErrorAlert: $editLetterViewModel.showTextRecognizerErrorAlert
             )
+            .ignoresSafeArea(.all, edges: .bottom)
         }
         .alert("문자 인식 실패", isPresented: $editLetterViewModel.showTextRecognizerErrorAlert) {
 

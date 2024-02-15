@@ -101,6 +101,7 @@ struct AddLetterView: View {
                 text: $addLetterViewModel.text,
                 showTextRecognizerErrorAlert: $addLetterViewModel.showTextRecognizerErrorAlert
             )
+            .ignoresSafeArea(.all, edges: .bottom)
         }
         .alert("문자 인식 실패", isPresented: $addLetterViewModel.showTextRecognizerErrorAlert) {
 
