@@ -29,6 +29,7 @@ struct InformationView: View {
                         .foregroundStyle(postieColors.dividerColor)
                     
                     DividerView()
+                        .padding(.bottom)
                     
                     HStack {
                         Text("버전정보")
@@ -45,6 +46,7 @@ struct InformationView: View {
                         .foregroundStyle(postieColors.dividerColor)
                     
                     DividerView()
+                        .padding(.bottom)
                     
                     NavigationLink(destination: TermOfUserView()) {
                         HStack {

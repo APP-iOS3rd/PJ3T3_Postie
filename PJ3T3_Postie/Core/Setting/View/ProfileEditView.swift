@@ -44,6 +44,7 @@ struct ProfileEditView: View {
                                     .resizable()
                                     .scaledToFit()
                                     .frame(width: geometry.size.height < 400 ? 80 : 110, height: geometry.size.height < 400 ? 80 : 110)
+                                    .offset(y: -10)
                                 
                                 Image(systemName: "pencil.circle.fill")
                                     .font(geometry.size.height < 400 ? .title3 : .title2)

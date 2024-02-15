@@ -168,7 +168,7 @@ struct SideMenuView: View {
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 50, height: 50)
-                                .offset(y: -7)
+                                .offset(y: -4)
                         }
                         
                         VStack(alignment: .leading) {
