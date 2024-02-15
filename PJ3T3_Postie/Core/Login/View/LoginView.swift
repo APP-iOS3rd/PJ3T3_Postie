@@ -13,12 +13,14 @@ import GoogleSignInSwift
 struct LoginView: View {
     @ObservedObject var authManager = AuthManager.shared
     @ObservedObject var appleSignInHelper = AppleSignInHelper.shared
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
     var body: some View {
+        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
+        
         NavigationStack {
             ZStack {
-                Rectangle()
-                    .foregroundStyle(.postieBeige)
+                postieColors.backGroundColor
                     .ignoresSafeArea()
                 
                 VStack {
@@ -39,11 +41,11 @@ struct LoginView: View {
                             Text("Sign in with Email")
                                 .font(.system(size: 20, weight: .semibold))
                         }
-                        .foregroundColor(.white)
+                        .foregroundColor(postieColors.receivedLetterColor)
                         .frame(height: 54)
                         .frame(maxWidth: .infinity)
                     }
-                    .background(.postieOrange)
+                    .background(postieColors.tintColor)
                     .clipShape(RoundedRectangle(cornerRadius: 5))
                     .shadow(radius: 3, x: 3, y: 3)
                     .padding(.bottom, 10)
@@ -86,7 +88,7 @@ struct LoginView: View {
                         }
                     }
                     .frame(height: 54)
-                    .signInWithAppleButtonStyle(.black)
+                    .signInWithAppleButtonStyle(isThemeGroupButton == 4 ? .white : .black)
                     .shadow(radius: 3, x: 3, y: 3)
                     .padding(.bottom, 10)
                 }
