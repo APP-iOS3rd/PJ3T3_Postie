@@ -186,6 +186,9 @@ struct AddDataSectionView: View {
             
             if let uiImage = UIImage(data: image) {
                 selectedImages.append(uiImage)
+                let imgData = NSData(data: uiImage.jpegData(compressionQuality: 1)!)
+                var imageSize: Int = imgData.count
+                print("actual size of image in KB: %f ", Double(imageSize) / 1000.0)
                 print(selectedImages)
             } else {
                 //alert 구현 필요
