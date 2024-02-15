@@ -61,13 +61,23 @@ struct LoginView: View {
                             }
                         }
                     } label: {
-                        Image("GoogleSignIn")
-                            .resizable()
-                            .scaledToFit()
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 5)
-                                .stroke(Color(.black), lineWidth: 0.5))
-                            .shadow(radius: 3, x: 3, y: 3)
+                        ZStack {
+                            //Apple 로그인 버튼과 구글 로그인 버튼의 cornerRadius 일치를 위한 배경색
+                            //stroke를 이미지 아래에 그리면 이미지가 stoke 라인을 조금 가려서 stoke만 이미지에 overlay함
+                            RoundedRectangle(cornerRadius: 5)
+                                .foregroundStyle(.white)
+                                .frame(height: 54)
+                                .shadow(radius: 3, x: 3, y: 3)
+                            
+                            Image("GoogleSignIn")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(height: 54)
+                                .overlay {
+                                    RoundedRectangle(cornerRadius: 5)
+                                        .stroke(Color(.black), lineWidth: 0.5)
+                                }
+                        }
                     }
                     .padding(.bottom, 10)
                     
