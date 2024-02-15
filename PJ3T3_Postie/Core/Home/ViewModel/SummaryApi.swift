@@ -45,6 +45,7 @@ class APIClient {
     private var apiKey: String? {
         get { getValueOfPlistFile("SummaryApiKeys", "APIKey")}
     }
+    
     private var apiKeyID: String? {
         get { getValueOfPlistFile("SummaryApiKeys", "APIKeyID")}
     }
@@ -59,6 +60,7 @@ class APIClient {
         }
 
         var request = URLRequest(url: url)
+        
         request.httpMethod = "POST"
         request.addValue(apiKeyID, forHTTPHeaderField: "X-NCP-APIGW-API-KEY-ID")
         request.addValue(apiKey, forHTTPHeaderField: "X-NCP-APIGW-API-KEY")
@@ -88,6 +90,7 @@ class APIClient {
             do {
                 let decoder = JSONDecoder()
                 let decodedData = try decoder.decode(ApiResponse.self, from: data)
+                
                 return decodedData.summary
             } catch {
                 throw URLError(.badServerResponse)

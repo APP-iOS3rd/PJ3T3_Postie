@@ -53,9 +53,10 @@ struct ProfileView: View {
                         DividerView()
                             .padding(.bottom)
                         
-                        Text(" \(String(user?.fullName ?? ""))")
+                        Text(String(user?.fullName ?? ""))
                             .foregroundStyle(postieColors.tabBarTintColor)
                             .padding(.bottom)
+                            .padding(.leading, 3)
                         
                         Text("닉네임")
                             .font(.subheadline)
@@ -64,9 +65,10 @@ struct ProfileView: View {
                         DividerView()
                             .padding(.bottom)
                         
-                        Text(" \(String(user?.nickname ?? ""))")
+                        Text(String(user?.nickname ?? ""))
                             .foregroundStyle(postieColors.tabBarTintColor)
                             .padding(.bottom)
+                            .padding(.leading, 3)
                         
                         Text("계정")
                             .font(.subheadline)
@@ -75,10 +77,11 @@ struct ProfileView: View {
                         DividerView()
                             .padding(.bottom)
                         
-                        Text(" \(String(user?.email ?? ""))")
+                        Text(String(user?.email ?? ""))
                             .foregroundStyle(postieColors.tabBarTintColor)
                             .padding(.bottom)
-                        
+                            .padding(.leading, 3)
+                             
                         Text("구독정보")
                             .font(.subheadline)
                             .foregroundStyle(postieColors.dividerColor)
@@ -90,9 +93,10 @@ struct ProfileView: View {
                             isshowingMembershipView = true
                         } label: {
                             HStack {
-                                Text(" 일반회원")
+                                Text("일반회원")
                                     .foregroundStyle(postieColors.tabBarTintColor)
                                     .padding(.bottom)
+                                    .padding(.leading, 3)
                                 
                                 Spacer()
                                 
@@ -115,9 +119,10 @@ struct ProfileView: View {
                         Button {
                             isLogOutAlert = true
                         } label: {
-                            Text(" 로그아웃")
+                            Text("로그아웃")
                                 .foregroundStyle(postieColors.tabBarTintColor)
                                 .padding(.bottom)
+                                .padding(.leading, 3)
                         }
                         .alert("로그아웃", isPresented: $isLogOutAlert) {
                             Button(role: .cancel) {
@@ -138,8 +143,9 @@ struct ProfileView: View {
                         Button {
                             isSignOutAlert = true
                         } label: {
-                            Text(" 회원탈퇴")
+                            Text("회원탈퇴")
                                 .foregroundStyle(postieColors.tabBarTintColor)
+                                .padding(.leading, 3)
                         }
                         .alert("회원탈퇴", isPresented: $isSignOutAlert) {
                             Button(role: .cancel) {

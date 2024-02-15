@@ -156,8 +156,8 @@ struct ProfileImageEditView: View {
     
     var body: some View {
         let profileImages = ["postySmileSketch", "postySmileLine", "postySmileLineColor", "postyThinkingSketch", "postyThinkingLine", "postyThinkingLineColor", "postySendingSketch", "postySendingLine", "postySendingLineColor", "postyReceivingSketch", "postyReceivingLine", "postyReceivingLineColor", "postyHeartSketch", "postyHeartLine", "postyHeartLineColor", "postyTrumpetSketch", "postyTrumpetLine", "postyTrumpetLineColor", "postyQuestionSketch", "postyQuestionLine", "postyQuestionLineColor", "postyNormalSketch", "postyNormalLine", "postyNormalLineColor", "postyWinkSketch", "postyWinkLine", "postyWinkLineColor", "postySleepingSketch", "postySleepingLine", "postySleepingLineColor", "postyNotGoodSketch", "postyNotGoodLine", "postyNotGoodLineColor"]
-        let rows3: [GridItem] = Array(repeating: .init(.fixed(170)), count: 3)
-        let rows2: [GridItem] = Array(repeating: .init(.fixed(170)), count: 2)
+        let rows3: [GridItem] = Array(repeating: .init(.fixed(180)), count: 3)
+        let rows2: [GridItem] = Array(repeating: .init(.fixed(180)), count: 2)
         
         GeometryReader { geometry in
             ZStack {
