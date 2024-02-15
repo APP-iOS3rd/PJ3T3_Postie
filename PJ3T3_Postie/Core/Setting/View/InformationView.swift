@@ -15,7 +15,7 @@ struct InformationView: View {
         var appVersion: String {
                 if let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String,
                    let build = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String {
-                    return "\(version) (\(build))"
+                    return "\(version)"
                 }
                 return "버전 정보 없음"
             }
