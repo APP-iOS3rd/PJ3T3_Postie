@@ -84,6 +84,8 @@
 		9E9F6B162B5769AA003DFE83 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 9E9F6B152B5769AA003DFE83 /* FirebaseStorage */; };
 		9EA106772B63C5C90033E7A8 /* LetterPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EA106762B63C5C90033E7A8 /* LetterPhoto.swift */; };
 		9EBAFDC42B70ED900020EE6F /* AppleSignInHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBAFDC32B70ED900020EE6F /* AppleSignInHelper.swift */; };
+		CE4F1AD22B7CDF8800FE7CF6 /* EditLetterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4F1AD12B7CDF8800FE7CF6 /* EditLetterView.swift */; };
+		CE4F1AD42B7CE06D00FE7CF6 /* EditLetterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4F1AD32B7CE06D00FE7CF6 /* EditLetterViewModel.swift */; };
 		CE5FF9272B6CF8A400DDA5BF /* NanumMyeongjo.otf in Resources */ = {isa = PBXBuildFile; fileRef = CE5FF9262B6CF8A400DDA5BF /* NanumMyeongjo.otf */; };
 		CE60AACD2B6F907500D6717A /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE60AACC2B6F907500D6717A /* Font.swift */; };
 		CE60AACF2B6F930600D6717A /* NanumMyeongjoBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = CE60AACE2B6F930600D6717A /* NanumMyeongjoBold.otf */; };
@@ -174,6 +176,8 @@
 		9E9F6ADE2B5765DD003DFE83 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		9EA106762B63C5C90033E7A8 /* LetterPhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterPhoto.swift; sourceTree = "<group>"; };
 		9EBAFDC32B70ED900020EE6F /* AppleSignInHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSignInHelper.swift; sourceTree = "<group>"; };
+		CE4F1AD12B7CDF8800FE7CF6 /* EditLetterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditLetterView.swift; sourceTree = "<group>"; };
+		CE4F1AD32B7CE06D00FE7CF6 /* EditLetterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditLetterViewModel.swift; sourceTree = "<group>"; };
 		CE5FF9262B6CF8A400DDA5BF /* NanumMyeongjo.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = NanumMyeongjo.otf; sourceTree = "<group>"; };
 		CE60AACC2B6F907500D6717A /* Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
 		CE60AACE2B6F930600D6717A /* NanumMyeongjoBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = NanumMyeongjoBold.otf; sourceTree = "<group>"; };
@@ -373,6 +377,7 @@
 			isa = PBXGroup;
 			children = (
 				CE7E50772B579D6800955F31 /* AddLetterViewModel.swift */,
+				CE4F1AD32B7CE06D00FE7CF6 /* EditLetterViewModel.swift */,
 				9E9F6AB72B5762EF003DFE83 /* HomeViewModel.swift */,
 				CE6E08442B5E09D800CFBF2A /* LetterDetailViewModel.swift */,
 				CEF09E482B57BFBF00BE67E4 /* TextRecognizer.swift */,
@@ -384,6 +389,7 @@
 			isa = PBXGroup;
 			children = (
 				CE6597032B5FB1E100A3C136 /* AddLetterView.swift */,
+				CE4F1AD12B7CDF8800FE7CF6 /* EditLetterView.swift */,
 				E349F8872B6B673C00253B02 /* GroupedLetterView.swift */,
 				E35C10142B720FFE0007DE8C /* GroupedFavoriteListLetterView.swift */,
 				E349F8892B6B7DA500253B02 /* GroupedListLetterView.swift */,
@@ -476,7 +482,6 @@
 		9E9F6AB42B5762C8003DFE83 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				E3D466DA2B733B5B00DFE93F /* MembershipView.swift */,
 				E3EECAF42B5FD2E000E639F2 /* ProfileView.swift */,
 				E3B41DA52B730E0300CB9E7A /* ProfileEditView.swift */,
 				9E9F6AD12B5763F3003DFE83 /* SettingsRowView.swift */,
@@ -791,6 +796,7 @@
 				9E25C2D12B7B8F8A00B04BA1 /* CryptoUtils.swift in Sources */,
 				9E7E05B52B7DE54200ACF177 /* FirestoreShopManager.swift in Sources */,
 				0E882AF02B6B79D800D8F2FC /* CoordinaterEtc.swift in Sources */,
+				CE4F1AD22B7CDF8800FE7CF6 /* EditLetterView.swift in Sources */,
 				0E882AEE2B6B73DE00D8F2FC /* LocationManager.swift in Sources */,
 				E36587A92B7C44EB00584965 /* AlertView.swift in Sources */,
 				9E9F6AD42B576411003DFE83 /* LetterDetailView.swift in Sources */,
@@ -798,6 +804,7 @@
 				E365879B2B790ADA00584965 /* QuestionView.swift in Sources */,
 				9E9A8BF32B6CD8990072CB75 /* NicknameView.swift in Sources */,
 				CEF09E492B57BFBF00BE67E4 /* TextRecognizer.swift in Sources */,
+				CE4F1AD42B7CE06D00FE7CF6 /* EditLetterViewModel.swift in Sources */,
 				E349F8862B6B672E00253B02 /* ListLetterView.swift in Sources */,
 				E3EECAF52B5FD2E100E639F2 /* ProfileView.swift in Sources */,
 				9EBAFDC42B70ED900020EE6F /* AppleSignInHelper.swift in Sources */,
@@ -953,7 +960,7 @@
 				CODE_SIGN_ENTITLEMENTS = PJ3T3_Postie/PJ3T3_Postie.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"PJ3T3_Postie/Preview Content\"";
 				DEVELOPMENT_TEAM = Y6QXM3Q994;
@@ -996,7 +1003,7 @@
 				CODE_SIGN_ENTITLEMENTS = PJ3T3_Postie/PJ3T3_Postie.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"PJ3T3_Postie/Preview Content\"";
 				DEVELOPMENT_TEAM = Y6QXM3Q994;
 				ENABLE_PREVIEWS = YES;
