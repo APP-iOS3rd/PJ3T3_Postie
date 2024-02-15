@@ -9,9 +9,10 @@ import SwiftUI
 
 struct LoadingView: View {
     @ObservedObject private var counter = Counter(interval: 1)
-    let images: [Image] = [Image("postyReceiving"), Image("postyReceivingBeige"), Image("postyReceivingOrange")]
+    let profileImages = ["postySmileSketch", "postySmileLine", "postySmileLineColor", "postyThinkingSketch", "postyThinkingLine", "postyThinkingLineColor", "postySendingSketch", "postySendingLine", "postySendingLineColor", "postyReceivingSketch", "postyReceivingLine", "postyReceivingLineColor", "postyHeartSketch", "postyHeartLine", "postyHeartLineColor", "postyTrumpetSketch", "postyTrumpetLine", "postyTrumpetLineColor", "postyQuestionSketch", "postyQuestionLine", "postyQuestionLineColor", "postyNormalSketch", "postyNormalLine", "postyNormalLineColor", "postyWinkSketch", "postyWinkLine", "postyWinkLineColor", "postySleepingSketch", "postySleepingLine", "postySleepingLineColor", "postyNotGoodSketch", "postyNotGoodLine", "postyNotGoodLineColor"].shuffled()
+    let sketchPostys = ["postySmileSketch", "postyThinkingSketch", "postySendingSketch", "postyReceivingSketch", "postyHeartSketch", "postyTrumpetSketch", "postyQuestionSketch", "postyNormalSketch", "postyWinkSketch", "postyWinkSketch", "postySleepingSketch", "postyNotGoodSketch"].shuffled()
     var text: String
-    @Binding var isThemeGroupButton: Int
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
     var body: some View {
         let postieColors = ThemeManager.themeColors[isThemeGroupButton]
@@ -28,20 +29,22 @@ struct LoadingView: View {
             
             
             VStack {
-                images[counter.value % images.count]
+                Image("\(sketchPostys[counter.value % sketchPostys.count])")
                     .resizable()
                     .frame(width: 150, height: 150)
+                    .padding(.bottom, 20)
                 
                 Text(text)
-                    .font(.system(size: 15))
+                    .font(.system(size: 22, weight: .semibold))
                     .foregroundStyle(postieColors.dividerColor)
+                    .multilineTextAlignment(.center)
             }
         }
     }
 }
 
 #Preview {
-    LoadingView(text: "프리뷰", isThemeGroupButton: .constant(0))
+    LoadingView(text: "프리뷰에 로딩이 표시되고 있어요\n공백 미포함 15자 초과시 줄 바꾸기")
 }
 
 private class Counter: ObservableObject {
