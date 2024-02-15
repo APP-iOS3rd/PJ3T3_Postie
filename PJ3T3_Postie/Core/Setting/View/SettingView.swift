@@ -13,7 +13,8 @@ struct SettingView: View {
     //Colors
     private let profileBackgroundColor: Color = .gray
     private let signOutIconColor: Color = Color(uiColor: .lightGray)
-    
+    @State private var content: String = ""
+    @State private var summary: String = ""
     var body: some View {
         NavigationStack {
             if let user = authManager.currentUser {
@@ -63,6 +64,22 @@ struct SettingView: View {
                                 .font(.subheadline)
                                 .foregroundStyle(profileBackgroundColor)
                         }
+                    }
+                    
+                    Section("SummaryTest") {
+                        
+                        TextField("content", text: $content)
+                        
+                        Text(summary)
+                        
+                        Button(action: {
+                            Task {
+                                summary = try await APIClient.shared.postRequestToAPI(title: "", content: content)
+                            }}, label: {
+                                Text("요약하기")
+                            })
+                        .padding(5)
+                        .background(Color.yellow)
                     }
                     
                     Section("Account") {
