@@ -15,7 +15,6 @@ class EditLetterViewModel: ObservableObject {
     @Published var text: String = ""
     @Published var summary: String = ""
     @Published var images: [UIImage] = []
-
     @Published var showUIImagePicker = false
     @Published var showLetterImageFullScreenView: Bool = false
     @Published var showTextRecognizerErrorAlert: Bool = false

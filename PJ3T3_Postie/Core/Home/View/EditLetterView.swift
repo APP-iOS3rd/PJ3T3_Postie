@@ -66,7 +66,6 @@ struct EditLetterView: View {
                 Button {
                     Task {
                         await editLetter(letter: letter)
-
                     }
 
                     dismiss()
@@ -103,7 +102,6 @@ struct EditLetterView: View {
             .ignoresSafeArea(.all, edges: .bottom)
         }
         .alert("문자 인식 실패", isPresented: $editLetterViewModel.showTextRecognizerErrorAlert) {
-
         } message: {
             Text("문자 인식에 실패했습니다. 다시 시도해 주세요.")
         }
