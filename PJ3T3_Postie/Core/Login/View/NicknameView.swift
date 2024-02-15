@@ -12,6 +12,7 @@ struct NicknameView: View {
     @State var nickname: String = ""
     @State var isTappable: Bool = false
     @State var isTapped: Bool = false
+    @FocusState private var focusField: String?
     @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
     var body: some View {
@@ -35,8 +36,13 @@ struct NicknameView: View {
                         .font(.footnote)
                     
                     TextField("앱에서 사용할 닉네임을 입력 해 주세요", text: $nickname)
+                        .focused($focusField, equals: "nickname")
+                        .autocorrectionDisabled()
                     
                     Divider()
+                }
+                .onAppear {
+                    focusField = "nickname"
                 }
                 
                 Button {
