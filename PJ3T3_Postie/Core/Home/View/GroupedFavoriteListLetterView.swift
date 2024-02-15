@@ -16,17 +16,34 @@ struct GroupedFavoriteListLetterView: View {
     
     var body: some View {
         let postieColors = ThemeManager.themeColors[isThemeGroupButton]
+        let favoriteLetters = firestoreManager.letters.filter { $0.isFavorite }
         
         ZStack(alignment: .bottomTrailing) {
             postieColors.backGroundColor
                 .ignoresSafeArea()
             
+            if firestoreManager.letters.isEmpty {
+                VStack {
+                    Image("postyHeartSketch")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 300)
+                        .opacity(0.5)
+                    
+                    Text("\n좋아하는 편지가 없어요 ㅠ.ㅠ 저장한 편지에서 하트를 눌러보세요!")
+                        .font(.callout)
+                        .foregroundStyle(postieColors.dividerColor)
+                }
+                .offset(x: -30, y: -150)
+                .padding()
+            }
+                
             ScrollView {
-                ForEach(firestoreManager.letters, id: \.self) { letter in
+                ForEach(favoriteLetters, id: \.self) { letter in
                     NavigationLink {
                         LetterDetailView(letter: letter)
                     } label: {
-                        favoriteLetterView(letter: letter)
+                        LetterItemView(letter: letter, isThemeGroupButton: $isThemeGroupButton)
                     }
                 }
                 
@@ -38,6 +55,7 @@ struct GroupedFavoriteListLetterView: View {
             
             AddLetterButton(isThemeGroupButton: $isThemeGroupButton)
         }
+        .toolbarBackground(postieColors.backGroundColor, for: .navigationBar)
         .tint(postieColors.tabBarTintColor)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -46,15 +64,6 @@ struct GroupedFavoriteListLetterView: View {
                     .bold()
                     .foregroundStyle(postieColors.tintColor)
             }
-        }
-    }
-    
-    @ViewBuilder
-    private func favoriteLetterView(letter: Letter) -> some View {
-        if letter.isFavorite {
-            LetterItemView(letter: letter, isThemeGroupButton: $isThemeGroupButton)
-        } else {
-            EmptyView()
         }
     }
 }

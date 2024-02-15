@@ -14,30 +14,46 @@ struct GroupedLetterView: View {
     var letterReceivedGrouped: [String] = []
     var letterWritedGrouped: [String] = []
     var letterGrouped: [String] = []
+    var homeWidth: CGFloat
     
     @Binding var isThemeGroupButton: Int
     
     // 숫자, 한글, 알파벳 순서대로 정렬
     func customSort(recipients: [String]) -> [String] {
         return recipients.sorted { (lhs: String, rhs: String) -> Bool in
-            func isKorean(_ string: String) -> Bool {
+            func isKoreanConsonant(_ string: String) -> Bool {
                 for scalar in string.unicodeScalars {
-                    if CharacterSet(charactersIn: "가"..."힣").contains(scalar) {
+                    if scalar.value >= 0x3131 && scalar.value <= 0x314E {
                         return true
                     }
                 }
+                
+                return false
+            }
+
+            func isKoreanSyllable(_ string: String) -> Bool {
+                for scalar in string.unicodeScalars {
+                    if scalar.value >= 0xAC00 && scalar.value <= 0xD7A3 {
+                        return true
+                    }
+                }
+                
                 return false
             }
             
-            func isNumber(_ string: String) -> Bool {
-                return string.rangeOfCharacter(from: CharacterSet.decimalDigits) != nil
+            // 우선순위 -> 숫자: 0, 한글 초성: 1, 한글 음절: 2, 그 외: 3
+            let lhsPriority = isKoreanConsonant(lhs) ? 1 : isKoreanSyllable(lhs) ? 2 : 3
+            let rhsPriority = isKoreanConsonant(rhs) ? 1 : isKoreanSyllable(rhs) ? 2 : 3
+            
+            if lhsPriority == rhsPriority {
+                if lhsPriority == 1 || lhsPriority == 2 {
+                    return lhs < rhs
+                } else {
+                    return lhs.lowercased() < rhs.lowercased()
+                }
+            } else {
+                return lhsPriority < rhsPriority
             }
-            
-            let lhsPriority = (isNumber(lhs) ? 0 : isKorean(lhs) ? 1 : 2)
-            let rhsPriority = (isNumber(rhs) ? 0 : isKorean(rhs) ? 1 : 2)
-            
-            // 왼쪽 String과 오른쪽 String을 비교하여 숫자, 한글, 알파벳 순으로 정렬
-            return lhsPriority == rhsPriority ? lhs < rhs : lhsPriority < rhsPriority
         }
     }
     
@@ -50,8 +66,7 @@ struct GroupedLetterView: View {
         // letterReceivedGrouped와 letterWritedGrouped를 합친 후 중복 제거
         let letterGrouped: [String] = Array(Set(letterReceivedGrouped + letterWritedGrouped))
         // 본인 이름 항목 제거
-        // "me" << 추후에는 authManager.currentUser?.nickName 로 해야함
-        let filteredLetterGrouped: [String] = letterGrouped.filter { $0 != "me" }
+        let filteredLetterGrouped: [String] = letterGrouped.filter { $0 != authManager.currentUser?.nickname }
         // 숫자, 한글, 알파벳 순서대로 정렬
         let sortedRecipients = customSort(recipients: filteredLetterGrouped)
         
@@ -70,7 +85,7 @@ struct GroupedLetterView: View {
                 GroupedFavoriteListLetterView(isThemeGroupButton: $isThemeGroupButton)
             } label: {
                 HStack {
-                    VStack(alignment: .leading) {
+                    VStack {
                         HStack {
                             Text("My Favorite.")
                                 .font(.custom("SourceSerifPro-Black", size: 18))
@@ -98,25 +113,39 @@ struct GroupedLetterView: View {
                         
                         Spacer()
                         
-                        HStack {
-                            Text("\"좋아하는 편지 꾸러미\"")
-                                .foregroundStyle(postieColors.tabBarTintColor)
+                        ZStack {
+                            HStack {
+                                Spacer()
+                                
+                                Text("\"")
+                                    .font(.custom("SourceSerifPro-Black", size: 17))
+                                
+                                Text("좋아하는 편지 꾸러미")
+                                    .foregroundStyle(postieColors.tabBarTintColor)
+                                
+                                Text("\"")
+                                    .font(.custom("SourceSerifPro-Black", size: 17))
+                                
+                                Spacer()
+                            }
                             
-                            Spacer()
-                            
-                            Image(systemName: "heart.fill")
-                                .font(.title2)
-                                .foregroundStyle(Color.postieOrange)
+                            HStack {
+                                Spacer()
+                                
+                                Image(systemName: "heart.fill")
+                                    .font(.title2)
+                                    .foregroundStyle(Color.postieOrange)
+                            }
                         }
                     }
                     .padding()
-                    .frame(width: 350, height: 130)
+                    .frame(width:homeWidth * 0.9, height: 130)
                     .background(
                         RoundedRectangle(cornerRadius: 4)
                             .foregroundStyle(postieColors.receivedLetterColor)
                             .shadow(color: .black.opacity(0.1), radius: 3, x: 3, y: 3)
                     )
-                    .modifier(StackedRoundedRectangleModifier(count: favoriteLetters.count, isThemeGroupButton: $isThemeGroupButton))
+                    .modifier(StackedRoundedRectangleModifier(count: favoriteLetters.count, groupWidth: homeWidth, isThemeGroupButton: $isThemeGroupButton))
                 }
                 
                 Spacer()
@@ -135,7 +164,7 @@ struct GroupedLetterView: View {
                 } label: {
                     HStack {
                         ZStack {
-                            VStack(alignment: .leading) {
+                            VStack {
                                 HStack {
                                     Text("With.")
                                         .font(.custom("SourceSerifPro-Black", size: 18))
@@ -163,16 +192,28 @@ struct GroupedLetterView: View {
                                 
                                 Spacer()
                                 
-                                Text("\"\(recipient)님과 주고받은 편지 꾸러미\"")
+                                HStack {
+                                    Spacer()
+                                    
+                                    Text("\"")
+                                        .font(.custom("SourceSerifPro-Black", size: 17))
+                                        
+                                    Text("\(recipient)님과 주고받은 편지 꾸러미")
+                                    
+                                    Text("\"")
+                                        .font(.custom("SourceSerifPro-Black", size: 17))
+                                    
+                                    Spacer()
+                                }
                             }
                             .padding()
-                            .frame(width: 350, height: 130)
+                            .frame(width: homeWidth * 0.9, height: 130)
                             .background(
                                 RoundedRectangle(cornerRadius: 4)
                                     .foregroundStyle(postieColors.receivedLetterColor)
                                     .shadow(color: .black.opacity(0.1), radius: 3, x: 3, y: 3)
                             )
-                            .modifier(StackedRoundedRectangleModifier(count: countOfMatchingRecipients + countOfMatchingWriters, isThemeGroupButton: $isThemeGroupButton))
+                            .modifier(StackedRoundedRectangleModifier(count: countOfMatchingRecipients + countOfMatchingWriters, groupWidth: homeWidth, isThemeGroupButton: $isThemeGroupButton))
                         }
                         .padding(.horizontal)
                         .padding(.bottom, 8)
@@ -182,12 +223,15 @@ struct GroupedLetterView: View {
                 }
             }
         }
+        .toolbarBackground(postieColors.backGroundColor, for: .navigationBar)
         .tint(postieColors.tabBarTintColor)
+        
     }
 }
 
 struct StackedRoundedRectangleModifier: ViewModifier {
     let count: Int
+    var groupWidth: CGFloat
     
     @Binding var isThemeGroupButton: Int
     
@@ -198,7 +242,7 @@ struct StackedRoundedRectangleModifier: ViewModifier {
             if count > 2 {
                 RoundedRectangle(cornerRadius: 4)
                     .foregroundStyle(postieColors.receivedLetterColor)
-                    .frame(width: 350, height: 130)
+                    .frame(width: groupWidth * 0.9, height: 130)
                     .offset(x: 10, y: 10)
                     .shadow(color: .black.opacity(0.1), radius: 3, x: 3, y: 3)
             }
@@ -206,7 +250,7 @@ struct StackedRoundedRectangleModifier: ViewModifier {
             if count > 1 {
                 RoundedRectangle(cornerRadius: 4)
                     .foregroundStyle(postieColors.receivedLetterColor)
-                    .frame(width: 350, height: 130)
+                    .frame(width: groupWidth * 0.9, height: 130)
                     .offset(x: 5, y: 5)
                     .shadow(color: .black.opacity(0.1), radius: 3, x: 3, y: 3)
             }
