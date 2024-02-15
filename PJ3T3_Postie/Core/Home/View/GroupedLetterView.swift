@@ -98,6 +98,7 @@ struct GroupedLetterView: View {
 }
 
 struct GroupedLetterItemView: View {
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     var firstWord: String
     var title: String
     var content: String

@@ -84,7 +84,7 @@ struct HomeView: View {
                     
                     if firestoreManager.letters.isEmpty {
                         VStack {
-                            Image("postySmileSketch")
+                            Image(isThemeGroupButton == 4 ? "postySmileSketchWhite" : "postySmileSketch")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: geometry.size.width * 0.7)

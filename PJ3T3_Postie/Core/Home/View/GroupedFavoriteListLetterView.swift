@@ -10,6 +10,7 @@ import SwiftUI
 struct GroupedFavoriteListLetterView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
     @ObservedObject var storageManager = StorageManager.shared
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     @Binding var isMenuActive: Bool
     @State private var isSideMenuOpen: Bool = false
     
@@ -20,15 +21,16 @@ struct GroupedFavoriteListLetterView: View {
             postieColors.backGroundColor
                 .ignoresSafeArea()
             
-            if firestoreManager.letters.isEmpty {
+            if favoriteLetters.count == 0 {
                 VStack {
-                    Image("postyHeartSketch")
+                    Image(isThemeGroupButton == 4 ? "postyHeartSketchWhite" : "postyHeartSketch")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 300)
                         .opacity(0.5)
+                        .padding(.bottom)
                     
-                    Text("\n좋아하는 편지가 없어요 ㅠ.ㅠ 저장한 편지에서 하트를 눌러보세요!")
+                    Text("좋아하는 편지가 없어요 ㅠ.ㅠ 저장한 편지에서 하트를 눌러보세요!")
                         .font(.callout)
                         .foregroundStyle(postieColors.dividerColor)
                 }

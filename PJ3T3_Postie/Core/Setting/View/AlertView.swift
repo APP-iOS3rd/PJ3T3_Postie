@@ -36,7 +36,7 @@ struct AlertView: View {
                 }
                 .padding()
             }
-            .tint(postieColors.tintColor)
+            .tint(isThemeGroupButton == 4 ? .postieDarkGray : postieColors.tintColor)
         }
         .toolbar {
             ToolbarItemGroup(placement: .principal) {
