@@ -137,6 +137,7 @@ final class StorageManager: ObservableObject {
                     }
                 }
             }
+            print(self.images)
         }
     }
     
