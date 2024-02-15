@@ -62,10 +62,14 @@ struct AddLetterView: View {
 
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button {
-                    Task {
-                        await addLetter()
-
-                        dismiss()
+                    if (isReceived && (addLetterViewModel.sender.isEmpty || addLetterViewModel.text.isEmpty))
+                        || (!isReceived && (addLetterViewModel.receiver.isEmpty || addLetterViewModel.text.isEmpty)) {
+                        addLetterViewModel.showNotEnoughInfoAlert()
+                    } else {
+                        Task {
+                            await addLetter()
+                            dismiss()
+                        }
                     }
                 } label : {
                     Text("완료")
@@ -112,6 +116,11 @@ struct AddLetterView: View {
                 // TODO: 네이버 클로바 API 호출
                 addLetterViewModel.showSummaryTextField = true
             }
+        }
+        .alert("편지 정보 부족", isPresented: $addLetterViewModel.showingNotEnoughInfoAlert) {
+
+        } message: {
+            Text("편지를 저장하기 위한 정보가 부족해요. \(isReceived ? "보낸 사람" : "받는 사람")과 내용을 채워주세요.")
         }
     }
 
