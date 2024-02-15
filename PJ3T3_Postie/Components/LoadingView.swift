@@ -35,10 +35,11 @@ struct LoadingView: View {
                     .padding(.bottom, 20)
                 
                 Text(text)
-                    .font(.system(size: 22, weight: .semibold))
+                    .font(.system(size: 15, weight: .semibold))
                     .foregroundStyle(postieColors.dividerColor)
                     .multilineTextAlignment(.center)
             }
+            .padding(.horizontal, 20)
         }
     }
 }
