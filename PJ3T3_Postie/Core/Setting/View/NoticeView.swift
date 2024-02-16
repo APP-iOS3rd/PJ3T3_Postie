@@ -48,6 +48,7 @@ struct NoticeView: View {
                                 }
                                 .padding()
                             }
+                            .padding(.top, 10)
                         } label: {
                             VStack(alignment: .leading) {
                                 Text(notice.date.toString())

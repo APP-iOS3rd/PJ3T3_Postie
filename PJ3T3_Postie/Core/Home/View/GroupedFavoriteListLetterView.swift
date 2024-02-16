@@ -11,7 +11,7 @@ struct GroupedFavoriteListLetterView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
     @ObservedObject var storageManager = StorageManager.shared
     @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
-    @Binding var isMenuActive: Bool
+    @State private var isMenuActive = false
     @State private var isSideMenuOpen: Bool = false
     
     var body: some View {
@@ -30,8 +30,11 @@ struct GroupedFavoriteListLetterView: View {
                         .opacity(0.5)
                         .padding(.bottom)
                     
-                    Text("좋아하는 편지가 없어요 ㅠ.ㅠ 저장한 편지에서 하트를 눌러보세요!")
-                        .font(.callout)
+                    Text("좋아하는 편지가 없어요 ㅠ.ㅠ")
+                        .font(.headline)
+                        .foregroundStyle(postieColors.tintColor)
+                    
+                    Text("저장한 편지에서 하트를 눌러보세요!")
                         .foregroundStyle(postieColors.dividerColor)
                 }
                 .offset(x: -30, y: -150)
@@ -55,6 +58,11 @@ struct GroupedFavoriteListLetterView: View {
             }
             
             AddLetterButton(isMenuActive: $isMenuActive)
+        }
+        .onTapGesture {
+            if self.isMenuActive {
+                self.isMenuActive = false
+            }
         }
         .toolbarBackground(postieColors.backGroundColor, for: .navigationBar)
         .tint(postieColors.tabBarTintColor)

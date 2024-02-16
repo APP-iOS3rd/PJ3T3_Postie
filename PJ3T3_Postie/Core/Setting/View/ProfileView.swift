@@ -27,7 +27,7 @@ struct ProfileView: View {
                     .ignoresSafeArea()
                 
                 ScrollView {
-                    VStack(alignment: .leading) {
+                    VStack(alignment: .leading, spacing: 3) {
                         HStack {
                             Spacer()
                             
@@ -48,10 +48,11 @@ struct ProfileView: View {
                         
                         Text("이름")
                             .font(.subheadline)
-                            .foregroundStyle(postieColors.dividerColor)
+                            .foregroundStyle(postieColors.tintColor)
+                            .padding(.leading, 3)
                         
                         DividerView()
-                            .padding(.bottom)
+                            .padding(.bottom, 3)
                         
                         Text(String(user?.fullName ?? ""))
                             .foregroundStyle(postieColors.tabBarTintColor)
@@ -60,10 +61,11 @@ struct ProfileView: View {
                         
                         Text("닉네임")
                             .font(.subheadline)
-                            .foregroundStyle(postieColors.dividerColor)
+                            .foregroundStyle(postieColors.tintColor)
+                            .padding(.leading, 3)
                         
                         DividerView()
-                            .padding(.bottom)
+                            .padding(.bottom, 3)
                         
                         Text(String(user?.nickname ?? ""))
                             .foregroundStyle(postieColors.tabBarTintColor)
@@ -72,10 +74,11 @@ struct ProfileView: View {
                         
                         Text("계정")
                             .font(.subheadline)
-                            .foregroundStyle(postieColors.dividerColor)
+                            .foregroundStyle(postieColors.tintColor)
+                            .padding(.leading, 3)
                         
                         DividerView()
-                            .padding(.bottom)
+                            .padding(.bottom, 3)
                         
                         Text(String(user?.email ?? ""))
                             .foregroundStyle(postieColors.tabBarTintColor)
@@ -84,10 +87,11 @@ struct ProfileView: View {
                              
                         Text("구독정보")
                             .font(.subheadline)
-                            .foregroundStyle(postieColors.dividerColor)
+                            .foregroundStyle(postieColors.tintColor)
+                            .padding(.leading, 3)
                         
                         DividerView()
-                            .padding(.bottom)
+                            .padding(.bottom, 3)
                         
                         Button {
                             isshowingMembershipView = true
@@ -111,10 +115,11 @@ struct ProfileView: View {
                         
                         Text("계정 관리")
                             .font(.subheadline)
-                            .foregroundStyle(postieColors.dividerColor)
+                            .foregroundStyle(postieColors.tintColor)
+                            .padding(.leading, 3)
                         
                         DividerView()
-                            .padding(.bottom)
+                            .padding(.bottom, 3)
                         
                         Button {
                             isLogOutAlert = true

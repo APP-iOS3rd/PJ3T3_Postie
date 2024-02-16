@@ -28,15 +28,17 @@ struct HomeView: View {
                     
                     if firestoreManager.letters.isEmpty {
                         VStack {
-                            Image(isThemeGroupButton == 4 ? "postySmileSketchWhite" : "postySmileSketch")
+                            Image(isThemeGroupButton == 4 ? "postySendingSketchWhite" : "postySendingSketch")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: geometry.size.width * 0.7)
                                 .opacity(0.5)
-                                .padding(.bottom)
                             
-                            Text("저장된 편지가 없어요. 플로팅 버튼을 이용해 주고받은 편지를 저장해주세요!")
-                                .font(.callout)
+                            Text("저장된 편지가 없어요...")
+                                .font(.headline)
+                                .foregroundStyle(postieColors.tintColor)
+                            
+                            Text("우측 하단 편지봉투 버튼을 이용해 주고받은 편지를 저장해주세요!")
                                 .foregroundStyle(postieColors.dividerColor)
                         }
                         .padding()

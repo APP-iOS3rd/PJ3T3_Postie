@@ -29,7 +29,7 @@ struct QuestionView: View {
             ScrollView {
                 VStack(alignment: .leading) {
                     Text("자주묻는 질문")
-                        .font(.footnote)
+                        .font(.headline)
                         .foregroundStyle(postieColors.dividerColor)
                     
                     DividerView()
@@ -59,6 +59,7 @@ struct QuestionView: View {
                                 }
                                 .padding()
                             }
+                            .padding(.top, 10)
                         } label: {
                             VStack(alignment: .leading) {
                                 Text("Q ")

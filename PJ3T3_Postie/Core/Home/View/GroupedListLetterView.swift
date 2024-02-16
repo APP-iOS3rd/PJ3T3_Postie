@@ -10,7 +10,7 @@ import SwiftUI
 struct GroupedListLetterView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
     @ObservedObject var storageManager = StorageManager.shared
-    @Binding var isMenuActive: Bool
+    @State private var isMenuActive = false
     
     var recipient: String
     
@@ -41,6 +41,11 @@ struct GroupedListLetterView: View {
             }
             
             AddLetterButton(isMenuActive: $isMenuActive)
+        }
+        .onTapGesture {
+            if self.isMenuActive {
+                self.isMenuActive = false
+            }
         }
         .toolbarBackground(postieColors.backGroundColor, for: .navigationBar)
         .navigationBarTitleDisplayMode(.inline)

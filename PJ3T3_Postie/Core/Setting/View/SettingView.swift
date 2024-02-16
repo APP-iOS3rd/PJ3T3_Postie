@@ -79,7 +79,12 @@ struct SettingView: View {
                         
                         Button(action: {
                             Task {
-                                summary = try await APIClient.shared.postRequestToAPI(title: "", content: content)
+                                do {
+                                    summary = try await APIClient.shared.postRequestToAPI(title: "", content: content)
+                                } catch {
+                                    summary = "에러 발생"
+                                    print("에러 정보: \(error)")
+                                }
                             }}, label: {
                                 Text("요약하기")
                             })

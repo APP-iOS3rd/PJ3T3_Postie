@@ -45,7 +45,7 @@ struct LetterItemView: View {
                         Spacer()
                         
                         Text("\(letter.date.toString())")
-                            .font(.custom("SourceSerifPro-Light", size: 18))
+                            .font(.custom("SourceSerifPro-Light", size: 15))
                             .foregroundStyle(postieColors.tabBarTintColor)
                         
                         ZStack {
@@ -62,8 +62,18 @@ struct LetterItemView: View {
                     Spacer()
                     
                     HStack {
-                        Text("\"\(letter.summary)\"")
-                            .foregroundColor(postieColors.tabBarTintColor)
+                        Spacer()
+                        
+                        if !letter.summary.isEmpty {
+                            Text("“")
+                                .font(.custom("SairaStencilOne-Regular", size: 30))
+                            
+                            Text(letter.summary)
+                                .foregroundStyle(postieColors.tabBarTintColor)
+                            
+                            Text("”")
+                                .font(.custom("SairaStencilOne-Regular", size: 30))
+                        }
                         
                         Spacer()
                         

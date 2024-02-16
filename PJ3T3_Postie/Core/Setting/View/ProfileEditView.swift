@@ -141,11 +141,16 @@ struct ProfileEditView: View {
                         }
                     }
                 }
-                .padding()
+                
             }
+            .onTapGesture {
+                hideKeyboard()
+            }
+            .padding()
         }
     }
 }
+
 
 struct ProfileImageEditView: View {
     @Environment(\.dismiss) var dismiss

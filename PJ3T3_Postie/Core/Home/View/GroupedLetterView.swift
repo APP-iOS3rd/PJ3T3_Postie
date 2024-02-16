@@ -43,7 +43,7 @@ struct GroupedLetterView: View {
         
         VStack {
             NavigationLink { // 좋아하는 편지 뷰
-                GroupedFavoriteListLetterView(isMenuActive: $isMenuActive)
+                GroupedFavoriteListLetterView()
             } label: {
                 HStack {
                     GroupedLetterItemView(firstWord: "My favorite", title: "좋아하는 편지", content: "좋아하는 편지 꾸러미", isFavorite: true)
@@ -59,6 +59,7 @@ struct GroupedLetterView: View {
                 
                 Spacer()
             }
+            .disabled(isMenuActive)
             .padding(.horizontal)
             .padding(.bottom, 8)
             
@@ -69,7 +70,7 @@ struct GroupedLetterView: View {
                 let countOfMatchingWriters = firestoreManager.letters.filter { $0.writer == recipient }.count
                 
                 NavigationLink {
-                    GroupedListLetterView(isMenuActive: $isMenuActive, recipient: recipient)
+                    GroupedListLetterView(recipient: recipient)
                 } label: {
                     HStack {
                         ZStack {
@@ -116,10 +117,6 @@ struct GroupedLetterItemView: View {
                 
                 Spacer()
                 
-                Text(" ") // date
-                    .font(.custom("SourceSerifPro-Light", size: 18))
-                    .foregroundStyle(postieColors.tabBarTintColor)
-                
                 ZStack {
                     Image(systemName: "water.waves")
                         .font(.headline)
@@ -137,14 +134,14 @@ struct GroupedLetterItemView: View {
                 HStack {
                     Spacer()
                     
-                    Text("\"")
-                        .font(.custom("SourceSerifPro-Black", size: 17))
+                    Text("“")
+                        .font(.custom("SairaStencilOne-Regular", size: 30))
                     
                     Text(content)
                         .foregroundStyle(postieColors.tabBarTintColor)
                     
-                    Text("\"")
-                        .font(.custom("SourceSerifPro-Black", size: 17))
+                    Text("”")
+                        .font(.custom("SairaStencilOne-Regular", size: 30))
                     
                     Spacer()
                 }
