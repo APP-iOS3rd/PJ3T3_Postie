@@ -24,7 +24,27 @@ class FirestoreManager: ObservableObject {
         fetchAllLetters()
     }
 
-    //새로운 편지를 추가한다.
+    func addLetter(docId: String, letter: Letter) async throws {
+        try letterColRef.document(docId).setData(from: letter)
+    }
+    
+    ///이 함수를 사용할 경우 업로드 완료시 fetchAllLetters를 수행 해 주세요.
+    func addLetter(docId: String, writer: String, recipient: String, summary: String, date: Date, text: String, isReceived: Bool, isFavorite: Bool, imageURLs: [String]?, imageFullPaths: [String]?) async throws {
+        //imageURLs와 imageFullPaths 둘 중 하나만 nil인 경우를 걸러낼 수 있을까요?
+        let letter = Letter(id: docId,
+                            writer: writer,
+                            recipient: recipient,
+                            summary: summary,
+                            date: date,
+                            text: text,
+                            isReceived: isReceived,
+                            isFavorite: isFavorite,
+                            imageURLs: imageURLs,
+                            imageFullPaths: imageFullPaths)
+        
+        try letterColRef.document(docId).setData(from: letter)
+    }
+    
     func addLetter(writer: String, recipient: String, summary: String, date: Date, text: String, isReceived: Bool, isFavorite: Bool) async {
         let document = letterColRef.document() //새로운 document를 생성한다.
         let documentId = document.documentID //생성한 document의 id를 가져온다.
