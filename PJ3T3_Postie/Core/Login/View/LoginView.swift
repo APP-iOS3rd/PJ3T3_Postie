@@ -99,7 +99,7 @@ struct LoginView: View {
                         EmailLoginView()
                     } label: {
                         HStack {
-                            Text("테스트용 이메일 계정으로 ")
+                            Text("테스트용 이메일 계정으로")
                                 .foregroundColor(postieColors.tabBarTintColor)
                             
                             Text("로그인 하기")
