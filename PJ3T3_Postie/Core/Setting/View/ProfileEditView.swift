@@ -141,12 +141,11 @@ struct ProfileEditView: View {
                         }
                     }
                 }
-                
+                .padding()
             }
             .onTapGesture {
                 hideKeyboard()
             }
-            .padding()
         }
     }
 }
@@ -172,7 +171,7 @@ struct ProfileImageEditView: View {
                 VStack {
                     Text("프로필에 사용될 캐릭터를 선택해주세요!")
                         .bold()
-                        .font(.title3)
+                        .font(geometry.size.height < 400 ? .system(size: 18) : .title3)
                         .foregroundStyle(postieColors.tabBarTintColor)
                         .padding()
                     

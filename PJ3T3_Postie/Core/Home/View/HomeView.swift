@@ -123,7 +123,6 @@ struct HomeView: View {
     }
 }
 
-// 임시 세팅뷰
 struct SideMenuView: View {
     @ObservedObject var authManager = AuthManager.shared
     

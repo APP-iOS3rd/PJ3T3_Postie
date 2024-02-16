@@ -46,7 +46,7 @@ struct GroupedLetterView: View {
                 GroupedFavoriteListLetterView()
             } label: {
                 HStack {
-                    GroupedLetterItemView(firstWord: "My favorite", title: "좋아하는 편지", content: "좋아하는 편지 꾸러미", isFavorite: true)
+                    GroupedLetterItemView(firstWord: "My favorite.", title: "좋아하는 편지", content: "좋아하는 편지 꾸러미", isFavorite: true)
                         .padding()
                         .frame(width:homeWidth * 0.9, height: 130)
                         .background(
@@ -74,7 +74,7 @@ struct GroupedLetterView: View {
                 } label: {
                     HStack {
                         ZStack {
-                            GroupedLetterItemView(firstWord: "With", title: recipient, content: "\(recipient)님과 주고받은 편지 꾸러미", isFavorite: false)
+                            GroupedLetterItemView(firstWord: "With.", title: recipient, content: "\(recipient)님과 주고받은 편지 꾸러미", isFavorite: false)
                                 .padding()
                                 .frame(width: homeWidth * 0.9, height: 130)
                                 .background(

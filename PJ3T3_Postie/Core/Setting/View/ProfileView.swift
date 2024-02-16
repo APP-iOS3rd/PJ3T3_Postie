@@ -27,7 +27,7 @@ struct ProfileView: View {
                     .ignoresSafeArea()
                 
                 ScrollView {
-                    VStack(alignment: .leading, spacing: 3) {
+                    VStack(alignment: .leading, spacing: 5) {
                         HStack {
                             Spacer()
                             
@@ -126,7 +126,7 @@ struct ProfileView: View {
                         } label: {
                             Text("로그아웃")
                                 .foregroundStyle(postieColors.tabBarTintColor)
-                                .padding(.bottom)
+                                .padding(.bottom, 10)
                                 .padding(.leading, 3)
                         }
                         .alert("로그아웃", isPresented: $isLogOutAlert) {
@@ -142,7 +142,7 @@ struct ProfileView: View {
                                 Text("확인")
                             }
                         } message: {
-                            Text("로그아웃 하시겠습니까??")
+                            Text("로그아웃 하시겠습니까?")
                         }
                         
                         Button {

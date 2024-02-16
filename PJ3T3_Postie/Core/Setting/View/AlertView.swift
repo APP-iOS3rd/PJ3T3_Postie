@@ -30,7 +30,7 @@ struct AlertView: View {
                                 .foregroundColor(postieColors.dividerColor)
                         }
                     }
-                        .padding(.bottom)
+                    .padding(.bottom, 5)
                     
                     DividerView()
                         .padding(.bottom)

@@ -22,113 +22,115 @@ struct QuestionView: View {
             Question(title: "우체국, 우체통의 영업 시간이 궁금해요.", content: "우체국의 운영 및 이용시간은 공휴일을 제외한 평일 09:00 ~ 18:00으로 전국 어디서나 같아요.\n우체통은 365일 접수 가능하나, 우편물 수거는 공휴일을 제외한 평일에만 수거해요. 우체통의 우편물 수거 시간은 각 우체통 마다 달라, 우체통에 적힌 시간을 확인해야해요.\n\n더 자세한 사항은 인터넷 사이트 우정사업본부 > 사업분야 > 이용시간 에서 확인할 수 있답니다!")
         ]
         
-        ZStack {
-            postieColors.backGroundColor
-                .ignoresSafeArea()
-            
-            ScrollView {
-                VStack(alignment: .leading) {
-                    Text("자주묻는 질문")
-                        .font(.headline)
-                        .foregroundStyle(postieColors.dividerColor)
-                    
-                    DividerView()
-                        .padding(.bottom)
-                    
-                    ForEach(questions, id: \.id) { questions in
-                        DisclosureGroup {
-                            ZStack {
-                                postieColors.receivedLetterColor
-                                    .ignoresSafeArea()
-                                
-                                VStack(alignment: .leading) {
-                                    Text("안녕하세요 포스티팀입니다.\n")
-                                        .font(.callout)
-                                    
-                                    Text("\(questions.content)\n")
-                                        .font(.callout)
-                                    
-                                    HStack {
-                                        Spacer()
-                                        
-                                        Text("From. ")
-                                            .font(.custom("SourceSerifPro-Black", size: 16))
-                                        + Text("포스티팀")
-                                            .font(.callout)
-                                    }
-                                }
-                                .padding()
-                            }
-                            .padding(.top, 10)
-                        } label: {
-                            VStack(alignment: .leading) {
-                                Text("Q ")
-                                    .bold()
-                                    .foregroundColor(postieColors.tintColor)
-                                + Text(questions.title)
-                            }
-                        }
-                        .padding(.bottom)
+        GeometryReader { geometry in
+            ZStack {
+                postieColors.backGroundColor
+                    .ignoresSafeArea()
+                
+                ScrollView {
+                    VStack(alignment: .leading) {
+                        Text("자주묻는 질문")
+                            .font(.headline)
+                            .foregroundStyle(postieColors.dividerColor)
                         
                         DividerView()
                             .padding(.bottom)
-                    }
-                    
-                    Text("도움말을 통해 문제를 해결하지 못했나요?")
-                        .font(.title2)
-                        .bold()
-                        .padding(.top)
-                    
-                    Button(action: {
-                                let email = "postie@gmail.com"
-                                let subject = "문의하기"
-                                let body = ""
-                                if let url = URL(string: "mailto:\(email)?subject=\(subject.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")&body=\(body.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")") {
-                                    openURL(url)
+                        
+                        ForEach(questions, id: \.id) { questions in
+                            DisclosureGroup {
+                                ZStack {
+                                    postieColors.receivedLetterColor
+                                        .ignoresSafeArea()
+                                    
+                                    VStack(alignment: .leading) {
+                                        Text("안녕하세요 포스티팀입니다.\n")
+                                            .font(.callout)
+                                        
+                                        Text("\(questions.content)\n")
+                                            .font(.callout)
+                                        
+                                        HStack {
+                                            Spacer()
+                                            
+                                            Text("From. ")
+                                                .font(.custom("SourceSerifPro-Black", size: 16))
+                                            + Text("포스티팀")
+                                                .font(.callout)
+                                        }
+                                    }
+                                    .padding()
                                 }
-                    }) {
-                        HStack {
-                            Image(systemName: "square.and.pencil.circle")
-                                .font(.title)
+                                .padding(.top, 10)
+                            } label: {
+                                VStack(alignment: .leading) {
+                                    Text("Q ")
+                                        .bold()
+                                        .foregroundColor(postieColors.tintColor)
+                                    + Text(questions.title)
+                                }
+                            }
+                            .padding(.bottom)
                             
-                            VStack (alignment: .leading) {
-                                HStack {
-                                    Text("문의하기")
-                                        .font(.callout)
+                            DividerView()
+                                .padding(.bottom)
+                        }
+                        
+                        Text("도움말을 통해 문제를 해결하지 못했나요?")
+                            .font(.title2)
+                            .bold()
+                            .padding(.top)
+                        
+                        Button(action: {
+                            let email = "postie@gmail.com"
+                            let subject = "문의하기"
+                            let body = ""
+                            if let url = URL(string: "mailto:\(email)?subject=\(subject.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")&body=\(body.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")") {
+                                openURL(url)
+                            }
+                        }) {
+                            HStack {
+                                Image(systemName: "square.and.pencil.circle")
+                                    .font(.title)
+                                
+                                VStack (alignment: .leading) {
+                                    HStack {
+                                        Text("문의하기")
+                                            .font(.callout)
+                                        
+                                        Image(systemName: "chevron.right")
+                                            .font(.subheadline)
+                                            .foregroundStyle(postieColors.dividerColor)
+                                        
+                                        Spacer()
+                                    }
                                     
-                                    Image(systemName: "chevron.right")
-                                        .font(.subheadline)
+                                    Text("다른 질문이나 건의사항등을 메일로 답변 받을 수 있어요.")
                                         .foregroundStyle(postieColors.dividerColor)
-                                    
-                                    Spacer()
+                                        .font(geometry.size.height < 600 ? .caption2 : .caption)
                                 }
                                 
-                                Text("다른 질문이나 건의사항등을 메일로 답변 받을 수 있어요.")
-                                    .foregroundStyle(postieColors.dividerColor)
-                                    .font(.caption)
+                                Spacer()
                             }
-                            
-                            Spacer()
+                            .padding()
+                            .background(
+                                RoundedRectangle(cornerRadius: 4)
+                                    .foregroundStyle(postieColors.receivedLetterColor)
+                            )
                         }
-                        .padding()
-                        .background(
-                            RoundedRectangle(cornerRadius: 4)
-                                .foregroundStyle(postieColors.receivedLetterColor)
-                        )
                     }
                 }
+                .padding()
             }
-            .padding()
-        }
-        .toolbar {
-            ToolbarItemGroup(placement: .principal) {
-                Text("문의하기")
-                    .bold()
-                    .foregroundStyle(postieColors.tintColor)
+            .toolbar {
+                ToolbarItemGroup(placement: .principal) {
+                    Text("문의하기")
+                        .bold()
+                        .foregroundStyle(postieColors.tintColor)
+                }
             }
+            .toolbarBackground(postieColors.backGroundColor, for: .navigationBar)
+            .navigationBarTitleDisplayMode(.inline)
         }
-        .toolbarBackground(postieColors.backGroundColor, for: .navigationBar)
-        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
