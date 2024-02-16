@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SearchView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     @State var searchQuery = ""
     @State var filteredLetters: [Letter] = []
     
@@ -20,19 +21,20 @@ struct SearchView: View {
             if filteredLetters.isEmpty {
                 if searchQuery == "" {
                     VStack {
-                        Image("postyReceiving")
+                        Image(isThemeGroupButton == 4 ? "postyReceivingSketchWhite" :"postyReceivingSketch")
                             .resizable()
                             .scaledToFit()
-                            .frame(height: 150)
+                            .frame(height: 200)
+                            .padding(.bottom)
                         
-                        Text("어렴풋한 기억을 검색해보세요")
+                        Text("어렴풋한 기억을 검색해보세요!")
                             .foregroundStyle(postieColors.dividerColor)
                     }
                 } else {
-                    Image("postyReceiving")
+                    Image(isThemeGroupButton == 4 ? "postyReceivingSketchWhite" :"postyReceivingSketch")
                         .opacity(0.03)
                     
-                    Text("일치하는 내용의 편지가 없어요")
+                    Text("일치하는 내용의 편지가 없어요...")
                         .foregroundStyle(postieColors.dividerColor)
                 }
             } else {
@@ -45,7 +47,6 @@ struct SearchView: View {
                         }
                     }
                     
-                    // ScrollView margin 임시
                     Rectangle()
                         .frame(height: 70)
                         .foregroundStyle(Color.postieBlack.opacity(0))

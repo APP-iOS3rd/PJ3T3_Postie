@@ -26,6 +26,22 @@ struct HomeView: View {
                     postieColors.backGroundColor
                         .ignoresSafeArea()
                     
+                    if firestoreManager.letters.isEmpty {
+                        VStack {
+                            Image(isThemeGroupButton == 4 ? "postySmileSketchWhite" : "postySmileSketch")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: geometry.size.width * 0.7)
+                                .opacity(0.5)
+                                .padding(.bottom)
+                            
+                            Text("저장된 편지가 없어요. 플로팅 버튼을 이용해 주고받은 편지를 저장해주세요!")
+                                .font(.callout)
+                                .foregroundStyle(postieColors.dividerColor)
+                        }
+                        .padding()
+                    }
+                    
                     VStack(spacing: 0) {
                         HStack {
                             Text("Postie")
@@ -75,27 +91,10 @@ struct HomeView: View {
                                     .frame(height: 80)
                                     .foregroundStyle(postieColors.tabBarTintColor.opacity(0))
                             }
-                            .background(postieColors.backGroundColor)
                             
                             AddLetterButton(isMenuActive: $isMenuActive)
                         }
                         .preferredColorScheme(isThemeGroupButton == 4 ? .dark : .light)
-                    }
-                    
-                    if firestoreManager.letters.isEmpty {
-                        VStack {
-                            Image(isThemeGroupButton == 4 ? "postySmileSketchWhite" : "postySmileSketch")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: geometry.size.width * 0.7)
-                                .opacity(0.5)
-                                .padding(.bottom)
-                            
-                            Text("저장된 편지가 없어요! 플로팅 버튼을 이용해 주고받은 편지를 저장해주세요!")
-                                .font(.callout)
-                                .foregroundStyle(postieColors.dividerColor)
-                        }
-                        .padding()
                     }
                     
                     if isSideMenuOpen {
