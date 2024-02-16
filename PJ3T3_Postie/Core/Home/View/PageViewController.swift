@@ -76,6 +76,7 @@ struct PageViewController: UIViewControllerRepresentable {
 
 struct Page: View {
     @Binding var letter: Letter
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
 
     var body: some View {
         ScrollView {
@@ -108,7 +109,7 @@ struct Page: View {
         }
         .scrollIndicators(.never)
         .padding()
-        .background(Color(hex: 0xFFFBF2))
+        .background(ThemeManager.themeColors[isThemeGroupButton].receivedLetterColor)
         .clipShape(RoundedRectangle(cornerRadius: 4))
     }
 }

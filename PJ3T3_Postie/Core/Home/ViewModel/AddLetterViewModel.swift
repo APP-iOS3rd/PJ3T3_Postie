@@ -14,12 +14,13 @@ class AddLetterViewModel: ObservableObject {
     @Published var date: Date = .now
     @Published var text: String = ""
     @Published var summary: String = ""
-    @Published var images: [UIImage] = [UIImage(systemName: "photo.fill")!]
+    @Published var images: [UIImage] = []
     @Published var showUIImagePicker = false
     @Published var showLetterImageFullScreenView: Bool = false
     @Published var showTextRecognizerErrorAlert: Bool = false
     @Published var showSummaryTextField: Bool = false
     @Published var showSummaryAlert: Bool = false
+    @Published var showingNotEnoughInfoAlert: Bool = false
     @Published var selectedIndex: Int = 0
 
     private(set) var imagePickerSourceType: UIImagePickerController.SourceType = .camera
@@ -31,5 +32,9 @@ class AddLetterViewModel: ObservableObject {
     func showUIImagePicker(sourceType: UIImagePickerController.SourceType) {
         imagePickerSourceType = sourceType
         showUIImagePicker = true 
+    }
+    
+    func showNotEnoughInfoAlert() {
+        showingNotEnoughInfoAlert = true
     }
 }
