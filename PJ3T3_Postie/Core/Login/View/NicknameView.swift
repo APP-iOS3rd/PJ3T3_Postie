@@ -24,7 +24,7 @@ struct NicknameView: View {
         let postieColors = ThemeManager.themeColors[isThemeGroupButton]
         
         ZStack {
-            Color(.postieBeige)
+            postieColors.backGroundColor
                 .ignoresSafeArea()
             
             VStack {
