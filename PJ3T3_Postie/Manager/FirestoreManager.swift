@@ -24,6 +24,7 @@ class FirestoreManager: ObservableObject {
         fetchAllLetters()
     }
 
+//MARK: - 편지 추가
     func addLetter(docId: String, letter: Letter) async throws {
         try letterColRef.document(docId).setData(from: letter)
     }
@@ -72,6 +73,7 @@ class FirestoreManager: ObservableObject {
         }
     }
     
+//MARK: - 편지 수정
     /// 데이터의 위치와 수정 후 데이터를 받아 firestore에 업데이트 한다.
     /// - Parameters:
     ///   - documentId: letter 구조체 안에 저장된 id를 가져옴
@@ -103,42 +105,7 @@ class FirestoreManager: ObservableObject {
         }
     }
     
-    //데이터 삭제
-    //Storage의 이미지도 같이 삭제하도록 설정해야 한다.
-    func deleteLetter(documentId: String) {
-        let docRef = letterColRef.document(documentId)
-        
-        docRef.delete() { error in
-            if let error = error {
-                print(#function, "Error deleting document: ", error)
-            } else {
-                print(#function, "\(documentId) delete success")
-            }
-        }
-    }
-    
-    func deleteUserDocument(userUid: String) {
-        let userDocRef = Firestore.firestore().collection("users").document(userUid)
-        var letterQty = 0
-        
-        for letter in letters {
-                self.deleteLetter(documentId: letter.id)
-                StorageManager.shared.deleteFolder(docId: letter.id)
-            letterQty += 1
-        }
-        
-        print("Deleted \(letterQty)letters")
-        
-        userDocRef.delete { error in
-            if let error = error {
-                print(#function, "Error deleting document: ", error)
-            } else {
-                print(#function, "\(userUid) delete success")
-            }
-        }
-    }
-
-    //데이터 전체를 가지고 온다.
+//MARK: - 편지 fetch
     func fetchAllLetters() {
         //letterColRef(특정 user의 document의 letters라는 하위 컬렉션)에 있는 모든 document를 가져옴
         letterColRef.getDocuments { snapshot, error in
@@ -178,6 +145,42 @@ class FirestoreManager: ObservableObject {
             }
             
             print("Letter fetch success")
+        }
+    }
+
+//MARK: - 편지 삭제
+    //데이터 삭제
+    //Storage의 이미지도 같이 삭제하도록 설정해야 한다.
+    func deleteLetter(documentId: String) {
+        let docRef = letterColRef.document(documentId)
+        
+        docRef.delete() { error in
+            if let error = error {
+                print(#function, "Error deleting document: ", error)
+            } else {
+                print(#function, "\(documentId) delete success")
+            }
+        }
+    }
+    
+    func deleteUserDocument(userUid: String) {
+        let userDocRef = Firestore.firestore().collection("users").document(userUid)
+        var letterQty = 0
+        
+        for letter in letters {
+            self.deleteLetter(documentId: letter.id)
+            StorageManager.shared.deleteFolder(docId: letter.id)
+            letterQty += 1
+        }
+        
+        print("Deleted \(letterQty)letters")
+        
+        userDocRef.delete { error in
+            if let error = error {
+                print(#function, "Error deleting document: ", error)
+            } else {
+                print(#function, "\(userUid) delete success")
+            }
         }
     }
 }
