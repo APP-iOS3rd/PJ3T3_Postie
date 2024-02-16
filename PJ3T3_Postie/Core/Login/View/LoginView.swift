@@ -23,32 +23,24 @@ struct LoginView: View {
                 postieColors.backGroundColor
                     .ignoresSafeArea()
                 
+                ToFromLabelView(isThemeGroupButton: $isThemeGroupButton)
+                    .padding()
+                
                 VStack {
-                    Image(systemName: "envelope")
+                    Text("Postie")
+                        .font(.custom("SourceSerifPro-Black", size: 70))
+                        .foregroundStyle(postieColors.tintColor)
+                        .padding(.bottom, 36)
+                    
+                    Image("postySendingLineColor")
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 120)
-                        .padding(.vertical, 36)
-
-                    //Email sign in: 테스트용 이메일을 사용하기 위한 것으로 배포시 삭제 예정입니다.
-                    NavigationLink {
-                        EmailLoginView()
-                    } label: {
-                        HStack() {
-                            Image(systemName: "at")
-                                .padding(.horizontal, 10)
-                            
-                            Text("Sign in with Email")
-                                .font(.system(size: 20, weight: .semibold))
-                        }
-                        .foregroundColor(postieColors.receivedLetterColor)
-                        .frame(height: 54)
-                        .frame(maxWidth: .infinity)
-                    }
-                    .background(postieColors.tintColor)
-                    .clipShape(RoundedRectangle(cornerRadius: 5))
-                    .shadow(radius: 3, x: 3, y: 3)
-                    .padding(.bottom, 10)
+                        .frame(width: 152)
+                    
+                    Text("내 손안의 편지 보관함\n언제 어디서나")
+                        .foregroundStyle(postieColors.dividerColor)
+                        .padding(.bottom, 48)
+                        .multilineTextAlignment(.center)
 
                     //Google sign in Button
                     Button {
@@ -100,6 +92,20 @@ struct LoginView: View {
                     .frame(height: 54)
                     .signInWithAppleButtonStyle(isThemeGroupButton == 4 ? .white : .black)
                     .shadow(radius: 3, x: 3, y: 3)
+                    .padding(.bottom, 19)
+                    
+                    //Email sign in: 테스트용 이메일을 사용하기 위한 것으로 배포시 삭제 예정입니다.
+                    NavigationLink {
+                        EmailLoginView()
+                    } label: {
+                        HStack {
+                            Text("테스트용 이메일 계정으로 ")
+                                .foregroundColor(postieColors.tabBarTintColor)
+                            
+                            Text("로그인 하기")
+                                .foregroundColor(postieColors.tintColor)
+                        }
+                    }
                     .padding(.bottom, 10)
                 }
                 .padding(.horizontal, 32)
