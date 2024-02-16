@@ -89,7 +89,7 @@ struct ProfileEditView: View {
                                 }
                             }
                         )
-                        .onChange(of: name) { newValue in
+                        .customOnChange(name) { newValue in
                             if newValue.count > 12 {
                                 name = String(newValue.prefix(15))
                             }
@@ -136,7 +136,7 @@ struct ProfileEditView: View {
                                     .padding()
                             }
                         }
-                        .onChange(of: profileImage) { newValue in
+                        .customOnChange(profileImage) { newValue in
                             saveToUserDefaults(value: newValue, key: "profileImage")
                         }
                     }
@@ -191,7 +191,7 @@ struct ProfileImageEditView: View {
                                     ProfileImageItemView(imageName: imageName, profileImageTemp: $profileImageTemp)
                                 }
                             }
-                            .onChange(of: profileImageTemp) { newValue in
+                            .customOnChange(profileImageTemp) { newValue in
                                 saveToUserDefaults(value: newValue, key: "profileImageTemp")
                             }
                             .padding()

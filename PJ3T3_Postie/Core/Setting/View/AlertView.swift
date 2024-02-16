@@ -21,12 +21,12 @@ struct AlertView: View {
             ScrollView {
                 VStack {
                     Toggle(isOn: $allAlert) {
-                        VStack(alignment: .leading, spacing: 6) {
+                        VStack(alignment: .leading, spacing: 5) {
                             Text("전체 알림")
                                 .foregroundStyle(postieColors.tabBarTintColor)
                             
                             Text("편지 알림을 받을 수 있습니다.")
-                                .font(.caption)
+                                .font(.footnote)
                                 .foregroundColor(postieColors.dividerColor)
                         }
                     }
@@ -36,12 +36,12 @@ struct AlertView: View {
                         .padding(.bottom)
                     
                     Toggle(isOn: $slowAlert) {
-                        VStack(alignment: .leading, spacing: 6) {
+                        VStack(alignment: .leading, spacing: 5) {
                             Text("옛 편지 알림")
                                 .foregroundStyle(postieColors.tabBarTintColor)
                             
                             Text("N년전 오늘 적었던 편지 알림을 받을 수 있습니다.")
-                                .font(.caption)
+                                .font(.footnote)
                                 .foregroundColor(postieColors.dividerColor)
                         }
                     }
@@ -49,12 +49,12 @@ struct AlertView: View {
                     .padding(.bottom)
                     
                     Toggle(isOn: $todayAlert) {
-                        VStack(alignment: .leading, spacing: 6) {
+                        VStack(alignment: .leading, spacing: 5) {
                             Text("오늘의 편지 알림")
                                 .foregroundStyle(postieColors.tabBarTintColor)
                             
                             Text("매일 새로운 편지 알림을 받을 수 있습니다.")
-                                .font(.caption)
+                                .font(.footnote)
                                 .foregroundColor(postieColors.dividerColor)
                         }
                     }
