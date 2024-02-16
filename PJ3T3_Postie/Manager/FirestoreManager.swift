@@ -150,8 +150,6 @@ class FirestoreManager: ObservableObject {
     }
 
 //MARK: - 편지 삭제
-    //데이터 삭제
-    //Storage의 이미지도 같이 삭제하도록 설정해야 한다.
     func deleteLetter(documentId: String) {
         let docRef = letterColRef.document(documentId)
         
