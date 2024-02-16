@@ -24,6 +24,7 @@ final class StorageManager: ObservableObject {
         self.userReference = Storage.storage().reference().child("users").child(userUid)
     }
     
+//MARK: - 사진 업로드
     func uploadUIImage(image: UIImage, docId: String) async throws -> String {
             //metadata없이도 data를 업로드 할 수 있지만, 그 경우 서버는 어떤 타입의 데이터를 저장하는지 알지 못해 오류를 발생시킬 수 있으므로 upload하는 metadata 타입을 명시 해 주는 편이 좋다.
             let meta = StorageMetadata()
@@ -114,6 +115,7 @@ final class StorageManager: ObservableObject {
         return letterPhoto
     }
     
+//MARK: - 사진 fetch
     //Firebase의 listAll() 메서드를 사용하여 특정 경로에 포함된 모든 항목을 images 배열에 추가
     func listAllFile(docId: String) {
         //이미지 폴더의 모든 파일을 나열
@@ -143,10 +145,10 @@ final class StorageManager: ObservableObject {
                     }
                 }
             }
-            print(self.images)
         }
     }
     
+//MARK: - 사진 삭제
     func deleteItem(fullPath: String) {
         let item = Storage.storage().reference().child(fullPath)
         
