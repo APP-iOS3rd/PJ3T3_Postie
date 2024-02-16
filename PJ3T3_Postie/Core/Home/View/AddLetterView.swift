@@ -69,7 +69,10 @@ struct AddLetterView: View {
                         addLetterViewModel.showNotEnoughInfoAlert()
                     } else {
                         Task {
-                            await addLetter()
+                            await addLetterViewModel.addLetter(isReceived: isReceived)
+                            
+                            await addLetterViewModel.addImages()
+
                             dismiss()
                         }
                     }
@@ -90,36 +93,36 @@ struct AddLetterView: View {
         }
         .toolbar(.hidden, for: .tabBar)
         .scrollDismissesKeyboard(.interactively)
-        .fullScreenCover(isPresented: $addLetterViewModel.showLetterImageFullScreenView) {
+        .fullScreenCover(isPresented: $addLetterViewModel.showingLetterImageFullScreenView) {
             LetterImageFullScreenView(
                 images: addLetterViewModel.images,
                 pageIndex: $addLetterViewModel.selectedIndex
             )
         }
-        .sheet(isPresented: $addLetterViewModel.showUIImagePicker) {
+        .sheet(isPresented: $addLetterViewModel.showingUIImagePicker) {
             UIImagePicker(
                 sourceType: addLetterViewModel.imagePickerSourceType,
                 selectedImages: $addLetterViewModel.images,
                 text: $addLetterViewModel.text,
-                showTextRecognizerErrorAlert: $addLetterViewModel.showTextRecognizerErrorAlert
+                showingTextRecognizerErrorAlert: $addLetterViewModel.showingTextRecognizerErrorAlert
             )
             .ignoresSafeArea(.all, edges: .bottom)
         }
-        .alert("문자 인식 실패", isPresented: $addLetterViewModel.showTextRecognizerErrorAlert) {
+        .alert("문자 인식 실패", isPresented: $addLetterViewModel.showingTextRecognizerErrorAlert) {
 
         } message: {
             Text("문자 인식에 실패했습니다. 다시 시도해 주세요.")
         }
-        .alert("한 줄 요약", isPresented: $addLetterViewModel.showSummaryAlert) {
+        .alert("한 줄 요약", isPresented: $addLetterViewModel.showingSummaryAlert) {
             Button("직접 작성") {
                 // TODO: 함수로 빼기
-                addLetterViewModel.showSummaryTextField = true
+                addLetterViewModel.showSummaryTextField()
                 focusField = .summary
             }
 
             Button("AI 완성") {
                 // TODO: 네이버 클로바 API 호출
-                addLetterViewModel.showSummaryTextField = true
+                addLetterViewModel.showSummaryTextField()
                 focusField = .summary
             }
         }
@@ -128,37 +131,6 @@ struct AddLetterView: View {
         } message: {
             Text("편지를 저장하기 위한 정보가 부족해요. \(isReceived ? "보낸 사람" : "받는 사람")과 내용을 채워주세요.")
         }
-    }
-
-    /// 편지를 추가합니다
-    ///
-    /// 1. Firestore에 편지 추가
-    /// 2. 편지 이미지 값이 존재하면 Firestorage에 이미지 추가
-    /// 3. 모든 편지 불러와서 상태 업데이트
-    private func addLetter() async {
-        await firestoreManager.addLetter(
-            writer: isReceived ? addLetterViewModel.sender : AuthManager.shared.currentUser?.nickname ?? "유저",
-            recipient: isReceived ? AuthManager.shared.currentUser?.nickname ?? "유저" : addLetterViewModel.receiver,
-            summary: addLetterViewModel.summary,
-            date: addLetterViewModel.date,
-            text: addLetterViewModel.text,
-            isReceived: isReceived,
-            isFavorite: false
-        )
-
-        if !addLetterViewModel.images.isEmpty {
-            do {
-                try await storageManager.saveUIImage(
-                    images: addLetterViewModel.images,
-                    docId: firestoreManager.docId
-                )
-            } catch {
-                // TODO: Error 처리 필요
-                print("DEBUG: Failed to save UIImages to Firestore: \(error)")
-            }
-        }
-
-        firestoreManager.fetchAllLetters()
     }
 }
 
@@ -244,8 +216,7 @@ extension AddLetterView {
                         ForEach(0..<addLetterViewModel.images.count, id: \.self) { index in
                             ZStack(alignment: .topTrailing) {
                                 Button {
-                                    addLetterViewModel.selectedIndex = index
-                                    addLetterViewModel.showLetterImageFullScreenView = true
+                                    addLetterViewModel.showLetterImageFullScreenView(index: index)
                                 } label: {
                                     Image(uiImage: addLetterViewModel.images[index])
                                         .resizable()
@@ -315,13 +286,13 @@ extension AddLetterView {
                 Spacer()
 
                 Button {
-                    addLetterViewModel.showSummaryAlert = true
+                    addLetterViewModel.showSummaryAlert()
                 } label: {
                     Image(systemName: "plus")
                 }
             }
 
-            if addLetterViewModel.showSummaryTextField || !addLetterViewModel.summary.isEmpty {
+            if addLetterViewModel.showingSummaryTextField || !addLetterViewModel.summary.isEmpty {
                 TextField("", text: $addLetterViewModel.summary)
                     .padding(6)
                     .background(ThemeManager.themeColors[isThemeGroupButton].receivedLetterColor)

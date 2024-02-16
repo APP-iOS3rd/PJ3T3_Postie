@@ -99,7 +99,7 @@ struct EditLetterView: View {
                 sourceType: editLetterViewModel.imagePickerSourceType,
                 selectedImages: $editLetterViewModel.newImages,
                 text: $editLetterViewModel.text,
-                showTextRecognizerErrorAlert: $editLetterViewModel.showTextRecognizerErrorAlert
+                showingTextRecognizerErrorAlert: $editLetterViewModel.showTextRecognizerErrorAlert
             )
             .ignoresSafeArea(.all, edges: .bottom)
         }
