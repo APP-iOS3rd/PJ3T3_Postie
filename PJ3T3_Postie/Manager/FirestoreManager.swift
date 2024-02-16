@@ -10,9 +10,9 @@ import FirebaseFirestore
 class FirestoreManager: ObservableObject {
     static let shared = FirestoreManager()
     var letterColRef: CollectionReference = Firestore.firestore().collection("users")
-    var docId: String = ""
+    var docId: String = "" //deprecated
     @Published var letters: [Letter] = []
-    @Published var letter: Letter = Letter(id: "", writer: "", recipient: "", summary: "", date: Date(), text: "", isReceived: false, isFavorite: false)
+    @Published var letter: Letter = Letter(id: "", writer: "", recipient: "", summary: "", date: Date(), text: "", isReceived: false, isFavorite: false) //deprecated
 
     private init() { 
         fetchReference()
@@ -46,6 +46,7 @@ class FirestoreManager: ObservableObject {
         try letterColRef.document(docId).setData(from: letter)
     }
     
+    @available(*, deprecated, message: "모든 뷰에서 제거 해주세요. 제거가 완료되면 이 함수의 코드도 삭제 후 커밋 해 주세요.")
     func addLetter(writer: String, recipient: String, summary: String, date: Date, text: String, isReceived: Bool, isFavorite: Bool) async {
         let document = letterColRef.document() //새로운 document를 생성한다.
         let documentId = document.documentID //생성한 document의 id를 가져온다.
