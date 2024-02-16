@@ -127,7 +127,7 @@ struct AddDataSectionView: View {
             
             //photoPicker에서 이미지를 선택할 때 마다 onchange로 감지하여 selectedImages에 UIImage가 append 된다.
             Button {
-                uploadLetter(uiImages: selectedImages)
+                newUploadLetter(uiImages: selectedImages)
                 selectedImages = [] //uploadLetter 작업을 수행 한 이후 잘못된 이미지가 업로드 되는 일이 없도록 배열을 초기화 해 준다.
             } label: {
                 Text("Save Letter")
@@ -162,26 +162,40 @@ struct AddDataSectionView: View {
         }
     }
     
-    //userUid를 AuthManager에서 가져오도록 리팩토링 필요
-    func uploadLetter(uiImages: [UIImage]) {
+    func newUploadLetter(uiImages: [UIImage]) {
+        let docId = UUID().uuidString
+        var newImageFullPaths = [String]()
+        var newImageURLs = [String]()
+        
         Task {
-            //letter객체를 만들어 append한다면 id는 어떻게 하지?
-            //firestore에 document를 저장한다.
-            await firestoreManager.addLetter(writer: "me",
-                                             recipient: "you",
-                                             summary: "refacrorTest",
-                                             date: Date(),
-                                             text: "?.?",
-                                             isReceived: false,
-                                             isFavorite: false)
-            firestoreManager.fetchAllLetters() //변경사항을 fetch한다.
-            //함수가 호출되면 uiImages가 빈 배열이 아닌지 확인해 빈 배열이 아닐 경우 storage에 이미지를 업로드 하고
-            //이미지 업로드가 성공하면 urlString들이 저장된 배열을 return받아 selectedImageUrls에 저장한다.
-            if !uiImages.isEmpty {
-                try await storageManager.saveUIImage(images: uiImages, docId: firestoreManager.docId)
+            for img in uiImages {
+                do {
+                    let fullPath = try await storageManager.uploadUIImage(image: img, docId: docId)
+                    let url = try await storageManager.requestImageURL(fullPath: fullPath)
+                    
+                    newImageFullPaths.append(fullPath)
+                    newImageURLs.append(url)
+                } catch {
+                    print(#function, "Failed to upload image with: \(error)")
+                }
             }
-            
-            firestoreManager.docId = ""
+            do {
+                let newLetter = Letter(id: docId,
+                                       writer: "포스티",
+                                       recipient: "포스티팀",
+                                       summary: "이미지 있음, 새 로직",
+                                       date: Date(),
+                                       text: "새 로직으로 업로드 성공!",
+                                       isReceived: true,
+                                       isFavorite: true,
+                                       imageURLs: newImageURLs,
+                                       imageFullPaths: newImageFullPaths)
+                
+                try await firestoreManager.addLetter(docId: docId, letter: newLetter)
+                firestoreManager.letters.append(newLetter) //fetch 생략 가능
+            } catch {
+                print(#function, "Failed to upload document with: \(error)")
+            }
         }
     }
 }
