@@ -98,7 +98,7 @@ struct LetterDetailView: View {
         }
         .sheet(isPresented: $letterDetailViewModel.showLetterEditSheet) {
             NavigationStack {
-                EditLetterView(letter: firestoreManager.letter, letterPhotos: StorageManager.shared.images)
+                EditLetterView(letter: firestoreManager.letter)
             }
         }
         .alert("편지 삭제", isPresented: $letterDetailViewModel.showDeleteAlert) {

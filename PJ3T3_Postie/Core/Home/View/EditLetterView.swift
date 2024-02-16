@@ -18,15 +18,13 @@ struct EditLetterView: View {
     }
 
     let letter: Letter
-    var letterPhotos: [LetterPhoto]
 
     @FocusState private var focusField: Field?
     @Environment(\.dismiss) var dismiss
     @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
 
-    init(letter: Letter, letterPhotos: [LetterPhoto]) {
+    init(letter: Letter) {
         self.letter = letter
-        self.letterPhotos = letterPhotos
 
         // TextEditor 패딩
         UITextView.appearance().textContainerInset = UIEdgeInsets(
@@ -126,7 +124,6 @@ struct EditLetterView: View {
             editLetterViewModel.date = letter.date
             editLetterViewModel.text = letter.text
             editLetterViewModel.summary = letter.summary
-            editLetterViewModel.images = letterPhotos.map { $0.image }
 
             editLetterViewModel.showSummaryTextField = !letter.summary.isEmpty
 
@@ -403,5 +400,5 @@ extension EditLetterView {
 
 
 #Preview {
-    EditLetterView(letter: Letter.preview, letterPhotos: [])
+    EditLetterView(letter: Letter.preview)
 }
