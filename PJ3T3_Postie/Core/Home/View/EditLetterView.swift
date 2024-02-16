@@ -63,10 +63,9 @@ struct EditLetterView: View {
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button {
                     Task {
-                        await editLetter(letter: letter)
+                        await editLetterViewModel.editLetter(letter: letter)
+                        await editLetterViewModel.updateImages(letter: letter)
                     }
-
-                    updateImages()
 
                     dismiss()
                 } label : {
@@ -119,77 +118,8 @@ struct EditLetterView: View {
             }
         }
         .onAppear {
-            editLetterViewModel.sender = letter.writer
-            editLetterViewModel.receiver = letter.recipient
-            editLetterViewModel.date = letter.date
-            editLetterViewModel.text = letter.text
-            editLetterViewModel.summary = letter.summary
-
-            editLetterViewModel.showSummaryTextField = !letter.summary.isEmpty
-
-            editLetterViewModel.currentLetterPhoto = StorageManager.shared.images
+            editLetterViewModel.syncViewModelProperties(letter: letter)
         }
-    }
-
-    /// 이미 작성된 편지를 수정합니다.
-    /// - Parameter letter: 작성된 편지
-    ///
-    /// 1. Firestore에 저장된 편지 데이터를 수정
-    /// 2. Firestorage에 저장된 편지 이미지를 수정 후 불러와 데이터 상태 업데이트
-    /// 3. FirestoreManager의 @Published letter 변수 업데이트 ( AddView, DetailView 연동을 위해서 )
-    /// 4. `firestoreManager.fetchAllLetters()`을 홈뷰, 디테일뷰 데이터 상태 업데이트
-    private func editLetter(letter: Letter) async {
-        FirestoreManager.shared.editLetter(
-            documentId: letter.id,
-            writer: editLetterViewModel.sender,
-            recipient: editLetterViewModel.receiver,
-            summary: editLetterViewModel.summary,
-            date: editLetterViewModel.date,
-            text: editLetterViewModel.text,
-            isReceived: letter.isReceived,
-            isFavorite: letter.isFavorite
-        )
-
-        FirestoreManager.shared.letter = Letter(
-            id: letter.id,
-            writer: editLetterViewModel.sender,
-            recipient: editLetterViewModel.receiver,
-            summary: editLetterViewModel.summary,
-            date: editLetterViewModel.date,
-            text: editLetterViewModel.text,
-            isReceived: letter.isReceived,
-            isFavorite: letter.isFavorite
-        )
-
-        FirestoreManager.shared.fetchAllLetters()
-    }
-
-    func updateImages() {
-        print("Update Images started")
-        print(editLetterViewModel.deleteCandidatesFromCurrentLetterPhoto.count)
-        for deleteCandidate in editLetterViewModel.deleteCandidatesFromCurrentLetterPhoto {
-            if let index = StorageManager.shared.images.firstIndex(of: deleteCandidate) {
-
-                StorageManager.shared.images.remove(at: index)
-
-                StorageManager.shared.deleteItem(fullPath: deleteCandidate.fullPath)
-            }
-        }
-        
-        for newImage in editLetterViewModel.newImages {
-            Task {
-                do {
-                    let imageFullPath = try await StorageManager.shared.uploadUIImage(image: newImage, docId: letter.id)
-
-                    let newLetterPhoto = try await StorageManager.shared.formatToLetterPhoto(fullPath: imageFullPath, uiImage: newImage)
-
-                    StorageManager.shared.images.append(newLetterPhoto)
-                } catch {
-                    print("Failed To upload Image: \(error)")
-                }
-            }
-        }
-
     }
 }
 
