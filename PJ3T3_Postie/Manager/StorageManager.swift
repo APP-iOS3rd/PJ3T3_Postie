@@ -24,6 +24,42 @@ final class StorageManager: ObservableObject {
         self.userReference = Storage.storage().reference().child("users").child(userUid)
     }
     
+    func uploadUIImage(image: UIImage, docId: String) async throws -> String {
+            //metadata없이도 data를 업로드 할 수 있지만, 그 경우 서버는 어떤 타입의 데이터를 저장하는지 알지 못해 오류를 발생시킬 수 있으므로 upload하는 metadata 타입을 명시 해 주는 편이 좋다.
+            let meta = StorageMetadata()
+            meta.contentType = "image/jpeg"
+
+            let imageName = "\(UUID().uuidString).jpeg"
+            let fileReference = userReference.child(docId).child(imageName)
+            
+            print("업로드 시작")
+            
+            //compressionQuality: 1 => 100%를 의미해 압축 없음
+            //이미지가 너무 클 경우 직접 compress하거나 firebase extension 중 resize images(유료)를 사용
+            //이미지 타입이 png라면 data = image.png()
+            guard let data = image.jpegData(compressionQuality: 0.5) else {
+                print(#function, "Failed to compress image")
+                throw URLError(.badURL)
+            }
+
+            let returnedMetaData = try await fileReference.putDataAsync(data, metadata: meta)
+
+            guard let imageFullPath = returnedMetaData.path else {
+                print(#function, "Failed to get image full path")
+                throw URLError(.badURL)
+            }
+
+            print("업로드 종료")
+            return imageFullPath
+        }
+    
+    func requestImageURL(fullPath: String) async throws -> String {
+        let item = Storage.storage().reference().child(fullPath)
+        let absoluteString = try await item.downloadURL().absoluteString
+        
+        return absoluteString
+    }
+    
     /**
      [UIImage]를 받아 반복문을 돌며 각 이미지들을 Data type으로 변환, saveImage 함수를 호출해 Storage에 이미지를 업로드하고
      업로드가 완료될 때 마다 업로드된 이미지의 urlString을 urlArray에 append한다.
