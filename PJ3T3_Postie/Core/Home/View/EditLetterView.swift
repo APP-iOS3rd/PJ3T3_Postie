@@ -62,9 +62,18 @@ struct EditLetterView: View {
 
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button {
+//                    Task {
+//                        await editLetterViewModel.editLetter(letter: letter)
+//                        await editLetterViewModel.updateImages(letter: letter)
+//                    }
+
                     Task {
-                        await editLetterViewModel.editLetter(letter: letter)
-                        await editLetterViewModel.updateImages(letter: letter)
+                        await editLetterViewModel.updateLetter(
+                            letter: letter,
+                            docId: letter.id,
+                            deleteFullPaths: editLetterViewModel.fullPathsAndUrls.map { $0.fullPath },
+                            deleteUrls: editLetterViewModel.fullPathsAndUrls.map { $0.url }
+                        )
                     }
 
                     dismiss()
@@ -192,7 +201,7 @@ extension EditLetterView {
                     Image(systemName: "plus")
                 }
             }
-            if editLetterViewModel.currentLetterPhoto.isEmpty && editLetterViewModel.newImages.isEmpty {
+            if editLetterViewModel.fullPathsAndUrls.isEmpty && editLetterViewModel.newImages.isEmpty {
                 Label("사진을 추가해주세요.", systemImage: "photo.on.rectangle")
                     .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].dividerColor)
                     .frame(maxWidth: .infinity)
@@ -201,26 +210,31 @@ extension EditLetterView {
             } else {
                 ScrollView(.horizontal) {
                     HStack(spacing: 8) {
-                        ForEach(0..<editLetterViewModel.currentLetterPhoto.count, id: \.self) { index in
+                        ForEach(0..<editLetterViewModel.fullPathsAndUrls.count, id: \.self) { index in
                             ZStack(alignment: .topTrailing) {
                                 Button {
                                     editLetterViewModel.selectedIndex = index
                                     editLetterViewModel.showLetterImageFullScreenView = true
                                 } label: {
-                                    Image(uiImage: StorageManager.shared.images.map({$0.image}) [index])
-                                        .resizable()
-                                        .scaledToFill()
-                                        .frame(width: 100, height: 100)
-                                        .clipShape(RoundedRectangle(cornerRadius: 4))
+                                    if let url = URL(string: editLetterViewModel.fullPathsAndUrls[index].url) {
+                                        AsyncImage(url: url) { image in
+                                            image
+                                                .resizable()
+                                                .scaledToFill()
+                                                .frame(width: 100, height: 100)
+                                                .clipShape(RoundedRectangle(cornerRadius: 4))
+                                        } placeholder: {
+                                            ProgressView()
+                                                .frame(width: 100, height: 100)
+                                        }
+                                    }
                                 }
 
                                 Button {
-                                    print("Delete Button Tapped")
-                                    let deletedLetterPhoto = editLetterViewModel.currentLetterPhoto[index]
-                                    print("Delete Button Tapped: index \(index)")
-                                    editLetterViewModel.currentLetterPhoto.remove(at: index)
+                                    let deletedFullPathAndUrl = editLetterViewModel.fullPathsAndUrls[index]
+                                    editLetterViewModel.fullPathsAndUrls.remove(at: index)
 
-                                    editLetterViewModel.deleteCandidatesFromCurrentLetterPhoto.append(deletedLetterPhoto)
+                                    editLetterViewModel.deleteCandidatesFromFullPathsANdUrls.append(deletedFullPathAndUrl)
                                 } label: {
                                     Image(systemName: "xmark.circle.fill")
                                         .symbolRenderingMode(.palette)
@@ -233,7 +247,7 @@ extension EditLetterView {
                         ForEach(0..<editLetterViewModel.newImages.count, id: \.self) { index in
                             ZStack(alignment: .topTrailing) {
                                 Button {
-                                    editLetterViewModel.selectedIndex = index + editLetterViewModel.currentLetterPhoto.count
+                                    editLetterViewModel.selectedIndex = index + editLetterViewModel.fullPathsAndUrls.count
                                     editLetterViewModel.showLetterImageFullScreenView = true
                                 } label: {
                                     Image(uiImage: editLetterViewModel.newImages[index])

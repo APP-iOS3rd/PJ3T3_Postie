@@ -43,6 +43,9 @@ class EditLetterViewModel: ObservableObject {
         currentLetterPhoto.map({ $0.image }) + newImages
     }
 
+    @Published var fullPathsAndUrls: [FullPathAndUrl] = []
+    var deleteCandidatesFromFullPathsANdUrls: [FullPathAndUrl] = []
+
     /// 이미 작성된 편지를 수정합니다.
     /// - Parameter letter: 작성된 편지
     ///
@@ -106,6 +109,56 @@ class EditLetterViewModel: ObservableObject {
         }
     }
 
+    func updateLetter(letter: Letter, docId: String, deleteFullPaths: [String], deleteUrls: [String]) async {
+        var newImageFullPaths = [String]()
+        var newImageUrls = [String]()
+
+        // 이미지 삭제
+        for deleteCandidate in deleteCandidatesFromFullPathsANdUrls {
+            StorageManager.shared.deleteItem(fullPath: deleteCandidate.fullPath)
+        }
+
+        FirestoreManager.shared.removeFullPathsAndURLs(docId: docId, fullPaths: deleteCandidatesFromFullPathsANdUrls.map { $0.fullPath}, urls: deleteCandidatesFromFullPathsANdUrls.map { $0.url} )
+
+        // 이미지 추가
+        for image in newImages {
+            do {
+                let fullPath = try await StorageManager.shared.uploadUIImage(image: image, docId: docId)
+                let url = try await StorageManager.shared.requestImageURL(fullPath: fullPath)
+
+                newImageFullPaths.append(fullPath)
+                newImageUrls.append(url)
+            } catch {
+                print("Failed to upload image: \(error)")
+            }
+        }
+        
+        FirestoreManager.shared.updateLetter(
+            docId: docId,
+            writer: sender,
+            recipient: receiver,
+            summary: summary,
+            date: date,
+            text: text,
+            isReceived: letter.isReceived,
+            isFavorite: letter.isFavorite,
+            imageURLs: newImageUrls,
+            imageFullPaths: newImageFullPaths
+        )
+
+        do {
+            let updatedLetter = try await FirestoreManager.shared.getLetter(docId: docId)
+
+            await MainActor.run {
+                FirestoreManager.shared.letter = updatedLetter
+            }
+        } catch {
+            print("Failed To update letter")
+        }
+
+        FirestoreManager.shared.fetchAllLetters()
+    }
+
     func syncViewModelProperties(letter: Letter) {
         sender = letter.writer
         receiver = letter.recipient
@@ -115,8 +168,14 @@ class EditLetterViewModel: ObservableObject {
 
         // 요약 텍스트 필드 확인
         showSummaryTextField = !letter.summary.isEmpty
-            
-        currentLetterPhoto = StorageManager.shared.images
+
+        guard let urls = letter.imageURLs, let fullPaths = letter.imageFullPaths else { return }
+        fullPathsAndUrls = zip(urls, fullPaths).map { FullPathAndUrl(fullPath: $0.1, url: $0.0) }
+        print(fullPathsAndUrls)
     }
 }
 
+struct FullPathAndUrl {
+    let fullPath: String
+    let url: String
+}

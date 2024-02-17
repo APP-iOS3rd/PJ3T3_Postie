@@ -92,7 +92,7 @@ struct LetterDetailView: View {
         }
         .fullScreenCover(isPresented: $letterDetailViewModel.showLetterImageFullScreenView) {
             LetterImageFullScreenView(
-                images: storageManager.images.map { $0.image },
+                urls: firestoreManager.letter.imageURLs ?? [],
                 pageIndex: $letterDetailViewModel.selectedIndex
             )
         }
@@ -111,9 +111,7 @@ struct LetterDetailView: View {
             Button(role: .destructive) {
                 firestoreManager.deleteLetter(documentId: letter.id)
 
-                storageManager.images.forEach { letterPhoto in
-                    storageManager.deleteItem(fullPath: letterPhoto.fullPath)
-                }
+                StorageManager.shared.deleteFolder(docId: letter.id)
 
                 firestoreManager.fetchAllLetters()
 
@@ -125,14 +123,9 @@ struct LetterDetailView: View {
             Text("편지를 삭제하시겠습니까?")
         }
         .onAppear {
-            storageManager.listAllFile(docId: letter.id)
-
             letterDetailViewModel.isFavorite = letter.isFavorite
 
             firestoreManager.letter = letter
-        }
-        .onDisappear {
-            storageManager.images.removeAll()
         }
     }
 }
@@ -158,23 +151,30 @@ extension LetterDetailView {
 
     @ViewBuilder
     private var letterImageSection: some View {
-        if !storageManager.images.isEmpty {
+        if let imageUrls = firestoreManager.letter.imageURLs {
             VStack(alignment: .leading, spacing: 4) {
                 Text("편지 사진")
 
                 ScrollView(.horizontal) {
                     HStack(spacing: 8) {
-                        ForEach(0..<storageManager.images.count, id: \.self) { index in
+                        ForEach(0..<imageUrls.count, id: \.self) { index in
                             ZStack {
                                 Button {
                                     letterDetailViewModel.selectedIndex = index
                                     letterDetailViewModel.showLetterImageFullScreenView = true
                                 } label: {
-                                    Image(uiImage: storageManager.images.map({$0.image})[index])
-                                        .resizable()
-                                        .scaledToFill()
-                                        .frame(width: 50, height: 50)
-                                        .clipShape(RoundedRectangle(cornerRadius: 4))
+                                    if let url = URL(string: imageUrls[index]) {
+                                        AsyncImage(url: url) { image in
+                                            image
+                                                .resizable()
+                                                .scaledToFill()
+                                                .frame(width: 50, height: 50)
+                                                .clipShape(RoundedRectangle(cornerRadius: 4))
+                                        } placeholder: {
+                                            ProgressView()
+                                                .frame(width: 50, height: 50)
+                                        }
+                                    }
                                 }
                             }
                         }
