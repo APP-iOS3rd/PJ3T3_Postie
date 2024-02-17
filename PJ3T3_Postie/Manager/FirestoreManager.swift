@@ -138,37 +138,23 @@ class FirestoreManager: ObservableObject {
             for document in snapshot.documents {
                 let data = document.data()
                 
-                //document의 data를 가지고 와서, data를 각 값에 넣어줌
-                self.letters.append(Letter(id: data["id"] as? String ?? "",
-                                           writer: data["writer"] as? String ?? "",
-                                           recipient: data["recipient"] as? String ?? "",
-                                           summary: data["summary"] as? String ?? "",
-                                           date: data["date"] as? Date ?? Date(),
-                                           text: data["text"] as? String ?? "",
-                                           isReceived: data["isReceived"] as? Bool ?? true,
-                                           isFavorite: data["isFavorite"] as? Bool ?? false))
-                
-                //위의 코드는 값을 manual하게 mapping해 주어야 하므로 구조체에 업데이트가 발생하거나 오타가 발생하면 작동하지 않는다는 단점이 있습니다.
-                //아래와 같이 코드 개선이 가능하지만 현재 Letter 구조체의 변수 images의 key가 mapping되지 않아 fetch가 되지 않습니다.
-                //우선 주석으로 작성 해 두고 추후 위의 코드와 교체 할 예정입니다.
-//                do {
-//                    let letter = try document.data(as: Letter.self)
-//                    self.letters.append(letter)
-//                    print("Fetch letter success")
-//                } catch let DecodingError.dataCorrupted(context) {
-//                    print(context)
-//                } catch let DecodingError.keyNotFound(key, context) {
-//                    print("Key '\(key)' not found:", context.debugDescription)
-//                    print("codingPath:", context.codingPath)
-//                } catch let DecodingError.valueNotFound(value, context) {
-//                    print("Value '\(value)' not found:", context.debugDescription)
-//                    print("codingPath:", context.codingPath)
-//                } catch let DecodingError.typeMismatch(type, context)  {
-//                    print("Type '\(type)' mismatch:", context.debugDescription)
-//                    print("codingPath:", context.codingPath)
-//                } catch {
-//                    print("error: ", error)
-//                }
+                do {
+                    let letter = try document.data(as: Letter.self)
+                    self.letters.append(letter)
+                } catch let DecodingError.dataCorrupted(context) {
+                    print(context)
+                } catch let DecodingError.keyNotFound(key, context) {
+                    print("Key '\(key)' not found:", context.debugDescription)
+                    print("codingPath:", context.codingPath)
+                } catch let DecodingError.valueNotFound(value, context) {
+                    print("Value '\(value)' not found:", context.debugDescription)
+                    print("codingPath:", context.codingPath)
+                } catch let DecodingError.typeMismatch(type, context)  {
+                    print("Type '\(type)' mismatch:", context.debugDescription)
+                    print("codingPath:", context.codingPath)
+                } catch {
+                    print("Undefined error: ", error)
+                }
             }
             
             print("Letter fetch success")
