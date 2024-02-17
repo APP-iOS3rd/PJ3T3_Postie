@@ -300,6 +300,11 @@ struct TestDetailView: View {
             summary = letter.summary
             text = letter.text
             storageManager.listAllFile(docId: letter.id)
+            writer = letter.writer
+            recipient = letter.recipient
+            summary = letter.summary
+            text = letter.text
+            storageManager.listAllFile(docId: letter.id)
         }
         .onDisappear {
             //뷰가 dismiss될 때 images 배열 초기화
@@ -338,8 +343,40 @@ struct TestImageView: View {
                     } placeholder: {
                         ProgressView()
                     }
-                }
+        .onDisappear {
+            //뷰가 dismiss될 때 images 배열 초기화
+            storageManager.images.removeAll()
+        }
+    }
+}
+
+struct TestImageView: View {
+    @ObservedObject var storageManager = StorageManager.shared
+    let rows = Array(repeating: GridItem(.adaptive(minimum: 100)), count: 1)
+    var images: [LetterPhoto]
+    
+    func initLetterDetail() {
+        writer = letter.writer
+        recipient = letter.recipient
+        summary = letter.summary
+        text = letter.text
+        
+        if let currentFullPaths = letter.imageFullPaths {
+            self.currentFullPaths = currentFullPaths
+        }
+        
+        if let currentUrls = letter.imageURLs {
+            self.currentUrls = currentUrls
+        }
+        
+        if currentUrls.count == currentFullPaths.count {
+            let imageCount = currentUrls.count
+            
+            for i in 0..<imageCount {
+                currentFullPathAndURLs.append([currentFullPaths[i], currentUrls[i]])
             }
+        } else {
+            print("현재 letter는 Image url의 개수와 fullPath의 개수가 다릅니다.")
         }
     }
 }
