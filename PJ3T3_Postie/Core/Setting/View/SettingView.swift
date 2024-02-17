@@ -262,8 +262,36 @@ struct TestDetailView: View {
                 TextField("\(letter.text)", text: $text)
                     .textFieldStyle(.roundedBorder)
                 
-                if !storageManager.images.isEmpty {
-                    TestImageView(images: storageManager.images)
+                if !currentFullPathAndURLs.isEmpty {
+                    ScrollView(.horizontal) {
+                        LazyHGrid(rows: rows) {
+                            ForEach(currentFullPathAndURLs, id: \.self) { item in
+                                AsyncImage(url: URL(string: item[1])) { image in
+                                    ZStack(alignment: .topTrailing) {
+                                        image
+                                            .resizable()
+                                            .frame(width: 150, height: 150)
+                                            .scaledToFit()
+                                            .padding(.leading, 10)
+                                        
+                                        Button {
+                                            deleteImageFullPaths.append(item[0])
+                                            deleteImageURLs.append(item[1])
+                                            currentFullPathAndURLs.remove(at: currentFullPathAndURLs.firstIndex(of: item)!)
+                                        } label: {
+                                            Image(systemName: "xmark.circle.fill")
+                                                .foregroundStyle(.gray)
+                                                .frame(width: 20, height: 20)
+                                                .padding(5)
+                                        }
+                                    }
+                                } placeholder: {
+                                    ProgressView()
+                                        .frame(width: 150, height: 150)
+                                }
+                            }
+                        }
+                    }
                 }
             }
             
