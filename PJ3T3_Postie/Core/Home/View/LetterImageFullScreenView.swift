@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+import Kingfisher
+
 struct LetterImageFullScreenView: View {
     let images: [UIImage]?
     let urls: [String]?
@@ -34,14 +36,13 @@ struct LetterImageFullScreenView: View {
                     if let urls = urls {
                         ForEach(0..<urls.count, id: \.self) { index in
                             if let url = URL(string: urls[index]) {
-                                AsyncImage(url: url) { image in
-                                    image
-                                        .resizable()
-                                        .scaledToFit()
-                                } placeholder: {
-                                    ProgressView()
-                                }
-                                .tag(index)
+                                KFImage(url)
+                                    .placeholder {
+                                        ProgressView()
+                                    }
+                                    .resizable()
+                                    .scaledToFit()
+                                    .tag(index)
                             }
                         }
                     }

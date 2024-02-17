@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+import Kingfisher
+
 struct LetterDetailView: View {
     @StateObject private var letterDetailViewModel = LetterDetailViewModel()
     @ObservedObject var firestoreManager = FirestoreManager.shared
@@ -164,16 +166,15 @@ extension LetterDetailView {
                                     letterDetailViewModel.showLetterImageFullScreenView = true
                                 } label: {
                                     if let url = URL(string: imageUrls[index]) {
-                                        AsyncImage(url: url) { image in
-                                            image
-                                                .resizable()
-                                                .scaledToFill()
-                                                .frame(width: 50, height: 50)
-                                                .clipShape(RoundedRectangle(cornerRadius: 4))
-                                        } placeholder: {
-                                            ProgressView()
-                                                .frame(width: 50, height: 50)
-                                        }
+                                        KFImage(url)
+                                            .placeholder {
+                                                ProgressView()
+                                                    .frame(width: 50, height: 50)
+                                            }
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: 50, height: 50)
+                                            .clipShape(RoundedRectangle(cornerRadius: 4))
                                     }
                                 }
                             }

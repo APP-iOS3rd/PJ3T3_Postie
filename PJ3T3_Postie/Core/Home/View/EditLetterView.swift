@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+import Kingfisher
+
 struct EditLetterView: View {
     @StateObject private var editLetterViewModel = EditLetterViewModel()
 
@@ -218,16 +220,15 @@ extension EditLetterView {
                                     editLetterViewModel.showLetterImageFullScreenView = true
                                 } label: {
                                     if let url = URL(string: editLetterViewModel.fullPathsAndUrls[index].url) {
-                                        AsyncImage(url: url) { image in
-                                            image
-                                                .resizable()
-                                                .scaledToFill()
-                                                .frame(width: 100, height: 100)
-                                                .clipShape(RoundedRectangle(cornerRadius: 4))
-                                        } placeholder: {
-                                            ProgressView()
-                                                .frame(width: 100, height: 100)
-                                        }
+                                        KFImage(url)
+                                            .placeholder {
+                                                ProgressView().frame(width: 100, height: 100)
+                                            }
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: 100, height: 100)
+                                            .clipShape(RoundedRectangle(cornerRadius: 4))
+
                                     }
                                 }
 
