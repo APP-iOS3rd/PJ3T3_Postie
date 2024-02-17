@@ -69,9 +69,7 @@ struct AddLetterView: View {
                         addLetterViewModel.showNotEnoughInfoAlert()
                     } else {
                         Task {
-                            await addLetterViewModel.addLetter(isReceived: isReceived)
-                            
-                            await addLetterViewModel.addImages()
+                            await addLetterViewModel.uploadLetter(isReceived: isReceived)
 
                             dismiss()
                         }

@@ -68,16 +68,45 @@ class AddLetterViewModel: ObservableObject {
         FirestoreManager.shared.fetchAllLetters()
     }
 
-    func addImages() async {
-        if !images.isEmpty {
+    func uploadLetter(isReceived: Bool) async {
+        var newImageFullPaths = [String]()
+        var newImageUrls = [String]()
+        let docId = UUID().uuidString
+
+        for image in images {
             do {
-                try await StorageManager.shared.saveUIImage(
-                    images: images,
-                    docId: FirestoreManager.shared.docId
-                )
-            } catch {
+                let fullPath = try await StorageManager.shared.uploadUIImage(image: image, docId: docId)
+
+                let url = try await StorageManager.shared.requestImageURL(fullPath: fullPath)
                 
+                newImageFullPaths.append(fullPath)
+                newImageUrls.append(url)
+            } catch {
+                print("Failed to upload image: \(error)")
             }
+        }
+
+        do {
+            let letter = Letter(
+                id: docId,
+                writer: isReceived ? sender : AuthManager.shared.currentUser?.nickname ?? "유저",
+                recipient: isReceived ? AuthManager.shared.currentUser?.nickname ?? "유저" : receiver,
+                summary: summary,
+                date: date,
+                text: text,
+                isReceived: isReceived,
+                isFavorite: false,
+                imageURLs: newImageUrls,
+                imageFullPaths: newImageFullPaths
+            )
+
+            try await FirestoreManager.shared.addLetter(docId: docId, letter: letter)
+
+            await MainActor.run {
+                FirestoreManager.shared.letters.append(letter)
+            }
+        } catch {
+            print("Failed to upload letter: \(error)")
         }
     }
 }
