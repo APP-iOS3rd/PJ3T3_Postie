@@ -106,6 +106,19 @@ class FirestoreManager: ObservableObject {
         }
     }
     
+    func removeFullPathsAndURLs(docId: String, fullPaths: [String], urls: [String]) {
+        let docRef = letterColRef.document(docId)
+        
+        docRef.updateData(["imageURLs": FieldValue.arrayRemove(urls),
+                           "imageFullPaths": FieldValue.arrayRemove(fullPaths)]) { error in
+            if let error = error {
+                print(#function, "Failed to update fullPath and url: ", error)
+            } else {
+                print("\(docId) merge success")
+            }
+        }
+    }
+    
 //MARK: - 편지 fetch
     func fetchAllLetters() {
         //letterColRef(특정 user의 document의 letters라는 하위 컬렉션)에 있는 모든 document를 가져옴
