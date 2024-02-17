@@ -313,16 +313,7 @@ struct TestDetailView: View {
                 .buttonStyle(.borderedProminent)
                 
                 Button {
-                    firestoreManager.editLetter(documentId: letter.id,
-                                                writer: writer,
-                                                recipient: recipient,
-                                                summary: summary,
-                                                date: Date(),
-                                                text: text,
-                                                isReceived: false,
-                                                isFavorite: false)
-                    firestoreManager.fetchAllLetters()
-                    dismiss()
+                    updateLetter(docId: letter.id, deleteURLs: deleteImageURLs, deleteFullPaths: deleteImageFullPaths)
                 } label: {
                     Text("수정 완료")
                 }
@@ -391,6 +382,45 @@ struct TestDetailView: View {
                 print("\(#function): 이미지를 array에 추가하는데 실패했습니다.")
                 return
             }
+        }
+    }
+    
+    func updateLetter(docId: String, deleteURLs: [String], deleteFullPaths: [String]) {
+        var newImageFullPaths = [String]()
+        var newImageURLs = [String]()
+        
+        Task {
+            for img in selectedImages {
+                do {
+                    let fullPath = try await storageManager.uploadUIImage(image: img, docId: docId)
+                    let url = try await storageManager.requestImageURL(fullPath: fullPath)
+                    
+                    newImageFullPaths.append(fullPath)
+                    newImageURLs.append(url)
+                } catch {
+                    print(#function, "Failed to upload image with: \(error)")
+                }
+            }
+            
+            for deleteFullPath in deleteFullPaths {
+                storageManager.deleteItem(fullPath: deleteFullPath)
+            }
+            
+            print(newImageURLs, newImageFullPaths)
+            
+            firestoreManager.removeFullPathsAndURLs(docId: docId, fullPaths: deleteFullPaths, urls: deleteURLs)
+            firestoreManager.updateLetter(docId: docId,
+                                          writer: writer,
+                                          recipient: recipient,
+                                          summary: summary,
+                                          date: letter.date,
+                                          text: text,
+                                          isReceived: letter.isReceived,
+                                          isFavorite: letter.isFavorite,
+                                          imageURLs: newImageURLs.isEmpty ? nil : newImageURLs,
+                                          imageFullPaths: newImageFullPaths.isEmpty ? nil : newImageFullPaths)
+            firestoreManager.fetchAllLetters()
+            dismiss()
         }
     }
 }
