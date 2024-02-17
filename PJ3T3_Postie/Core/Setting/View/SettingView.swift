@@ -291,6 +291,7 @@ struct TestDetailView: View {
                 
                 Button {
                     firestoreManager.deleteLetter(documentId: letter.id)
+                    storageManager.deleteFolder(docId: letter.id)
                     firestoreManager.fetchAllLetters()
                     dismiss()
                 } label: {
