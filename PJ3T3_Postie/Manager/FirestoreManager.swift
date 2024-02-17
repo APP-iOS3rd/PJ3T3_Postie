@@ -83,6 +83,7 @@ class FirestoreManager: ObservableObject {
     ///   - summary: 변경 된 한 줄 요약
     ///   - date: 편지를 보내거나 받은 날짜
     ///   - text: 변경 된 편지 본문
+    @available(*, deprecated, message: "이 함수는 더이상 사용하지 않습니다. updateLetter 함수를 사용 해 주세요. 뷰에서 더이상 사용하는 곳이 없다면 함수를 삭제 해 주세요.")
     func editLetter(documentId: String, writer: String, recipient: String, summary: String, date: Date, text: String, isReceived: Bool, isFavorite: Bool) {
         let docRef = letterColRef.document(documentId)
         let docData: [String: Any] = [
