@@ -19,6 +19,8 @@ struct Letter: Codable, Hashable, Identifiable {
     var text: String
     let isReceived: Bool
     var isFavorite: Bool
+    var imageURLs: [String]?
+    var imageFullPaths: [String]?
 
     static var preview: Letter {
         return Letter(
