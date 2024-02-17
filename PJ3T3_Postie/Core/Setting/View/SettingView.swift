@@ -233,11 +233,22 @@ struct TestDetailView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
     @ObservedObject var storageManager = StorageManager.shared
     @Environment(\.dismiss) var dismiss
+    //편지 디테일
     var letter: Letter
+    let rows = Array(repeating: GridItem(.adaptive(minimum: 100)), count: 1)
     @State var writer = ""
     @State var recipient = ""
     @State var summary = ""
     @State var text = ""
+    @State var currentFullPaths = [String]()
+    @State var currentUrls = [String]()
+    @State var currentFullPathAndURLs = [[String]]()
+    //이미지 삭제
+    @State var deleteImageFullPaths = [String]()
+    @State var deleteImageURLs = [String]()
+    //새 이미지 추가
+    @State private var selectedItem: PhotosPickerItem? = nil
+    @State private var selectedImages: [UIImage] = []
     
     var body: some View {
         ScrollView {
