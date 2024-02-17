@@ -10,8 +10,10 @@ import FirebaseFirestore
 class FirestoreManager: ObservableObject {
     static let shared = FirestoreManager()
     var letterColRef: CollectionReference = Firestore.firestore().collection("users")
+    @available(*, deprecated, message: "모든 뷰에서 제거 해주세요. 제거가 완료되면 이 변수를 삭제 후 커밋 해 주세요.")
     var docId: String = "" //deprecated
     @Published var letters: [Letter] = []
+    @available(*, deprecated, message: "모든 뷰에서 제거 해주세요. 제거가 완료되면 이 변수를 삭제 후 커밋 해 주세요.")
     @Published var letter: Letter = Letter(id: "", writer: "", recipient: "", summary: "", date: Date(), text: "", isReceived: false, isFavorite: false) //deprecated
 
     private init() { 
