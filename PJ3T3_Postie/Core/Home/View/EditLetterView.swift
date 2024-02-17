@@ -96,7 +96,8 @@ struct EditLetterView: View {
         .scrollDismissesKeyboard(.interactively)
         .fullScreenCover(isPresented: $editLetterViewModel.showLetterImageFullScreenView) {
             LetterImageFullScreenView(
-                images: editLetterViewModel.currentLetterPhotosAndNewImages,
+                images: editLetterViewModel.newImages,
+                urls: editLetterViewModel.fullPathsAndUrls.map { $0.url },
                 pageIndex: $editLetterViewModel.selectedIndex
             )
         }

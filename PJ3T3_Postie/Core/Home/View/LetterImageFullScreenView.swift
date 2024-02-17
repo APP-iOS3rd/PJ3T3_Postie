@@ -11,6 +11,10 @@ struct LetterImageFullScreenView: View {
     let images: [UIImage]?
     let urls: [String]?
 
+    var urlsCount: Int {
+        guard let urls = urls else { return 0 }
+        return urls.count
+    }
     @Binding var pageIndex: Int
     @Environment(\.dismiss) var dismiss
     
@@ -27,14 +31,6 @@ struct LetterImageFullScreenView: View {
                     .ignoresSafeArea()
 
                 TabView(selection: $pageIndex) {
-                    if let images = images {
-                        ForEach(0..<images.count, id: \.self) { index in
-                            Image(uiImage: images[index])
-                                .resizable()
-                                .scaledToFit()
-                        }
-                    }
-
                     if let urls = urls {
                         ForEach(0..<urls.count, id: \.self) { index in
                             if let url = URL(string: urls[index]) {
@@ -49,6 +45,16 @@ struct LetterImageFullScreenView: View {
                             }
                         }
                     }
+
+                    if let images = images {
+                        ForEach(0..<images.count, id: \.self) { index in
+                            Image(uiImage: images[index])
+                                .resizable()
+                                .scaledToFit()
+                                .tag(urlsCount + index)
+                        }
+                    }
+
                 }
                 .tabViewStyle(.page)
                 .toolbar {
