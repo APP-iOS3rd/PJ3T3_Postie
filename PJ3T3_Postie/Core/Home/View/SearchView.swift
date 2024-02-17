@@ -56,7 +56,15 @@ struct SearchView: View {
                 .scrollContentBackground(.hidden)
             }
         }
-        .navigationTitle("편지 찾기")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(ThemeManager.themeColors[isThemeGroupButton].backGroundColor, for: .navigationBar)
+        .toolbar {
+            ToolbarItemGroup(placement: .principal) {
+                Text("편지 찾기")
+                    .bold()
+                    .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].tintColor)
+            }
+        }
         .searchable(text: $searchQuery, prompt: "찾고 싶은 기억이 있나요?")
         .autocorrectionDisabled()
         .scrollDismissesKeyboard(.immediately)
