@@ -106,6 +106,41 @@ class FirestoreManager: ObservableObject {
         }
     }
     
+    func updateLetter(docId: String, writer: String, recipient: String, summary: String, date: Date, text: String, isReceived: Bool, isFavorite: Bool, imageURLs: [String]?, imageFullPaths: [String]?) {
+        let docRef = letterColRef.document(letter.id)
+        var docData = [String: Any]()
+        
+        if let imageURLs = letter.imageURLs, let imageFullPaths = letter.imageFullPaths {
+            docData = ["id": docId,
+                       "writer": writer,
+                       "recipient": recipient,
+                       "summary": summary,
+                       "date": date,
+                       "text": text,
+                       "isReceived": isReceived,
+                       "isFavorite": isFavorite,
+                       "imageURLs": FieldValue.arrayUnion(imageURLs),
+                       "imageFullPaths": FieldValue.arrayUnion(imageFullPaths)]
+        } else {
+            docData = ["id": docId,
+                       "writer": writer,
+                       "recipient": recipient,
+                       "summary": summary,
+                       "date": date,
+                       "text": text,
+                       "isReceived": isReceived,
+                       "isFavorite": isFavorite]
+        }
+        
+        docRef.updateData(docData) { error in
+            if let error = error {
+                print("Failed to updating document: ", error)
+            } else {
+                print("\(docId) merge success")
+            }
+        }
+    }
+    
     func removeFullPathsAndURLs(docId: String, fullPaths: [String], urls: [String]) {
         let docRef = letterColRef.document(docId)
         
