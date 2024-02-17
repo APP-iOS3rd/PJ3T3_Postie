@@ -268,6 +268,11 @@ struct TestDetailView: View {
             }
             
             HStack {
+                PhotosPicker(selection: $selectedItem, matching: .images, photoLibrary: .shared()) {
+                    Text("사진 추가")
+                }
+                .buttonStyle(.borderedProminent)
+                
                 Button {
                     firestoreManager.editLetter(documentId: letter.id,
                                                 writer: writer,
@@ -295,65 +300,15 @@ struct TestDetailView: View {
             }
         }
         .onAppear {
-            writer = letter.writer
-            recipient = letter.recipient
-            summary = letter.summary
-            text = letter.text
-            storageManager.listAllFile(docId: letter.id)
-            writer = letter.writer
-            recipient = letter.recipient
-            summary = letter.summary
-            text = letter.text
-            storageManager.listAllFile(docId: letter.id)
+            initLetterDetail()
         }
-        .onDisappear {
-            //뷰가 dismiss될 때 images 배열 초기화
-            storageManager.images.removeAll()
+        .onChange(of: selectedItem) { newValue in
+            if let newValue {
+                appendImages(item: newValue)
+            }
+            selectedItem = nil
         }
     }
-}
-
-struct TestImageView: View {
-    @ObservedObject var storageManager = StorageManager.shared
-    let rows = Array(repeating: GridItem(.adaptive(minimum: 100)), count: 1)
-    var images: [LetterPhoto]
-    
-    var body: some View {
-        ScrollView(.horizontal) {
-            LazyHGrid(rows: rows) {
-                ForEach(images, id: \.self) { img in
-                    //LetterPhoto의 UIImage 타입으로 저장된 변수를 사용할 수도 있다: Image(uiImage: img.image)
-                    AsyncImage(url: URL(string: img.urlString)) { image in
-                        ZStack(alignment: .topTrailing) {
-                            image
-                                .resizable()
-                                .frame(width: 150, height: 150)
-                                .scaledToFit()
-                                .padding(.leading, 10)
-                            
-                            Button {
-                                storageManager.deleteItem(fullPath: img.fullPath)
-                            } label: {
-                                Image(systemName: "xmark.circle.fill")
-                                    .foregroundStyle(.gray)
-                                    .frame(width: 20, height: 20)
-                                    .padding(5)
-                            }
-                        }
-                    } placeholder: {
-                        ProgressView()
-                    }
-        .onDisappear {
-            //뷰가 dismiss될 때 images 배열 초기화
-            storageManager.images.removeAll()
-        }
-    }
-}
-
-struct TestImageView: View {
-    @ObservedObject var storageManager = StorageManager.shared
-    let rows = Array(repeating: GridItem(.adaptive(minimum: 100)), count: 1)
-    var images: [LetterPhoto]
     
     func initLetterDetail() {
         writer = letter.writer
@@ -377,6 +332,25 @@ struct TestImageView: View {
             }
         } else {
             print("현재 letter는 Image url의 개수와 fullPath의 개수가 다릅니다.")
+        }
+    }
+    
+    func appendImages(item: PhotosPickerItem) {
+        Task {
+            //지정한 타입의 인스턴스를 불러오려고 시도한다. 실패 action 구현 필요
+            guard let image = try await item.loadTransferable(type: Data.self) else { return }
+            
+            if let uiImage = UIImage(data: image) {
+                selectedImages.append(uiImage)
+                let imgData = NSData(data: uiImage.jpegData(compressionQuality: 1)!)
+                let imageSize: Int = imgData.count
+                print("actual size of image in KB: %f ", Double(imageSize) / 1000.0)
+                print(selectedImages)
+            } else {
+                //alert 구현 필요
+                print("\(#function): 이미지를 array에 추가하는데 실패했습니다.")
+                return
+            }
         }
     }
 }
