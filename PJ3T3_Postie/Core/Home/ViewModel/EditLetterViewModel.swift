@@ -19,11 +19,11 @@ class EditLetterViewModel: ObservableObject {
     @Published var date: Date = .now
     @Published var text: String = ""
     @Published var summary: String = ""
-    @Published var showUIImagePicker = false
-    @Published var showLetterImageFullScreenView: Bool = false
-    @Published var showTextRecognizerErrorAlert: Bool = false
-    @Published var showSummaryTextField: Bool = false
-    @Published var showSummaryAlert: Bool = false
+    @Published var showingUIImagePicker = false
+    @Published var showingLetterImageFullScreenView: Bool = false
+    @Published var showingTextRecognizerErrorAlert: Bool = false
+    @Published var showingSummaryTextField: Bool = false
+    @Published var showingSummaryAlert: Bool = false
     @Published var showingEditErrorAlert: Bool = false
     @Published var selectedIndex: Int = 0
     @Published var shouldDismiss: Bool = false
@@ -37,11 +37,24 @@ class EditLetterViewModel: ObservableObject {
 
     func showUIImagePicker(sourceType: UIImagePickerController.SourceType) {
         imagePickerSourceType = sourceType
-        showUIImagePicker = true
+        showingUIImagePicker = true
     }
 
     func showEditErrorAlert() {
         showingEditErrorAlert = true
+    }
+
+    func showLetterImageFullScreenView(index: Int) {
+        selectedIndex = index
+        showingLetterImageFullScreenView = true
+    }
+
+    func showSummaryTextField() {
+        showingSummaryTextField = true
+    }
+
+    func showSummaryAlert() {
+        showingSummaryAlert = true
     }
 
     private func dismissView() {
@@ -146,7 +159,7 @@ class EditLetterViewModel: ObservableObject {
         summary = letter.summary
 
         // 요약 텍스트 필드 확인
-        showSummaryTextField = !letter.summary.isEmpty
+        showingSummaryTextField = !letter.summary.isEmpty
 
         guard let urls = letter.imageURLs, let fullPaths = letter.imageFullPaths else { return }
         fullPathsAndUrls = zip(urls, fullPaths).map { FullPathAndUrl(fullPath: $0.1, url: $0.0) }

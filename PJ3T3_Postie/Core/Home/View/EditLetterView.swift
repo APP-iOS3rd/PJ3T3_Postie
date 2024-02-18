@@ -86,36 +86,35 @@ struct EditLetterView: View {
         .toolbar(.hidden, for: .tabBar)
         .scrollDismissesKeyboard(.interactively)
         .modifier(LoadingModifier(isLoading: $editLetterViewModel.isLoading, text: "편지를 수정하고 있어요."))
-        .fullScreenCover(isPresented: $editLetterViewModel.showLetterImageFullScreenView) {
+        .fullScreenCover(isPresented: $editLetterViewModel.showingLetterImageFullScreenView) {
             LetterImageFullScreenView(
                 images: editLetterViewModel.newImages,
                 urls: editLetterViewModel.fullPathsAndUrls.map { $0.url },
                 pageIndex: $editLetterViewModel.selectedIndex
             )
         }
-        .sheet(isPresented: $editLetterViewModel.showUIImagePicker) {
+        .sheet(isPresented: $editLetterViewModel.showingUIImagePicker) {
             UIImagePicker(
                 sourceType: editLetterViewModel.imagePickerSourceType,
                 selectedImages: $editLetterViewModel.newImages,
                 text: $editLetterViewModel.text,
-                showingTextRecognizerErrorAlert: $editLetterViewModel.showTextRecognizerErrorAlert
+                showingTextRecognizerErrorAlert: $editLetterViewModel.showingTextRecognizerErrorAlert
             )
             .ignoresSafeArea(.all, edges: .bottom)
         }
-        .alert("문자 인식 실패", isPresented: $editLetterViewModel.showTextRecognizerErrorAlert) {
+        .alert("문자 인식 실패", isPresented: $editLetterViewModel.showingTextRecognizerErrorAlert) {
         } message: {
             Text("문자 인식에 실패했습니다. 다시 시도해 주세요.")
         }
-        .alert("한 줄 요약", isPresented: $editLetterViewModel.showSummaryAlert) {
+        .alert("한 줄 요약", isPresented: $editLetterViewModel.showingSummaryAlert) {
             Button("직접 작성") {
-                // TODO: 함수로 빼기
-                editLetterViewModel.showSummaryTextField = true
+                editLetterViewModel.showSummaryTextField()
                 focusField = .summary
             }
 
             Button("AI 완성") {
                 // TODO: 네이버 클로바 API 호출
-                editLetterViewModel.showSummaryTextField = true
+                editLetterViewModel.showSummaryTextField()
                 focusField = .summary
             }
         }
@@ -216,8 +215,7 @@ extension EditLetterView {
                         ForEach(0..<editLetterViewModel.fullPathsAndUrls.count, id: \.self) { index in
                             ZStack(alignment: .topTrailing) {
                                 Button {
-                                    editLetterViewModel.selectedIndex = index
-                                    editLetterViewModel.showLetterImageFullScreenView = true
+                                    editLetterViewModel.showLetterImageFullScreenView(index: index)
                                 } label: {
                                     if let url = URL(string: editLetterViewModel.fullPathsAndUrls[index].url) {
                                         KFImage(url)
@@ -248,8 +246,7 @@ extension EditLetterView {
                         ForEach(0..<editLetterViewModel.newImages.count, id: \.self) { index in
                             ZStack(alignment: .topTrailing) {
                                 Button {
-                                    editLetterViewModel.selectedIndex = index + editLetterViewModel.fullPathsAndUrls.count
-                                    editLetterViewModel.showLetterImageFullScreenView = true
+                                    editLetterViewModel.showLetterImageFullScreenView(index: index + editLetterViewModel.fullPathsAndUrls.count)
                                 } label: {
                                     Image(uiImage: editLetterViewModel.newImages[index])
                                         .resizable()
@@ -320,13 +317,13 @@ extension EditLetterView {
                 Spacer()
 
                 Button {
-                    editLetterViewModel.showSummaryAlert = true
+                    editLetterViewModel.showSummaryAlert()
                 } label: {
                     Image(systemName: "plus")
                 }
             }
 
-            if editLetterViewModel.showSummaryTextField || !editLetterViewModel.summary.isEmpty {
+            if editLetterViewModel.showingSummaryTextField || !editLetterViewModel.summary.isEmpty {
                 TextField("", text: $editLetterViewModel.summary)
                     .padding(6)
                     .background(ThemeManager.themeColors[isThemeGroupButton].receivedLetterColor)
