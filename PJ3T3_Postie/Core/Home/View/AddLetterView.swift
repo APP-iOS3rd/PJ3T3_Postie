@@ -83,11 +83,6 @@ struct AddLetterView: View {
                 }
             }
         }
-        .customOnChange(addLetterViewModel.shouldDismiss) { shouldDismiss in
-            if shouldDismiss {
-                dismiss()
-            }
-        }
         .toolbar(.hidden, for: .tabBar)
         .scrollDismissesKeyboard(.interactively)
         .fullScreenCover(isPresented: $addLetterViewModel.showingLetterImageFullScreenView) {
@@ -132,6 +127,11 @@ struct AddLetterView: View {
 
         } message: {
             Text("편지 저장에 실패했어요. 다시 시도해주세요.")
+        }
+        .customOnChange(addLetterViewModel.shouldDismiss) { shouldDismiss in
+            if shouldDismiss {
+                dismiss()
+            }
         }
     }
 }

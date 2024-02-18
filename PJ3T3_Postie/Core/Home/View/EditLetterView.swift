@@ -65,15 +65,8 @@ struct EditLetterView: View {
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button {
                     Task {
-                        await editLetterViewModel.updateLetter(
-                            letter: letter,
-                            docId: letter.id,
-                            deleteFullPaths: editLetterViewModel.fullPathsAndUrls.map { $0.fullPath },
-                            deleteUrls: editLetterViewModel.fullPathsAndUrls.map { $0.url }
-                        )
+                        await editLetterViewModel.updateLetter(letter: letter)
                     }
-
-                    dismiss()
                 } label : {
                     Text("완료")
                 }
@@ -126,6 +119,11 @@ struct EditLetterView: View {
         }
         .onAppear {
             editLetterViewModel.syncViewModelProperties(letter: letter)
+        }
+        .customOnChange(editLetterViewModel.shouldDismiss) { shouldDismiss in
+            if shouldDismiss {
+                dismiss()
+            }
         }
     }
 }

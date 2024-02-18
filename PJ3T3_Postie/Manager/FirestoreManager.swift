@@ -144,7 +144,36 @@ class FirestoreManager: ObservableObject {
             }
         }
     }
-    
+
+    func updateLetterAsync(docId: String, writer: String, recipient: String, summary: String, date: Date, text: String, isReceived: Bool, isFavorite: Bool, imageURLs: [String]?, imageFullPaths: [String]?) async throws {
+        let docRef = letterColRef.document(docId)
+        var docData = [String: Any]()
+
+        if let imageURLs = imageURLs, let imageFullPaths = imageFullPaths {
+            docData = ["id": docId,
+                       "writer": writer,
+                       "recipient": recipient,
+                       "summary": summary,
+                       "date": date,
+                       "text": text,
+                       "isReceived": isReceived,
+                       "isFavorite": isFavorite,
+                       "imageURLs": FieldValue.arrayUnion(imageURLs),
+                       "imageFullPaths": FieldValue.arrayUnion(imageFullPaths)]
+        } else {
+            docData = ["id": docId,
+                       "writer": writer,
+                       "recipient": recipient,
+                       "summary": summary,
+                       "date": date,
+                       "text": text,
+                       "isReceived": isReceived,
+                       "isFavorite": isFavorite]
+        }
+
+        try await docRef.updateData(docData)
+    }
+
     func removeFullPathsAndURLs(docId: String, fullPaths: [String], urls: [String]) {
         let docRef = letterColRef.document(docId)
 
@@ -211,6 +240,20 @@ class FirestoreManager: ObservableObject {
             }
             
             print("Letter fetch success")
+        }
+    }
+
+    func fetchAllLettersAsync() async throws {
+        let snapshot = try await letterColRef.getDocuments()
+        await MainActor.run {
+            self.letters.removeAll()
+        }
+        
+        for document in snapshot.documents {
+            let letter = try document.data(as: Letter.self)
+            await MainActor.run {
+                self.letters.append(letter)
+            }
         }
     }
 

@@ -25,6 +25,7 @@ class EditLetterViewModel: ObservableObject {
     @Published var showSummaryTextField: Bool = false
     @Published var showSummaryAlert: Bool = false
     @Published var selectedIndex: Int = 0
+    @Published var shouldDismiss: Bool = false
 
     private(set) var imagePickerSourceType: UIImagePickerController.SourceType = .camera
 
@@ -35,6 +36,10 @@ class EditLetterViewModel: ObservableObject {
     func showUIImagePicker(sourceType: UIImagePickerController.SourceType) {
         imagePickerSourceType = sourceType
         showUIImagePicker = true
+    }
+
+    private func dismissView() {
+        shouldDismiss = true
     }
 
     // MARK: - Images
@@ -85,18 +90,22 @@ class EditLetterViewModel: ObservableObject {
     }
 
     private func updateLetterInfo(docId: String, newImageUrls: [String], newImageFullPaths: [String], letter: Letter) async {
-        FirestoreManager.shared.updateLetter(
-            docId: docId,
-            writer: sender,
-            recipient: receiver,
-            summary: summary,
-            date: date,
-            text: text,
-            isReceived: letter.isReceived,
-            isFavorite: letter.isFavorite,
-            imageURLs: newImageUrls,
-            imageFullPaths: newImageFullPaths
-        )
+        do {
+            try await FirestoreManager.shared.updateLetterAsync(
+                docId: docId,
+                writer: sender,
+                recipient: receiver,
+                summary: summary,
+                date: date,
+                text: text,
+                isReceived: letter.isReceived,
+                isFavorite: letter.isFavorite,
+                imageURLs: newImageUrls,
+                imageFullPaths: newImageFullPaths
+            )
+        } catch {
+            print("Failed to update Letter")
+        }
     }
 
     private func fetchLetter(docId: String) async {
@@ -111,20 +120,28 @@ class EditLetterViewModel: ObservableObject {
         }
     }
 
-    private func fetchAllLetters() {
-        FirestoreManager.shared.fetchAllLetters()
+    private func fetchAllLetters() async {
+        do {
+            try await FirestoreManager.shared.fetchAllLettersAsync()
+        } catch {
+            print("Failed to fetch all Letters")
+        }
     }
 
-    func updateLetter(letter: Letter, docId: String, deleteFullPaths: [String], deleteUrls: [String]) async {
-        await removeImages(docId: docId, deleteCandidates: deleteCandidatesFromFullPathsANdUrls)
+    func updateLetter(letter: Letter) async {
+        await removeImages(docId: letter.id, deleteCandidates: deleteCandidatesFromFullPathsANdUrls)
 
-        let (newImageFullPaths, newImageUrls) = await addImages(docId: docId, newImages: newImages)
+        let (newImageFullPaths, newImageUrls) = await addImages(docId: letter.id, newImages: newImages)
 
-        await updateLetterInfo(docId: docId, newImageUrls: newImageUrls, newImageFullPaths: newImageFullPaths, letter: letter)
+        await updateLetterInfo(docId: letter.id, newImageUrls: newImageUrls, newImageFullPaths: newImageFullPaths, letter: letter)
 
-        await fetchLetter(docId: docId)
+        await fetchLetter(docId: letter.id)
 
-        fetchAllLetters()
+        await fetchAllLetters()
+
+        await MainActor.run {
+            dismissView()
+        }
     }
 
     func syncViewModelProperties(letter: Letter) {
