@@ -243,6 +243,7 @@ extension AddLetterView {
                         }
                     }
                     .padding(.top, 8)
+                    .padding(.trailing, 8)
                 }
                 .scrollIndicators(.never)
             }

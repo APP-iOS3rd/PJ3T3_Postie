@@ -228,7 +228,6 @@ extension EditLetterView {
                                             .scaledToFill()
                                             .frame(width: 100, height: 100)
                                             .clipShape(RoundedRectangle(cornerRadius: 4))
-
                                     }
                                 }
 
@@ -273,6 +272,7 @@ extension EditLetterView {
                         }
                     }
                     .padding(.top, 8)
+                    .padding(.trailing, 8)
                 }
                 .scrollIndicators(.never)
             }
