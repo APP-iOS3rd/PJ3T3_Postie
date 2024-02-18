@@ -80,6 +80,7 @@ struct LetterDetailView: View {
 
             }
         }
+        .modifier(LoadingModifier(isLoading: $letterDetailViewModel.isLoading, text: "편지를 삭제 중이에요."))
         .fullScreenCover(isPresented: $letterDetailViewModel.showLetterImageFullScreenView) {
             LetterImageFullScreenView(
                 urls: firestoreManager.letter.imageURLs ?? [],
@@ -99,23 +100,29 @@ struct LetterDetailView: View {
             }
 
             Button(role: .destructive) {
-                firestoreManager.deleteLetter(documentId: letter.id)
-
-                StorageManager.shared.deleteFolder(docId: letter.id)
-
-                firestoreManager.fetchAllLetters()
-
-                dismiss()
+                Task {
+                    await letterDetailViewModel.deleteLetter(docId: letter.id)
+                }
             } label: {
                 Text("삭제")
             }
         } message: {
             Text("편지를 삭제하시겠습니까?")
         }
+        .alert("편지 삭제 실패", isPresented: $letterDetailViewModel.showingDeleteErrorAlert) {
+
+        } message: {
+            Text("편지 삭제에 실패했어요. 다시 시도해 주세요.")
+        }
         .onAppear {
             letterDetailViewModel.isFavorite = letter.isFavorite
 
             firestoreManager.letter = letter
+        }
+        .customOnChange(letterDetailViewModel.shouldDismiss) { shouldDismiss in
+            if shouldDismiss {
+                dismiss()
+            }
         }
     }
 }

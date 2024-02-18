@@ -277,7 +277,13 @@ class FirestoreManager: ObservableObject {
             }
         }
     }
-    
+
+    func deleteLetterAsync(documentId: String) async throws {
+        let docRef = letterColRef.document(documentId)
+        
+        try await docRef.delete()
+    }
+
     func deleteUserDocument(userUid: String) {
         let userDocRef = Firestore.firestore().collection("users").document(userUid)
         var letterQty = 0

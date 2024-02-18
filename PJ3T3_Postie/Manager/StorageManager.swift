@@ -191,4 +191,14 @@ final class StorageManager: ObservableObject {
             }
         }
     }
+
+    func deleteFolderAsync(docId: String) async throws {
+        let folderRef = userReference.child(docId)
+
+        let result = try await folderRef.listAll()
+
+        for item in result.items {
+            try await deleteItemAsync(fullPath: item.fullPath)
+        }
+    }
 }
