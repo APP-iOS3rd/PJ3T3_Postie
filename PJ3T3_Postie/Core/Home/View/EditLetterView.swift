@@ -65,9 +65,7 @@ struct EditLetterView: View {
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button {
                     Task {
-                        editLetterViewModel.isLoading = true
                         await editLetterViewModel.updateLetter(letter: letter)
-                        editLetterViewModel.isLoading = false
                     }
                 } label : {
                     Text("완료")

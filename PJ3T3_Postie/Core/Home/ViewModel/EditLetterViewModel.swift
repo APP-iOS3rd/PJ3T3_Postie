@@ -111,6 +111,10 @@ class EditLetterViewModel: ObservableObject {
 
     func updateLetter(letter: Letter) async {
         do {
+            await MainActor.run {
+                isLoading = true
+            }
+
             try await removeImages(docId: letter.id, deleteCandidates: deleteCandidatesFromFullPathsANdUrls)
 
             let (newImageFullPaths, newImageUrls) = try await addImages(docId: letter.id, newImages: newImages)
@@ -126,6 +130,8 @@ class EditLetterViewModel: ObservableObject {
             }
         } catch {
             await MainActor.run {
+                isLoading = false
+
                 showEditErrorAlert()
             }
             print("Failed to edit letter: \(error)")

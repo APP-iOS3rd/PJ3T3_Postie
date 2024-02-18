@@ -77,6 +77,10 @@ class AddLetterViewModel: ObservableObject {
                 showNotEnoughInfoAlert()
             }
         } else {
+            await MainActor.run {
+                isLoading = true
+            }
+
             do {
                 let docId = UUID().uuidString
 
@@ -88,6 +92,8 @@ class AddLetterViewModel: ObservableObject {
                 }
             } catch {
                 await MainActor.run {
+                    isLoading = false
+
                     showUploadErrorAlert()
                 }
             }

@@ -66,9 +66,7 @@ struct AddLetterView: View {
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button {
                     Task {
-                        addLetterViewModel.isLoading = true
                         await addLetterViewModel.uploadLetter()
-                        addLetterViewModel.isLoading = false
                     }
                 } label : {
                     Text("완료")
