@@ -18,6 +18,18 @@ struct NoticeView: View {
             
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading) {
+                    if firestoreNoticeManager.notices.isEmpty {
+                        VStack {
+                            Image("postyThingkingLineColor")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(height: 300)
+                            
+                            Text("공지가 로딩중입니다.")
+                                .foregroundStyle(postieColors.tabBarTintColor)
+                        }
+                    }
+                    
                     ForEach(firestoreNoticeManager.notices.sorted(by: { $0.date > $1.date }), id:\.self) { notice in
                         DisclosureGroup {
                             ZStack {

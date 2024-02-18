@@ -9,9 +9,10 @@ import SwiftUI
 
 struct AlertView: View {
     @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
+    @AppStorage("allAlert") private var allAlert: Bool = true
     @State private var slowAlert = true
-    @State private var allAlert = true
     @State private var todayAlert = true
+    @State private var oldAlert = true
     
     var body: some View {
         ZStack {
@@ -25,7 +26,7 @@ struct AlertView: View {
                             Text("전체 알림")
                                 .foregroundStyle(postieColors.tabBarTintColor)
                             
-                            Text("편지 알림을 받을 수 있습니다.")
+                            Text("모든 편지 알림을 받을 수 있습니다.")
                                 .font(.footnote)
                                 .foregroundColor(postieColors.dividerColor)
                         }
@@ -35,30 +36,31 @@ struct AlertView: View {
                     DividerView()
                         .padding(.bottom)
                     
+//                    Toggle(isOn: $oldAlert) {
+//                        VStack(alignment: .leading, spacing: 5) {
+//                            Text("옛 편지 알림")
+//                                .foregroundStyle(postieColors.tabBarTintColor)
+//                            
+//                            Text("N년전 오늘 적었던 편지 알림을 받을 수 있습니다.")
+//                                .font(.footnote)
+//                                .foregroundColor(postieColors.dividerColor)
+//                        }
+//                    }
+//                    .disabled(!allAlert)
+//                    .padding(.bottom, 8)
+                    
                     Toggle(isOn: $slowAlert) {
                         VStack(alignment: .leading, spacing: 5) {
-                            Text("옛 편지 알림")
+                            Text("느린 우체통 알림")
                                 .foregroundStyle(postieColors.tabBarTintColor)
                             
-                            Text("N년전 오늘 적었던 편지 알림을 받을 수 있습니다.")
+                            Text("정해둔 시간이 지나 편지를 열 수 있게 되면 알림을 받을 수 있습니다.")
                                 .font(.footnote)
                                 .foregroundColor(postieColors.dividerColor)
                         }
                     }
                     .disabled(!allAlert)
-                    .padding(.bottom)
-                    
-                    Toggle(isOn: $todayAlert) {
-                        VStack(alignment: .leading, spacing: 5) {
-                            Text("오늘의 편지 알림")
-                                .foregroundStyle(postieColors.tabBarTintColor)
-                            
-                            Text("매일 새로운 편지 알림을 받을 수 있습니다.")
-                                .font(.footnote)
-                                .foregroundColor(postieColors.dividerColor)
-                        }
-                    }
-                    .disabled(!allAlert)
+
                 }
                 .padding()
             }

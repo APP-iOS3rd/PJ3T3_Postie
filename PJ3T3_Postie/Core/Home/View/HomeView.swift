@@ -38,7 +38,7 @@ struct HomeView: View {
                                 .font(.headline)
                                 .foregroundStyle(postieColors.tintColor)
                             
-                            Text("우측 하단 편지봉투 버튼을 이용해 주고받은 편지를 저장해주세요!")
+                            Text("우측 하단 편지봉투 버튼을 눌러서 주고받은 편지를 저장해주세요!")
                                 .foregroundStyle(postieColors.dividerColor)
                         }
                         .padding()
