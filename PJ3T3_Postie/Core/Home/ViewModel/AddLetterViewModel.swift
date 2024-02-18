@@ -22,8 +22,23 @@ class AddLetterViewModel: ObservableObject {
     @Published var showingSummaryTextField: Bool = false
     @Published var showingSummaryAlert: Bool = false
     @Published var showingNotEnoughInfoAlert: Bool = false
+    @Published var showingUploadErrorAlert: Bool = false
+    @Published var shouldDismiss: Bool = false
 
     private(set) var imagePickerSourceType: UIImagePickerController.SourceType = .camera
+    var isReceived: Bool
+    var isNotEnoughInfo: Bool {
+        (isReceived && (sender.isEmpty || text.isEmpty))
+            || (!isReceived && (receiver.isEmpty || text.isEmpty))
+    }
+
+    init(isReceived: Bool) {
+        self.isReceived = isReceived
+    }
+
+    private func dismissView() {
+        shouldDismiss = true
+    }
 
     func removeImage(at index: Int) {
         images.remove(at: index)
@@ -51,14 +66,30 @@ class AddLetterViewModel: ObservableObject {
         showingSummaryAlert = true
     }
 
-    func uploadLetter(isReceived: Bool) async {
-        let docId = UUID().uuidString
-        
-        do {
-            let (newImageFullPaths, newImageUrls) = try await uploadImages(docId: docId)
-            try await addLetter(docId: docId, newImageUrls: newImageUrls, newImageFullPaths: newImageFullPaths, isReceived: isReceived)
-        } catch {
-            print("Failed to upload letter: \(error)")
+    func showUploadErrorAlert() {
+        showingUploadErrorAlert = true
+    }
+
+    func uploadLetter() async {
+        if isNotEnoughInfo {
+            await MainActor.run {
+                showNotEnoughInfoAlert()
+            }
+        } else {
+            do {
+                let docId = UUID().uuidString
+
+                let (newImageFullPaths, newImageUrls) = try await uploadImages(docId: docId)
+                try await addLetter(docId: docId, newImageUrls: newImageUrls, newImageFullPaths: newImageFullPaths, isReceived: isReceived)
+
+                await MainActor.run {
+                    dismissView()
+                }
+            } catch {
+                await MainActor.run {
+                    showUploadErrorAlert()
+                }
+            }
         }
     }
 

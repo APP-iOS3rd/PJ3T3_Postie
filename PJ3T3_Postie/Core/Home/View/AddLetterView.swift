@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AddLetterView: View {
-    @StateObject private var addLetterViewModel = AddLetterViewModel()
+    @StateObject private var addLetterViewModel: AddLetterViewModel
     @ObservedObject var firestoreManager = FirestoreManager.shared
     @ObservedObject var storageManager = StorageManager.shared
 
@@ -27,6 +27,7 @@ struct AddLetterView: View {
 
     init(isReceived: Bool) {
         self.isReceived = isReceived
+        self._addLetterViewModel = StateObject(wrappedValue: AddLetterViewModel(isReceived: isReceived))
 
         // TextEditor 패딩
         UITextView.appearance().textContainerInset = UIEdgeInsets(
@@ -64,15 +65,8 @@ struct AddLetterView: View {
 
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button {
-                    if (isReceived && (addLetterViewModel.sender.isEmpty || addLetterViewModel.text.isEmpty))
-                        || (!isReceived && (addLetterViewModel.receiver.isEmpty || addLetterViewModel.text.isEmpty)) {
-                        addLetterViewModel.showNotEnoughInfoAlert()
-                    } else {
-                        Task {
-                            await addLetterViewModel.uploadLetter(isReceived: isReceived)
-
-                            dismiss()
-                        }
+                    Task {
+                        await addLetterViewModel.uploadLetter()
                     }
                 } label : {
                     Text("완료")
@@ -87,6 +81,11 @@ struct AddLetterView: View {
                 } label: {
                     Image(systemName: "keyboard.chevron.compact.down")
                 }
+            }
+        }
+        .customOnChange(addLetterViewModel.shouldDismiss) { shouldDismiss in
+            if shouldDismiss {
+                dismiss()
             }
         }
         .toolbar(.hidden, for: .tabBar)
@@ -128,6 +127,11 @@ struct AddLetterView: View {
 
         } message: {
             Text("편지를 저장하기 위한 정보가 부족해요. \(isReceived ? "보낸 사람" : "받는 사람")과 내용을 채워주세요.")
+        }
+        .alert("편지 저장 실패", isPresented: $addLetterViewModel.showingUploadErrorAlert) {
+
+        } message: {
+            Text("편지 저장에 실패했어요. 다시 시도해주세요.")
         }
     }
 }
