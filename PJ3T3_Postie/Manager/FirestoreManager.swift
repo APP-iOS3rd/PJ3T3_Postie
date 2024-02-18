@@ -200,6 +200,14 @@ class FirestoreManager: ObservableObject {
         return try await docRef.getDocument(as: Letter.self)
     }
 
+    func updateIsFavorite(docId: String, isFavorite: Bool) async throws {
+        let docRef = letterColRef.document(docId)
+
+        try await docRef.updateData([
+            "isFavorite" : isFavorite
+        ])
+    }
+
 //MARK: - 편지 fetch
     func fetchAllLetters() {
         //letterColRef(특정 user의 document의 letters라는 하위 컬렉션)에 있는 모든 document를 가져옴
@@ -248,7 +256,7 @@ class FirestoreManager: ObservableObject {
         await MainActor.run {
             self.letters.removeAll()
         }
-        
+
         for document in snapshot.documents {
             let letter = try document.data(as: Letter.self)
             await MainActor.run {

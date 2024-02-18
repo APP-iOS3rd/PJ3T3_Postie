@@ -45,21 +45,9 @@ struct LetterDetailView: View {
 
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button {
-                    letterDetailViewModel.isFavorite.toggle()
-                    
-                    // TODO: 하나만 업데이트 하는 함수로 변경
-                    firestoreManager.editLetter(
-                        documentId: letter.id,
-                        writer: firestoreManager.letter.writer,
-                        recipient: firestoreManager.letter.recipient,
-                        summary: firestoreManager.letter.summary,
-                        date: firestoreManager.letter.date,
-                        text: firestoreManager.letter.text,
-                        isReceived: firestoreManager.letter.isReceived,
-                        isFavorite: letterDetailViewModel.isFavorite
-                    )
-
-                    firestoreManager.fetchAllLetters()
+                    Task {
+                        await letterDetailViewModel.updateIsFavorite(docId: letter.id)
+                    }
                 } label: {
                     Image(systemName: letterDetailViewModel.isFavorite ? "heart.fill" : "heart")
                         .foregroundStyle(.postieOrange)
