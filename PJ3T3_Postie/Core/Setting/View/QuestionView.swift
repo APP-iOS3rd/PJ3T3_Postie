@@ -82,7 +82,7 @@ struct QuestionView: View {
                             .padding(.top)
                         
                         Button(action: {
-                            let email = "postie@gmail.com"
+                            let email = "team.postie@gmail.com"
                             let subject = "문의하기"
                             let body = ""
                             if let url = URL(string: "mailto:\(email)?subject=\(subject.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")&body=\(body.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")") {
