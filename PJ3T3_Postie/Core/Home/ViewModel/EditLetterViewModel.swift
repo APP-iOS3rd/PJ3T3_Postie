@@ -24,6 +24,7 @@ class EditLetterViewModel: ObservableObject {
     @Published var showTextRecognizerErrorAlert: Bool = false
     @Published var showSummaryTextField: Bool = false
     @Published var showSummaryAlert: Bool = false
+    @Published var showingEditErrorAlert: Bool = false
     @Published var selectedIndex: Int = 0
     @Published var shouldDismiss: Bool = false
 
@@ -38,6 +39,10 @@ class EditLetterViewModel: ObservableObject {
         showUIImagePicker = true
     }
 
+    func showEditErrorAlert() {
+        showingEditErrorAlert = true
+    }
+
     private func dismissView() {
         shouldDismiss = true
     }
@@ -49,98 +54,80 @@ class EditLetterViewModel: ObservableObject {
     @Published var fullPathsAndUrls: [FullPathAndUrl] = []
     var deleteCandidatesFromFullPathsANdUrls: [FullPathAndUrl] = []
 
-    //TODO: 내부 함수들 Async로 변경 필요
-    private func removeImages(docId: String, deleteCandidates: [FullPathAndUrl]) async {
+    private func removeImages(docId: String, deleteCandidates: [FullPathAndUrl]) async throws {
         for deleteCandidate in deleteCandidatesFromFullPathsANdUrls {
-            do {
-                try await StorageManager.shared.deleteItemAsync(fullPath: deleteCandidate.fullPath)
-            } catch {
-                print("Failed to delte Image")
-            }
+            try await StorageManager.shared.deleteItemAsync(fullPath: deleteCandidate.fullPath)
         }
-        
-        do {
-            try await FirestoreManager.shared.removeFullPathsAndUrlsAsync(
-                docId: docId,
-                fullPaths: deleteCandidates.map { $0.fullPath },
-                urls: deleteCandidates.map { $0.url }
+
+        try await FirestoreManager.shared.removeFullPathsAndUrlsAsync(
+            docId: docId,
+            fullPaths: deleteCandidates.map { $0.fullPath },
+            urls: deleteCandidates.map { $0.url }
             )
-        } catch {
-            print("Failed to remove Full paths and urls")
-        }
     }
 
-    private func addImages(docId: String, newImages: [UIImage]) async -> ([String], [String]) {
+    private func addImages(docId: String, newImages: [UIImage]) async throws -> ([String], [String]) {
         var newImageFullPaths = [String]()
         var newImageUrls = [String]()
 
         for image in newImages {
-            do {
-                let fullPath = try await StorageManager.shared.uploadUIImage(image: image, docId: docId)
-                let url = try await StorageManager.shared.requestImageURL(fullPath: fullPath)
+            let fullPath = try await StorageManager.shared.uploadUIImage(image: image, docId: docId)
+            let url = try await StorageManager.shared.requestImageURL(fullPath: fullPath)
 
-                newImageFullPaths.append(fullPath)
-                newImageUrls.append(url)
-            } catch {
-                print("Failed to upload image: \(error)")
-            }
+            newImageFullPaths.append(fullPath)
+            newImageUrls.append(url)
         }
 
         return (newImageFullPaths, newImageUrls)
     }
 
-    private func updateLetterInfo(docId: String, newImageUrls: [String], newImageFullPaths: [String], letter: Letter) async {
-        do {
-            try await FirestoreManager.shared.updateLetterAsync(
-                docId: docId,
-                writer: sender,
-                recipient: receiver,
-                summary: summary,
-                date: date,
-                text: text,
-                isReceived: letter.isReceived,
-                isFavorite: letter.isFavorite,
-                imageURLs: newImageUrls,
-                imageFullPaths: newImageFullPaths
-            )
-        } catch {
-            print("Failed to update Letter")
+    private func updateLetterInfo(docId: String, newImageUrls: [String], newImageFullPaths: [String], letter: Letter) async throws {
+        try await FirestoreManager.shared.updateLetterAsync(
+            docId: docId,
+            writer: sender,
+            recipient: receiver,
+            summary: summary,
+            date: date,
+            text: text,
+            isReceived: letter.isReceived,
+            isFavorite: letter.isFavorite,
+            imageURLs: newImageUrls,
+            imageFullPaths: newImageFullPaths
+        )
+    }
+
+    private func fetchLetter(docId: String) async throws {
+        let updatedLetter = try await FirestoreManager.shared.getLetter(docId: docId)
+
+        await MainActor.run {
+            FirestoreManager.shared.letter = updatedLetter
         }
     }
 
-    private func fetchLetter(docId: String) async {
-        do {
-            let updatedLetter = try await FirestoreManager.shared.getLetter(docId: docId)
-
-            await MainActor.run {
-                FirestoreManager.shared.letter = updatedLetter
-            }
-        } catch {
-            print("Failed To update letter")
-        }
-    }
-
-    private func fetchAllLetters() async {
-        do {
-            try await FirestoreManager.shared.fetchAllLettersAsync()
-        } catch {
-            print("Failed to fetch all Letters")
-        }
+    private func fetchAllLetters() async throws {
+        try await FirestoreManager.shared.fetchAllLettersAsync()
     }
 
     func updateLetter(letter: Letter) async {
-        await removeImages(docId: letter.id, deleteCandidates: deleteCandidatesFromFullPathsANdUrls)
+        do {
+            try await removeImages(docId: letter.id, deleteCandidates: deleteCandidatesFromFullPathsANdUrls)
 
-        let (newImageFullPaths, newImageUrls) = await addImages(docId: letter.id, newImages: newImages)
+            let (newImageFullPaths, newImageUrls) = try await addImages(docId: letter.id, newImages: newImages)
 
-        await updateLetterInfo(docId: letter.id, newImageUrls: newImageUrls, newImageFullPaths: newImageFullPaths, letter: letter)
+            try await updateLetterInfo(docId: letter.id, newImageUrls: newImageUrls, newImageFullPaths: newImageFullPaths, letter: letter)
 
-        await fetchLetter(docId: letter.id)
+            try await fetchLetter(docId: letter.id)
 
-        await fetchAllLetters()
+            try await fetchAllLetters()
 
-        await MainActor.run {
-            dismissView()
+            await MainActor.run {
+                dismissView()
+            }
+        } catch {
+            await MainActor.run {
+                showEditErrorAlert()
+            }
+            print("Failed to edit letter: \(error)")
         }
     }
 
