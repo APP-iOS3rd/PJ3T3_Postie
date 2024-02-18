@@ -23,7 +23,6 @@ class AddLetterViewModel: ObservableObject {
     @Published var showingSummaryAlert: Bool = false
     @Published var showingNotEnoughInfoAlert: Bool = false
 
-
     private(set) var imagePickerSourceType: UIImagePickerController.SourceType = .camera
 
     func removeImage(at index: Int) {
@@ -52,61 +51,53 @@ class AddLetterViewModel: ObservableObject {
         showingSummaryAlert = true
     }
 
-    /// 편지를 서버에 저장합니다.
-    /// - Parameter isReceived: 받은 편지 혹은 보낸 편지 여부
-    func addLetter(isReceived: Bool) async {
-        await FirestoreManager.shared.addLetter(
-            writer: isReceived ? sender : AuthManager.shared.currentUser?.nickname ?? "유저",
-            recipient: isReceived ? AuthManager.shared.currentUser?.nickname ?? "유저" : receiver,
+    func uploadLetter(isReceived: Bool) async {
+        let docId = UUID().uuidString
+        
+        do {
+            let (newImageFullPaths, newImageUrls) = try await uploadImages(docId: docId)
+            try await addLetter(docId: docId, newImageUrls: newImageUrls, newImageFullPaths: newImageFullPaths, isReceived: isReceived)
+        } catch {
+            print("Failed to upload letter: \(error)")
+        }
+    }
+
+    func uploadImages(docId: String) async throws -> ([String], [String]) {
+        var newImageFullPaths = [String]()
+        var newImageUrls = [String]()
+
+        // 이미지 추가
+        for image in images {
+            let fullPath = try await StorageManager.shared.uploadUIImage(image: image, docId: docId)
+            let url = try await StorageManager.shared.requestImageURL(fullPath: fullPath)
+            newImageFullPaths.append(fullPath)
+            newImageUrls.append(url)
+        }
+
+        return (newImageFullPaths, newImageUrls)
+    }
+
+    func addLetter(docId: String, newImageUrls: [String], newImageFullPaths: [String], isReceived: Bool) async throws {
+        let writer = isReceived ? sender : AuthManager.shared.currentUser?.nickname ?? "유저"
+        let recipient = isReceived ? AuthManager.shared.currentUser?.nickname ?? "유저" : receiver
+
+        let newLetter = Letter(
+            id: docId,
+            writer: writer,
+            recipient: recipient,
             summary: summary,
             date: date,
             text: text,
             isReceived: isReceived,
-            isFavorite: false
+            isFavorite: false,
+            imageURLs: newImageUrls,
+            imageFullPaths: newImageFullPaths
         )
 
-        FirestoreManager.shared.fetchAllLetters()
-    }
+        try await FirestoreManager.shared.addLetter(docId: docId, letter: newLetter)
 
-    func uploadLetter(isReceived: Bool) async {
-        var newImageFullPaths = [String]()
-        var newImageUrls = [String]()
-        let docId = UUID().uuidString
-
-        for image in images {
-            do {
-                let fullPath = try await StorageManager.shared.uploadUIImage(image: image, docId: docId)
-
-                let url = try await StorageManager.shared.requestImageURL(fullPath: fullPath)
-                
-                newImageFullPaths.append(fullPath)
-                newImageUrls.append(url)
-            } catch {
-                print("Failed to upload image: \(error)")
-            }
-        }
-
-        do {
-            let letter = Letter(
-                id: docId,
-                writer: isReceived ? sender : AuthManager.shared.currentUser?.nickname ?? "유저",
-                recipient: isReceived ? AuthManager.shared.currentUser?.nickname ?? "유저" : receiver,
-                summary: summary,
-                date: date,
-                text: text,
-                isReceived: isReceived,
-                isFavorite: false,
-                imageURLs: newImageUrls,
-                imageFullPaths: newImageFullPaths
-            )
-
-            try await FirestoreManager.shared.addLetter(docId: docId, letter: letter)
-
-            await MainActor.run {
-                FirestoreManager.shared.letters.append(letter)
-            }
-        } catch {
-            print("Failed to upload letter: \(error)")
+        await MainActor.run {
+            FirestoreManager.shared.letters.append(newLetter)
         }
     }
 }
