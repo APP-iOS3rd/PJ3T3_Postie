@@ -66,11 +66,14 @@ struct AddLetterView: View {
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button {
                     Task {
+                        addLetterViewModel.isLoading = true
                         await addLetterViewModel.uploadLetter()
+                        addLetterViewModel.isLoading = false
                     }
                 } label : {
                     Text("완료")
                 }
+                .disabled(addLetterViewModel.isLoading)
             }
 
             ToolbarItemGroup(placement: .keyboard) {
@@ -85,6 +88,7 @@ struct AddLetterView: View {
         }
         .toolbar(.hidden, for: .tabBar)
         .scrollDismissesKeyboard(.interactively)
+        .modifier(LoadingModifier(isLoading: $addLetterViewModel.isLoading, text: "편지를 저장하고 있어요."))
         .fullScreenCover(isPresented: $addLetterViewModel.showingLetterImageFullScreenView) {
             LetterImageFullScreenView(
                 images: addLetterViewModel.images,
@@ -315,5 +319,24 @@ extension AddLetterView {
 #Preview {
     NavigationStack {
         AddLetterView(isReceived: false)
+    }
+}
+
+struct LoadingModifier: ViewModifier {
+    @Binding var isLoading: Bool
+    let text: String
+
+    func body(content: Content) -> some View {
+        ZStack {
+            if isLoading {
+                content
+                    .disabled(isLoading)
+                    .blur(radius: isLoading ? 3 : 0)
+
+                LoadingView(text: text)
+            } else {
+                content
+            }
+        }
     }
 }

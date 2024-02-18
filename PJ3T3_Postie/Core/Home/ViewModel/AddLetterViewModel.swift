@@ -24,6 +24,7 @@ class AddLetterViewModel: ObservableObject {
     @Published var showingNotEnoughInfoAlert: Bool = false
     @Published var showingUploadErrorAlert: Bool = false
     @Published var shouldDismiss: Bool = false
+    @Published var isLoading: Bool = false
 
     private(set) var imagePickerSourceType: UIImagePickerController.SourceType = .camera
     var isReceived: Bool

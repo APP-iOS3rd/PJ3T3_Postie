@@ -65,11 +65,14 @@ struct EditLetterView: View {
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button {
                     Task {
+                        editLetterViewModel.isLoading = true
                         await editLetterViewModel.updateLetter(letter: letter)
+                        editLetterViewModel.isLoading = false
                     }
                 } label : {
                     Text("완료")
                 }
+                .disabled(editLetterViewModel.isLoading)
             }
 
             ToolbarItemGroup(placement: .keyboard) {
@@ -84,6 +87,7 @@ struct EditLetterView: View {
         }
         .toolbar(.hidden, for: .tabBar)
         .scrollDismissesKeyboard(.interactively)
+        .modifier(LoadingModifier(isLoading: $editLetterViewModel.isLoading, text: "편지를 수정하고 있어요."))
         .fullScreenCover(isPresented: $editLetterViewModel.showLetterImageFullScreenView) {
             LetterImageFullScreenView(
                 images: editLetterViewModel.newImages,

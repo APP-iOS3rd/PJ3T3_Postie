@@ -27,6 +27,7 @@ class EditLetterViewModel: ObservableObject {
     @Published var showingEditErrorAlert: Bool = false
     @Published var selectedIndex: Int = 0
     @Published var shouldDismiss: Bool = false
+    @Published var isLoading: Bool = false
 
     private(set) var imagePickerSourceType: UIImagePickerController.SourceType = .camera
 
