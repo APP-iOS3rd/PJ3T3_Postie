@@ -158,6 +158,13 @@ class FirestoreManager: ObservableObject {
         }
     }
 
+    func removeFullPathsAndUrlsAsync(docId: String, fullPaths: [String], urls:  [String]) async throws {
+        let docRef = letterColRef.document(docId)
+
+        try await docRef.updateData(["imageURLs": FieldValue.arrayRemove(urls),
+                           "imageFullPaths": FieldValue.arrayRemove(fullPaths)])
+    }
+
     func getLetter(docId: String) async throws -> Letter {
         let docRef = letterColRef.document(docId)
 

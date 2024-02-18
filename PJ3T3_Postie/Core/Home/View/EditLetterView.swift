@@ -64,11 +64,6 @@ struct EditLetterView: View {
 
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button {
-//                    Task {
-//                        await editLetterViewModel.editLetter(letter: letter)
-//                        await editLetterViewModel.updateImages(letter: letter)
-//                    }
-
                     Task {
                         await editLetterViewModel.updateLetter(
                             letter: letter,

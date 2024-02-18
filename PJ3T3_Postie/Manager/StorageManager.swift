@@ -163,7 +163,13 @@ final class StorageManager: ObservableObject {
             print(#function, "Success deleting images: \(fullPath)")
         }
     }
-    
+
+    func deleteItemAsync(fullPath: String) async throws {
+        let item = Storage.storage().reference().child(fullPath)
+
+        try await item.delete()
+    }
+
     func deleteFolder(docId: String) {
         let folderRef = userReference.child(docId)
         let deleteDataGroup = DispatchGroup()
