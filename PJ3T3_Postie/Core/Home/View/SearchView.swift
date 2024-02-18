@@ -54,6 +54,7 @@ struct SearchView: View {
                 .scrollContentBackground(.hidden)
             }
         }
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItemGroup(placement: .principal) {
                 Text("편지 찾기")
@@ -62,7 +63,6 @@ struct SearchView: View {
             }
         }
         .toolbarBackground(postieColors.backGroundColor, for: .navigationBar)
-        .navigationBarTitleDisplayMode(.inline)
         .searchable(text: $searchQuery, prompt: "찾고 싶은 기억이 있나요?")
         .autocorrectionDisabled()
         .scrollDismissesKeyboard(.immediately)
