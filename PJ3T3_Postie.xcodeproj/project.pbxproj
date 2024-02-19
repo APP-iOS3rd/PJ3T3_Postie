@@ -109,6 +109,10 @@
 		E36587992B78F32900584965 /* InformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E36587982B78F32900584965 /* InformationView.swift */; };
 		E365879B2B790ADA00584965 /* QuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E365879A2B790ADA00584965 /* QuestionView.swift */; };
 		E36587A92B7C44EB00584965 /* AlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E36587A82B7C44EB00584965 /* AlertView.swift */; };
+		E36587AB2B7E34E400584965 /* GroupedLetterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E36587AA2B7E34E400584965 /* GroupedLetterViewModel.swift */; };
+		E36587AD2B7E6ED200584965 /* SummaryApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = E36587AC2B7E6ED200584965 /* SummaryApi.swift */; };
+		E36587B12B7E987A00584965 /* SummaryApiKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = E36587B02B7E987A00584965 /* SummaryApiKeys.plist */; };
+		E36587B32B7EF89D00584965 /* SairaStencilOne-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E36587B22B7EF89D00584965 /* SairaStencilOne-Regular.ttf */; };
 		E39C35F12B71F820001F6E5F /* ContenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E39C35F02B71F820001F6E5F /* ContenViewModel.swift */; };
 		E3B41DA62B730E0300CB9E7A /* ProfileEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B41DA52B730E0300CB9E7A /* ProfileEditView.swift */; };
 		E3D466DB2B733B5B00DFE93F /* MembershipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D466DA2B733B5B00DFE93F /* MembershipView.swift */; };
@@ -202,6 +206,10 @@
 		E36587982B78F32900584965 /* InformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformationView.swift; sourceTree = "<group>"; };
 		E365879A2B790ADA00584965 /* QuestionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionView.swift; sourceTree = "<group>"; };
 		E36587A82B7C44EB00584965 /* AlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertView.swift; sourceTree = "<group>"; };
+		E36587AA2B7E34E400584965 /* GroupedLetterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupedLetterViewModel.swift; sourceTree = "<group>"; };
+		E36587AC2B7E6ED200584965 /* SummaryApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryApi.swift; sourceTree = "<group>"; };
+		E36587B02B7E987A00584965 /* SummaryApiKeys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = SummaryApiKeys.plist; path = PJ3T3_Postie/Core/Home/SummaryApiKeys.plist; sourceTree = SOURCE_ROOT; };
+		E36587B22B7EF89D00584965 /* SairaStencilOne-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SairaStencilOne-Regular.ttf"; sourceTree = "<group>"; };
 		E39C35F02B71F820001F6E5F /* ContenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContenViewModel.swift; sourceTree = "<group>"; };
 		E3B41DA52B730E0300CB9E7A /* ProfileEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditView.swift; sourceTree = "<group>"; };
 		E3D466DA2B733B5B00DFE93F /* MembershipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MembershipView.swift; sourceTree = "<group>"; };
@@ -374,6 +382,7 @@
 			children = (
 				9E9F6AAB2B576221003DFE83 /* View */,
 				9E9F6AAA2B57621D003DFE83 /* ViewModel */,
+				E36587B02B7E987A00584965 /* SummaryApiKeys.plist */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -386,6 +395,8 @@
 				9E9F6AB72B5762EF003DFE83 /* HomeViewModel.swift */,
 				CE6E08442B5E09D800CFBF2A /* LetterDetailViewModel.swift */,
 				CEF09E482B57BFBF00BE67E4 /* TextRecognizer.swift */,
+				E36587AA2B7E34E400584965 /* GroupedLetterViewModel.swift */,
+				E36587AC2B7E6ED200584965 /* SummaryApi.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -557,6 +568,7 @@
 		E3EECAEE2B5F956200E639F2 /* Font */ = {
 			isa = PBXGroup;
 			children = (
+				E36587B22B7EF89D00584965 /* SairaStencilOne-Regular.ttf */,
 				CE5FF9262B6CF8A400DDA5BF /* NanumMyeongjo.otf */,
 				CE60AACE2B6F930600D6717A /* NanumMyeongjoBold.otf */,
 				E3EECAEF2B5F957A00E639F2 /* SourceSerifPro-Black.otf */,
@@ -678,7 +690,9 @@
 				0E29F0D32B5ED136005B86FB /* MapApiKeys.plist in Resources */,
 				9E0FA12A2B54D2EF001CEEB9 /* README.md in Resources */,
 				9E9A8BE02B6AB09D0072CB75 /* PJ3T3-Postie-Info.plist in Resources */,
+				E36587B12B7E987A00584965 /* SummaryApiKeys.plist in Resources */,
 				CE60AACF2B6F930600D6717A /* NanumMyeongjoBold.otf in Resources */,
+				E36587B32B7EF89D00584965 /* SairaStencilOne-Regular.ttf in Resources */,
 				CE5FF9272B6CF8A400DDA5BF /* NanumMyeongjo.otf in Resources */,
 				E3EECAF02B5F957A00E639F2 /* SourceSerifPro-Black.otf in Resources */,
 				9E0FA1232B54D27C001CEEB9 /* Preview Assets.xcassets in Resources */,
@@ -763,12 +777,14 @@
 				9E078CC02B7207660072E5FC /* AppleUser.swift in Sources */,
 				0E882AF12B6B907200D8F2FC /* AuthManager.swift in Sources */,
 				E349F8712B6918B500253B02 /* ThemeView.swift in Sources */,
+				E36587AD2B7E6ED200584965 /* SummaryApi.swift in Sources */,
 				CE7E50782B579D6800955F31 /* AddLetterViewModel.swift in Sources */,
 				CE60AACD2B6F907500D6717A /* Font.swift in Sources */,
 				CE6E08452B5E09D900CFBF2A /* LetterDetailViewModel.swift in Sources */,
 				E35C10152B720FFE0007DE8C /* GroupedFavoriteListLetterView.swift in Sources */,
 				9E9F6AB62B5762E5003DFE83 /* HomeView.swift in Sources */,
 				9E9A8BEB2B6B79870072CB75 /* EmailLoginView.swift in Sources */,
+				E36587AB2B7E34E400584965 /* GroupedLetterViewModel.swift in Sources */,
 				9E9A8BF12B6B85640072CB75 /* PostieUser.swift in Sources */,
 				0E29F0DB2B5FDC0F005B86FB /* NaverMap.swift in Sources */,
 				0E29F0E02B602E3D005B86FB /* MyCoord.swift in Sources */,
@@ -968,7 +984,7 @@
 				CODE_SIGN_ENTITLEMENTS = PJ3T3_Postie/PJ3T3_Postie.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 6;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"PJ3T3_Postie/Preview Content\"";
 				DEVELOPMENT_TEAM = Y6QXM3Q994;
@@ -1011,7 +1027,7 @@
 				CODE_SIGN_ENTITLEMENTS = PJ3T3_Postie/PJ3T3_Postie.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "\"PJ3T3_Postie/Preview Content\"";
 				DEVELOPMENT_TEAM = Y6QXM3Q994;
 				ENABLE_PREVIEWS = YES;

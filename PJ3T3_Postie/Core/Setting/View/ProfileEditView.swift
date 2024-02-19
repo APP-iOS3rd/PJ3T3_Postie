@@ -11,15 +11,13 @@ struct ProfileEditView: View {
     @ObservedObject var authManager = AuthManager.shared
     @Environment(\.dismiss) var dismiss
     
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     @State var name: String = "테스트 포스티"
     @State private var isShowingProfileImageEditor = false
-    @Binding var isThemeGroupButton: Int
     @Binding var profileImage: String
     @Binding var profileImageTemp: String
     
     var body: some View {
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
-        
         GeometryReader { geometry in
             ZStack {
                 postieColors.backGroundColor
@@ -39,64 +37,65 @@ struct ProfileEditView: View {
                         }) {
                             ZStack {
                                 Circle()
-                                    .frame(width: geometry.size.height < 400 ? 140 : 170, height: geometry.size.height < 400 ? 140 : 170)
+                                    .frame(width: 170, height: 170)
                                     .foregroundStyle(.postieGray)
                                 
                                 Image(profileImageTemp)
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(width: geometry.size.height < 400 ? 80 : 110, height: geometry.size.height < 400 ? 80 : 110)
+                                    .frame(width: 110, height: 110)
+                                    .offset(y: -10)
                                 
                                 Image(systemName: "pencil.circle.fill")
                                     .font(geometry.size.height < 400 ? .title3 : .title2)
                                     .foregroundColor(postieColors.tabBarTintColor)
-                                    .offset(x: geometry.size.height < 400 ? 50 : 60, y: geometry.size.height < 400 ? 50 : 60)
+                                    .offset(x: 60, y: 60)
                             }
                         }
                         .sheet(isPresented: $isShowingProfileImageEditor) {
-                            ProfileImageEditView(isThemeGroupButton: $isThemeGroupButton, profileImage: $profileImage, profileImageTemp: $profileImageTemp)
+                            ProfileImageEditView(profileImage: $profileImage, profileImageTemp: $profileImageTemp)
                                 .presentationDetents([.medium, .large])
                         }
                     }
                     
                     Spacer()
                     
-                    HStack {
-                        Text("닉네임")
-                            .foregroundStyle(postieColors.dividerColor)
-                        
-                        Spacer()
-                    }
-                    .padding(.bottom, geometry.size.height < 400 ? 8 : 10)
-                    
-                    Rectangle()
-                        .fill(postieColors.dividerColor)
-                        .frame(height: 1)
-                        .padding(.bottom, geometry.size.height < 400 ? 8 : 10)
-                    
-                    TextField(" 닉네임을 입력해주세요! (12자 제한)", text: $name)
-                        .textFieldStyle(.roundedBorder)
-                        .overlay(
-                            HStack {
-                                Spacer()
-                                if !name.isEmpty {
-                                    Button(action: {
-                                        self.name = ""
-                                    }) {
-                                        Image(systemName: "multiply.circle.fill")
-                                            .foregroundColor(.postieGray)
-                                    }
-                                    .padding(.trailing, 5)
-                                }
-                            }
-                        )
-                        .onChange(of: name) { newValue in
-                            if newValue.count > 12 {
-                                name = String(newValue.prefix(15))
-                            }
-                        }
-                    
-                    Spacer()
+//                    HStack {
+//                        Text("닉네임")
+//                            .foregroundStyle(postieColors.dividerColor)
+//                        
+//                        Spacer()
+//                    }
+//                    .padding(.bottom, geometry.size.height < 400 ? 8 : 10)
+//                    
+//                    Rectangle()
+//                        .fill(postieColors.dividerColor)
+//                        .frame(height: 1)
+//                        .padding(.bottom, geometry.size.height < 400 ? 8 : 10)
+//                    
+//                    TextField(" 닉네임을 입력해주세요! (12자 제한)", text: $name)
+//                        .textFieldStyle(.roundedBorder)
+//                        .overlay(
+//                            HStack {
+//                                Spacer()
+//                                if !name.isEmpty {
+//                                    Button(action: {
+//                                        self.name = ""
+//                                    }) {
+//                                        Image(systemName: "multiply.circle.fill")
+//                                            .foregroundColor(.postieGray)
+//                                    }
+//                                    .padding(.trailing, 5)
+//                                }
+//                            }
+//                        )
+//                        .customOnChange(name) { newValue in
+//                            if newValue.count > 12 {
+//                                name = String(newValue.prefix(15))
+//                            }
+//                        }
+//                    
+//                    Spacer()
                     
                     HStack {
                         Button(action: {
@@ -137,29 +136,32 @@ struct ProfileEditView: View {
                                     .padding()
                             }
                         }
-                        .onChange(of: profileImage) { newValue in
+                        .customOnChange(profileImage) { newValue in
                             saveToUserDefaults(value: newValue, key: "profileImage")
                         }
                     }
                 }
                 .padding()
             }
+            .onTapGesture {
+                hideKeyboard()
+            }
         }
     }
 }
 
+
 struct ProfileImageEditView: View {
     @Environment(\.dismiss) var dismiss
     
-    @Binding var isThemeGroupButton: Int
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     @Binding var profileImage: String
     @Binding var profileImageTemp: String
     
     var body: some View {
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
         let profileImages = ["postySmileSketch", "postySmileLine", "postySmileLineColor", "postyThinkingSketch", "postyThinkingLine", "postyThinkingLineColor", "postySendingSketch", "postySendingLine", "postySendingLineColor", "postyReceivingSketch", "postyReceivingLine", "postyReceivingLineColor", "postyHeartSketch", "postyHeartLine", "postyHeartLineColor", "postyTrumpetSketch", "postyTrumpetLine", "postyTrumpetLineColor", "postyQuestionSketch", "postyQuestionLine", "postyQuestionLineColor", "postyNormalSketch", "postyNormalLine", "postyNormalLineColor", "postyWinkSketch", "postyWinkLine", "postyWinkLineColor", "postySleepingSketch", "postySleepingLine", "postySleepingLineColor", "postyNotGoodSketch", "postyNotGoodLine", "postyNotGoodLineColor"]
-        let rows3: [GridItem] = Array(repeating: .init(.fixed(170)), count: 3)
-        let rows2: [GridItem] = Array(repeating: .init(.fixed(170)), count: 2)
+        let rows3: [GridItem] = Array(repeating: .init(.fixed(180)), count: 3)
+        let rows2: [GridItem] = Array(repeating: .init(.fixed(180)), count: 2)
         
         GeometryReader { geometry in
             ZStack {
@@ -169,7 +171,7 @@ struct ProfileImageEditView: View {
                 VStack {
                     Text("프로필에 사용될 캐릭터를 선택해주세요!")
                         .bold()
-                        .font(.title3)
+                        .font(geometry.size.height < 430 ? .system(size: 18) : .title3)
                         .foregroundStyle(postieColors.tabBarTintColor)
                         .padding()
                     
@@ -178,22 +180,22 @@ struct ProfileImageEditView: View {
                         if geometry.size.height > 710 {
                             LazyHGrid(rows: rows3, alignment: .top) {
                                 ForEach(profileImages, id: \.self) { imageName in
-                                    ProfileImageItemView(imageName: imageName, isThemeGroupButton: $isThemeGroupButton, profileImageTemp: $profileImageTemp)
+                                    ProfileImageItemView(imageName: imageName, profileImageTemp: $profileImageTemp)
                                 }
                             }
                         } else if geometry.size.height > 600 && geometry.size.height < 800  {
                             LazyHGrid(rows: rows2, alignment: .top) {
                                 ForEach(profileImages, id: \.self) { imageName in
-                                    ProfileImageItemView(imageName: imageName, isThemeGroupButton: $isThemeGroupButton, profileImageTemp: $profileImageTemp)
+                                    ProfileImageItemView(imageName: imageName, profileImageTemp: $profileImageTemp)
                                 }
                             }
                         } else {
                             HStack {
                                 ForEach(profileImages, id: \.self) { imageName in
-                                    ProfileImageItemView(imageName: imageName, isThemeGroupButton: $isThemeGroupButton, profileImageTemp: $profileImageTemp)
+                                    ProfileImageItemView(imageName: imageName, profileImageTemp: $profileImageTemp)
                                 }
                             }
-                            .onChange(of: profileImageTemp) { newValue in
+                            .customOnChange(profileImageTemp) { newValue in
                                 saveToUserDefaults(value: newValue, key: "profileImageTemp")
                             }
                             .padding()
@@ -251,12 +253,10 @@ struct ProfileImageEditView: View {
 struct ProfileImageItemView: View {
     let imageName: String
     
-    @Binding var isThemeGroupButton: Int
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     @Binding var profileImageTemp: String
     
     var body: some View {
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
-        
         Button(action: {
             profileImageTemp = imageName
         }) {

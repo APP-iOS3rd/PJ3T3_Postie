@@ -15,6 +15,8 @@ struct SettingView: View {
     //Colors
     private let profileBackgroundColor: Color = .gray
     private let signOutIconColor: Color = Color(uiColor: .lightGray)
+    @State private var content: String = ""
+    @State private var summary: String = ""
     @State private var isDeleteAccountDialogPresented = false
     @State private var showLoading = false
     
@@ -67,6 +69,25 @@ struct SettingView: View {
                                 .font(.subheadline)
                                 .foregroundStyle(profileBackgroundColor)
                         }
+                    }
+                    
+                    Section("SummaryTest") {
+                        
+                        TextField("content", text: $content)
+                        
+                        Text(summary)
+                        
+                        Button(action: {
+                            Task {
+                                do {
+                                    summary = try await APIClient.shared.postRequestToAPI(title: "", content: content)
+                                } catch {
+                                    summary = "에러 발생"
+                                    print("에러 정보: \(error)")
+                                }
+                            }}, label: {
+                                Text("요약하기")
+                            })
                     }
                     
                     Section("Account") {
