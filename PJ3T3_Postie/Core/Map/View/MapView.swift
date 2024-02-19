@@ -13,6 +13,7 @@ import NMapsMap
 
 struct MapView: View {
     private let name = ["우체국", "우체통"]
+    //햄버거 구현하기
     
     @StateObject var naverGeocodeAPI = NaverGeocodeAPI.shared
     @StateObject var officeInfoServiceAPI = OfficeInfoServiceAPI.shared
@@ -23,72 +24,104 @@ struct MapView: View {
     @State private var selectedButtonIndex: Int = 0
     @State private var postLatitude: Double = 37.56
     @State private var postLongitude: Double = 126.98
+    @State private var isSideMenuOpen = false
     @State var coord: MyCoord = MyCoord(37.579081, 126.974375) //Dafult값 (서울역)
     
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
+    
     var body: some View {
+        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
+        
         NavigationStack {
-            VStack {
-                HStack(spacing: 10) {
-                    ForEach(0...1, id: \.self) { index in
-                        Button(action: {
-                            selectedButtonIndex = index
-//                            officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)
-                        }) {
-                            ZStack {
-                                if selectedButtonIndex == index {
+            ZStack {
+                postieColors.backGroundColor
+                    .ignoresSafeArea()
+                //
+                VStack(spacing: 0) {
+                    HStack {
+                        Text("Postie Map")
+                            .font(.custom("SourceSerifPro-Black", size: 40))
+                            .foregroundStyle(postieColors.tintColor) //색상
+                        
+                        Spacer()
+                    }
+                    .padding(.horizontal)
+                    
+                    HStack(spacing: 10) {
+                        ForEach(0...1, id: \.self) { index in
+                            Button(action: {
+                                selectedButtonIndex = index
+                            }) {
+                                ZStack {
+                                    if selectedButtonIndex == index {
+                                        Rectangle()
+                                            .foregroundColor(.clear)
+                                            .frame(width: 70, height: 30)
+                                            .background(Color(red: 1, green: 0.98, blue: 0.95)) //색상
+                                            .cornerRadius(16)
+                                            .overlay(
+                                                RoundedRectangle(cornerRadius: 16)
+                                                    .inset(by: 0.5)
+                                                    .stroke(Color(red: 0.45, green: 0.45, blue: 0.45), lineWidth: 1) //색상
+                                            )} else {
+                                                Rectangle()
+                                                    .foregroundColor(.clear)
+                                                    .frame(width: 72, height: 30)
+                                                    .background(Color(red: 1, green: 0.98, blue: 0.95)) //색상
+                                                    .cornerRadius(20)
+                                                    .shadow(color: .black.opacity(0.1), radius: 3, x: 2, y: 2) //색상
+                                            }
+                                    
+                                    Text(name[index])
+                                        .font(Font.custom("SF Pro Text", size: 12))
+                                        .multilineTextAlignment(.center)
+                                        .foregroundColor(Color(red: 0.12, green: 0.12, blue: 0.12)) //색상
+                                        .frame(width: 60, alignment: .center)
+                                }
+                            }
+                        }
+                        Spacer()
+                    }
+                    .padding()
+                    
+                    ZStack(alignment: .top) {
+                        NaverMap(coord: coord)
+                            .ignoresSafeArea(.all, edges: .top)
+                        
+                        VStack {
+                            Button(action: {
+                                print("현재 위치에서 \(name[selectedButtonIndex]) 찾기 버튼 눌림")
+                                coord = MyCoord(coordinator.cameraLocation?.lat ?? 37.579081, coordinator.cameraLocation?.lng ?? 126.974375 )
+                                
+                                officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)
+                            }) {
+                                ZStack {
                                     Rectangle()
                                         .foregroundColor(.clear)
-                                        .frame(width: 70, height: 30)
-                                        .background(Color(red: 1, green: 0.98, blue: 0.95))
+                                        .frame(width: 150, height: 35)
+                                        .background(Color.white) //색상
                                         .cornerRadius(16)
                                         .overlay(
                                             RoundedRectangle(cornerRadius: 16)
-                                                .inset(by: 0.5)
-                                                .stroke(Color(red: 0.45, green: 0.45, blue: 0.45), lineWidth: 1)
-                                        )} else {
-                                            Rectangle()
-                                                .foregroundColor(.clear)
-                                                .frame(width: 72, height: 30)
-                                                .background(Color(red: 1, green: 0.98, blue: 0.95))
-                                                .cornerRadius(20)
-                                                .shadow(color: .black.opacity(0.1), radius: 3, x: 2, y: 2)
-                                        }
-                                
-                                Text(name[index])
-                                    .font(Font.custom("SF Pro Text", size: 12))
-                                    .multilineTextAlignment(.center)
-                                    .foregroundColor(Color(red: 0.12, green: 0.12, blue: 0.12))
-                                    .frame(width: 60, alignment: .center)
+                                                .stroke(Color.gray, lineWidth: 0.3))
+                                    
+                                    HStack {
+                                        Image(systemName: "arrow.clockwise")
+                                            .frame(height: 10)
+                                        Text("현 지도에서 검색")
+                                            .font(Font.custom("SF Pro Text", size: 15))
+                                    }
+                                    .padding()
+                                    .foregroundColor(.blue)
+                                }
                             }
+                            Spacer()
                         }
+                        .padding()
                     }
-                    
-                    Spacer()
                 }
-                .padding()
+                Spacer()
             }
-            
-            NaverMap(coord: coord)
-                .ignoresSafeArea(.all, edges: .top)
-            
-            Button("현재 위치에서 \(name[selectedButtonIndex])찾기") {
-                //현재 coord( 카메라 위치) 불러오기
-                //값을 불러 오기
-                print("버튼 눌림 \(coordinator.cameraLocation)")
-                coord = MyCoord(coordinator.cameraLocation?.lat ?? 37.579081, coordinator.cameraLocation?.lng ?? 126.974375 )
-                
-                officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)
-                
-//                coordinator.removeAllMakers()
-//                
-//                for result in officeInfoServiceAPI.infos {
-//                    coordinator.addMarkerAndInfoWindow(latitude: Double(result.postLat)!, longitude: Double(result.postLon)!, caption: result.postNm)
-//                }
-                
-                print("불러옵니다\(coord)")
-            }
-            
-            Spacer()
         }
         .onAppear() {
             CLLocationManager().requestWhenInUseAuthorization()
@@ -101,15 +134,24 @@ struct MapView: View {
             coordinator.removeAllMakers()
             
             for result in newInfos {
-                coordinator.addMarkerAndInfoWindow(latitude: Double(result.postLat)!, longitude: Double(result.postLon)!, caption: result.postNm)
+                var lunchtime: String = ""
+                if result.lunchTime == "null" {
+                    lunchtime = "없음"
+                } else {
+                    lunchtime = result.lunchTime!
+                }
+                coordinator.addMarkerAndInfoWindow(latitude: Double(result.postLat)!, longitude: Double(result.postLon)!, caption: result.postNm, time: result.postTime, lunchtime: lunchtime)
+                print(result.lunchTime,lunchtime)
+                //codingKey
             }
         }
-        //초기 화면이 열리 때 위치값을 불러온다. 
+        //초기 화면이 열리 때 위치값을 불러온다.
         .onChange(of: locationManager.location) { newLocation in
             if let location = newLocation {
                 coord = MyCoord(location.coordinate.latitude, location.coordinate.longitude)
                 
                 print("현재위치: \(coord)")
+                
                 locationManager.stopUpdatingLocation()
             }
         }
@@ -117,10 +159,5 @@ struct MapView: View {
             locationManager.stopUpdatingLocation()
         }
         .zIndex(1)
-        
     }
 }
-
-//#Preview {
-//    MapView()
-//}

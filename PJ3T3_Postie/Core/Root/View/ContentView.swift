@@ -7,17 +7,30 @@
 
 import SwiftUI
 
-//struct TestView: View {
-//    var body: some View {
-//        NaverMap(coord: coord)
-//    }
-//}
+struct TabItemContent: View {
+    let image: String
+    let text: String
+    
+    var body: some View {
+        Group {
+            Image(systemName: image)
+            Text(text)
+        }
+        .background(Color.red)
+    }
+}
 
 struct ContentView: View {
     //ViewModels
     @ObservedObject var authViewModel = AuthManager.shared
     @StateObject private var viewModel = AppViewModel()
     
+    init() {
+        let tbAppearance: UITabBarAppearance = UITabBarAppearance()
+        tbAppearance.backgroundColor = UIColor.systemBackground
+        UITabBar.appearance().scrollEdgeAppearance = tbAppearance
+        UITabBar.appearance().standardAppearance = tbAppearance
+    }
     @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
     init() {
@@ -27,6 +40,7 @@ struct ContentView: View {
         UITabBar.appearance().standardAppearance = tbAppearance
     }
     
+
     var body: some View {
         Group {
             // 로딩 끝나면 화면 재생

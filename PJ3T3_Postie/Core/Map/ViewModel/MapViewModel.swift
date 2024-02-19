@@ -32,25 +32,25 @@ struct PostMsgHeader: Codable {
 struct PostItem: Codable, Hashable {
     let postId: Int
     let postDiv: Int
-    let postNm: String
+    let postNm: String // 사용됨
     let postNmEn: String
     let postTel: String
     let postFax: String
     let postAddr: String
     let postAddrEn: String
     let post365Yn: String
-    let postTime: String
+    let postTime: String // 사용됨
     let postFinanceTime: String
     let postServiceTime: String?
-    let postLat: String
-    let postLon: String
+    let postLat: String // 사용됨
+    let postLon: String // 사용됨
     let postSubWay: String
     let postOffiId: Int
     let fundSaleYn: String
     let phoneSaleYn: String
     let partTimeYn: String
     let lunchTimeYn: String
-    let lunchTime: String?
+    let lunchTime: String? // 사용됨
     let todayDepartureYn: String
     let todayDepartureMailTime: String
     let postDesc: String?
