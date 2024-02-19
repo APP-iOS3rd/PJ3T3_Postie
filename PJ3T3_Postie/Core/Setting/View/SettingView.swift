@@ -183,9 +183,9 @@ struct AddDataSectionView: View {
                 let newLetter = Letter(id: docId,
                                        writer: "포스티",
                                        recipient: "포스티팀",
-                                       summary: "이미지 있음, 새 로직",
+                                       summary: "푸시 테스트, 이미지 없음",
                                        date: Date(),
-                                       text: "새 로직으로 업로드 성공!",
+                                       text: "푸시를 삭제하자!",
                                        isReceived: true,
                                        isFavorite: true,
                                        imageURLs: newImageURLs,
@@ -249,6 +249,8 @@ struct TestDetailView: View {
     //새 이미지 추가
     @State private var selectedItem: PhotosPickerItem? = nil
     @State private var selectedImages: [UIImage] = []
+    //푸시 추가
+    @State private var notificationDate = Date.now
     
     var body: some View {
         ScrollView {
@@ -304,9 +306,19 @@ struct TestDetailView: View {
                         }
                     }
                 }
+                
+                DatePicker("DatePicker", selection: $notificationDate, in: Date.now..., displayedComponents: [.date, .hourAndMinute])
+                    .datePickerStyle(.compact)
             }
             
             HStack {
+                Button {
+                    setNotification(docId: letter.id, date: notificationDate)
+                } label: {
+                    Text("푸시 추가")
+                }
+                .buttonStyle(.borderedProminent)
+                
                 PhotosPicker(selection: $selectedItem, matching: .images, photoLibrary: .shared()) {
                     Text("사진 추가")
                 }
@@ -323,6 +335,7 @@ struct TestDetailView: View {
                     firestoreManager.deleteLetter(documentId: letter.id)
                     storageManager.deleteFolder(docId: letter.id)
                     firestoreManager.fetchAllLetters()
+                    NotificationManager.shared.removePendingNotificationRequests(docId: letter.id)
                     dismiss()
                 } label: {
                     Text("삭제")
@@ -339,6 +352,13 @@ struct TestDetailView: View {
             }
             selectedItem = nil
         }
+    }
+    
+    func setNotification(docId: String, date: Date) {
+        let manager = NotificationManager.shared
+        //title이나 body 부분의 문구 여러가지로 배열 작성 해 두었다가 알람 뜰 때 랜덤으로 설정되면 좋을 것 같아요~
+        manager.addNotification(id: docId, title: "포스티", body: "포스티가 편지를 배달했어요")
+        manager.setNotification(date: date)
     }
     
     func initLetterDetail() {
