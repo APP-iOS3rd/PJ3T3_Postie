@@ -17,6 +17,8 @@
 		0E882AEE2B6B73DE00D8F2FC /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E882AED2B6B73DE00D8F2FC /* LocationManager.swift */; };
 		0E882AF02B6B79D800D8F2FC /* CoordinaterEtc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E882AEF2B6B79D800D8F2FC /* CoordinaterEtc.swift */; };
 		0E882AF12B6B907200D8F2FC /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9F6ACD2B5763CA003DFE83 /* AuthManager.swift */; };
+		0E97E2832B73E1BF00895EF9 /* Shop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E97E2822B73E1BF00895EF9 /* Shop.swift */; };
+		0E97E2852B73E77300895EF9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0E97E2842B73E77300895EF9 /* GoogleService-Info.plist */; };
 		9E078CC02B7207660072E5FC /* AppleUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E078CBF2B7207660072E5FC /* AppleUser.swift */; };
 		9E0FA11C2B54D27A001CEEB9 /* PJ3T3_PostieApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0FA11B2B54D27A001CEEB9 /* PJ3T3_PostieApp.swift */; };
 		9E0FA11E2B54D27A001CEEB9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0FA11D2B54D27A001CEEB9 /* ContentView.swift */; };
@@ -98,6 +100,7 @@
 		CEF09E452B57B6C500BE67E4 /* UIImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF09E442B57B6C500BE67E4 /* UIImagePicker.swift */; };
 		CEF09E472B57BD8500BE67E4 /* LetterImageFullScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF09E462B57BD8500BE67E4 /* LetterImageFullScreenView.swift */; };
 		CEF09E492B57BFBF00BE67E4 /* TextRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF09E482B57BFBF00BE67E4 /* TextRecognizer.swift */; };
+		CEF18BC02B810362002669B7 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = CEF18BBF2B810362002669B7 /* Kingfisher */; };
 		E30DED6F2B6FD25B00FA70A6 /* SplashScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E30DED6E2B6FD25B00FA70A6 /* SplashScreenView.swift */; };
 		E349F8712B6918B500253B02 /* ThemeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E349F8702B6918B500253B02 /* ThemeView.swift */; };
 		E349F8862B6B672E00253B02 /* ListLetterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E349F8852B6B672E00253B02 /* ListLetterView.swift */; };
@@ -129,6 +132,8 @@
 		0E29F0DF2B602E3D005B86FB /* MyCoord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCoord.swift; sourceTree = "<group>"; };
 		0E882AED2B6B73DE00D8F2FC /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		0E882AEF2B6B79D800D8F2FC /* CoordinaterEtc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinaterEtc.swift; sourceTree = "<group>"; };
+		0E97E2822B73E1BF00895EF9 /* Shop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shop.swift; sourceTree = "<group>"; };
+		0E97E2842B73E77300895EF9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = "GoogleService-Info.plist"; path = "PJ3T3_Postie/GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		19068E0481D2E4323D4AC3E2 /* Pods_PJ3T3_Postie.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PJ3T3_Postie.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		23E14589945C36E243AAF134 /* Pods-PJ3T3_Postie.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PJ3T3_Postie.debug.xcconfig"; path = "Target Support Files/Pods-PJ3T3_Postie/Pods-PJ3T3_Postie.debug.xcconfig"; sourceTree = "<group>"; };
 		84267E897C35F8294DF9D1F2 /* Pods-PJ3T3_Postie.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PJ3T3_Postie.release.xcconfig"; path = "Target Support Files/Pods-PJ3T3_Postie/Pods-PJ3T3_Postie.release.xcconfig"; sourceTree = "<group>"; };
@@ -235,6 +240,7 @@
 				9E9F6AEA2B5769AA003DFE83 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
 				9E9F6AF02B5769AA003DFE83 /* FirebaseAuth in Frameworks */,
 				9E9F6AF42B5769AA003DFE83 /* FirebaseCrashlytics in Frameworks */,
+				CEF18BC02B810362002669B7 /* Kingfisher in Frameworks */,
 				9E9F6B142B5769AA003DFE83 /* FirebaseRemoteConfigSwift in Frameworks */,
 				9E9A8BE52B6B51940072CB75 /* GoogleSignInSwift in Frameworks */,
 				9E9F6B122B5769AA003DFE83 /* FirebaseRemoteConfig in Frameworks */,
@@ -281,6 +287,7 @@
 				9E9F6AA22B5761CD003DFE83 /* Core */,
 				9E9F6ADD2B5765A3003DFE83 /* Extenstions */,
 				E3EECAEE2B5F956200E639F2 /* Font */,
+				0E97E2842B73E77300895EF9 /* GoogleService-Info.plist */,
 				9EB8740B2B68C6350025C2DB /* Manager */,
 				9E9F6AA12B5761C5003DFE83 /* Model */,
 				9E0FA1212B54D27C001CEEB9 /* Preview Content */,
@@ -634,6 +641,7 @@
 				0E29F0D52B5EDC30005B86FB /* XMLCoder */,
 				9E9A8BE22B6B51940072CB75 /* GoogleSignIn */,
 				9E9A8BE42B6B51940072CB75 /* GoogleSignInSwift */,
+				CEF18BBF2B810362002669B7 /* Kingfisher */,
 			);
 			productName = PJ3T3_Postie;
 			productReference = 9E0FA1182B54D27A001CEEB9 /* PJ3T3_Postie.app */;
@@ -667,6 +675,7 @@
 				9E9F6AE22B5769AA003DFE83 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				0E29F0D42B5EDC30005B86FB /* XCRemoteSwiftPackageReference "XMLCoder" */,
 				9E9A8BE12B6B51940072CB75 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+				CEF18BBE2B810362002669B7 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = 9E0FA1192B54D27A001CEEB9 /* Products */;
 			projectDirPath = "";
@@ -980,7 +989,7 @@
 				CODE_SIGN_ENTITLEMENTS = PJ3T3_Postie/PJ3T3_Postie.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 6;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"PJ3T3_Postie/Preview Content\"";
 				DEVELOPMENT_TEAM = Y6QXM3Q994;
@@ -1023,7 +1032,7 @@
 				CODE_SIGN_ENTITLEMENTS = PJ3T3_Postie/PJ3T3_Postie.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "\"PJ3T3_Postie/Preview Content\"";
 				DEVELOPMENT_TEAM = Y6QXM3Q994;
 				ENABLE_PREVIEWS = YES;
@@ -1101,6 +1110,14 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 10.20.0;
+			};
+		};
+		CEF18BBE2B810362002669B7 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.11.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -1215,6 +1232,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 9E9F6AE22B5769AA003DFE83 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
+		};
+		CEF18BBF2B810362002669B7 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CEF18BBE2B810362002669B7 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

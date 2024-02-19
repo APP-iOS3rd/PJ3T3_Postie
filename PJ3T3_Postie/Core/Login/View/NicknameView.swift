@@ -11,7 +11,7 @@ struct NicknameView: View {
     @ObservedObject var authManager = AuthManager.shared
     @State var nickname: String = ""
     @State var isTappable: Bool = false
-    @State var isTapped: Bool = false
+    @State private var showAlert = false
     @State private var isDialogPresented = false
     @State private var showLoading = false
     @State private var dialogTitle = ""
@@ -45,6 +45,41 @@ struct NicknameView: View {
                         .autocorrectionDisabled()
                     
                     Divider()
+                    
+                    if nickname.isEmpty {
+                        HStack {
+                            Text("닉네임을 입력 해 주세요.")
+                            
+                            Spacer()
+                            
+                            Text("\(nickname.count) / 12")
+                        }
+                        .foregroundStyle(postieColors.tintColor)
+                        .font(.system(size: 12))
+                        .padding(.bottom, 20)
+                    } else if nickname.count > 12 {
+                        HStack {
+                            Text("닉네임은 최대 12자까지 설정할 수 있습니다.")
+                            
+                            Spacer()
+                            
+                            Text("\(nickname.count) / 12")
+                        }
+                        .foregroundStyle(postieColors.tintColor)
+                        .font(.system(size: 12))
+                        .padding(.bottom, 20)
+                    } else {
+                        HStack {
+                            Text("사용 가능한 닉네임입니다.")
+                            
+                            Spacer()
+                            
+                            Text("\(nickname.count) / 12")
+                        }
+                        .foregroundStyle(postieColors.tintColor)
+                        .font(.system(size: 12))
+                        .padding(.bottom, 20)
+                    }
                 }
                 .onAppear {
                     focusField = "nickname"
@@ -52,22 +87,7 @@ struct NicknameView: View {
                 
                 Button {
                     isTappable = false
-                    isTapped = true
-                    
-                    Task {
-                        guard let authDataResult = authManager.authDataResult else {
-                            dialogTitle = "계정 정보를 가져오는데 실패했습니다."
-                            dialogMessage = "재인증을 통해 로그인 정보를 삭제한 다음 다시 회원가입 해 주세요."
-                            loadingText = "계정을 안전하게 삭제하는 중이에요"
-                            isDialogPresented = true
-                            nickname = ""
-                            return
-                        }
-                        
-                        loadingText = "포스티에 오신 것을 환영합니다!"
-                        showLoading = true
-                        try await authManager.createUser(authDataResult: authDataResult, nickname: nickname)
-                    }
+                    showAlert = true
                 } label: {
                     HStack() {
                         Image(systemName: "envelope")
@@ -86,11 +106,36 @@ struct NicknameView: View {
                 .padding(.bottom, 10)
                 .disabled(!isTappable)
                 .onChange(of: nickname) { newValue in
-                    if !newValue.isEmpty {
+                    if !newValue.isEmpty && newValue.count < 13 {
                         isTappable = true
                     } else {
                         isTappable = false
                     }
+                }
+                .alert(isPresented: $showAlert) {
+                    let title = Text("닉네임 설정")
+                    let message = Text(#"한 번 설정한 닉네임은 변경할 수 없으니 신중하게 선택해주세요! \#n "\#(nickname)"으로 시작하시겠습니까?"#)
+                    let cancelButton = Alert.Button.destructive(Text("취소")) {
+                        isTappable = true
+                    }
+                    let confirmButton = Alert.Button.default(Text("좋아요")) {
+                        Task {
+                            guard let authDataResult = authManager.authDataResult else {
+                                dialogTitle = "계정 정보를 가져오는데 실패했습니다."
+                                dialogMessage = "재인증을 통해 로그인 정보를 삭제한 다음 다시 회원가입 해 주세요."
+                                loadingText = "계정을 안전하게 삭제하는 중이에요"
+                                isDialogPresented = true
+                                nickname = ""
+                                return
+                            }
+                            
+                            loadingText = "포스티에 오신 것을 환영합니다!"
+                            showLoading = true
+                            try await authManager.createUser(authDataResult: authDataResult, nickname: nickname)
+                        }
+                    }
+                    
+                    return Alert(title: title, message: message, primaryButton: cancelButton, secondaryButton: confirmButton)
                 }
             }
             .padding(.horizontal, 32)
