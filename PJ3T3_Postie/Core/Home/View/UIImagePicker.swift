@@ -37,21 +37,25 @@ struct UIImagePicker: UIViewControllerRepresentable {
             _ picker: UIImagePickerController,
             didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]
         ) {
+            guard !picker.isBeingDismissed else {
+                return
+            }
+            
+            picker.dismiss(animated: true) {
+                if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+                    self.parent.selectedImages.append(image)
 
-            if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-                self.parent.selectedImages.append(image)
+                    let recognizer = TextRecognizer(selectedImage: image)
 
-                let recognizer = TextRecognizer(selectedImage: image)
+                    do {
+                        try recognizer.recognizeText()
 
-                do {
-                    try recognizer.recognizeText()
-
-                    self.parent.text.append(" \(recognizer.recognizedText)")
-                } catch {
-                    parent.showingTextRecognizerErrorAlert = true
+                        self.parent.text.append(" \(recognizer.recognizedText)")
+                    } catch {
+                        self.parent.showingTextRecognizerErrorAlert = true
+                    }
                 }
             }
-            parent.dismiss()
         }
     }
     
