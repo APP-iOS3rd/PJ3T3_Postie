@@ -17,6 +17,8 @@ struct ProfileEditView: View {
     @Binding var profileImage: String
     @Binding var profileImageTemp: String
     
+    var onConfirm: (Bool) -> Void
+    
     var body: some View {
         GeometryReader { geometry in
             ZStack {
@@ -118,6 +120,7 @@ struct ProfileEditView: View {
                         }
                         
                         Button(action: {
+                            self.onConfirm(true)
                             profileImage = profileImageTemp
                             dismiss()
                         }) {
@@ -144,7 +147,7 @@ struct ProfileEditView: View {
                 .padding()
             }
             .onTapGesture {
-                hideKeyboard()
+                profileImageTemp = profileImage
             }
         }
     }
@@ -195,9 +198,6 @@ struct ProfileImageEditView: View {
                                     ProfileImageItemView(imageName: imageName, profileImageTemp: $profileImageTemp)
                                 }
                             }
-                            .customOnChange(profileImageTemp) { newValue in
-                                saveToUserDefaults(value: newValue, key: "profileImageTemp")
-                            }
                             .padding()
                         }
                     }
@@ -241,6 +241,9 @@ struct ProfileImageEditView: View {
                                     .bold()
                                     .padding()
                             }
+                        }
+                        .customOnChange(profileImageTemp) { newValue in
+                            saveToUserDefaults(value: newValue, key: "profileImageTemp")
                         }
                     }
                 }

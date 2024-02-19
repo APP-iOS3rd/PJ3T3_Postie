@@ -11,7 +11,7 @@ struct HomeView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
     @AppStorage("isTabGroupButton") private var isTabGroupButton: Bool = true
     @AppStorage("profileImage") private var profileImage: String = "postyReceivingLineColor"
-    @AppStorage("profileImageTemp") private var profileImageTemp: String = ""
+    @AppStorage("profileImageTemp") private var profileImageTemp: String = "postyReceivingLineColor"
     @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
     @State private var isMenuActive = false

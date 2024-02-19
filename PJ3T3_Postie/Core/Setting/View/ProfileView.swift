@@ -84,7 +84,7 @@ struct ProfileView: View {
                             .foregroundStyle(postieColors.tabBarTintColor)
                             .padding(.bottom)
                             .padding(.leading, 3)
-                             
+                        
                         Text("구독정보")
                             .font(.subheadline)
                             .foregroundStyle(postieColors.tintColor)
@@ -189,8 +189,12 @@ struct ProfileView: View {
                             .foregroundStyle(postieColors.tabBarTintColor)
                     }
                     .sheet(isPresented: $isShowingProfileEditView) {
-                        ProfileEditView(profileImage: $profileImage, profileImageTemp: $profileImageTemp)
-                            .presentationDetents([.medium])
+                        ProfileEditView(profileImage: $profileImage, profileImageTemp: $profileImageTemp) { confirmed in
+                            if !confirmed {
+                                self.profileImageTemp = self.profileImage
+                            }
+                        }
+                        .presentationDetents([.medium])
                     }
                 }
             }
