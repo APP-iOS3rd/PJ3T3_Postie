@@ -17,8 +17,6 @@
 		0E882AEE2B6B73DE00D8F2FC /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E882AED2B6B73DE00D8F2FC /* LocationManager.swift */; };
 		0E882AF02B6B79D800D8F2FC /* CoordinaterEtc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E882AEF2B6B79D800D8F2FC /* CoordinaterEtc.swift */; };
 		0E882AF12B6B907200D8F2FC /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9F6ACD2B5763CA003DFE83 /* AuthManager.swift */; };
-		0E97E2832B73E1BF00895EF9 /* Shop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E97E2822B73E1BF00895EF9 /* Shop.swift */; };
-		0E97E2852B73E77300895EF9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0E97E2842B73E77300895EF9 /* GoogleService-Info.plist */; };
 		9E078CC02B7207660072E5FC /* AppleUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E078CBF2B7207660072E5FC /* AppleUser.swift */; };
 		9E0FA11C2B54D27A001CEEB9 /* PJ3T3_PostieApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0FA11B2B54D27A001CEEB9 /* PJ3T3_PostieApp.swift */; };
 		9E0FA11E2B54D27A001CEEB9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0FA11D2B54D27A001CEEB9 /* ContentView.swift */; };
@@ -132,8 +130,6 @@
 		0E29F0DF2B602E3D005B86FB /* MyCoord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCoord.swift; sourceTree = "<group>"; };
 		0E882AED2B6B73DE00D8F2FC /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		0E882AEF2B6B79D800D8F2FC /* CoordinaterEtc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinaterEtc.swift; sourceTree = "<group>"; };
-		0E97E2822B73E1BF00895EF9 /* Shop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shop.swift; sourceTree = "<group>"; };
-		0E97E2842B73E77300895EF9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = "GoogleService-Info.plist"; path = "PJ3T3_Postie/GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		19068E0481D2E4323D4AC3E2 /* Pods_PJ3T3_Postie.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PJ3T3_Postie.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		23E14589945C36E243AAF134 /* Pods-PJ3T3_Postie.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PJ3T3_Postie.debug.xcconfig"; path = "Target Support Files/Pods-PJ3T3_Postie/Pods-PJ3T3_Postie.debug.xcconfig"; sourceTree = "<group>"; };
 		84267E897C35F8294DF9D1F2 /* Pods-PJ3T3_Postie.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PJ3T3_Postie.release.xcconfig"; path = "Target Support Files/Pods-PJ3T3_Postie/Pods-PJ3T3_Postie.release.xcconfig"; sourceTree = "<group>"; };
@@ -287,7 +283,6 @@
 				9E9F6AA22B5761CD003DFE83 /* Core */,
 				9E9F6ADD2B5765A3003DFE83 /* Extenstions */,
 				E3EECAEE2B5F956200E639F2 /* Font */,
-				0E97E2842B73E77300895EF9 /* GoogleService-Info.plist */,
 				9EB8740B2B68C6350025C2DB /* Manager */,
 				9E9F6AA12B5761C5003DFE83 /* Model */,
 				9E0FA1212B54D27C001CEEB9 /* Preview Content */,
