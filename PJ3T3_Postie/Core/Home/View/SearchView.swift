@@ -9,13 +9,11 @@ import SwiftUI
 
 struct SearchView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
-    @Binding var isThemeGroupButton: Int
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     @State var searchQuery = ""
     @State var filteredLetters: [Letter] = []
     
     var body: some View {
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
-        
         ZStack {
             postieColors.backGroundColor
                 .ignoresSafeArea()
@@ -23,19 +21,20 @@ struct SearchView: View {
             if filteredLetters.isEmpty {
                 if searchQuery == "" {
                     VStack {
-                        Image("postyReceiving")
+                        Image(isThemeGroupButton == 4 ? "postyReceivingSketchWhite" :"postyReceivingSketch")
                             .resizable()
                             .scaledToFit()
-                            .frame(height: 150)
+                            .frame(height: 200)
+                            .padding(.bottom)
                         
-                        Text("어렴풋한 기억을 검색해보세요")
+                        Text("어렴풋한 기억을 검색해보세요!")
                             .foregroundStyle(postieColors.dividerColor)
                     }
                 } else {
-                    Image("postyReceiving")
+                    Image(isThemeGroupButton == 4 ? "postyReceivingSketchWhite" :"postyReceivingSketch")
                         .opacity(0.03)
                     
-                    Text("일치하는 내용의 편지가 없어요")
+                    Text("일치하는 내용의 편지가 없어요...")
                         .foregroundStyle(postieColors.dividerColor)
                 }
             } else {
@@ -44,11 +43,10 @@ struct SearchView: View {
                         NavigationLink {
                             LetterDetailView(letter: letter)
                         } label: {
-                            LetterItemView(letter: letter, isThemeGroupButton: $isThemeGroupButton)
+                            LetterItemView(letter: letter)
                         }
                     }
                     
-                    // ScrollView margin 임시
                     Rectangle()
                         .frame(height: 70)
                         .foregroundStyle(Color.postieBlack.opacity(0))
@@ -56,7 +54,15 @@ struct SearchView: View {
                 .scrollContentBackground(.hidden)
             }
         }
-        .navigationTitle("편지 찾기")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItemGroup(placement: .principal) {
+                Text("편지 찾기")
+                    .bold()
+                    .foregroundStyle(postieColors.tintColor)
+            }
+        }
+        .toolbarBackground(postieColors.backGroundColor, for: .navigationBar)
         .searchable(text: $searchQuery, prompt: "찾고 싶은 기억이 있나요?")
         .autocorrectionDisabled()
         .scrollDismissesKeyboard(.immediately)
@@ -92,5 +98,5 @@ struct SearchView: View {
 }
 
 #Preview {
-    SearchView(isThemeGroupButton: .constant(0))
+    SearchView()
 }

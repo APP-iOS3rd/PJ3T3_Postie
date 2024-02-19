@@ -10,14 +10,14 @@ import SwiftUI
 struct GroupedListLetterView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
     @ObservedObject var storageManager = StorageManager.shared
-
+    @State private var isMenuActive = false
+    
     var recipient: String
-
+    
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     @State private var isSideMenuOpen = false
-    @Binding var isThemeGroupButton: Int
     
     var body: some View {
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
         let filteredLetters = firestoreManager.letters.filter { $0.recipient == recipient || $0.writer == recipient }
         
         ZStack(alignment: .bottomTrailing) {
@@ -29,8 +29,9 @@ struct GroupedListLetterView: View {
                     NavigationLink {
                         LetterDetailView(letter: letter)
                     } label: {
-                        LetterItemView(letter: letter, isThemeGroupButton: $isThemeGroupButton)
+                        LetterItemView(letter: letter)
                     }
+                    .disabled(isMenuActive)
                 }
                 
                 // ScrollView margin 임시
@@ -39,7 +40,12 @@ struct GroupedListLetterView: View {
                     .foregroundStyle(Color.postieBlack.opacity(0))
             }
             
-            AddLetterButton(isThemeGroupButton: $isThemeGroupButton)
+            AddLetterButton(isMenuActive: $isMenuActive)
+        }
+        .onTapGesture {
+            if self.isMenuActive {
+                self.isMenuActive = false
+            }
         }
         .toolbarBackground(postieColors.backGroundColor, for: .navigationBar)
         .navigationBarTitleDisplayMode(.inline)

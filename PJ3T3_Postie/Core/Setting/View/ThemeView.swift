@@ -11,15 +11,14 @@ struct ThemeView: View {
     @Environment(\.dismiss) var dismiss
     @AppStorage("selectedLayoutMode") private var selectedLayoutMode: Int = 0
     @AppStorage("isSplitLayout") private var isSplitLayout: Bool = true
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
     @State private var selectedThemeButton: Bool = true
-    @Binding var isThemeGroupButton: Int
     @Binding var currentColorPage: Int
     @Binding var isTabGroupButton: Bool
     @Binding var currentGroupPage: Int
     
     var body: some View {
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
         let items = ["포스티 오렌지", "포스티 옐로우", "포스티 그린", "포스티 블루", "포스티 블랙"]
         let listImages = ["postieListOrange", "postieListYellow", "postieListGreen", "postieListBlue", "postieListBlack"]
         let groupImages = ["postieGroupOrange", "postieGroupYellow", "postieGroupGreen", "postieGroupBlue", "postieGroupBlack"]
@@ -39,7 +38,7 @@ struct ThemeView: View {
                         ZStack(alignment: .center) {
                             Rectangle()
                                 .foregroundColor(.clear)
-                                .frame(width: 72, height: 30)
+                                .frame(width: 70, height: 30)
                                 .background(selectedThemeButton ? postieColors.tintColor : postieColors.receivedLetterColor)
                                 .cornerRadius(20)
                                 .shadow(color: Color.postieBlack.opacity(0.1), radius: 3, x: 2, y: 2)
@@ -68,7 +67,7 @@ struct ThemeView: View {
                         ZStack(alignment: .center) {
                             Rectangle()
                                 .foregroundColor(.clear)
-                                .frame(width: 72, height: 30)
+                                .frame(width: 70, height: 30)
                                 .background(selectedThemeButton ? postieColors.receivedLetterColor : postieColors.tintColor)
                                 .cornerRadius(20)
                                 .shadow(color: Color.postieBlack.opacity(0.1), radius: 3, x: 2, y: 2)
@@ -185,6 +184,7 @@ struct ThemeView: View {
                                     Button (action: {
                                         isThemeGroupButton = index
                                         currentColorPage = isThemeGroupButton
+                                        ThemeManager.shared.updateTheme(index: index)
                                     }) {
                                         VStack {
                                             HStack {
@@ -207,7 +207,7 @@ struct ThemeView: View {
                             }
                             .tabViewStyle(PageTabViewStyle())
                             .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
-                            .onChange(of: isThemeGroupButton) { newValue in
+                            .customOnChange(isThemeGroupButton) { newValue in
                                 saveToUserDefaults(value: newValue, key: "IsThemeGroupButton")
                             }
                         } else if selectedLayoutMode == 1 {
@@ -216,6 +216,7 @@ struct ThemeView: View {
                                     ForEach(Array(zip(items.indices, items)), id: \.0) { index, item in
                                         Button (action: {
                                             isThemeGroupButton = index
+                                            ThemeManager.shared.updateTheme(index: index)
                                         }) {
                                             VStack {
                                                 Image(isTabGroupButton ? groupImages[index] : listImages[index])
@@ -243,6 +244,7 @@ struct ThemeView: View {
                                 ForEach(Array(zip(items.indices, items)), id: \.0) { index, item in
                                     Button (action: {
                                         isThemeGroupButton = index
+                                        ThemeManager.shared.updateTheme(index: index)
                                     }) {
                                         VStack {
                                             HStack {
@@ -260,7 +262,7 @@ struct ThemeView: View {
                                                     .font(.title2)
                                             }
                                             
-                                            DividerView(isThemeGroupButton: $isThemeGroupButton)
+                                            DividerView()
                                         }
                                     }
                                 }
@@ -316,7 +318,7 @@ struct ThemeView: View {
                             }
                             .tabViewStyle(PageTabViewStyle())
                             .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
-                            .onChange(of: isTabGroupButton) { newValue in
+                            .customOnChange(isTabGroupButton) { newValue in
                                 saveToUserDefaults(value: newValue, key: "IsTabGroupButton")
                             }
                         } else {
@@ -341,7 +343,7 @@ struct ThemeView: View {
                                         }
                                     }
                                     
-                                    DividerView(isThemeGroupButton: $isThemeGroupButton)
+                                    DividerView()
                                     
                                     Button (action: {
                                         isTabGroupButton = false
@@ -362,7 +364,7 @@ struct ThemeView: View {
                                         }
                                     }
                                     
-                                    DividerView(isThemeGroupButton: $isThemeGroupButton)
+                                    DividerView()
                                 }
                                 .padding()
                             }

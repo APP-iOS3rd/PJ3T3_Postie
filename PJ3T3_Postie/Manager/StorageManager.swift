@@ -12,7 +12,6 @@ import FirebaseStorage
 final class StorageManager: ObservableObject {
     static let shared = StorageManager()
     var userReference: StorageReference = Storage.storage().reference()
-    var imageFullPath: String = ""
     @Published var images: [LetterPhoto] = []
     
     private init() { 
@@ -22,6 +21,43 @@ final class StorageManager: ObservableObject {
     func fetchReference() {
         let userUid = AuthManager.shared.userUid
         self.userReference = Storage.storage().reference().child("users").child(userUid)
+    }
+    
+//MARK: - 사진 업로드
+    func uploadUIImage(image: UIImage, docId: String) async throws -> String {
+            //metadata없이도 data를 업로드 할 수 있지만, 그 경우 서버는 어떤 타입의 데이터를 저장하는지 알지 못해 오류를 발생시킬 수 있으므로 upload하는 metadata 타입을 명시 해 주는 편이 좋다.
+            let meta = StorageMetadata()
+            meta.contentType = "image/jpeg"
+
+            let imageName = "\(UUID().uuidString).jpeg"
+            let fileReference = userReference.child(docId).child(imageName)
+            
+            print("업로드 시작")
+            
+            //compressionQuality: 1 => 100%를 의미해 압축 없음
+            //이미지가 너무 클 경우 직접 compress하거나 firebase extension 중 resize images(유료)를 사용
+            //이미지 타입이 png라면 data = image.png()
+            guard let data = image.jpegData(compressionQuality: 0.5) else {
+                print(#function, "Failed to compress image")
+                throw URLError(.badURL)
+            }
+
+            let returnedMetaData = try await fileReference.putDataAsync(data, metadata: meta)
+
+            guard let imageFullPath = returnedMetaData.path else {
+                print(#function, "Failed to get image full path")
+                throw URLError(.badURL)
+            }
+
+            print("업로드 종료")
+            return imageFullPath
+        }
+    
+    func requestImageURL(fullPath: String) async throws -> String {
+        let item = Storage.storage().reference().child(fullPath)
+        let absoluteString = try await item.downloadURL().absoluteString
+        
+        return absoluteString
     }
     
     /**
@@ -34,6 +70,7 @@ final class StorageManager: ObservableObject {
        - userId: 현재 로그인중인 유저의 uuid로 이미지를 업로드 할 경로를 생성하거나 찾는데 사용한다.
        - docId: 방금 생성한 firestore문서 id로 이미지를 업로드 할 경로를 생성하거나 찾는데 사용한다.
      */
+    @available(*, deprecated, message: "이 함수는 더이상 사용하지 않습니다. String을 return하는 uploadUIImage 함수를 사용 해 주세요. 뷰에서 더이상 사용하는 곳이 없다면 함수를 삭제 해 주세요.")
     func saveUIImage(images: [UIImage], docId: String) async throws {
         //metadata없이도 data를 업로드 할 수 있지만, 그 경우 서버는 어떤 타입의 데이터를 저장하는지 알지 못해 오류를 발생시킬 수 있으므로 upload하는 metadata 타입을 명시 해 주는 편이 좋다.
         let meta = StorageMetadata()
@@ -50,7 +87,7 @@ final class StorageManager: ObservableObject {
             //compressionQuality: 1 => 100%를 의미해 압축 없음
             //이미지가 너무 클 경우 직접 compress하거나 firebase extension 중 resize images(유료)를 사용
             //이미지 타입이 png라면 data = image.png()
-            guard let data = img.jpegData(compressionQuality: 1) else {
+            guard let data = img.jpegData(compressionQuality: 0.5) else {
                 throw URLError(.backgroundSessionWasDisconnected)
             }
             
@@ -60,7 +97,6 @@ final class StorageManager: ObservableObject {
                 return
             }
             
-            self.imageFullPath = testFullPath
             currentImageNo += 1
         }
         
@@ -68,38 +104,7 @@ final class StorageManager: ObservableObject {
         print("함수를 uploadUIImage로 교체해 사용 해 주세요!")
     }
     
-    func uploadUIImage(image: UIImage, docId: String) async throws {
-        //metadata없이도 data를 업로드 할 수 있지만, 그 경우 서버는 어떤 타입의 데이터를 저장하는지 알지 못해 오류를 발생시킬 수 있으므로 upload하는 metadata 타입을 명시 해 주는 편이 좋다.
-        let meta = StorageMetadata()
-        meta.contentType = "image/jpeg"
-        
-        let imageName = "\(UUID().uuidString).jpeg"
-        let fileReference = userReference.child(docId).child(imageName)
-        
-        print("업로드 시작")
-        
-        //compressionQuality: 1 => 100%를 의미해 압축 없음
-        //이미지가 너무 클 경우 직접 compress하거나 firebase extension 중 resize images(유료)를 사용
-        //이미지 타입이 png라면 data = image.png()
-        guard let data = image.jpegData(compressionQuality: 1) else {
-            print(#function, "Failed to compress image")
-            return
-        }
-        do {
-            let returnedMetaData = try await fileReference.putDataAsync(data, metadata: meta)
-            
-            guard let imageFullPath = returnedMetaData.path else {
-                print(#function, "Failed to get image full path")
-                return
-            }
-            
-            self.imageFullPath = imageFullPath
-        } catch {
-            
-        }
-        print("업로드 종료")
-    }
-    
+    @available(*, deprecated, message: "이 함수는 더이상 사용하지 않습니다. String을 return하는 requestImageURL 함수를 사용 해 주세요. 뷰에서 더이상 사용하는 곳이 없다면 함수를 삭제 해 주세요.")
     func formatToLetterPhoto(fullPath: String, uiImage: UIImage) async throws -> LetterPhoto {
         let item = Storage.storage().reference().child(fullPath)
         let absoluteString = try await item.downloadURL().absoluteString
@@ -108,6 +113,7 @@ final class StorageManager: ObservableObject {
         return letterPhoto
     }
     
+//MARK: - 사진 fetch
     //Firebase의 listAll() 메서드를 사용하여 특정 경로에 포함된 모든 항목을 images 배열에 추가
     func listAllFile(docId: String) {
         //이미지 폴더의 모든 파일을 나열
@@ -121,7 +127,7 @@ final class StorageManager: ObservableObject {
             
             //result.items == 지정한 경로에 포함된 모든 파일
             for item in result.items {
-                item.getData(maxSize: 20 * 1024 * 1024) { data, error in
+                item.getData(maxSize: 10 * 1024 * 1024) { data, error in
                     //UIImage타입으로 데이터를 저장 할 필요가 없다면 error 부분 제외하고 모두 삭제 필요
                     guard let data = data, let image = UIImage(data: data), error == nil else {
                         print("\(#function): \(String(describing: error?.localizedDescription))")
@@ -137,10 +143,10 @@ final class StorageManager: ObservableObject {
                     }
                 }
             }
-            print(self.images)
         }
     }
     
+//MARK: - 사진 삭제
     func deleteItem(fullPath: String) {
         let item = Storage.storage().reference().child(fullPath)
         
@@ -157,7 +163,13 @@ final class StorageManager: ObservableObject {
             print(#function, "Success deleting images: \(fullPath)")
         }
     }
-    
+
+    func deleteItemAsync(fullPath: String) async throws {
+        let item = Storage.storage().reference().child(fullPath)
+
+        try await item.delete()
+    }
+
     func deleteFolder(docId: String) {
         let folderRef = userReference.child(docId)
         let deleteDataGroup = DispatchGroup()
@@ -177,6 +189,16 @@ final class StorageManager: ObservableObject {
                 self.deleteItem(fullPath: item.fullPath)
                 deleteDataGroup.leave()
             }
+        }
+    }
+
+    func deleteFolderAsync(docId: String) async throws {
+        let folderRef = userReference.child(docId)
+
+        let result = try await folderRef.listAll()
+
+        for item in result.items {
+            try await deleteItemAsync(fullPath: item.fullPath)
         }
     }
 }

@@ -9,28 +9,27 @@ import SwiftUI
 
 struct ListLetterView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
-    
-    @Binding var isThemeGroupButton: Int
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
+    @Binding var isMenuActive: Bool
     
     var body: some View {
         ForEach(firestoreManager.letters, id: \.self) { letter in
             NavigationLink {
                 LetterDetailView(letter: letter)
             } label: {
-                LetterItemView(letter: letter, isThemeGroupButton: $isThemeGroupButton)
+                LetterItemView(letter: letter)
             }
+            .disabled(isMenuActive)
         }
     }
 }
 
 struct LetterItemView: View {
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
+    
     var letter: Letter
     
-    @Binding var isThemeGroupButton: Int
-    
     var body: some View {
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
-        
         HStack {
             if !letter.isReceived {
                 Spacer()
@@ -39,7 +38,7 @@ struct LetterItemView: View {
             HStack {
                 VStack(alignment: .leading) {
                     HStack {
-                        Text(letter.isReceived ? "To." : "From.")
+                        Text(!letter.isReceived ? "To." : "From.")
                             .font(.custom("SourceSerifPro-Black", size: 18))
                             .foregroundColor(postieColors.tabBarTintColor)
                         
@@ -49,13 +48,13 @@ struct LetterItemView: View {
                         Spacer()
                         
                         Text("\(letter.date.toString())")
-                            .font(.custom("SourceSerifPro-Light", size: 18))
+                            .font(.custom("SourceSerifPro-Light", size: 15))
                             .foregroundStyle(postieColors.tabBarTintColor)
                         
                         ZStack {
                             Image(systemName: "water.waves")
                                 .font(.headline)
-                                .offset(x:18)
+                                .offset(x: 18)
                             
                             Image(systemName: "sleep.circle")
                                 .font(.largeTitle)
@@ -66,8 +65,18 @@ struct LetterItemView: View {
                     Spacer()
                     
                     HStack {
-                        Text("\"\(letter.summary)\"")
-                            .foregroundColor(postieColors.tabBarTintColor)
+                        Spacer()
+                        
+                        if !letter.summary.isEmpty {
+                            Text("“")
+                                .font(.custom("SairaStencilOne-Regular", size: 30))
+                            
+                            Text(letter.summary)
+                                .foregroundStyle(postieColors.tabBarTintColor)
+                            
+                            Text("”")
+                                .font(.custom("SairaStencilOne-Regular", size: 30))
+                        }
                         
                         Spacer()
                         
@@ -83,7 +92,7 @@ struct LetterItemView: View {
             .frame(width: 300, height: 130)
             .background(
                 RoundedRectangle(cornerRadius: 4)
-                    .foregroundStyle(letter.isReceived ? postieColors.writenLetterColor : postieColors.receivedLetterColor)
+                    .foregroundStyle(!letter.isReceived ? postieColors.writenLetterColor : postieColors.receivedLetterColor)
                     .shadow(color: Color.postieBlack.opacity(0.1), radius: 3, x: 3, y: 3)
             )
             

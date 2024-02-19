@@ -11,4 +11,5 @@ struct OfficialLetter: Identifiable, Hashable, Codable {
     let id: String
     let title: String
     let content: String
+    let date: Date
 }
