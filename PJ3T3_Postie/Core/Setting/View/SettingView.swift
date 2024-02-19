@@ -469,11 +469,9 @@ struct NoticeTestView: View {
     @ObservedObject var firestoreNoticeManager = FirestoreNoticeManager.shared
     
     var body: some View {
-        VStack {            
-            Section {
-                ForEach(firestoreNoticeManager.notices, id:\.self) { notice in
-                    Text(notice.title)
-                }
+        Section("Notices") {
+            ForEach(firestoreNoticeManager.notices, id:\.self) { notice in
+                Text(notice.title)
             }
         }
         .onAppear {
