@@ -25,6 +25,7 @@ struct MapView: View {
     @State private var postLatitude: Double = 37.56
     @State private var postLongitude: Double = 126.98
     @State private var isSideMenuOpen = false
+    @State private var searchText = ""
     @State var coord: MyCoord = MyCoord(37.579081, 126.974375) //Dafult값 (서울역)
     
     @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
@@ -36,7 +37,7 @@ struct MapView: View {
             ZStack {
                 postieColors.backGroundColor
                     .ignoresSafeArea()
-                //
+
                 VStack(spacing: 0) {
                     HStack {
                         Text("Postie Map")
@@ -82,7 +83,27 @@ struct MapView: View {
                         }
                         Spacer()
                     }
-                    .padding()
+//                    .padding()
+                    
+                    TextField("장소 검색(서초구, 서초동)", text: $searchText)
+                        .padding()
+                        .textFieldStyle(.roundedBorder)
+                        .overlay(
+                            HStack() {
+                                Spacer()
+                                if !searchText.isEmpty {
+                                    Button(action: {
+                                        self.searchText = ""
+                                    }) {
+                                        Image(systemName: "multiply.circle.fill")
+                                            .foregroundColor(.postieGray)
+                                    }
+                                    .padding()
+                                }
+                            }
+                            
+                        )
+                    //                        .autocapitalization(.none) // 자동 대문자 변환 비활성화
                     
                     ZStack(alignment: .top) {
                         NaverMap(coord: coord)

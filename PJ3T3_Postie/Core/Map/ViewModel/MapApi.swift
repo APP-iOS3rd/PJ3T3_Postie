@@ -49,8 +49,8 @@ class NaverGeocodeAPI: ObservableObject {
         guard let clientID = clientID else { return }
         guard let clinetSecret = clinetSecret else { return }
         
-        let urlString = "https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=\(postalCode)"
-        
+        let urlString = "https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=\(postalCode)?"
+
         guard let url = URL(string: urlString) else { return }
         
         let session = URLSession(configuration: .default)
