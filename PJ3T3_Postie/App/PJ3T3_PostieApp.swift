@@ -32,7 +32,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
 
 @main
 struct PJ3T3_PostieApp: App {
-    // register app delegate for Firebase setup
+    @Environment(\.scenePhase) var scenePhase
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
     private var clientID: String? {
@@ -46,6 +46,11 @@ struct PJ3T3_PostieApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .onChange(of: scenePhase) { newPhase in
+                    if newPhase == .active {
+                        UIApplication.shared.applicationIconBadgeNumber = 0
+                    }
+                }
         }
     }
 }
