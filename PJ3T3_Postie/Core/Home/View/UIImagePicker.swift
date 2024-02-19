@@ -10,7 +10,6 @@ import SwiftUI
 struct UIImagePicker: UIViewControllerRepresentable {
     var sourceType: UIImagePickerController.SourceType = .camera
 
-    @Environment(\.dismiss) var dismiss
     @Binding var selectedImages: [UIImage]
     @Binding var text: String
     @Binding var showingTextRecognizerErrorAlert: Bool
@@ -46,13 +45,14 @@ struct UIImagePicker: UIViewControllerRepresentable {
                     self.parent.selectedImages.append(image)
 
                     let recognizer = TextRecognizer(selectedImage: image)
-
-                    do {
-                        try recognizer.recognizeText()
-
-                        self.parent.text.append(" \(recognizer.recognizedText)")
-                    } catch {
-                        self.parent.showingTextRecognizerErrorAlert = true
+                    recognizer.recognizeText { result in
+                        switch result {
+                        case .success(let recognizedText):
+                            self.parent.text.append("\(recognizedText)")
+                        case.failure(let error):
+                            self.parent.showingTextRecognizerErrorAlert = true
+                            print("Text recognition error: \(error)")
+                        }
                     }
                 }
             }
