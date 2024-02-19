@@ -28,6 +28,7 @@ class EditLetterViewModel: ObservableObject {
     @Published var selectedIndex: Int = 0
     @Published var shouldDismiss: Bool = false
     @Published var isLoading: Bool = false
+    @Published var loadingText: String = ""
 
     private(set) var imagePickerSourceType: UIImagePickerController.SourceType = .camera
 
@@ -126,6 +127,7 @@ class EditLetterViewModel: ObservableObject {
         do {
             await MainActor.run {
                 isLoading = true
+                loadingText = "편지를 수정하고 있어요."
             }
 
             try await removeImages(docId: letter.id, deleteCandidates: deleteCandidatesFromFullPathsANdUrls)

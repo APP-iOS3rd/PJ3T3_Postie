@@ -85,7 +85,7 @@ struct EditLetterView: View {
         }
         .toolbar(.hidden, for: .tabBar)
         .scrollDismissesKeyboard(.interactively)
-        .modifier(LoadingModifier(isLoading: $editLetterViewModel.isLoading, text: "편지를 수정하고 있어요."))
+        .modifier(LoadingModifier(isLoading: $editLetterViewModel.isLoading, text: editLetterViewModel.loadingText))
         .fullScreenCover(isPresented: $editLetterViewModel.showingLetterImageFullScreenView) {
             LetterImageFullScreenView(
                 images: editLetterViewModel.newImages,
@@ -98,7 +98,9 @@ struct EditLetterView: View {
                 sourceType: editLetterViewModel.imagePickerSourceType,
                 selectedImages: $editLetterViewModel.newImages,
                 text: $editLetterViewModel.text,
-                showingTextRecognizerErrorAlert: $editLetterViewModel.showingTextRecognizerErrorAlert
+                isLoading: $editLetterViewModel.isLoading,
+                showingTextRecognizerErrorAlert: $editLetterViewModel.showingTextRecognizerErrorAlert,
+                loadingText: $editLetterViewModel.loadingText
             )
             .ignoresSafeArea(.all, edges: .bottom)
         }
