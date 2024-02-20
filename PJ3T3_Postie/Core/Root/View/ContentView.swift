@@ -24,13 +24,6 @@ struct ContentView: View {
     //ViewModels
     @ObservedObject var authViewModel = AuthManager.shared
     @StateObject private var viewModel = AppViewModel()
-    
-    init() {
-        let tbAppearance: UITabBarAppearance = UITabBarAppearance()
-        tbAppearance.backgroundColor = UIColor.systemBackground
-        UITabBar.appearance().scrollEdgeAppearance = tbAppearance
-        UITabBar.appearance().standardAppearance = tbAppearance
-    }
     @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
     init() {
