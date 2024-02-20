@@ -58,13 +58,6 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate {
     func mapView(_ mapView: NMFMapView, cameraIsChangingByReason reason: Int) {
         // 현재 지도 중심 좌표 가져오기
         cameraLocation = mapView.cameraPosition.target
-        
-        //        print("change position")
-        //        print(center)
-        // 값이 이동했는지 확인하는용
-        //        DispatchQueue.main.async {
-        //            print("바껴랏!! \(self.cameraLocation)")
-        //            }
     }
     
     // 맵을 업데이트 -> 해당 위치에서 우체국 찾기 때 사용 예정
@@ -111,14 +104,6 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate {
         view.mapView.moveCamera(cameraUpdate)
     }
     
-    // 현재 위치 전달
-    //    func getCurrentLocation() {
-    //        // https://developer.apple.com/documentation/corelocation/cllocationmanager/1620548-requestlocation
-    //        locationManager.requestLocation()
-    //        currentLocation = locationManager.location
-    //        print(currentLocation)
-    //    }
-    
     // 내 위치 주변에 원 그리기
     func drawCircleOvelay(center: NMGLatLng, radius: Double) {
         let circleOverlay = NMFCircleOverlay()
@@ -138,20 +123,27 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate {
         let marker = NMFMarker()
         
         marker.captionText = caption
-        marker.iconTintColor = UIColor.red
-        marker.captionColor = UIColor.orange
+        //        marker.iconTintColor = UIColor.red
+        //        marker.captionColor = UIColor.orange
         marker.captionTextSize = 16
         marker.subCaptionText = "영업시간 \(time) \n 점심시간 \(lunchtime)"
         
         marker.position = NMGLatLng(lat: latitude, lng: longitude)
         marker.mapView = view.mapView
         markers.append(marker)
-        
-        //        let infoWindow = NMFInfoWindow()
-        //        let dataSource = NMFInfoWindowDefaultTextSource.data()
-        //        //시간 설정, 나중에 구현 예정
-        //        dataSource.title = time
-        //        infoWindow.dataSource = dataSource
+    }
+    
+    func convertAddressToCoordinates(_ address: String) {
+        NaverGeocodeAPI.shared.fetchLocationForPostalCode(address) { latitude, longitude in
+            if let latitude = latitude, let longitude = longitude {
+                let newCoord = MyCoord(latitude, longitude)
+                self.coord = newCoord
+                print("바뀐 위경도\(latitude),\(longitude)")
+            } else {
+                // 장소 검색 결과가 없을 경우 처리
+                print("장소를 찾을 수 없습니다.")
+            }
+        }
     }
     
     // 기존 마커 삭제

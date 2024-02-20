@@ -84,25 +84,36 @@ struct MapView: View {
                         Spacer()
                     }
 //                    .padding()
-                    
-                    TextField("장소 검색(서초구, 서초동)", text: $searchText)
-                        .padding()
-                        .textFieldStyle(.roundedBorder)
-                        .overlay(
-                            HStack() {
-                                Spacer()
-                                if !searchText.isEmpty {
-                                    Button(action: {
-                                        self.searchText = ""
-                                    }) {
-                                        Image(systemName: "multiply.circle.fill")
-                                            .foregroundColor(.postieGray)
+                    HStack {
+                        TextField("장소 검색(서초구, 서초동)", text: $searchText)
+                            .padding()
+                            .textFieldStyle(.roundedBorder)
+                            .overlay(
+                                HStack() {
+                                    Spacer()
+                                    if !searchText.isEmpty {
+                                        Button(action: {
+                                            self.searchText = ""
+                                        }) {
+                                            Image(systemName: "multiply.circle.fill")
+                                                .foregroundColor(.postieGray)
+                                        }
+                                        .padding()
                                     }
-                                    .padding()
                                 }
-                            }
-                            
-                        )
+                                
+                            )
+                        Button(action: {
+                            print("바꾸기전 위경도 \(coord)")
+                            coordinator.convertAddressToCoordinates(searchText)
+                                //coord가 바뀌면 다시 뷰를 그리기 때문에 카메라 조정이 가능
+                                print("바뀐 위경도 \(coord)")
+                        
+                        }) {
+                            Text("주소로 검색")
+                        }
+                    }
+                    
                     //                        .autocapitalization(.none) // 자동 대문자 변환 비활성화
                     
                     ZStack(alignment: .top) {
