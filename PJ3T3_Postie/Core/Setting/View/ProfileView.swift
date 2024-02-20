@@ -184,6 +184,7 @@ struct ProfileView: View {
                 ToolbarItemGroup(placement: .topBarTrailing) {
                     Button (action: {
                         isShowingProfileEditView = true
+                        profileImageTemp = profileImage
                     }) {
                         Text("수정")
                             .foregroundStyle(postieColors.tabBarTintColor)
