@@ -62,13 +62,11 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate {
     
     // 맵을 업데이트 -> 해당 위치에서 우체국 찾기 때 사용 예정
     func updateMapView(coord: MyCoord) {
-        //        self.coord = coord
         
         // NMGLatLng: 하나의 위경도 좌표를 나타내는 클래스
         // https://navermaps.github.io/ios-map-sdk/guide-ko/2-2.html
         let coord = NMGLatLng(lat: coord.lat, lng: coord.lng)
         
-        //        print(currentLocation ?? "못찾음")
         moveCamera(coord: coord) //카메라 바로 이동
         
         // 마커와 정보 창을 새롭게 추가하기 위해 기존 내용을 삭제
@@ -83,11 +81,11 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate {
         //                               infoTitle: "정보 창 내용/마커를 탭하면 닫힘")
     }
     
+    //이건 뭐야
     func setLocationOverlay(coord: NMGLatLng) {
         let locationOverlay = view.mapView.locationOverlay
         locationOverlay.hidden = false
         locationOverlay.location = coord
-        //        locationOverlay.circleOutlineWidth =
     }
     
     // 카메라를 옮기는 기능
@@ -136,14 +134,20 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate {
     func convertAddressToCoordinates(_ address: String) {
         NaverGeocodeAPI.shared.fetchLocationForPostalCode(address) { latitude, longitude in
             if let latitude = latitude, let longitude = longitude {
-                let newCoord = MyCoord(latitude, longitude)
-                self.coord = newCoord
-                print("바뀐 위경도\(latitude),\(longitude)")
+                let coord = NMGLatLng(lat: latitude, lng: longitude)
+                self.moveCamera(coord: coord)
+                
+                self.removeAllMakers()
+                
+                self.setLocationOverlay(coord: coord)
+
+                print("바뀐 위경도\(coord)")
             } else {
                 // 장소 검색 결과가 없을 경우 처리
                 print("장소를 찾을 수 없습니다.")
             }
         }
+        
     }
     
     // 기존 마커 삭제
