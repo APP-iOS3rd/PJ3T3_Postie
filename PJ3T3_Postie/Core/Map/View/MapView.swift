@@ -28,7 +28,7 @@ struct MapView: View {
     @State private var searchText = ""
     @State private var checkAlert = false
     @State var coord: MyCoord = MyCoord(37.579081, 126.974375) //Dafult값 (서울역)
-
+    
     
     @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
@@ -39,7 +39,7 @@ struct MapView: View {
             ZStack {
                 postieColors.backGroundColor
                     .ignoresSafeArea()
-
+                
                 VStack(spacing: 0) {
                     HStack {
                         Text("Postie Map")
@@ -85,7 +85,7 @@ struct MapView: View {
                         }
                         Spacer()
                     }
-//                    .padding()
+                    //                    .padding()
                     HStack {
                         TextField("장소 검색(서초구, 서초동)", text: $searchText)
                             .padding()
@@ -111,31 +111,29 @@ struct MapView: View {
                                 
                                 if let latitude = latitude, let longitude = longitude {
                                     //위경도 값 저장
-                                    self.coord = MyCoord(latitude, longitude) 
+                                    self.coord = MyCoord(latitude, longitude)
                                     officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)
                                     print("위경도 변환 성공\(coord)")
                                 } else {
                                     //알럿창 띄우기
                                     print("위치 정보를 가져오는데 실패했습니다.\(coord)")
-//                                    self.checkAlert = true
+                                    self.checkAlert.toggle()
                                     
                                 }
                             }
                         }) {
                             Text("주소로 검색")
                         }
-//                        .alert(isPresented: checkAlert) {
-//                            Alert(
-//                                title: Text("위치 정보가 잘못되었습니다."),
-//                                message: Text("동이나 구 단위로 입력해주세요"),
-//                                dismissButton: .default(Text:"확인")
-//                               )
-//                        }
+                        .alert("위치 정보가 잘못되었습니다.", isPresented: $checkAlert) {
+                            Button("확인", role: .cancel) {
+                                
+                            }
+                        } message: {
+                            Text("동이나 구 단위로 입력해주세요")
+                        }
                         
                     }
                     .padding()
-                    
-                    //                        .autocapitalization(.none) // 자동 대문자 변환 비활성화
                     
                     ZStack(alignment: .top) {
                         NaverMap(coord: coord)
@@ -145,7 +143,7 @@ struct MapView: View {
                             Button(action: {
                                 print("현재 위치에서 \(name[selectedButtonIndex]) 찾기 버튼 눌림")
                                 locationManager.stopUpdatingLocation() // 현재 위치 추적 금지
-                            
+                                
                                 coord = MyCoord(coordinator.cameraLocation?.lat ?? coord.lat, coordinator.cameraLocation?.lng ?? coord.lng)
                                 
                                 officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)
@@ -177,8 +175,8 @@ struct MapView: View {
                                 
                             }) {
                                 Image(systemName: "location.circle")
-                                                    .foregroundColor(.blue)
-                                                    .font(.title)
+                                    .foregroundColor(.blue)
+                                    .font(.title)
                             }
                         }
                         .padding()
