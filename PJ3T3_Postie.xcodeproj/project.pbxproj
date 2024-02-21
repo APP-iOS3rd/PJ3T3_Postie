@@ -85,6 +85,7 @@
 		9E9F6B162B5769AA003DFE83 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 9E9F6B152B5769AA003DFE83 /* FirebaseStorage */; };
 		9EA106772B63C5C90033E7A8 /* LetterPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EA106762B63C5C90033E7A8 /* LetterPhoto.swift */; };
 		9EBAFDC42B70ED900020EE6F /* AppleSignInHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBAFDC32B70ED900020EE6F /* AppleSignInHelper.swift */; };
+		9EE31F9B2B84B19900B11D70 /* ReAuthButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE31F9A2B84B19900B11D70 /* ReAuthButtonView.swift */; };
 		CE4F1AD22B7CDF8800FE7CF6 /* EditLetterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4F1AD12B7CDF8800FE7CF6 /* EditLetterView.swift */; };
 		CE4F1AD42B7CE06D00FE7CF6 /* EditLetterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4F1AD32B7CE06D00FE7CF6 /* EditLetterViewModel.swift */; };
 		CE5FF9272B6CF8A400DDA5BF /* NanumMyeongjo.otf in Resources */ = {isa = PBXBuildFile; fileRef = CE5FF9262B6CF8A400DDA5BF /* NanumMyeongjo.otf */; };
@@ -183,6 +184,7 @@
 		9E9F6ADE2B5765DD003DFE83 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		9EA106762B63C5C90033E7A8 /* LetterPhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterPhoto.swift; sourceTree = "<group>"; };
 		9EBAFDC32B70ED900020EE6F /* AppleSignInHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSignInHelper.swift; sourceTree = "<group>"; };
+		9EE31F9A2B84B19900B11D70 /* ReAuthButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReAuthButtonView.swift; sourceTree = "<group>"; };
 		CE4F1AD12B7CDF8800FE7CF6 /* EditLetterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditLetterView.swift; sourceTree = "<group>"; };
 		CE4F1AD32B7CE06D00FE7CF6 /* EditLetterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditLetterViewModel.swift; sourceTree = "<group>"; };
 		CE5FF9262B6CF8A400DDA5BF /* NanumMyeongjo.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = NanumMyeongjo.otf; sourceTree = "<group>"; };
@@ -372,6 +374,7 @@
 				9E9F6ACF2B5763D0003DFE83 /* LoginInputView.swift */,
 				9E9F6AC92B5763B8003DFE83 /* LoginView.swift */,
 				9E9A8BF22B6CD8990072CB75 /* NicknameView.swift */,
+				9EE31F9A2B84B19900B11D70 /* ReAuthButtonView.swift */,
 				9E9F6ACB2B5763C3003DFE83 /* RegistrationView.swift */,
 			);
 			path = View;
@@ -798,6 +801,7 @@
 				9E9F6ADF2B5765DE003DFE83 /* Color.swift in Sources */,
 				0E29F0D82B5FA2FC005B86FB /* Button.swift in Sources */,
 				9E9F6ABA2B5762FC003DFE83 /* MapView.swift in Sources */,
+				9EE31F9B2B84B19900B11D70 /* ReAuthButtonView.swift in Sources */,
 				9E7E05B92B7DE6D200ACF177 /* FirestoreNoticeManager.swift in Sources */,
 				9E9F6ACC2B5763C3003DFE83 /* RegistrationView.swift in Sources */,
 				9E9F6ABC2B576351003DFE83 /* MapCoordinator.swift in Sources */,
