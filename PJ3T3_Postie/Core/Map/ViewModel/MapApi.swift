@@ -94,10 +94,15 @@ class NaverGeocodeAPI: ObservableObject {
                     
                     //메인 스레드에서 UI를 업데이트 한다.
                     DispatchQueue.main.async {
-                        //                        self.targetLocation = (latitude: latitude, longitude: longitude)
                         completion(latitude,longitude)
                     }
+                } else {
+                    print("값이 없읍니다")
+                    DispatchQueue.main.async {
+                        completion(nil,nil)
+                    }
                 }
+                
             }
             catch {
                 print("JSON 디코딩 에러: \(error.localizedDescription)")

@@ -39,7 +39,7 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate {
         view.mapView.minZoomLevel = 10 // 최소 줌 레벨
         view.mapView.maxZoomLevel = 17 // 최대 줌 레벨
         
-        view.showLocationButton = true // 현위치 버튼: 위치 추적 모드를 표현합니다. 탭하면 모드가 변경됩니다.
+        view.showLocationButton = false // 현위치 버튼: 위치 추적 모드를 표현합니다. 탭하면 모드가 변경됩니다.
         view.showZoomControls = true // 줌 버튼: 탭하면 지도의 줌 레벨을 1씩 증가 또는 감소합니다.
         view.showCompass = true //  나침반 : 카메라의 회전 및 틸트 상태를 표현합니다. 탭하면 카메라의 헤딩과 틸트가 0으로 초기화됩니다. 헤딩과 틸트가 0이 되면 자동으로 사라집니다
         view.showScaleBar = true // 스케일 바 : 지도의 축척을 표현합니다. 지도를 조작하는 기능은 없습니다.
@@ -56,6 +56,11 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate {
     }
     
     func mapView(_ mapView: NMFMapView, cameraIsChangingByReason reason: Int) {
+        // 현재 지도 중심 좌표 가져오기
+        cameraLocation = mapView.cameraPosition.target
+    }
+    
+    func mapView(_ mapView: NMFMapView, cameraDidChangeByReason reason: Int) {
         // 현재 지도 중심 좌표 가져오기
         cameraLocation = mapView.cameraPosition.target
     }

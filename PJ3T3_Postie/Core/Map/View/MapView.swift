@@ -26,7 +26,9 @@ struct MapView: View {
     @State private var postLongitude: Double = 126.98
     @State private var isSideMenuOpen = false
     @State private var searchText = ""
+    @State private var checkAlert = false
     @State var coord: MyCoord = MyCoord(37.579081, 126.974375) //Dafult값 (서울역)
+
     
     @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
@@ -105,21 +107,31 @@ struct MapView: View {
                         Button(action: {
                             print("바꾸기전 위경도 \(coord)")
                             naverGeocodeAPI.fetchLocationForPostalCode(searchText) { latitude, longitude in
+                                locationManager.stopUpdatingLocation()
+                                
                                 if let latitude = latitude, let longitude = longitude {
                                     //위경도 값 저장
                                     self.coord = MyCoord(latitude, longitude) 
                                     officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)
-                                    print("위경도 변환 성공")
+                                    print("위경도 변환 성공\(coord)")
                                 } else {
-                                    print("위치 정보를 가져오는데 실패했습니다.")
+                                    //알럿창 띄우기
+                                    print("위치 정보를 가져오는데 실패했습니다.\(coord)")
+//                                    self.checkAlert = true
+                                    
                                 }
                             }
-                            
-//                            officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)
-                        
                         }) {
                             Text("주소로 검색")
                         }
+//                        .alert(isPresented: checkAlert) {
+//                            Alert(
+//                                title: Text("위치 정보가 잘못되었습니다."),
+//                                message: Text("동이나 구 단위로 입력해주세요"),
+//                                dismissButton: .default(Text:"확인")
+//                               )
+//                        }
+                        
                     }
                     .padding()
                     
@@ -132,7 +144,9 @@ struct MapView: View {
                         VStack {
                             Button(action: {
                                 print("현재 위치에서 \(name[selectedButtonIndex]) 찾기 버튼 눌림")
-                                coord = MyCoord(coordinator.cameraLocation?.lat ?? 37.579081, coordinator.cameraLocation?.lng ?? 126.974375 )
+                                locationManager.stopUpdatingLocation() // 현재 위치 추적 금지
+                            
+                                coord = MyCoord(coordinator.cameraLocation?.lat ?? coord.lat, coordinator.cameraLocation?.lng ?? coord.lng)
                                 
                                 officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)
                             }) {
@@ -157,6 +171,15 @@ struct MapView: View {
                                 }
                             }
                             Spacer()
+                            
+                            Button( action: {
+                                //action
+                                
+                            }) {
+                                Image(systemName: "location.circle")
+                                                    .foregroundColor(.blue)
+                                                    .font(.title)
+                            }
                         }
                         .padding()
                     }

@@ -36,6 +36,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         // https://developer.apple.com/documentation/corelocation/cllocationmanager/1423750-startupdatinglocation
         isUpdatingLocation = true
         locationManager.startUpdatingLocation()
+        //카메라 location == coord
     }
     
     func stopUpdatingLocation() {
