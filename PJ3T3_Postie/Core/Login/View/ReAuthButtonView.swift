@@ -10,8 +10,8 @@ import AuthenticationServices
 
 struct ReAuthButtonView: View {
     @ObservedObject var authManager = AuthManager.shared
-    @Binding var showLoading: Bool
-    @Binding var showAlert: Bool
+    @Binding var showFailureAlert: Bool
+    @Binding var showSuccessAlert: Bool
     @Binding var alertBody: String
     
     var body: some View {
@@ -22,9 +22,7 @@ struct ReAuthButtonView: View {
                 Task {
                     do {
                         let credential = try await authManager.signInWithGoogle()
-                        showLoading = true
                         authManager.authDataResult = try await authManager.signInWithSSO(credential: credential)
-                        showLoading = false
                     } catch let error as NSError {
                         if error.code == GIDSignInErrorCode.canceled.rawValue {
                             alertBody = "재인증이 취소되었습니다. 계정 생성을 위해서는 재인증을 해 주세요."
@@ -35,8 +33,7 @@ struct ReAuthButtonView: View {
                                 googleLoginFailure(error: error)
                             }
                         }
-                        showLoading = false
-                        showAlert = true
+                        showFailureAlert = true
                     }
                 }
             case .apple:
@@ -48,12 +45,13 @@ struct ReAuthButtonView: View {
                 //alert 창 구현
             }
         }
-        .customOnChange(authManager.credential) { newValue in
-            if authManager.credential == nil {
-                print(#function, "Canceled to delete account")
-                showLoading = false
+        .customOnChange(authManager.authDataResult) { newValue in
+            if authManager.authDataResult == nil {
+                print(#function, "on change authDataResult nil")
+                showSuccessAlert = false
             } else {
-                showLoading = true
+                print(#function, "on change authDataResult not nil")
+                showSuccessAlert = true
             }
         }
     }
@@ -75,5 +73,5 @@ struct ReAuthButtonView: View {
 }
 
 #Preview {
-    ReAuthButtonView(showLoading: .constant(false), showAlert: .constant(false), alertBody: .constant("프리뷰"))
+    ReAuthButtonView(showFailureAlert: .constant(false), showSuccessAlert: .constant(false), alertBody: .constant("프리뷰"))
 }

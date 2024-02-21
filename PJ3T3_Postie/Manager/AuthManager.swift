@@ -17,11 +17,11 @@ class AuthManager: ObservableObject {
     static let shared = AuthManager()
     var userUid: String  = ""
     var hasAccount: Bool = true
-    var authDataResult: AuthDataResult?
     var provider: AuthProviderOption?
     @Published var userSession: FirebaseAuth.User? //Firebase user object
     @Published var currentUser: PostieUser? //User Data Model
     @Published var credential: OAuthCredential?
+    @Published var authDataResult: AuthDataResult?
     
     private init() {
         Task {
@@ -246,8 +246,11 @@ extension AuthManager {
         let credential = OAuthProvider.appleCredential(withIDToken: user.token,
                                                        rawNonce: user.nonce,
                                                        fullName: user.fullName)
+        let authDataResult = try await signInWithSSO(credential: credential)
         
-        self.authDataResult = try await signInWithSSO(credential: credential)
+        DispatchQueue.main.async {
+            self.authDataResult = authDataResult
+        }
     }
     
     func deleteAppleAccount(user: AppleUser, authCodeString: String) async {

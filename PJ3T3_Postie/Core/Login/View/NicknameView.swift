@@ -13,6 +13,7 @@ struct NicknameView: View {
     @State private var isTappable: Bool = false
     @State private var showSuccessAlert = false
     @State private var showFailureAlert = false
+    @State private var isReAuthing = false
     @State private var isDialogPresented = false
     @State private var showLoading = false
     @State private var loadingText = ""
@@ -42,6 +43,7 @@ struct NicknameView: View {
                         .focused($focusField, equals: "nickname")
                         .autocorrectionDisabled()
                         .foregroundStyle(postieColors.dividerColor)
+                        .disabled(isReAuthing)
                     
                     Divider()
                     
@@ -88,24 +90,30 @@ struct NicknameView: View {
                     isTappable = false
                     guard authManager.authDataResult != nil else {
                         hideKeyboard()
-                        loadingText = "계정을 확인하고 있어요"
-                        isTappable = true
+                        isReAuthing = true
                         isDialogPresented = true
                         return
                     }
                     
                     showSuccessAlert = true
                 } label: {
-                    HStack() {
-                        Image(systemName: "envelope")
-                            .padding(.horizontal, 10)
-                        
-                        Text("포스티 시작하기")
-                            .font(.system(size: 18, weight: .semibold))
+                    if isReAuthing {
+                        ProgressView()
+                            .foregroundColor(postieColors.writenLetterColor)
+                            .frame(height: 54)
+                            .frame(maxWidth: .infinity)
+                    } else {
+                        HStack {
+                            Image(systemName: "envelope")
+                                .padding(.horizontal, 10)
+                            
+                            Text("포스티 시작하기")
+                                .font(.system(size: 18, weight: .semibold))
+                        }
+                        .foregroundColor(postieColors.writenLetterColor)
+                        .frame(height: 54)
+                        .frame(maxWidth: .infinity)
                     }
-                    .foregroundColor(postieColors.writenLetterColor)
-                    .frame(height: 54)
-                    .frame(maxWidth: .infinity)
                 }
                 .background(isTappable ? postieColors.tintColor : postieColors.profileColor)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
@@ -119,17 +127,17 @@ struct NicknameView: View {
                         isTappable = false
                     }
                 }
-                .alert(isPresented: $showSuccessAlert) {
-                    let title = Text("닉네임 설정")
-                    let message = Text(#"한 번 설정한 닉네임은 변경할 수 없으니 신중하게 선택해주세요! \#n "\#(nickname)"으로 시작하시겠습니까?"#)
-                    let cancelButton = Alert.Button.destructive(Text("취소")) {
+                .alert("닉네임 설정", isPresented: $showSuccessAlert) {
+                    Button("취소", role: .cancel) {
+                        isReAuthing = false
                         isTappable = true
                     }
-                    let confirmButton = Alert.Button.default(Text("좋아요")) {
+                    
+                    Button("좋아요") {
                         Task {
                             guard let authDataResult = authManager.authDataResult else {
                                 isDialogPresented = true
-                                isTappable = true
+                                isReAuthing = true
                                 return
                             }
                             
@@ -138,11 +146,14 @@ struct NicknameView: View {
                             try await authManager.createUser(authDataResult: authDataResult, nickname: nickname)
                         }
                     }
-                    
-                    return Alert(title: title, message: message, primaryButton: cancelButton, secondaryButton: confirmButton)
+                } message: {
+                    Text(#"한 번 설정한 닉네임은 변경할 수 없으니 신중하게 선택해주세요! \#n "\#(nickname)"으로 시작하시겠습니까?"#)
                 }
                 .alert("인증 실패", isPresented: $showFailureAlert) {
-                    Button(role: .cancel, action: { }) {
+                    Button(role: .cancel) {
+                        isReAuthing = false
+                        isTappable = true
+                    } label: {
                         Text("확인")
                     }
                 } message: {
@@ -156,7 +167,7 @@ struct NicknameView: View {
             hideKeyboard()
         }
         .confirmationDialog("계정 정보를 가져오는데 실패했습니다.", isPresented: $isDialogPresented, titleVisibility: .visible) {
-            ReAuthButtonView(showLoading: $showLoading, showAlert: $showFailureAlert, alertBody: $failureAlertMessage)
+            ReAuthButtonView(showFailureAlert: $showFailureAlert, showSuccessAlert: $showSuccessAlert, alertBody: $failureAlertMessage)
         } message: {
             Text("계정 생성을 위해 재인증이 필요합니다. 재인증이 완료 되면 버튼을 다시 한 번 눌러주세요.")
                 .multilineTextAlignment(.center)
