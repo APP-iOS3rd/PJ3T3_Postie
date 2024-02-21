@@ -26,8 +26,8 @@ struct DeleteAccountButtonView: View {
                 Task {
                     do {
                         try await authManager.deleteGoogleAccount()
-                        try await authManager.deleteAccount()
                         showLoading = true
+                        try await authManager.deleteAccount()
                     } catch {
                         googleLoginFailure(error: error)
                         showLoading = false
