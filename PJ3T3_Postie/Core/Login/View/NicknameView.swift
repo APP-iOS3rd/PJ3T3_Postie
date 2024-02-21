@@ -14,8 +14,6 @@ struct NicknameView: View {
     @State private var showAlert = false
     @State private var isDialogPresented = false
     @State private var showLoading = false
-    @State private var dialogTitle = ""
-    @State private var dialogMessage = ""
     @State private var loadingText = ""
     @FocusState private var focusField: String?
     
@@ -119,11 +117,8 @@ struct NicknameView: View {
                     let confirmButton = Alert.Button.default(Text("좋아요")) {
                         Task {
                             guard let authDataResult = authManager.authDataResult else {
-                                dialogTitle = "계정 정보를 가져오는데 실패했습니다."
-                                dialogMessage = "재인증을 통해 로그인 정보를 삭제한 다음 다시 회원가입 해 주세요."
-                                loadingText = "계정을 안전하게 삭제하는 중이에요"
                                 isDialogPresented = true
-                                nickname = ""
+                                isTappable = true
                                 return
                             }
                             
@@ -138,28 +133,14 @@ struct NicknameView: View {
             }
             .padding(.horizontal, 32)
             .padding(.bottom, 100)
-            
-            VStack {
-                Spacer()
-                
-                Button {
-                    dialogTitle = "이미 존재하는 계정입니다."
-                    dialogMessage = "계정 삭제를 위해서는 재인증을 통해 다시 로그인 해야 합니다."
-                    loadingText = "계정을 안전하게 삭제하는 중이에요"
-                    isDialogPresented = true
-                } label: {
-                    Text("Back to Login Selection")
-                        .foregroundStyle(postieColors.tintColor)
-                }
-            }
         }
         .onTapGesture {
             hideKeyboard()
         }
-        .confirmationDialog(dialogTitle, isPresented: $isDialogPresented, titleVisibility: .visible) {
-            DeleteAccountButtonView(showLoading: $showLoading)
+        .confirmationDialog("계정 정보를 가져오는데 실패했습니다.", isPresented: $isDialogPresented, titleVisibility: .visible) {
+            ReAuthButtonView(showLoading: $showLoading, nickname: $nickname)
         } message: {
-            Text(dialogMessage)
+            Text("계정 생성을 위해 재인증이 필요합니다. 재인증이 완료 되면 버튼을 다시 한 번 눌러주세요.")
                 .multilineTextAlignment(.center)
         }
         .fullScreenCover(isPresented: $showLoading) {
