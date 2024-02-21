@@ -24,7 +24,7 @@ struct ContentView: View {
     //ViewModels
     @ObservedObject var authViewModel = AuthManager.shared
     @StateObject private var viewModel = AppViewModel()
-    
+    @State private var selectedTab = 1
     @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
     init() {
@@ -33,7 +33,6 @@ struct ContentView: View {
         UITabBar.appearance().scrollEdgeAppearance = tbAppearance
         UITabBar.appearance().standardAppearance = tbAppearance
     }
-    
 
     var body: some View {
         Group {
@@ -43,31 +42,39 @@ struct ContentView: View {
                 // ContentView는 viewModel에 업데이트가 없는지 listen하는 상태
                 if authViewModel.userSession != nil { // userSession이 있으면 SettingView를 보여줌
                     if authViewModel.currentUser != nil {
-                        TabView {
+                        TabView(selection: $selectedTab) {
                             HomeView()
                                 .tabItem {
                                     Image(systemName: "house")
-                                    Text("Home")
+                                    
+                                    Text("홈")
                                 }
+                                .tag(1)
                             
                             ShopView()
                                 .tabItem {
                                     Image(systemName: "cart")
-                                    Text("Letter Paper")
+                                    
+                                    Text("편지지")
                                 }
+                                .tag(2)
                             
                             MapView()
                                 .tabItem {
                                     Image(systemName: "map")
-                                    Text("Map")
+                                    
+                                    Text("지도")
                                 }
+                                .tag(3)
                             
                             //테스트용 뷰입니다. 추후 삭제 예정입니다.
                             SettingView()
                                 .tabItem {
                                     Image(systemName: "person")
-                                    Text("Setting")
+                                    
+                                    Text("세팅")
                                 }
+                                .tag(4)
                         }
                         .accentColor(ThemeManager.themeColors[isThemeGroupButton].tabBarTintColor)
                     } else {

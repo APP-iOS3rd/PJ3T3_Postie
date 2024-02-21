@@ -20,10 +20,10 @@ struct NoticeView: View {
                 VStack(alignment: .leading) {
                     if firestoreNoticeManager.notices.isEmpty {
                         VStack {
-                            Image("postyThingkingLineColor")
+                            Image("postyThinkingSketch")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(height: 300)
+                                .frame(height: 200)
                             
                             Text("공지가 로딩중입니다.")
                                 .foregroundStyle(postieColors.tabBarTintColor)
@@ -81,7 +81,8 @@ struct NoticeView: View {
                     }
                 }
             }
-            .padding()
+            .padding(.leading)
+            .padding(.trailing)
         }
         .toolbar {
             ToolbarItemGroup(placement: .principal) {
