@@ -23,6 +23,7 @@ class AddLetterViewModel: ObservableObject {
     @Published var showingSummaryAlert: Bool = false
     @Published var showingNotEnoughInfoAlert: Bool = false
     @Published var showingUploadErrorAlert: Bool = false
+    @Published var showingSummaryErrorAlert: Bool = false
     @Published var shouldDismiss: Bool = false
     @Published var isLoading: Bool = false
 
@@ -65,6 +66,10 @@ class AddLetterViewModel: ObservableObject {
 
     func showSummaryAlert() {
         showingSummaryAlert = true
+    }
+
+    func showSummaryErrorAlert() {
+        showingSummaryErrorAlert = true
     }
 
     func showUploadErrorAlert() {
@@ -136,6 +141,24 @@ class AddLetterViewModel: ObservableObject {
 
         await MainActor.run {
             FirestoreManager.shared.letters.append(newLetter)
+        }
+    }
+
+    func getSummary() async {
+        do {
+            let summaryResponse = try await APIClient.shared.postRequestToAPI(
+                title: isReceived ? "\(sender)에게 받은 편지" : "\(receiver)에게 쓴 편지",
+                content: text
+            )
+
+            await MainActor.run {
+                summary = summaryResponse
+                showSummaryTextField()
+            }
+        } catch {
+            await MainActor.run {
+                showSummaryErrorAlert()
+            }
         }
     }
 }

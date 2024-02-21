@@ -113,8 +113,9 @@ struct EditLetterView: View {
             }
 
             Button("AI 완성") {
-                // TODO: 네이버 클로바 API 호출
-                editLetterViewModel.showSummaryTextField()
+                Task {
+                    await editLetterViewModel.getSummary(isReceived: letter.isReceived)
+                }
                 focusField = .summary
             }
         }
@@ -122,6 +123,11 @@ struct EditLetterView: View {
             
         } message: {
             Text("편지 수정에 실패했어요. 다시 시도해 주세요")
+        }
+        .alert("편지 요약 실패", isPresented: $editLetterViewModel.showingSummaryErrorAlert) {
+
+        } message: {
+            Text("편지 요약에 실패했어요. 직접 요약해주세요.")
         }
         .onAppear {
             editLetterViewModel.syncViewModelProperties(letter: letter)
