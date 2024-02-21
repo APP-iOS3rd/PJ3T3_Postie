@@ -33,6 +33,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
 struct PJ3T3_PostieApp: App {
     @Environment(\.scenePhase) var scenePhase
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
     private var clientID: String? {
         get { getValueOfPlistFile("MapApiKeys", "NAVER_GEOCODE_ID") }
@@ -45,6 +46,7 @@ struct PJ3T3_PostieApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .tint(ThemeManager.themeColors[isThemeGroupButton].tabBarTintColor)
                 .onChange(of: scenePhase) { newPhase in
                     if newPhase == .active {
                         UIApplication.shared.applicationIconBadgeNumber = 0
