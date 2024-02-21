@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+import Kingfisher
+
 struct LetterDetailView: View {
     @StateObject private var letterDetailViewModel = LetterDetailViewModel()
     @ObservedObject var firestoreManager = FirestoreManager.shared
@@ -43,21 +45,9 @@ struct LetterDetailView: View {
 
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button {
-                    letterDetailViewModel.isFavorite.toggle()
-                    
-                    // TODO: 하나만 업데이트 하는 함수로 변경
-                    firestoreManager.editLetter(
-                        documentId: letter.id,
-                        writer: firestoreManager.letter.writer,
-                        recipient: firestoreManager.letter.recipient,
-                        summary: firestoreManager.letter.summary,
-                        date: firestoreManager.letter.date,
-                        text: firestoreManager.letter.text,
-                        isReceived: firestoreManager.letter.isReceived,
-                        isFavorite: letterDetailViewModel.isFavorite
-                    )
-
-                    firestoreManager.fetchAllLetters()
+                    Task {
+                        await letterDetailViewModel.updateIsFavorite(docId: letter.id)
+                    }
                 } label: {
                     Image(systemName: letterDetailViewModel.isFavorite ? "heart.fill" : "heart")
                         .foregroundStyle(.postieOrange)
@@ -90,15 +80,16 @@ struct LetterDetailView: View {
 
             }
         }
+        .modifier(LoadingModifier(isLoading: $letterDetailViewModel.isLoading, text: "편지를 삭제 중이에요."))
         .fullScreenCover(isPresented: $letterDetailViewModel.showLetterImageFullScreenView) {
             LetterImageFullScreenView(
-                images: storageManager.images.map { $0.image },
+                urls: firestoreManager.letter.imageURLs ?? [],
                 pageIndex: $letterDetailViewModel.selectedIndex
             )
         }
         .sheet(isPresented: $letterDetailViewModel.showLetterEditSheet) {
             NavigationStack {
-                EditLetterView(letter: firestoreManager.letter, letterPhotos: StorageManager.shared.images)
+                EditLetterView(letter: firestoreManager.letter)
             }
         }
         .alert("편지 삭제", isPresented: $letterDetailViewModel.showDeleteAlert) {
@@ -109,30 +100,29 @@ struct LetterDetailView: View {
             }
 
             Button(role: .destructive) {
-                firestoreManager.deleteLetter(documentId: letter.id)
-
-                storageManager.images.forEach { letterPhoto in
-                    storageManager.deleteItem(fullPath: letterPhoto.fullPath)
+                Task {
+                    await letterDetailViewModel.deleteLetter(docId: letter.id)
                 }
-
-                firestoreManager.fetchAllLetters()
-
-                dismiss()
             } label: {
                 Text("삭제")
             }
         } message: {
             Text("편지를 삭제하시겠습니까?")
         }
-        .onAppear {
-            storageManager.listAllFile(docId: letter.id)
+        .alert("편지 삭제 실패", isPresented: $letterDetailViewModel.showingDeleteErrorAlert) {
 
+        } message: {
+            Text("편지 삭제에 실패했어요. 다시 시도해 주세요.")
+        }
+        .onAppear {
             letterDetailViewModel.isFavorite = letter.isFavorite
 
             firestoreManager.letter = letter
         }
-        .onDisappear {
-            storageManager.images.removeAll()
+        .customOnChange(letterDetailViewModel.shouldDismiss) { shouldDismiss in
+            if shouldDismiss {
+                dismiss()
+            }
         }
     }
 }
@@ -158,23 +148,29 @@ extension LetterDetailView {
 
     @ViewBuilder
     private var letterImageSection: some View {
-        if !storageManager.images.isEmpty {
+        if let imageUrls = firestoreManager.letter.imageURLs {
             VStack(alignment: .leading, spacing: 4) {
                 Text("편지 사진")
 
                 ScrollView(.horizontal) {
                     HStack(spacing: 8) {
-                        ForEach(0..<storageManager.images.count, id: \.self) { index in
+                        ForEach(0..<imageUrls.count, id: \.self) { index in
                             ZStack {
                                 Button {
                                     letterDetailViewModel.selectedIndex = index
                                     letterDetailViewModel.showLetterImageFullScreenView = true
                                 } label: {
-                                    Image(uiImage: storageManager.images.map({$0.image})[index])
-                                        .resizable()
-                                        .scaledToFill()
-                                        .frame(width: 50, height: 50)
-                                        .clipShape(RoundedRectangle(cornerRadius: 4))
+                                    if let url = URL(string: imageUrls[index]) {
+                                        KFImage(url)
+                                            .placeholder {
+                                                ProgressView()
+                                                    .frame(width: 50, height: 50)
+                                            }
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: 50, height: 50)
+                                            .clipShape(RoundedRectangle(cornerRadius: 4))
+                                    }
                                 }
                             }
                         }

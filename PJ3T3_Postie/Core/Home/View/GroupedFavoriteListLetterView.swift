@@ -10,28 +10,31 @@ import SwiftUI
 struct GroupedFavoriteListLetterView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
     @ObservedObject var storageManager = StorageManager.shared
-    
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
+    @State private var isMenuActive = false
     @State private var isSideMenuOpen: Bool = false
-    @Binding var isThemeGroupButton: Int
     
     var body: some View {
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
         let favoriteLetters = firestoreManager.letters.filter { $0.isFavorite }
         
         ZStack(alignment: .bottomTrailing) {
             postieColors.backGroundColor
                 .ignoresSafeArea()
             
-            if firestoreManager.letters.isEmpty {
+            if favoriteLetters.count == 0 {
                 VStack {
-                    Image("postyHeartSketch")
+                    Image(isThemeGroupButton == 4 ? "postyHeartSketchWhite" : "postyHeartSketch")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 300)
                         .opacity(0.5)
+                        .padding(.bottom)
                     
-                    Text("\n좋아하는 편지가 없어요 ㅠ.ㅠ 저장한 편지에서 하트를 눌러보세요!")
-                        .font(.callout)
+                    Text("좋아하는 편지가 없어요 ㅠ.ㅠ")
+                        .font(.headline)
+                        .foregroundStyle(postieColors.tintColor)
+                    
+                    Text("저장한 편지에서 하트를 눌러보세요!")
                         .foregroundStyle(postieColors.dividerColor)
                 }
                 .offset(x: -30, y: -150)
@@ -43,8 +46,9 @@ struct GroupedFavoriteListLetterView: View {
                     NavigationLink {
                         LetterDetailView(letter: letter)
                     } label: {
-                        LetterItemView(letter: letter, isThemeGroupButton: $isThemeGroupButton)
+                        LetterItemView(letter: letter)
                     }
+                    .disabled(isMenuActive)
                 }
                 
                 // ScrollView margin 임시
@@ -53,7 +57,12 @@ struct GroupedFavoriteListLetterView: View {
                     .foregroundStyle(Color.postieBlack.opacity(0))
             }
             
-            AddLetterButton(isThemeGroupButton: $isThemeGroupButton)
+            AddLetterButton(isMenuActive: $isMenuActive)
+        }
+        .onTapGesture {
+            if self.isMenuActive {
+                self.isMenuActive = false
+            }
         }
         .toolbarBackground(postieColors.backGroundColor, for: .navigationBar)
         .tint(postieColors.tabBarTintColor)

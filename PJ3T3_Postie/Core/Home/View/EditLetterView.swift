@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+import Kingfisher
+
 struct EditLetterView: View {
     @StateObject private var editLetterViewModel = EditLetterViewModel()
 
@@ -18,15 +20,13 @@ struct EditLetterView: View {
     }
 
     let letter: Letter
-    var letterPhotos: [LetterPhoto]
 
     @FocusState private var focusField: Field?
     @Environment(\.dismiss) var dismiss
     @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
 
-    init(letter: Letter, letterPhotos: [LetterPhoto]) {
+    init(letter: Letter) {
         self.letter = letter
-        self.letterPhotos = letterPhotos
 
         // TextEditor 패딩
         UITextView.appearance().textContainerInset = UIEdgeInsets(
@@ -65,13 +65,12 @@ struct EditLetterView: View {
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button {
                     Task {
-                        await editLetter(letter: letter)
+                        await editLetterViewModel.updateLetter(letter: letter)
                     }
-
-                    dismiss()
                 } label : {
                     Text("완료")
                 }
+                .disabled(editLetterViewModel.isLoading)
             }
 
             ToolbarItemGroup(placement: .keyboard) {
@@ -86,81 +85,52 @@ struct EditLetterView: View {
         }
         .toolbar(.hidden, for: .tabBar)
         .scrollDismissesKeyboard(.interactively)
-        .fullScreenCover(isPresented: $editLetterViewModel.showLetterImageFullScreenView) {
+        .modifier(LoadingModifier(isLoading: $editLetterViewModel.isLoading, text: "편지를 수정하고 있어요."))
+        .fullScreenCover(isPresented: $editLetterViewModel.showingLetterImageFullScreenView) {
             LetterImageFullScreenView(
-                images: editLetterViewModel.images,
+                images: editLetterViewModel.newImages,
+                urls: editLetterViewModel.fullPathsAndUrls.map { $0.url },
                 pageIndex: $editLetterViewModel.selectedIndex
             )
         }
-        .sheet(isPresented: $editLetterViewModel.showUIImagePicker) {
+        .sheet(isPresented: $editLetterViewModel.showingUIImagePicker) {
             UIImagePicker(
                 sourceType: editLetterViewModel.imagePickerSourceType,
-                selectedImages: $editLetterViewModel.images,
+                selectedImages: $editLetterViewModel.newImages,
                 text: $editLetterViewModel.text,
-                showTextRecognizerErrorAlert: $editLetterViewModel.showTextRecognizerErrorAlert
+                showingTextRecognizerErrorAlert: $editLetterViewModel.showingTextRecognizerErrorAlert
             )
             .ignoresSafeArea(.all, edges: .bottom)
         }
-        .alert("문자 인식 실패", isPresented: $editLetterViewModel.showTextRecognizerErrorAlert) {
+        .alert("문자 인식 실패", isPresented: $editLetterViewModel.showingTextRecognizerErrorAlert) {
         } message: {
             Text("문자 인식에 실패했습니다. 다시 시도해 주세요.")
         }
-        .alert("한 줄 요약", isPresented: $editLetterViewModel.showSummaryAlert) {
+        .alert("한 줄 요약", isPresented: $editLetterViewModel.showingSummaryAlert) {
             Button("직접 작성") {
-                // TODO: 함수로 빼기
-                editLetterViewModel.showSummaryTextField = true
+                editLetterViewModel.showSummaryTextField()
                 focusField = .summary
             }
 
             Button("AI 완성") {
                 // TODO: 네이버 클로바 API 호출
-                editLetterViewModel.showSummaryTextField = true
+                editLetterViewModel.showSummaryTextField()
                 focusField = .summary
             }
         }
-        .onAppear {
-            editLetterViewModel.sender = letter.writer
-            editLetterViewModel.receiver = letter.recipient
-            editLetterViewModel.date = letter.date
-            editLetterViewModel.text = letter.text
-            editLetterViewModel.summary = letter.summary
-            editLetterViewModel.images = letterPhotos.map { $0.image }
-
-            editLetterViewModel.showSummaryTextField = !letter.summary.isEmpty
+        .alert("편지 수정 실패", isPresented: $editLetterViewModel.showingEditErrorAlert) {
+            
+        } message: {
+            Text("편지 수정에 실패했어요. 다시 시도해 주세요")
         }
-    }
-
-    /// 이미 작성된 편지를 수정합니다.
-    /// - Parameter letter: 작성된 편지
-    ///
-    /// 1. Firestore에 저장된 편지 데이터를 수정
-    /// 2. Firestorage에 저장된 편지 이미지를 수정 후 불러와 데이터 상태 업데이트
-    /// 3. FirestoreManager의 @Published letter 변수 업데이트 ( AddView, DetailView 연동을 위해서 )
-    /// 4. `firestoreManager.fetchAllLetters()`을 홈뷰, 디테일뷰 데이터 상태 업데이트
-    private func editLetter(letter: Letter) async {
-        FirestoreManager.shared.editLetter(
-            documentId: letter.id,
-            writer: editLetterViewModel.sender,
-            recipient: editLetterViewModel.receiver,
-            summary: editLetterViewModel.summary,
-            date: editLetterViewModel.date,
-            text: editLetterViewModel.text,
-            isReceived: letter.isReceived,
-            isFavorite: letter.isFavorite
-        )
-
-        FirestoreManager.shared.letter = Letter(
-            id: letter.id,
-            writer: editLetterViewModel.sender,
-            recipient: editLetterViewModel.receiver,
-            summary: editLetterViewModel.summary,
-            date: editLetterViewModel.date,
-            text: editLetterViewModel.text,
-            isReceived: letter.isReceived,
-            isFavorite: letter.isFavorite
-        )
-
-        FirestoreManager.shared.fetchAllLetters()
+        .onAppear {
+            editLetterViewModel.syncViewModelProperties(letter: letter)
+        }
+        .customOnChange(editLetterViewModel.shouldDismiss) { shouldDismiss in
+            if shouldDismiss {
+                dismiss()
+            }
+        }
     }
 }
 
@@ -233,8 +203,7 @@ extension EditLetterView {
                     Image(systemName: "plus")
                 }
             }
-
-            if StorageManager.shared.images.isEmpty {
+            if editLetterViewModel.fullPathsAndUrls.isEmpty && editLetterViewModel.newImages.isEmpty {
                 Label("사진을 추가해주세요.", systemImage: "photo.on.rectangle")
                     .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].dividerColor)
                     .frame(maxWidth: .infinity)
@@ -243,13 +212,43 @@ extension EditLetterView {
             } else {
                 ScrollView(.horizontal) {
                     HStack(spacing: 8) {
-                        ForEach(0..<StorageManager.shared.images.count, id: \.self) { index in
+                        ForEach(0..<editLetterViewModel.fullPathsAndUrls.count, id: \.self) { index in
                             ZStack(alignment: .topTrailing) {
                                 Button {
-                                    editLetterViewModel.selectedIndex = index
-                                    editLetterViewModel.showLetterImageFullScreenView = true
+                                    editLetterViewModel.showLetterImageFullScreenView(index: index)
                                 } label: {
-                                    Image(uiImage: StorageManager.shared.images.map({$0.image}) [index])
+                                    if let url = URL(string: editLetterViewModel.fullPathsAndUrls[index].url) {
+                                        KFImage(url)
+                                            .placeholder {
+                                                ProgressView().frame(width: 100, height: 100)
+                                            }
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: 100, height: 100)
+                                            .clipShape(RoundedRectangle(cornerRadius: 4))
+                                    }
+                                }
+
+                                Button {
+                                    let deletedFullPathAndUrl = editLetterViewModel.fullPathsAndUrls[index]
+                                    editLetterViewModel.fullPathsAndUrls.remove(at: index)
+
+                                    editLetterViewModel.deleteCandidatesFromFullPathsANdUrls.append(deletedFullPathAndUrl)
+                                } label: {
+                                    Image(systemName: "xmark.circle.fill")
+                                        .symbolRenderingMode(.palette)
+                                        .foregroundStyle(.white, ThemeManager.themeColors[isThemeGroupButton].tintColor)
+                                }
+                                .offset(x: 8, y: -8)
+                            }
+                        }
+
+                        ForEach(0..<editLetterViewModel.newImages.count, id: \.self) { index in
+                            ZStack(alignment: .topTrailing) {
+                                Button {
+                                    editLetterViewModel.showLetterImageFullScreenView(index: index + editLetterViewModel.fullPathsAndUrls.count)
+                                } label: {
+                                    Image(uiImage: editLetterViewModel.newImages[index])
                                         .resizable()
                                         .scaledToFill()
                                         .frame(width: 100, height: 100)
@@ -258,8 +257,7 @@ extension EditLetterView {
 
                                 Button {
                                     withAnimation {
-                                        let selectedLetterPhoto = StorageManager.shared.images[index]
-                                        StorageManager.shared.deleteItem(fullPath: selectedLetterPhoto.fullPath)
+                                        editLetterViewModel.removeImage(at: index)
                                     }
                                 } label: {
                                     Image(systemName: "xmark.circle.fill")
@@ -271,6 +269,7 @@ extension EditLetterView {
                         }
                     }
                     .padding(.top, 8)
+                    .padding(.trailing, 8)
                 }
                 .scrollIndicators(.never)
             }
@@ -318,13 +317,13 @@ extension EditLetterView {
                 Spacer()
 
                 Button {
-                    editLetterViewModel.showSummaryAlert = true
+                    editLetterViewModel.showSummaryAlert()
                 } label: {
                     Image(systemName: "plus")
                 }
             }
 
-            if editLetterViewModel.showSummaryTextField || !editLetterViewModel.summary.isEmpty {
+            if editLetterViewModel.showingSummaryTextField || !editLetterViewModel.summary.isEmpty {
                 TextField("", text: $editLetterViewModel.summary)
                     .padding(6)
                     .background(ThemeManager.themeColors[isThemeGroupButton].receivedLetterColor)
@@ -344,5 +343,5 @@ extension EditLetterView {
 
 
 #Preview {
-    EditLetterView(letter: Letter.preview, letterPhotos: [])
+    EditLetterView(letter: Letter.preview)
 }

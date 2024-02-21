@@ -13,7 +13,8 @@ class FirestoreManager: ObservableObject {
     @available(*, deprecated, message: "모든 뷰에서 제거 해주세요. 제거가 완료되면 이 변수를 삭제 후 커밋 해 주세요.")
     var docId: String = "" //deprecated
     @Published var letters: [Letter] = []
-    @available(*, deprecated, message: "모든 뷰에서 제거 해주세요. 제거가 완료되면 이 변수를 삭제 후 커밋 해 주세요.")
+
+//    @available(*, deprecated, message: "모든 뷰에서 제거 해주세요. 제거가 완료되면 이 변수를 삭제 후 커밋 해 주세요.")
     @Published var letter: Letter = Letter(id: "", writer: "", recipient: "", summary: "", date: Date(), text: "", isReceived: false, isFavorite: false) //deprecated
 
     private init() { 
@@ -110,10 +111,10 @@ class FirestoreManager: ObservableObject {
     }
     
     func updateLetter(docId: String, writer: String, recipient: String, summary: String, date: Date, text: String, isReceived: Bool, isFavorite: Bool, imageURLs: [String]?, imageFullPaths: [String]?) {
-        let docRef = letterColRef.document(letter.id)
+        let docRef = letterColRef.document(docId)
         var docData = [String: Any]()
         
-        if let imageURLs = letter.imageURLs, let imageFullPaths = letter.imageFullPaths {
+        if let imageURLs = imageURLs, let imageFullPaths = imageFullPaths {
             docData = ["id": docId,
                        "writer": writer,
                        "recipient": recipient,
@@ -143,10 +144,39 @@ class FirestoreManager: ObservableObject {
             }
         }
     }
-    
+
+    func updateLetterAsync(docId: String, writer: String, recipient: String, summary: String, date: Date, text: String, isReceived: Bool, isFavorite: Bool, imageURLs: [String]?, imageFullPaths: [String]?) async throws {
+        let docRef = letterColRef.document(docId)
+        var docData = [String: Any]()
+
+        if let imageURLs = imageURLs, let imageFullPaths = imageFullPaths {
+            docData = ["id": docId,
+                       "writer": writer,
+                       "recipient": recipient,
+                       "summary": summary,
+                       "date": date,
+                       "text": text,
+                       "isReceived": isReceived,
+                       "isFavorite": isFavorite,
+                       "imageURLs": FieldValue.arrayUnion(imageURLs),
+                       "imageFullPaths": FieldValue.arrayUnion(imageFullPaths)]
+        } else {
+            docData = ["id": docId,
+                       "writer": writer,
+                       "recipient": recipient,
+                       "summary": summary,
+                       "date": date,
+                       "text": text,
+                       "isReceived": isReceived,
+                       "isFavorite": isFavorite]
+        }
+
+        try await docRef.updateData(docData)
+    }
+
     func removeFullPathsAndURLs(docId: String, fullPaths: [String], urls: [String]) {
         let docRef = letterColRef.document(docId)
-        
+
         docRef.updateData(["imageURLs": FieldValue.arrayRemove(urls),
                            "imageFullPaths": FieldValue.arrayRemove(fullPaths)]) { error in
             if let error = error {
@@ -156,7 +186,28 @@ class FirestoreManager: ObservableObject {
             }
         }
     }
-    
+
+    func removeFullPathsAndUrlsAsync(docId: String, fullPaths: [String], urls:  [String]) async throws {
+        let docRef = letterColRef.document(docId)
+
+        try await docRef.updateData(["imageURLs": FieldValue.arrayRemove(urls),
+                           "imageFullPaths": FieldValue.arrayRemove(fullPaths)])
+    }
+
+    func getLetter(docId: String) async throws -> Letter {
+        let docRef = letterColRef.document(docId)
+
+        return try await docRef.getDocument(as: Letter.self)
+    }
+
+    func updateIsFavorite(docId: String, isFavorite: Bool) async throws {
+        let docRef = letterColRef.document(docId)
+
+        try await docRef.updateData([
+            "isFavorite" : isFavorite
+        ])
+    }
+
 //MARK: - 편지 fetch
     func fetchAllLetters() {
         //letterColRef(특정 user의 document의 letters라는 하위 컬렉션)에 있는 모든 document를 가져옴
@@ -200,6 +251,20 @@ class FirestoreManager: ObservableObject {
         }
     }
 
+    func fetchAllLettersAsync() async throws {
+        let snapshot = try await letterColRef.getDocuments()
+        await MainActor.run {
+            self.letters.removeAll()
+        }
+
+        for document in snapshot.documents {
+            let letter = try document.data(as: Letter.self)
+            await MainActor.run {
+                self.letters.append(letter)
+            }
+        }
+    }
+
 //MARK: - 편지 삭제
     func deleteLetter(documentId: String) {
         let docRef = letterColRef.document(documentId)
@@ -212,7 +277,13 @@ class FirestoreManager: ObservableObject {
             }
         }
     }
-    
+
+    func deleteLetterAsync(documentId: String) async throws {
+        let docRef = letterColRef.document(documentId)
+        
+        try await docRef.delete()
+    }
+
     func deleteUserDocument(userUid: String) {
         let userDocRef = Firestore.firestore().collection("users").document(userUid)
         var letterQty = 0

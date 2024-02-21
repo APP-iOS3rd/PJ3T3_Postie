@@ -8,23 +8,29 @@
 import SwiftUI
 
 struct NoticeView: View {
-    @Binding var isThemeGroupButton: Int
+    @ObservedObject var firestoreNoticeManager = FirestoreNoticeManager.shared
     @State private var isExpanded = false
     
     var body: some View {
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
-        let posts = [
-            Post(title: "언제나 변함없는 편지 앱, 포스티가 시작했습니다. 1.0 업데이트 안내", content: "언제나 변함없는 편지 앱, 포스티가 베타 테스트를 시작했습니다!", date: Date(), imageURL: nil),
-            Post(title: "시작은 작은 한걸음 부터. 1.0.2 업데이트 안내", content: "편지 수정 기능을 강화했습니다.", date: Date(), imageURL: nil)
-        ]
-        
         ZStack {
             postieColors.backGroundColor
                 .ignoresSafeArea()
             
-            ScrollView {
+            ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading) {
-                    ForEach(Array(posts.reversed()), id: \.id) { post in
+                    if firestoreNoticeManager.notices.isEmpty {
+                        VStack {
+                            Image("postyThingkingLineColor")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(height: 300)
+                            
+                            Text("공지가 로딩중입니다.")
+                                .foregroundStyle(postieColors.tabBarTintColor)
+                        }
+                    }
+                    
+                    ForEach(firestoreNoticeManager.notices.sorted(by: { $0.date > $1.date }), id:\.self) { notice in
                         DisclosureGroup {
                             ZStack {
                                 postieColors.receivedLetterColor
@@ -32,6 +38,7 @@ struct NoticeView: View {
                                 
                                 VStack(alignment: .leading) {
                                     Text("안녕하세요 포스티팀입니다.\n")
+                                        .font(.callout)
                                     
 //                                    if let imageURL = post.imageURL {
 //                                        Image(systemName: "photo")
@@ -39,30 +46,38 @@ struct NoticeView: View {
 //                                            .scaledToFit()
 //                                    }
                                     
-                                    Text("\(post.content)\n")
+                                    Text("\(notice.content.replacingOccurrences(of: "\\n", with: "\n"))\n")
+                                        .font(.callout)
                                     
                                     HStack {
                                         Spacer()
                                         
                                         Text("From. ")
-                                            .font(.custom("SourceSerifPro-Black", size: 15))
+                                            .font(.custom("SourceSerifPro-Black", size: 16))
                                         + Text("포스티팀")
+                                            .font(.callout)
                                     }
                                 }
                                 .padding()
                             }
+                            .padding(.top, 10)
                         } label: {
                             VStack(alignment: .leading) {
-                                Text(post.date.toString())
+                                Text(notice.date.toString())
                                     .font(.caption)
                                     .foregroundColor(postieColors.dividerColor)
                                 
-                                Text(post.title)
+                                Text(notice.title)
                                     .multilineTextAlignment(.leading)
                             }
                         }
                         
-                        DividerView(isThemeGroupButton: $isThemeGroupButton)
+                        DividerView()
+                    }
+                }
+                .onAppear {
+                    if firestoreNoticeManager.notices.isEmpty {
+                        firestoreNoticeManager.fetchAllNotices()
                     }
                 }
             }
@@ -78,14 +93,6 @@ struct NoticeView: View {
         .toolbarBackground(postieColors.backGroundColor, for: .navigationBar)
         .navigationBarTitleDisplayMode(.inline)
     }
-}
-
-struct Post {
-    var id = UUID()
-    var title: String
-    var content: String
-    var date: Date
-    var imageURL: String?
 }
 
 //#Preview {

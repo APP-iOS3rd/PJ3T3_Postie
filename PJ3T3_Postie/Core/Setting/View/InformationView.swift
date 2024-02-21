@@ -8,10 +8,9 @@
 import SwiftUI
 
 struct InformationView: View {
-    @Binding var isThemeGroupButton: Int
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
     var body: some View {
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
         var appVersion: String {
                 if let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String,
                    let build = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String {
@@ -29,7 +28,8 @@ struct InformationView: View {
                     Text("앱 정보")
                         .foregroundStyle(postieColors.dividerColor)
                     
-                    DividerView(isThemeGroupButton: $isThemeGroupButton)
+                    DividerView()
+                        .padding(.bottom)
                     
                     HStack {
                         Text("버전정보")
@@ -45,9 +45,10 @@ struct InformationView: View {
                     Text("법률 조항")
                         .foregroundStyle(postieColors.dividerColor)
                     
-                    DividerView(isThemeGroupButton: $isThemeGroupButton)
+                    DividerView()
+                        .padding(.bottom)
                     
-                    NavigationLink(destination: TermOfUserView(isThemeGroupButton: $isThemeGroupButton)) {
+                    NavigationLink(destination: TermOfUserView()) {
                         HStack {
                             Text("이용약관")
                                 .foregroundStyle(postieColors.tabBarTintColor)
@@ -60,7 +61,7 @@ struct InformationView: View {
                         .padding(.bottom)
                     }
                     
-                    NavigationLink(destination: PrivacyView(isThemeGroupButton : $isThemeGroupButton)) {
+                    NavigationLink(destination: PrivacyView()) {
                         HStack {
                             Text("개인정보 처리방침")
                                 .foregroundStyle(postieColors.tabBarTintColor)
@@ -88,11 +89,9 @@ struct InformationView: View {
 }
 
 struct TermOfUserView: View {
-    @Binding var isThemeGroupButton: Int
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
     var body: some View {
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
-        
         ZStack {
             postieColors.backGroundColor
                 .ignoresSafeArea()
@@ -102,7 +101,7 @@ struct TermOfUserView: View {
                     Text("제1조 (목적)\n")
                         .bold()
                     
-                    Text("본 약관은 회사(이하 \"회사\"라 합니다)가 제공하는 모든 서비스(이하 \"서비스\"라 합니다)의 이용조건 및 절차, 이용자와 회사의 권리, 의무, 책임사항, 서비스 이용에 대한 기타 필요한 사항을 규정함을 목적으로 합니다.\n")
+                    Text("본 약관은 포스티(이하 \"회사\"라 합니다)가 제공하는 모든 서비스(이하 \"서비스\"라 합니다)의 이용조건 및 절차, 이용자와 회사의 권리, 의무, 책임사항, 서비스 이용에 대한 기타 필요한 사항을 규정함을 목적으로 합니다.\n")
                         .font(.subheadline)
                     
                     Text("제2조 (정의)\n")
@@ -158,11 +157,9 @@ struct TermOfUserView: View {
 }
 
 struct PrivacyView: View {
-    @Binding var isThemeGroupButton: Int
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
     var body: some View {
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
-        
         ZStack {
             postieColors.backGroundColor
                 .ignoresSafeArea()
@@ -172,7 +169,7 @@ struct PrivacyView: View {
                     Text("1. 개인정보의 처리 목적\n")
                         .bold()
                     
-                    Text("회사(이하 '회사')는 다음의 목적을 위해 개인정보를 처리합니다. 처리한 개인정보는 다음의 목적 이외의 용도로는 사용되지 않으며, 이용 목적이 변경될 시에는 사전 동의를 구할 예정입니다.")
+                    Text("포스티(이하 '회사')는 다음의 목적을 위해 개인정보를 처리합니다. 처리한 개인정보는 다음의 목적 이외의 용도로는 사용되지 않으며, 이용 목적이 변경될 시에는 사전 동의를 구할 예정입니다.")
                         .font(.subheadline)
                     
                     Text(" • 서비스 제공에 관한 계약 이행 및 서비스 제공에 따른 요금정산\n • 회원 관리, 개인 맞춤 서비스 제공 등\n")

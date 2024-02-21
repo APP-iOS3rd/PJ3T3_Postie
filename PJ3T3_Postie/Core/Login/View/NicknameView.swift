@@ -40,27 +40,59 @@ struct NicknameView: View {
                         .fontWeight(.semibold)
                         .font(.footnote)
                     
-                    TextField("앱에서 사용할 닉네임을 입력 해 주세요", text: $nickname)
+                    TextField("사용할 닉네임을 입력 해 주세요", text: $nickname)
                         .focused($focusField, equals: "nickname")
                         .autocorrectionDisabled()
+                        .overlay(
+                            HStack {
+                                Spacer()
+                                if !nickname.isEmpty {
+                                    Button{
+                                        nickname = ""
+                                    } label: {
+                                        Image(systemName: "multiply.circle.fill")
+                                            .foregroundColor(.postieGray)
+                                    }
+                                    .padding(.trailing, 5)
+                                }
+                            }
+                        )
                     
                     Divider()
                     
                     if nickname.isEmpty {
-                        Text("닉네임을 입력 해 주세요.")
-                            .foregroundStyle(postieColors.tintColor)
-                            .font(.system(size: 12))
-                            .padding(.bottom, 20)
-                    } else if nickname.count > 13 {
-                        Text("닉네임은 최대 12자까지 설정할 수 있습니다.")
-                            .foregroundStyle(postieColors.tintColor)
-                            .font(.system(size: 12))
-                            .padding(.bottom, 20)
+                        HStack {
+                            Text("닉네임을 입력 해 주세요.")
+                            
+                            Spacer()
+                            
+                            Text("\(nickname.count) / 12")
+                        }
+                        .foregroundStyle(postieColors.tintColor)
+                        .font(.system(size: 12))
+                        .padding(.bottom, 20)
+                    } else if nickname.count > 12 {
+                        HStack {
+                            Text("닉네임은 최대 12자까지 설정할 수 있습니다.")
+                            
+                            Spacer()
+                            
+                            Text("\(nickname.count) / 12")
+                        }
+                        .foregroundStyle(postieColors.tintColor)
+                        .font(.system(size: 12))
+                        .padding(.bottom, 20)
                     } else {
-                        Text("사용 가능한 닉네임입니다.")
-                            .foregroundStyle(postieColors.tintColor)
-                            .font(.system(size: 12))
-                            .padding(.bottom, 20)
+                        HStack {
+                            Text("사용 가능한 닉네임입니다.")
+                            
+                            Spacer()
+                            
+                            Text("\(nickname.count) / 12")
+                        }
+                        .foregroundStyle(postieColors.tintColor)
+                        .font(.system(size: 12))
+                        .padding(.bottom, 20)
                     }
                 }
                 .onAppear {

@@ -23,7 +23,7 @@ struct LoginView: View {
                 postieColors.backGroundColor
                     .ignoresSafeArea()
                 
-                ToFromLabelView(isThemeGroupButton: $isThemeGroupButton)
+                ToFromLabelView()
                     .padding()
                 
                 VStack {

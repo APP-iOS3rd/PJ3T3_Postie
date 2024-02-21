@@ -13,7 +13,7 @@ struct UIImagePicker: UIViewControllerRepresentable {
     @Environment(\.dismiss) var dismiss
     @Binding var selectedImages: [UIImage]
     @Binding var text: String
-    @Binding var showTextRecognizerErrorAlert: Bool
+    @Binding var showingTextRecognizerErrorAlert: Bool
 
     func makeUIViewController(context: Context) -> UIImagePickerController {
         let imagePicker = UIImagePickerController()
@@ -48,7 +48,7 @@ struct UIImagePicker: UIViewControllerRepresentable {
 
                     self.parent.text.append(" \(recognizer.recognizedText)")
                 } catch {
-                    parent.showTextRecognizerErrorAlert = true
+                    parent.showingTextRecognizerErrorAlert = true
                 }
             }
             parent.dismiss()

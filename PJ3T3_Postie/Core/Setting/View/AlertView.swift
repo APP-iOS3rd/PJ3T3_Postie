@@ -8,36 +8,63 @@
 import SwiftUI
 
 struct AlertView: View {
-    @Binding var isThemeGroupButton: Int
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
+    @AppStorage("allAlert") private var allAlert: Bool = true
     @State private var slowAlert = true
-    @State private var allAlert = true
-    @State private var alert1 = true
-    @State private var alert2 = true
+    @State private var todayAlert = true
+    @State private var oldAlert = true
     
     var body: some View {
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
-        
         ZStack {
             postieColors.backGroundColor
                 .ignoresSafeArea()
             
             ScrollView {
                 VStack {
-                    Toggle("전체 알림", isOn: $allAlert)
+                    Toggle(isOn: $allAlert) {
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("전체 알림")
+                                .foregroundStyle(postieColors.tabBarTintColor)
+                            
+                            Text("모든 편지 알림을 받을 수 있습니다.")
+                                .font(.footnote)
+                                .foregroundColor(postieColors.dividerColor)
+                        }
+                    }
+                    .padding(.bottom, 5)
+                    
+                    DividerView()
                         .padding(.bottom)
                     
-                    DividerView(isThemeGroupButton: $isThemeGroupButton)
+//                    Toggle(isOn: $oldAlert) {
+//                        VStack(alignment: .leading, spacing: 5) {
+//                            Text("옛 편지 알림")
+//                                .foregroundStyle(postieColors.tabBarTintColor)
+//                            
+//                            Text("N년전 오늘 적었던 편지 알림을 받을 수 있습니다.")
+//                                .font(.footnote)
+//                                .foregroundColor(postieColors.dividerColor)
+//                        }
+//                    }
+//                    .disabled(!allAlert)
+//                    .padding(.bottom, 8)
                     
-                    Toggle("옛 편지 알림", isOn: $slowAlert)
-                        .disabled(!allAlert)
-                        .padding(.bottom)
-                    
-                    Toggle("오늘의 편지 알림", isOn: $alert1)
-                        .disabled(!allAlert)
+                    Toggle(isOn: $slowAlert) {
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("느린 우체통 알림")
+                                .foregroundStyle(postieColors.tabBarTintColor)
+                            
+                            Text("정해둔 시간이 지나 편지를 열 수 있게 되면 알림을 받을 수 있습니다.")
+                                .font(.footnote)
+                                .foregroundColor(postieColors.dividerColor)
+                        }
+                    }
+                    .disabled(!allAlert)
+
                 }
                 .padding()
             }
-            .tint(postieColors.tintColor)
+            .tint(isThemeGroupButton == 4 ? .postieDarkGray : postieColors.tintColor)
         }
         .toolbar {
             ToolbarItemGroup(placement: .principal) {

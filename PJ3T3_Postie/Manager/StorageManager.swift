@@ -12,7 +12,6 @@ import FirebaseStorage
 final class StorageManager: ObservableObject {
     static let shared = StorageManager()
     var userReference: StorageReference = Storage.storage().reference()
-    var imageFullPath: String = ""
     @Published var images: [LetterPhoto] = []
     
     private init() { 
@@ -88,7 +87,7 @@ final class StorageManager: ObservableObject {
             //compressionQuality: 1 => 100%를 의미해 압축 없음
             //이미지가 너무 클 경우 직접 compress하거나 firebase extension 중 resize images(유료)를 사용
             //이미지 타입이 png라면 data = image.png()
-            guard let data = img.jpegData(compressionQuality: 1) else {
+            guard let data = img.jpegData(compressionQuality: 0.5) else {
                 throw URLError(.backgroundSessionWasDisconnected)
             }
             
@@ -98,7 +97,6 @@ final class StorageManager: ObservableObject {
                 return
             }
             
-            self.imageFullPath = testFullPath
             currentImageNo += 1
         }
         
@@ -129,7 +127,7 @@ final class StorageManager: ObservableObject {
             
             //result.items == 지정한 경로에 포함된 모든 파일
             for item in result.items {
-                item.getData(maxSize: 20 * 1024 * 1024) { data, error in
+                item.getData(maxSize: 10 * 1024 * 1024) { data, error in
                     //UIImage타입으로 데이터를 저장 할 필요가 없다면 error 부분 제외하고 모두 삭제 필요
                     guard let data = data, let image = UIImage(data: data), error == nil else {
                         print("\(#function): \(String(describing: error?.localizedDescription))")
@@ -165,7 +163,13 @@ final class StorageManager: ObservableObject {
             print(#function, "Success deleting images: \(fullPath)")
         }
     }
-    
+
+    func deleteItemAsync(fullPath: String) async throws {
+        let item = Storage.storage().reference().child(fullPath)
+
+        try await item.delete()
+    }
+
     func deleteFolder(docId: String) {
         let folderRef = userReference.child(docId)
         let deleteDataGroup = DispatchGroup()
@@ -185,6 +189,16 @@ final class StorageManager: ObservableObject {
                 self.deleteItem(fullPath: item.fullPath)
                 deleteDataGroup.leave()
             }
+        }
+    }
+
+    func deleteFolderAsync(docId: String) async throws {
+        let folderRef = userReference.child(docId)
+
+        let result = try await folderRef.listAll()
+
+        for item in result.items {
+            try await deleteItemAsync(fullPath: item.fullPath)
         }
     }
 }
