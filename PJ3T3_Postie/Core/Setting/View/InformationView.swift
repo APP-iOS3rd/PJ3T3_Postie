@@ -9,27 +9,28 @@ import SwiftUI
 
 struct InformationView: View {
     @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
+    @State private var columns = Array(repeating: GridItem(.flexible(), spacing: 15), count: 2)
     
     var body: some View {
         var appVersion: String {
-                if let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String,
-                   let build = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String {
-                    return "\(version)"
-                }
-                return "버전 정보 없음"
+            if let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String,
+               let build = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String {
+                return "\(version)"
             }
+            return "버전 정보 없음"
+        }
         
         ZStack {
             postieColors.backGroundColor
                 .ignoresSafeArea()
             
-            ScrollView {
+            ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading) {
                     Text("앱 정보")
                         .foregroundStyle(postieColors.dividerColor)
                     
                     DividerView()
-                        .padding(.bottom)
+                        .padding(.bottom, 5)
                     
                     HStack {
                         Text("버전정보")
@@ -46,7 +47,7 @@ struct InformationView: View {
                         .foregroundStyle(postieColors.dividerColor)
                     
                     DividerView()
-                        .padding(.bottom)
+                        .padding(.bottom, 5)
                     
                     NavigationLink(destination: TermOfUserView()) {
                         HStack {
@@ -71,10 +72,38 @@ struct InformationView: View {
                             Image(systemName: "chevron.right")
                                 .foregroundStyle(postieColors.dividerColor)
                         }
+                        .padding(.bottom)
                     }
+                    
+                    Text("함께하신 분들")
+                        .foregroundStyle(postieColors.dividerColor)
+                    
+                    DividerView()
+                        .padding(.bottom, 5)
+                    
+                    LazyVGrid(columns: columns, spacing: 15){
+                        ForEach(0..<PersonData.count, id: \.self) { person in
+                            PersonGridView(person: PersonData[person])
+                        }
+                    }
+                    .padding(.bottom)
+                    
+                    Text("도움주신 분들")
+                        .foregroundStyle(postieColors.dividerColor)
+                    
+                    DividerView()
+                        .padding(.bottom, 5)
+                    
+                    LazyVGrid(columns: columns, spacing: 15){
+                        ForEach(0..<ContributeData.count, id: \.self) { person in
+                            PersonGridView(person: ContributeData[person])
+                        }
+                    }
+                    .padding(.bottom)
                 }
             }
-            .padding()
+            .padding(.leading)
+            .padding(.trailing)
         }
         .toolbar {
             ToolbarItemGroup(placement: .principal) {
@@ -85,6 +114,61 @@ struct InformationView: View {
         }
         .toolbarBackground(postieColors.backGroundColor, for: .navigationBar)
         .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+struct Person: Identifiable {
+    var id = UUID()
+    var name: String
+    var subtitle: String
+    var image: String
+    var color: Color
+    var link: String
+}
+
+var PersonData: [Person] = [
+    Person(name: "UnKi", subtitle: "iOS Developer", image: "postyWinkLineColor", color: .postieBlue, link: "https://github.com/qlrmr111"),
+    Person(name: "JiWon", subtitle: "iOS Developer", image: "postyTrumpetLineColor", color: .postieOrange, link: "https://github.com/wonny1012"),
+    Person(name: "HyeonJin", subtitle: "iOS Developer", image: "postySmileLineColor", color: .postieYellow, link: "https://github.com/hjsupernova"),
+    Person(name: "JooWon", subtitle: "iOS Developer", image: "postySleepingLineColor", color: Color(hex: 0xED3025), link: "https://github.com/lm-loki"),
+    Person(name: "EunSu", subtitle: "iOS Developer", image: "postyReceivingLineColor", color: .postieGreen, link: "https://github.com/Eunice0927")
+]
+
+var ContributeData: [Person] = [
+    Person(name: "Ohtt", subtitle: "iOS Developer", image: "postyHeartLineColor", color: Color(hex: 0xFF8599), link: "https://github.com/ohtt-iOS")
+]
+
+struct PersonGridView: View {
+    
+    var person: Person
+    
+    var body: some View {
+        Link(destination: URL(string: person.link)!) {
+            VStack {
+                ZStack {
+                    Rectangle()
+                        .frame(width: 170,height: 200)
+                        .clipShape(RoundedRectangle(cornerRadius: 25))
+                        .foregroundStyle(person.color)
+                        .shadow(color: .black, radius: 0.8)
+                    
+                    VStack {
+                        Text(person.name)
+                            .bold()
+                        
+                        Text(person.subtitle)
+                            .font(.footnote)
+                        
+                        Image(person.image)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 100)
+                        
+                    }
+                    .foregroundStyle(.postieWhite)
+                }
+            }
+        }
     }
 }
 
