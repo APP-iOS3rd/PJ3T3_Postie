@@ -136,12 +136,14 @@ struct GroupedLetterItemView: View {
                     
                     Text("“")
                         .font(.custom("SairaStencilOne-Regular", size: 30))
+                        .foregroundStyle(postieColors.tabBarTintColor)
                     
                     Text(content)
                         .foregroundStyle(postieColors.tabBarTintColor)
                     
                     Text("”")
                         .font(.custom("SairaStencilOne-Regular", size: 30))
+                        .foregroundStyle(postieColors.tabBarTintColor)
                     
                     Spacer()
                 }

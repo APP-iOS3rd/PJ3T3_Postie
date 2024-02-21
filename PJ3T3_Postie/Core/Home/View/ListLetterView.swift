@@ -70,12 +70,14 @@ struct LetterItemView: View {
                         if !letter.summary.isEmpty && Date() > letter.date {
                             Text("“")
                                 .font(.custom("SairaStencilOne-Regular", size: 30))
+                                .foregroundStyle(postieColors.tabBarTintColor)
                             
                             Text(letter.summary)
                                 .foregroundStyle(postieColors.tabBarTintColor)
                             
                             Text("”")
                                 .font(.custom("SairaStencilOne-Regular", size: 30))
+                                .foregroundStyle(postieColors.tabBarTintColor)
                         } else if Date() < letter.date {
                             Image(systemName: "lock")
                                 .foregroundStyle(postieColors.tabBarTintColor)
