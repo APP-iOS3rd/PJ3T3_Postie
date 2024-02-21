@@ -18,10 +18,8 @@ struct NicknameView: View {
     @State private var dialogMessage = ""
     @State private var loadingText = ""
     @FocusState private var focusField: String?
-    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
     var body: some View {
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
         
         ZStack {
             postieColors.backGroundColor
