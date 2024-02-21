@@ -307,7 +307,7 @@ struct TestDetailView: View {
                     }
                 }
                 
-                DatePicker("DatePicker", selection: $notificationDate, in: Date.now..., displayedComponents: [.date, .hourAndMinute])
+                DatePicker("DatePicker", selection: $notificationDate, in: Date.now..., displayedComponents: [.date])
                     .datePickerStyle(.compact)
             }
             

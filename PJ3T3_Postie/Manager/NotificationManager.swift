@@ -58,7 +58,10 @@ class NotificationManager {
             content.sound = .default
             content.badge = NSNumber(value: UIApplication.shared.applicationIconBadgeNumber + 1)
             
-            let date = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: date)
+            var date = Calendar.current.dateComponents([.year, .month, .day], from: date)
+            date.hour = 09
+            date.minute = 00
+            
             let trigger = UNCalendarNotificationTrigger(dateMatching: date, repeats: false)
             let request = UNNotificationRequest(identifier: notification.id, content: content, trigger: trigger)
             
