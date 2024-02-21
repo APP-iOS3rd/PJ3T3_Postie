@@ -209,7 +209,6 @@ extension AuthManager {
         do {
             let credential = try await signInWithGoogle()
             try await self.userSession?.reauthenticate(with: credential)
-            self.deleteAccount()
         } catch let error as NSError {
             if error.code == GIDSignInErrorCode.canceled.rawValue {
                 throw GIDSignInErrorCode.canceled
