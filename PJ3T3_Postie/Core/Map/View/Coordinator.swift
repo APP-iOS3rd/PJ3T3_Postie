@@ -62,18 +62,19 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate {
     
     // 맵을 업데이트 -> 해당 위치에서 우체국 찾기 때 사용 예정
     func updateMapView(coord: MyCoord) {
+        self.coord = coord //클래스 속성인 coord를 함수 인자로 전달된 값으로 변경
         
         // NMGLatLng: 하나의 위경도 좌표를 나타내는 클래스
         // https://navermaps.github.io/ios-map-sdk/guide-ko/2-2.html
-        let coord = NMGLatLng(lat: coord.lat, lng: coord.lng)
+        let updatecoord = NMGLatLng(lat: coord.lat, lng: coord.lng)
         
-        moveCamera(coord: coord) //카메라 바로 이동
+        moveCamera(coord: updatecoord) //카메라 바로 이동
         
         // 마커와 정보 창을 새롭게 추가하기 위해 기존 내용을 삭제
         removeAllMakers()
         
         // 위치 오버레이
-        setLocationOverlay(coord: coord)
+        setLocationOverlay(coord: updatecoord)
         
         // 정보창과 연결된 마커를 추가
         //        addMarkerAndInfoWindow(coord: coord,
@@ -131,25 +132,28 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate {
         markers.append(marker)
     }
     
-    func convertAddressToCoordinates(_ address: String) {
-        NaverGeocodeAPI.shared.fetchLocationForPostalCode(address) { latitude, longitude in
-            if let latitude = latitude, let longitude = longitude {
-                let coord = NMGLatLng(lat: latitude, lng: longitude)
-                self.moveCamera(coord: coord)
-                
-                self.removeAllMakers()
-                
-                self.setLocationOverlay(coord: coord)
-
-                print("바뀐 위경도\(coord)")
-            } else {
-                // 장소 검색 결과가 없을 경우 처리
-                print("장소를 찾을 수 없습니다.")
-            }
-        }
-        
-    }
-    
+//    func convertAddressToCoordinates(_ address: String, coord: MyCoord) {
+//        self.coord = coord
+//        
+//        NaverGeocodeAPI.shared.fetchLocationForPostalCode(address) { latitude, longitude in
+//            if let latitude = latitude, let longitude = longitude {
+//                let convertcoord = NMGLatLng(lat: latitude, lng: longitude)
+//                self.moveCamera(coord: convertcoord)
+//                
+//                self.removeAllMakers()
+//                
+//                self.setLocationOverlay(coord: convertcoord)
+//
+//                print("바뀐 위경도\(coord)")
+//                
+//            } else {
+//                // 장소 검색 결과가 없을 경우 처리
+//                print("장소를 찾을 수 없습니다.")
+//            }
+//        }
+//        
+//    }
+//    
     // 기존 마커 삭제
     func removeAllMakers() {
         markers.forEach { marker in

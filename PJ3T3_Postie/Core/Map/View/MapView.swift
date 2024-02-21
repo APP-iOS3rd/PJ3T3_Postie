@@ -98,21 +98,30 @@ struct MapView: View {
                                             Image(systemName: "multiply.circle.fill")
                                                 .foregroundColor(.postieGray)
                                         }
-                                        .padding()
                                     }
                                 }
                                 
                             )
                         Button(action: {
                             print("바꾸기전 위경도 \(coord)")
-                            coordinator.convertAddressToCoordinates(searchText)
-                                //coord가 바뀌면 다시 뷰를 그리기 때문에 카메라 조정이 가능
-                                print("바뀐 위경도 \(coord)")
+                            naverGeocodeAPI.fetchLocationForPostalCode(searchText) { latitude, longitude in
+                                if let latitude = latitude, let longitude = longitude {
+                                    //위경도 값 저장
+                                    self.coord = MyCoord(latitude, longitude) 
+                                    officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)
+                                    print("위경도 변환 성공")
+                                } else {
+                                    print("위치 정보를 가져오는데 실패했습니다.")
+                                }
+                            }
+                            
+//                            officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)
                         
                         }) {
                             Text("주소로 검색")
                         }
                     }
+                    .padding()
                     
                     //                        .autocapitalization(.none) // 자동 대문자 변환 비활성화
                     
