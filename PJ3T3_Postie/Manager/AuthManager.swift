@@ -233,6 +233,8 @@ extension AuthManager {
         } catch let error as NSError {
             if error.code == GIDSignInErrorCode.canceled.rawValue {
                 throw GIDSignInErrorCode.canceled
+            } else if let _ = AuthErrorCode.Code(rawValue: error.code) {
+                try authErrorCodeConverter(error: error)
             } else {
                 print(#function, "Failed to delete Google account: \(error)")
             }
