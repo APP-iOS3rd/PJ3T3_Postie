@@ -10,7 +10,7 @@ import SwiftUI
 struct NicknameView: View {
     @ObservedObject var authManager = AuthManager.shared
     @State var nickname: String = ""
-    @State var isTappable: Bool = false
+    @State private var isTappable: Bool = false
     @State private var showAlert = false
     @State private var isDialogPresented = false
     @State private var showLoading = false
@@ -36,9 +36,10 @@ struct NicknameView: View {
                         .fontWeight(.semibold)
                         .font(.footnote)
                     
-                    TextField("앱에서 사용할 닉네임을 입력 해 주세요", text: $nickname)
+                    TextField("사용할 닉네임을 입력 해 주세요", text: $nickname)
                         .focused($focusField, equals: "nickname")
                         .autocorrectionDisabled()
+                        .foregroundStyle(postieColors.dividerColor)
                     
                     Divider()
                     
