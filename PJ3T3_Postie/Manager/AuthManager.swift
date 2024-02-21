@@ -183,6 +183,19 @@ class AuthManager: ObservableObject {
             }
         }
     }
+    
+    func authErrorCodeConverter(error: NSError) throws {
+        let errorCode = AuthErrorCode.Code(rawValue: error.code)
+        
+        switch errorCode {
+        case .userMismatch:
+            throw AuthErrorCodeCase.userMismatch
+        case .requiresRecentLogin:
+            throw AuthErrorCodeCase.requiresRecentLogin
+        default:
+            print(#function, "Failed to delete Google account AuthErrorCode: \(error)")
+        }
+    }
 }
 
 // MARK: Sign in SSO
