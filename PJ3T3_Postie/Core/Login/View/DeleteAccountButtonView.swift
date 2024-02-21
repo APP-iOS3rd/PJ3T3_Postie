@@ -32,7 +32,8 @@ struct DeleteAccountButtonView: View {
                 }
             case .apple:
                 print("Delete Apple account")
-                AppleSignInHelper.shared.deleteCurrentAppleUser()
+                AppleSignInHelper.shared.reAuthCurrentAppleUser()
+                showLoading = true
             default:
                 print("Delete account")
                 //alert 창 구현
