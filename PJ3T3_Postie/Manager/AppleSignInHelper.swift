@@ -13,6 +13,7 @@ final class AppleSignInHelper: NSObject, ObservableObject {
     private var nonce = ""
     var cryptoUtils: CryptoUtils?
     var window: UIWindow?
+    var isReAuth = false
     
     private override init() { }
     
@@ -127,7 +128,17 @@ extension AppleSignInHelper: ASAuthorizationControllerDelegate {
         AuthManager.shared.signInwithApple(user: appleUser)
         
         Task {
-            await AuthManager.shared.deleteAppleAccount(authCodeString: authCodeString)
+            if !self.isReAuth {
+                await AuthManager.shared.deleteAppleAccount(user: appleUser, authCodeString: authCodeString)
+            } else {
+                do {
+                    print("Called Reauth")
+                    try await AuthManager.shared.reAuthAppleAccount(user: appleUser)
+                    isReAuth = false
+                } catch {
+                    print(#function, "Failed to re-auth Apple account: \(error)")
+                }
+            }
         }
     }
 }
