@@ -27,7 +27,7 @@ struct DeleteAccountButtonView: View {
                         try await authManager.deleteAccount()
                         showLoading = true
                     } catch {
-                        print(#function, "Failed to delete Google account: \(error)")
+                        googleLoginFailure(error: error)
                         showLoading = false
                     }
                 }
@@ -47,6 +47,20 @@ struct DeleteAccountButtonView: View {
             } else {
                 showLoading = true
             }
+        }
+    }
+    
+    func googleLoginFailure(error: Error) {
+        switch error {
+        case AuthErrorCodeCase.userMismatch:
+            alertBody = "현재 로그인중인 사용자가 아니에요. 계정을 다시 확인 해 주세요."
+        case GIDSignInErrorCode.canceled:
+            alertBody = "재인증이 취소되었습니다. 회원 탈퇴를 위해서는 계정 재인증을 위한 로그인이 필요합니다."
+        case AuthErrorCodeCase.requiresRecentLogin:
+            alertBody = "재인증이 취소되었습니다. 회원 탈퇴를 위해서는 계정 재인증을 위한 로그인이 필요합니다."
+        default:
+            alertBody = "알 수 없는 오류가 발생하였습니다. 회원 탈퇴를 위해서는 관리자에게 문의 해 주세요.\nteam.postie@google.com"
+            print(#function, "Failed to delete Google account: \(error)")
         }
     }
 }
