@@ -26,6 +26,7 @@ class AddLetterViewModel: ObservableObject {
     @Published var showingSummaryErrorAlert: Bool = false
     @Published var shouldDismiss: Bool = false
     @Published var isLoading: Bool = false
+    @Published var loadingText: String = "편지를 저장하고 있어요."
 
     private(set) var imagePickerSourceType: UIImagePickerController.SourceType = .camera
     var isReceived: Bool
@@ -84,6 +85,7 @@ class AddLetterViewModel: ObservableObject {
         } else {
             await MainActor.run {
                 isLoading = true
+                loadingText = "편지를 저장하고 있어요."
             }
 
             do {

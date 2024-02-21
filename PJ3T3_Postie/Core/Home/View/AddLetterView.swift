@@ -86,7 +86,7 @@ struct AddLetterView: View {
         }
         .toolbar(.hidden, for: .tabBar)
         .scrollDismissesKeyboard(.interactively)
-        .modifier(LoadingModifier(isLoading: $addLetterViewModel.isLoading, text: "편지를 저장하고 있어요."))
+        .modifier(LoadingModifier(isLoading: $addLetterViewModel.isLoading, text: addLetterViewModel.loadingText))
         .fullScreenCover(isPresented: $addLetterViewModel.showingLetterImageFullScreenView) {
             LetterImageFullScreenView(
                 images: addLetterViewModel.images,
@@ -98,7 +98,9 @@ struct AddLetterView: View {
                 sourceType: addLetterViewModel.imagePickerSourceType,
                 selectedImages: $addLetterViewModel.images,
                 text: $addLetterViewModel.text,
-                showingTextRecognizerErrorAlert: $addLetterViewModel.showingTextRecognizerErrorAlert
+                isLoading: $addLetterViewModel.isLoading,
+                showingTextRecognizerErrorAlert: $addLetterViewModel.showingTextRecognizerErrorAlert,
+                loadingText: $addLetterViewModel.loadingText
             )
             .ignoresSafeArea(.all, edges: .bottom)
         }
