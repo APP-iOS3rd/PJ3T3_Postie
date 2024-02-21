@@ -28,22 +28,35 @@ struct ProfileView: View {
                 
                 ScrollView {
                     VStack(alignment: .leading, spacing: 5) {
-                        HStack {
-                            Spacer()
-                            
-                            ZStack {
-                                Circle()
-                                    .frame(width: 170, height: 170)
-                                    .foregroundStyle(postieColors.profileColor)
+                        Button (action: {
+                            isShowingProfileEditView = true
+                            profileImageTemp = profileImage
+                        }) {
+                            HStack {
+                                Spacer()
                                 
-                                Image(profileImage)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 110, height: 110)
-                                    .offset(y: -10)
+                                ZStack {
+                                    Circle()
+                                        .frame(width: 170, height: 170)
+                                        .foregroundStyle(postieColors.profileColor)
+                                    
+                                    Image(profileImage)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 110, height: 110)
+                                        .offset(y: -10)
+                                    
+                                    Image(systemName: "pencil.circle.fill")
+                                        .font(.title)
+                                        .offset(x: 60, y: 60)
+                                }
+                                
+                                Spacer()
                             }
-                            
-                            Spacer()
+                        }
+                        .sheet(isPresented: $isShowingProfileEditView) {
+                            ProfileEditView(profileImage: $profileImage, profileImageTemp: $profileImageTemp)
+                                .presentationDetents([.medium, .large])
                         }
                         
                         Text("이름")
@@ -179,24 +192,6 @@ struct ProfileView: View {
                     Text("프로필 설정")
                         .bold()
                         .foregroundStyle(postieColors.tintColor)
-                }
-                
-                ToolbarItemGroup(placement: .topBarTrailing) {
-                    Button (action: {
-                        isShowingProfileEditView = true
-                        profileImageTemp = profileImage
-                    }) {
-                        Text("수정")
-                            .foregroundStyle(postieColors.tabBarTintColor)
-                    }
-                    .sheet(isPresented: $isShowingProfileEditView) {
-                        ProfileEditView(profileImage: $profileImage, profileImageTemp: $profileImageTemp) { confirmed in
-                            if !confirmed {
-                                self.profileImageTemp = self.profileImage
-                            }
-                        }
-                        .presentationDetents([.medium])
-                    }
                 }
             }
             .toolbarBackground(postieColors.backGroundColor, for: .navigationBar)
