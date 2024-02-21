@@ -202,6 +202,14 @@ extension AuthManager {
         let helper = GoogleSignInHelper()
         let tokens = try await helper.googleHelperSingIn()
         
+        if userSession != nil {
+            if tokens.email != userSession?.email {
+                throw AuthErrorCode(.userMismatch)
+            } else {
+                return GoogleAuthProvider.credential(withIDToken: tokens.idToken, accessToken: tokens.accessToken)
+            }
+        }
+        
         return GoogleAuthProvider.credential(withIDToken: tokens.idToken, accessToken: tokens.accessToken)
     }
     
