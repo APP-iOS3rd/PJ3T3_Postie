@@ -10,6 +10,8 @@ import SwiftUI
 struct DeleteAccountButtonView: View {
     @ObservedObject var authManager = AuthManager.shared
     @Binding var showLoading: Bool
+    @Binding var showAlert: Bool
+    @Binding var alertBody: String
     
     var body: some View {
         Button("계정 삭제", role: .destructive) {
@@ -29,6 +31,7 @@ struct DeleteAccountButtonView: View {
                     } catch {
                         googleLoginFailure(error: error)
                         showLoading = false
+                        showAlert = true
                     }
                 }
             case .apple:
@@ -66,5 +69,5 @@ struct DeleteAccountButtonView: View {
 }
 
 #Preview {
-    DeleteAccountButtonView(showLoading: .constant(false))
+    DeleteAccountButtonView(showLoading: .constant(false), showAlert: .constant(false), alertBody: .constant("프리뷰"))
 }
