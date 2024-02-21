@@ -85,26 +85,9 @@ struct MapView: View {
                         }
                         Spacer()
                     }
-                    //                    .padding()
-                    HStack {
-                        TextField("장소 검색(서초구, 서초동)", text: $searchText)
-                            .padding()
-                            .textFieldStyle(.roundedBorder)
-                            .overlay(
-                                HStack() {
-                                    Spacer()
-                                    if !searchText.isEmpty {
-                                        Button(action: {
-                                            self.searchText = ""
-                                        }) {
-                                            Image(systemName: "multiply.circle.fill")
-                                                .foregroundColor(.postieGray)
-                                        }
-                                    }
-                                }
-                                
-                            )
-                        Button(action: {
+                    .padding()
+                    HStack(spacing: 4) {
+                        TextField("장소 검색(서초구, 서초동)", text: $searchText, onCommit: {
                             print("바꾸기전 위경도 \(coord)")
                             naverGeocodeAPI.fetchLocationForPostalCode(searchText) { latitude, longitude in
                                 locationManager.stopUpdatingLocation()
@@ -121,9 +104,25 @@ struct MapView: View {
                                     
                                 }
                             }
-                        }) {
-                            Text("주소로 검색")
-                        }
+                            
+                        })
+                        .padding()
+                        .textFieldStyle(.roundedBorder)
+                        .keyboardType(.webSearch)
+                        .overlay(
+                            HStack() {
+                                Spacer()
+                                if !searchText.isEmpty {
+                                    Button(action: {
+                                        self.searchText = ""
+                                    }) {
+                                        Image(systemName: "multiply.circle.fill")
+                                            .foregroundColor(.postieGray)
+                                    }
+                                    padding(.trailing, 10)
+                                }
+                            }
+                        )
                         .alert("위치 정보가 잘못되었습니다.", isPresented: $checkAlert) {
                             Button("확인", role: .cancel) {
                                 
@@ -131,9 +130,8 @@ struct MapView: View {
                         } message: {
                             Text("동이나 구 단위로 입력해주세요")
                         }
-                        
                     }
-                    .padding()
+                    .padding(.leading, 10)
                     
                     ZStack(alignment: .top) {
                         NaverMap(coord: coord)
@@ -142,7 +140,7 @@ struct MapView: View {
                         VStack {
                             Button(action: {
                                 print("현재 위치에서 \(name[selectedButtonIndex]) 찾기 버튼 눌림")
-                                locationManager.stopUpdatingLocation() // 현재 위치 추적 금지
+                                //                                locationManager.stopUpdatingLocation() // 현재 위치 추적 금지
                                 
                                 coord = MyCoord(coordinator.cameraLocation?.lat ?? coord.lat, coordinator.cameraLocation?.lng ?? coord.lng)
                                 
@@ -169,15 +167,28 @@ struct MapView: View {
                                 }
                             }
                             Spacer()
-                            
-                            Button( action: {
-                                //action
-                                
-                            }) {
-                                Image(systemName: "location.circle")
-                                    .foregroundColor(.blue)
-                                    .font(.title)
+                            HStack {
+                                Button( action: {
+                                    locationManager.startUpdatingLocation()
+                                    
+                                    coordinator.cameraLocation?.lat = (locationManager.location!.coordinate.latitude)
+                                    coordinator.cameraLocation?.lng = (locationManager.location!.coordinate.longitude)
+                                }) {
+                                    ZStack {
+                                        RoundedRectangle(cornerRadius: 6)
+                                            .frame(width: 46, height: 46)
+                                            .foregroundColor(.white)
+                                        Image(systemName: "dot.scope")
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: 27, height: 20)
+                                            .clipShape(Circle())
+                                            .foregroundColor(.blue)
+                                    }
+                                }
+                                Spacer()
                             }
+                            .padding(.bottom, 25)
                         }
                         .padding()
                     }
