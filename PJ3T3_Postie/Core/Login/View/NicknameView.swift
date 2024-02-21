@@ -83,6 +83,14 @@ struct NicknameView: View {
                 
                 Button {
                     isTappable = false
+                    guard authManager.authDataResult != nil else {
+                        hideKeyboard()
+                        loadingText = "계정을 확인하고 있어요"
+                        isTappable = true
+                        isDialogPresented = true
+                        return
+                    }
+                    
                     showAlert = true
                 } label: {
                     HStack() {
