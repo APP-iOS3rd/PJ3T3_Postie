@@ -225,13 +225,20 @@ extension AuthManager {
                                                         fullName: user.fullName)
     }
     
-    func deleteAppleAccount(authCodeString: String) async {
+    func reAuthAppleAccount(user: AppleUser) async throws {
+        let credential = OAuthProvider.appleCredential(withIDToken: user.token,
+                                                       rawNonce: user.nonce,
+                                                       fullName: user.fullName)
+        
+        self.authDataResult = try await signInWithSSO(credential: credential)
+    }
+    
+    func deleteAppleAccount(user: AppleUser, authCodeString: String) async {
+        let credential = OAuthProvider.appleCredential(withIDToken: user.token,
+                                                       rawNonce: user.nonce,
+                                                       fullName: user.fullName)
+        
         do {
-            guard let credential = self.credential else {
-                print(#function, "Failed to get credential")
-                return
-            }
-            
             try await self.userSession?.reauthenticate(with: credential)
             try await Auth.auth().revokeToken(withAuthorizationCode: authCodeString)
             self.deleteAccount()
