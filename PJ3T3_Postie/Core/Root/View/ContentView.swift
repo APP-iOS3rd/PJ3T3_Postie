@@ -14,18 +14,30 @@ struct TabItemContent: View {
     var body: some View {
         Group {
             Image(systemName: image)
+            
             Text(text)
         }
-        .background(Color.red)
     }
+}
+
+class TabSelection: ObservableObject {
+    @Published var selectedTab: Int = 0 {
+        didSet {
+            if selectedTab == oldValue {
+                resetViewAction()
+            }
+        }
+    }
+    
+    var resetViewAction: () -> Void = {}
 }
 
 struct ContentView: View {
     //ViewModels
     @ObservedObject var authViewModel = AuthManager.shared
     @StateObject private var viewModel = AppViewModel()
-    @State private var selectedTab = 1
     @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
+    @StateObject private var tabSelection = TabSelection()
     
     init() {
         let tbAppearance: UITabBarAppearance = UITabBarAppearance()
@@ -42,14 +54,14 @@ struct ContentView: View {
                 // ContentView는 viewModel에 업데이트가 없는지 listen하는 상태
                 if authViewModel.userSession != nil { // userSession이 있으면 SettingView를 보여줌
                     if authViewModel.currentUser != nil {
-                        TabView(selection: $selectedTab) {
-                            HomeView()
+                        TabView(selection: $tabSelection.selectedTab) {
+                            HomeView(tabSelection: tabSelection)
                                 .tabItem {
                                     Image(systemName: "house")
                                     
                                     Text("홈")
                                 }
-                                .tag(1)
+                                .tag(0)
                             
                             ShopView()
                                 .tabItem {
@@ -57,7 +69,7 @@ struct ContentView: View {
                                     
                                     Text("편지지")
                                 }
-                                .tag(2)
+                                .tag(1)
                             
                             MapView()
                                 .tabItem {
@@ -65,7 +77,7 @@ struct ContentView: View {
                                     
                                     Text("지도")
                                 }
-                                .tag(3)
+                                .tag(2)
                             
                             //테스트용 뷰입니다. 추후 삭제 예정입니다.
                             SettingView()
@@ -74,7 +86,7 @@ struct ContentView: View {
                                     
                                     Text("세팅")
                                 }
-                                .tag(4)
+                                .tag(3)
                         }
                         .accentColor(ThemeManager.themeColors[isThemeGroupButton].tabBarTintColor)
                     } else {

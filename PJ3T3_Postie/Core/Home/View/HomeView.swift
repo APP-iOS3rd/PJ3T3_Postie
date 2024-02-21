@@ -18,6 +18,9 @@ struct HomeView: View {
     @State private var isSideMenuOpen = false
     @State private var currentGroupPage: Int = 0
     @State private var currentColorPage: Int = 0
+    @State private var scrollTarget: Int? = nil
+    
+    var tabSelection: TabSelection
     
     var body: some View {
         NavigationStack {
@@ -77,21 +80,33 @@ struct HomeView: View {
                         .padding(.horizontal)
                         
                         ZStack(alignment: .bottomTrailing) {
-                            ScrollView {
-                                if isTabGroupButton {
-                                    VStack {
-                                        GroupedLetterView(isMenuActive: $isMenuActive, homeWidth: geometry.size.width)
+                            ScrollViewReader { value in
+                                ScrollView {
+                                    if isTabGroupButton {
+                                        VStack {
+                                            GroupedLetterView(isMenuActive: $isMenuActive, homeWidth: geometry.size.width)
+                                                .id(0)
+                                        }
+                                    } else {
+                                        VStack {
+                                            ListLetterView(isMenuActive: $isMenuActive)
+                                                .id(0)
+                                        }
                                     }
-                                } else {
-                                    VStack {
-                                        ListLetterView(isMenuActive: $isMenuActive)
+                                    
+                                    // ScrollView margin
+                                    Rectangle()
+                                        .frame(height: 80)
+                                        .foregroundStyle(postieColors.tabBarTintColor.opacity(0))
+                                        .id(1)
+                                }
+                                .onAppear {                        
+                                    tabSelection.resetViewAction = {
+                                        withAnimation {
+                                            value.scrollTo(0, anchor: .top)
+                                        }
                                     }
                                 }
-                                
-                                // ScrollView margin
-                                Rectangle()
-                                    .frame(height: 80)
-                                    .foregroundStyle(postieColors.tabBarTintColor.opacity(0))
                             }
                             
                             AddLetterButton(isMenuActive: $isMenuActive)

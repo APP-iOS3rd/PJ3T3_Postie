@@ -9,7 +9,7 @@ import SwiftUI
 
 struct InformationView: View {
     @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
-    @State private var columns = Array(repeating: GridItem(.flexible(), spacing: 15), count: 2)
+    @State private var columns = Array(repeating: GridItem(.flexible(), spacing: 9), count: 2)
     
     var body: some View {
         var appVersion: String {
@@ -81,11 +81,13 @@ struct InformationView: View {
                     DividerView()
                         .padding(.bottom, 5)
                     
-                    LazyVGrid(columns: columns, spacing: 15){
+                    LazyVGrid(columns: columns, spacing: 9){
                         ForEach(0..<PersonData.count, id: \.self) { person in
                             PersonGridView(person: PersonData[person])
                         }
                     }
+                    .padding(.leading, 2)
+                    .padding(.trailing, 2)
                     .padding(.bottom)
                     
                     Text("도움주신 분들")
@@ -94,11 +96,13 @@ struct InformationView: View {
                     DividerView()
                         .padding(.bottom, 5)
                     
-                    LazyVGrid(columns: columns, spacing: 15){
+                    LazyVGrid(columns: columns, spacing: 9){
                         ForEach(0..<ContributeData.count, id: \.self) { person in
                             PersonGridView(person: ContributeData[person])
                         }
                     }
+                    .padding(.leading, 2)
+                    .padding(.trailing, 2)
                     .padding(.bottom)
                 }
             }
@@ -125,7 +129,7 @@ struct PersonGridView: View {
             VStack {
                 ZStack {
                     Rectangle()
-                        .frame(width: 170,height: 200)
+                        .frame(height: 190)
                         .clipShape(RoundedRectangle(cornerRadius: 25))
                         .foregroundStyle(person.color)
                         .shadow(color: .black, radius: 0.8)
