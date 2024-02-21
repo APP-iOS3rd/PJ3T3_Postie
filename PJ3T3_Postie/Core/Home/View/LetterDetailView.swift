@@ -148,7 +148,7 @@ extension LetterDetailView {
 
     @ViewBuilder
     private var letterImageSection: some View {
-        if let imageUrls = firestoreManager.letter.imageURLs {
+        if let imageUrls = firestoreManager.letter.imageURLs, !imageUrls.isEmpty {
             VStack(alignment: .leading, spacing: 4) {
                 Text("편지 사진")
 
