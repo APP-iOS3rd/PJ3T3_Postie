@@ -60,7 +60,7 @@ final class AppleSignInHelper: NSObject, ObservableObject {
         }
     }
     
-    func deleteCurrentAppleUser() {
+    func reAuthCurrentAppleUser() {
         let appleIDProvider = ASAuthorizationAppleIDProvider()
         let request = appleIDProvider.createRequest()
         
