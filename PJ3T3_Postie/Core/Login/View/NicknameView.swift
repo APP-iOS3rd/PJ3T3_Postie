@@ -47,9 +47,9 @@ struct NicknameView: View {
                             HStack {
                                 Spacer()
                                 if !nickname.isEmpty {
-                                    Button(action: {
+                                    Button{
                                         nickname = ""
-                                    }) {
+                                    } label: {
                                         Image(systemName: "multiply.circle.fill")
                                             .foregroundColor(.postieGray)
                                     }
