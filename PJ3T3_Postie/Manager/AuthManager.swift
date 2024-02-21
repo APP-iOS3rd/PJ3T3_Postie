@@ -147,24 +147,19 @@ class AuthManager: ObservableObject {
         }
     }
     
-    func deleteAccount() {
-        self.userSession?.delete { error in
-            if let error = error {
-                print("DEBUG: Failed to remove account with error \(error.localizedDescription)")
-            } else {
-                guard let userUid = self.userSession?.uid else {
-                    print(#function, "Cannot get userUid from userSession")
-                    return
-                }
-                
-                FirestoreManager.shared.deleteUserDocument(userUid: userUid)
-                self.userSession = nil
-                self.currentUser = nil
-                
-                DispatchQueue.main.async {
-                    self.credential = nil
-                }
-            }
+    func deleteAccount() async throws {
+        try await self.userSession?.delete()
+        guard let userUid = self.userSession?.uid else {
+            print(#function, "Cannot get userUid from userSession")
+            return
+        }
+        
+        FirestoreManager.shared.deleteUserDocument(userUid: userUid)
+        
+        DispatchQueue.main.async {
+            self.userSession = nil
+            self.currentUser = nil
+            self.credential = nil
         }
     }
     
@@ -263,7 +258,7 @@ extension AuthManager {
         do {
             try await self.userSession?.reauthenticate(with: credential)
             try await Auth.auth().revokeToken(withAuthorizationCode: authCodeString)
-            self.deleteAccount()
+            try await self.deleteAccount()
         } catch {
             print(#function, "Failed to delete Apple account: \(error)")
         }
@@ -303,7 +298,7 @@ extension AuthManager {
             let credential = EmailAuthProvider.credential(withEmail: email, password: password)
             
             try await self.userSession?.reauthenticate(with: credential)
-            self.deleteAccount()
+            try await self.deleteAccount()
         } catch {
             print(#function, "Failed to reauth: \(error)")
         }
