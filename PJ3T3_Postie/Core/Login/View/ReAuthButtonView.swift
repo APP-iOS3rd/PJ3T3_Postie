@@ -11,7 +11,8 @@ import AuthenticationServices
 struct ReAuthButtonView: View {
     @ObservedObject var authManager = AuthManager.shared
     @Binding var showLoading: Bool
-    @Binding var nickname: String
+    @Binding var showAlert: Bool
+    @Binding var alertBody: String
     
     var body: some View {
         Button("계정 재인증") {
@@ -35,6 +36,7 @@ struct ReAuthButtonView: View {
                             }
                         }
                         showLoading = false
+                        showAlert = true
                     }
                 }
             case .apple:
@@ -73,5 +75,5 @@ struct ReAuthButtonView: View {
 }
 
 #Preview {
-    ReAuthButtonView(showLoading: .constant(false), nickname: .constant("포스티"))
+    ReAuthButtonView(showLoading: .constant(false), showAlert: .constant(false), alertBody: .constant("프리뷰"))
 }

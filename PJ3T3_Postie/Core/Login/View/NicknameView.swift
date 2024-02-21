@@ -11,10 +11,12 @@ struct NicknameView: View {
     @ObservedObject var authManager = AuthManager.shared
     @State var nickname: String = ""
     @State private var isTappable: Bool = false
-    @State private var showAlert = false
+    @State private var showSuccessAlert = false
+    @State private var showFailureAlert = false
     @State private var isDialogPresented = false
     @State private var showLoading = false
     @State private var loadingText = ""
+    @State private var failureAlertMessage = ""
     @FocusState private var focusField: String?
     
     var body: some View {
@@ -92,7 +94,7 @@ struct NicknameView: View {
                         return
                     }
                     
-                    showAlert = true
+                    showSuccessAlert = true
                 } label: {
                     HStack() {
                         Image(systemName: "envelope")
@@ -117,7 +119,7 @@ struct NicknameView: View {
                         isTappable = false
                     }
                 }
-                .alert(isPresented: $showAlert) {
+                .alert(isPresented: $showSuccessAlert) {
                     let title = Text("닉네임 설정")
                     let message = Text(#"한 번 설정한 닉네임은 변경할 수 없으니 신중하게 선택해주세요! \#n "\#(nickname)"으로 시작하시겠습니까?"#)
                     let cancelButton = Alert.Button.destructive(Text("취소")) {
@@ -139,6 +141,13 @@ struct NicknameView: View {
                     
                     return Alert(title: title, message: message, primaryButton: cancelButton, secondaryButton: confirmButton)
                 }
+                .alert("인증 실패", isPresented: $showFailureAlert) {
+                    Button(role: .cancel, action: { }) {
+                        Text("확인")
+                    }
+                } message: {
+                    Text(failureAlertMessage)
+                }
             }
             .padding(.horizontal, 32)
             .padding(.bottom, 100)
@@ -147,7 +156,7 @@ struct NicknameView: View {
             hideKeyboard()
         }
         .confirmationDialog("계정 정보를 가져오는데 실패했습니다.", isPresented: $isDialogPresented, titleVisibility: .visible) {
-            ReAuthButtonView(showLoading: $showLoading, nickname: $nickname)
+            ReAuthButtonView(showLoading: $showLoading, showAlert: $showFailureAlert, alertBody: $failureAlertMessage)
         } message: {
             Text("계정 생성을 위해 재인증이 필요합니다. 재인증이 완료 되면 버튼을 다시 한 번 눌러주세요.")
                 .multilineTextAlignment(.center)
