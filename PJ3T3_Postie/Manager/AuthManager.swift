@@ -259,6 +259,9 @@ extension AuthManager {
         let credential = OAuthProvider.appleCredential(withIDToken: user.token,
                                                        rawNonce: user.nonce,
                                                        fullName: user.fullName)
+        DispatchQueue.main.async {
+            self.credential = credential
+        }
         
         do {
             try await self.userSession?.reauthenticate(with: credential)
