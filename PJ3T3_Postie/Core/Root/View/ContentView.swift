@@ -7,31 +7,6 @@
 
 import SwiftUI
 
-struct TabItemContent: View {
-    let image: String
-    let text: String
-    
-    var body: some View {
-        Group {
-            Image(systemName: image)
-            
-            Text(text)
-        }
-    }
-}
-
-class TabSelection: ObservableObject {
-    @Published var selectedTab: Int = 0 {
-        didSet {
-            if selectedTab == oldValue {
-                resetViewAction()
-            }
-        }
-    }
-    
-    var resetViewAction: () -> Void = {}
-}
-
 struct ContentView: View {
     //ViewModels
     @ObservedObject var authViewModel = AuthManager.shared
