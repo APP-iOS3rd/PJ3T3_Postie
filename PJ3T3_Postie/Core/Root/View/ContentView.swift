@@ -44,7 +44,7 @@ struct ContentView: View {
                                 }
                                 .tag(0)
                             
-                            ShopView(isThemeGroupButton: $isThemeGroupButton)
+                            ShopView()
                                 .tabItem {
                                     Image(systemName: "cart")
                                     

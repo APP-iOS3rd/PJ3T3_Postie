@@ -32,18 +32,15 @@ struct ShopView: View {
         }
     }
     
-    @Binding var isThemeGroupButton: Int
     @State private var safariURL: String?
     @State private var selectedButtonIndex: Int = 0
     @State private var showDetails = false
     @ObservedObject private var shopViewModel = ShopViewModel()
     
     var body: some View {
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
-        
         NavigationStack {
             ZStack {
-                Color.postieBeige
+                postieColors.backGroundColor
                     .ignoresSafeArea()
                 
                 VStack(spacing: 0) {
