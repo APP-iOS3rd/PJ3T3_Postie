@@ -7,29 +7,64 @@
 
 import SwiftUI
 
-struct LetterImageFullScreenView: View {
-    let images: [UIImage]
+import Kingfisher
 
+struct LetterImageFullScreenView: View {
+    let images: [UIImage]?
+    let urls: [String]?
+
+    var urlsCount: Int {
+        guard let urls = urls else { return 0 }
+        return urls.count
+    }
     @Binding var pageIndex: Int
     @Environment(\.dismiss) var dismiss
+    
+    init(images: [UIImage]? = nil, urls: [String]? = nil, pageIndex: Binding<Int>) {
+        self.images = images
+        self.urls = urls
+        self._pageIndex = pageIndex
+    }
 
     var body: some View {
         NavigationStack {
-            TabView(selection: $pageIndex) {
-                ForEach(0..<images.count, id: \.self) { index in
-                    Image(uiImage: images[index])
-                        .resizable()
-                        .scaledToFit()
-                        .tag(index)
+            ZStack {
+                Color.black
+                    .ignoresSafeArea()
+
+                TabView(selection: $pageIndex) {
+                    if let urls = urls {
+                        ForEach(0..<urls.count, id: \.self) { index in
+                            if let url = URL(string: urls[index]) {
+                                KFImage(url)
+                                    .placeholder {
+                                        ProgressView()
+                                    }
+                                    .resizable()
+                                    .scaledToFit()
+                                    .tag(index)
+                            }
+                        }
+                    }
+
+                    if let images = images {
+                        ForEach(0..<images.count, id: \.self) { index in
+                            Image(uiImage: images[index])
+                                .resizable()
+                                .scaledToFit()
+                                .tag(urlsCount + index)
+                        }
+                    }
+
                 }
-            }
-            .tabViewStyle(.page)
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button {
-                        dismiss()
-                    } label: {
-                        Image(systemName: "xmark")
+                .tabViewStyle(.page)
+                .toolbar {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button {
+                            dismiss()
+                        } label: {
+                            Image(systemName: "xmark")
+                        }
                     }
                 }
             }

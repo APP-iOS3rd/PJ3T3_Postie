@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AddLetterView: View {
-    @StateObject private var addLetterViewModel = AddLetterViewModel()
+    @StateObject private var addLetterViewModel: AddLetterViewModel
     @ObservedObject var firestoreManager = FirestoreManager.shared
     @ObservedObject var storageManager = StorageManager.shared
 
@@ -16,19 +16,18 @@ struct AddLetterView: View {
         case sender
         case receiver
         case text
+        case summary
     }
 
     var isReceived: Bool
-    var letter: Letter?
-    var letterPhotos: [LetterPhoto]?
 
     @FocusState private var focusField: Field?
     @Environment(\.dismiss) var dismiss
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
 
-    init(isReceived: Bool, letter: Letter? = nil, letterPhotos: [LetterPhoto]? = nil) {
+    init(isReceived: Bool) {
         self.isReceived = isReceived
-        self.letter = letter
-        self.letterPhotos = letterPhotos
+        self._addLetterViewModel = StateObject(wrappedValue: AddLetterViewModel(isReceived: isReceived))
 
         // TextEditor 패딩
         UITextView.appearance().textContainerInset = UIEdgeInsets(
@@ -39,9 +38,9 @@ struct AddLetterView: View {
         )
     }
     
-    var body: some View {
+    var body: some View {        
         ZStack {
-            Color(hex: 0xF5F1E8)
+            ThemeManager.themeColors[isThemeGroupButton].backGroundColor
                 .ignoresSafeArea()
 
             ScrollView {
@@ -56,29 +55,23 @@ struct AddLetterView: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
-        .toolbarBackground(Color(hex: 0xF5F1E8), for: .navigationBar)
+        .toolbarBackground(ThemeManager.themeColors[isThemeGroupButton].backGroundColor, for: .navigationBar)
         .toolbar {
             ToolbarItemGroup(placement: .principal) {
                 Text(isReceived ? "받은 편지 기록" : "보낸 편지 기록")
                     .bold()
-                    .foregroundStyle(Color(hex: 0xFF5733))
+                    .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].tintColor)
             }
 
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button {
                     Task {
-                        if let letter = letter {
-                            await editLetter(letter: letter)
-
-                        } else {
-                            await addLetter()
-                        }
-
-                        dismiss()
+                        await addLetterViewModel.uploadLetter()
                     }
                 } label : {
                     Text("완료")
                 }
+                .disabled(addLetterViewModel.isLoading)
             }
 
             ToolbarItemGroup(placement: .keyboard) {
@@ -92,141 +85,63 @@ struct AddLetterView: View {
             }
         }
         .toolbar(.hidden, for: .tabBar)
-        .fullScreenCover(isPresented: $addLetterViewModel.showLetterImageFullScreenView) {
+        .scrollDismissesKeyboard(.interactively)
+        .modifier(LoadingModifier(isLoading: $addLetterViewModel.isLoading, text: addLetterViewModel.loadingText))
+        .fullScreenCover(isPresented: $addLetterViewModel.showingLetterImageFullScreenView) {
             LetterImageFullScreenView(
                 images: addLetterViewModel.images,
                 pageIndex: $addLetterViewModel.selectedIndex
             )
         }
-        .sheet(isPresented: $addLetterViewModel.showUIImagePicker) {
+        .sheet(isPresented: $addLetterViewModel.showingUIImagePicker) {
             UIImagePicker(
                 sourceType: addLetterViewModel.imagePickerSourceType,
                 selectedImages: $addLetterViewModel.images,
                 text: $addLetterViewModel.text,
-                showTextRecognizerErrorAlert: $addLetterViewModel.showTextRecognizerErrorAlert
+                isLoading: $addLetterViewModel.isLoading,
+                showingTextRecognizerErrorAlert: $addLetterViewModel.showingTextRecognizerErrorAlert,
+                loadingText: $addLetterViewModel.loadingText
             )
+            .ignoresSafeArea(.all, edges: .bottom)
         }
-        .alert("문자 인식 실패", isPresented: $addLetterViewModel.showTextRecognizerErrorAlert) {
+        .alert("문자 인식 실패", isPresented: $addLetterViewModel.showingTextRecognizerErrorAlert) {
 
         } message: {
             Text("문자 인식에 실패했습니다. 다시 시도해 주세요.")
         }
-        .alert("한 줄 요약", isPresented: $addLetterViewModel.showSummaryAlert) {
+        .alert("한 줄 요약", isPresented: $addLetterViewModel.showingSummaryAlert) {
             Button("직접 작성") {
-                // TODO: 함수로 빼기
-                addLetterViewModel.showSummaryTextField = true
+                addLetterViewModel.showSummaryTextField()
+                focusField = .summary
             }
 
             Button("AI 완성") {
-                // TODO: 네이버 클로바 API 호출
-                addLetterViewModel.showSummaryTextField = true
-            }
-        }
-        .onAppear {
-            if let letter = letter {
-                if isReceived {
-                    addLetterViewModel.sender = letter.writer
-                } else {
-                    addLetterViewModel.receiver = letter.recipient
+                Task {
+                    await addLetterViewModel.getSummary()
                 }
-                addLetterViewModel.date = letter.date
-                addLetterViewModel.text = letter.text
-                addLetterViewModel.summary = letter.summary
-                addLetterViewModel.images = letterPhotos?.map { $0.image } ?? []
+                focusField = .summary
             }
         }
-    }
-    
-    /// 이미 작성된 편지를 수정합니다.
-    /// - Parameter letter: 작성된 편지
-    ///
-    /// 1. Firestore에 저장된 편지 데이터를 수정
-    /// 2. Firestorage에 저장된 편지 이미지를 수정 후 불러와 데이터 상태 업데이트
-    /// 3. FirestoreManager의 @Published letter 변수 업데이트 ( AddView, DetailView 연동을 위해서 )
-    /// 4. `firestoreManager.fetchAllLetters()`을 홈뷰, 디테일뷰 데이터 상태 업데이트
-    private func editLetter(letter: Letter) async {
-        firestoreManager.editLetter(
-            documentId: letter.id,
-            writer: addLetterViewModel.sender,
-            recipient: addLetterViewModel.receiver,
-            summary: addLetterViewModel.summary,
-            date: addLetterViewModel.date,
-            text: addLetterViewModel.text,
-            isReceived: isReceived,
-            isFavorite: letter.isFavorite
-        )
+        .alert("편지 정보 부족", isPresented: $addLetterViewModel.showingNotEnoughInfoAlert) {
 
-        if var savedLetterPhotos = letterPhotos {
-            var uiImagesAndFullPaths = savedLetterPhotos.map { (image: $0.image , fullPath: $0.fullPath)}
-
-            for uiImageAndFullPath in uiImagesAndFullPaths {
-                if !addLetterViewModel.images.contains(uiImageAndFullPath.image) {
-                    if let index = uiImagesAndFullPaths.firstIndex(where: { $0 == uiImageAndFullPath }) {
-                        uiImagesAndFullPaths.remove(at: index)
-                        storageManager.deleteItem(fullPath: uiImageAndFullPath.fullPath)
-                    }
-                }
-            }
-
-            for image in addLetterViewModel.images {
-                if !uiImagesAndFullPaths.map( { $0.image } ).contains(image) {
-                    do {
-                        try await storageManager.saveUIImage(images: [image], docId: letter.id)
-                    } catch {
-                        // TODO: ERROR 처리 필요
-                        print("DEBUG: 이미지 저장 실패")
-                    }
-                }
-            }
-
-            storageManager.images.removeAll()
-            
-            storageManager.listAllFile(docId: letter.id)
+        } message: {
+            Text("편지를 저장하기 위한 정보가 부족해요. \(isReceived ? "보낸 사람" : "받는 사람")과 내용을 채워주세요.")
         }
+        .alert("편지 저장 실패", isPresented: $addLetterViewModel.showingUploadErrorAlert) {
 
-        firestoreManager.letter = Letter(
-            id: letter.id,
-            writer: addLetterViewModel.sender,
-            recipient: addLetterViewModel.receiver,
-            summary: addLetterViewModel.summary,
-            date: addLetterViewModel.date,
-            text: addLetterViewModel.text,
-            isReceived: isReceived,
-            isFavorite: letter.isFavorite
-        )
+        } message: {
+            Text("편지 저장에 실패했어요. 다시 시도해주세요.")
+        }
+        .alert("편지 요약 실패", isPresented: $addLetterViewModel.showingSummaryErrorAlert) {
 
-        firestoreManager.fetchAllLetters()
-    }
-    
-    /// 편지를 추가합니다
-    ///
-    /// 1. Firestore에 편지 추가
-    /// 2. 편지 이미지 값이 존재하면 Firestorage에 이미지 추가
-    /// 3. 모든 편지 불러와서 상태 업데이트
-    private func addLetter() async {
-        await firestoreManager.addLetter(
-            writer: isReceived ? addLetterViewModel.sender : AuthManager.shared.currentUser?.fullName ?? "유저",
-            recipient: isReceived ? AuthManager.shared.currentUser?.fullName ?? "유저" : addLetterViewModel.receiver,
-            summary: addLetterViewModel.summary,
-            date: addLetterViewModel.date,
-            text: addLetterViewModel.text,
-            isReceived: isReceived,
-            isFavorite: false
-        )
-
-        if !addLetterViewModel.images.isEmpty {
-            do {
-                try await storageManager.saveUIImage(
-                    images: addLetterViewModel.images,
-                    docId: firestoreManager.docId
-                )
-            } catch {
-                // TODO: Error 처리 필요
-                print("DEBUG: Failed to save UIImages to Firestore: \(error)")
+        } message: {
+            Text("편지 요약에 실패했어요. 직접 요약해주세요.")
+        }
+        .customOnChange(addLetterViewModel.shouldDismiss) { shouldDismiss in
+            if shouldDismiss {
+                dismiss()
             }
         }
-
-        firestoreManager.fetchAllLetters()
     }
 }
 
@@ -243,7 +158,7 @@ extension AddLetterView {
                           text: isReceived ?
                           $addLetterViewModel.sender : $addLetterViewModel.receiver)
                 .padding(6)
-                .background(Color(hex: 0xFCFBF7))
+                .background(ThemeManager.themeColors[isThemeGroupButton].receivedLetterColor)
                 .clipShape(RoundedRectangle(cornerRadius: 4))
                 .focused($focusField, equals: .sender)
             }
@@ -302,7 +217,7 @@ extension AddLetterView {
 
             if addLetterViewModel.images.isEmpty {
                 Label("사진을 추가해주세요.", systemImage: "photo.on.rectangle")
-                    .foregroundStyle(Color(hex: 0xAAAAAA))
+                    .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].dividerColor)
                     .frame(maxWidth: .infinity)
                     .frame(height: 100)
                     .frame(alignment: .center)
@@ -312,8 +227,7 @@ extension AddLetterView {
                         ForEach(0..<addLetterViewModel.images.count, id: \.self) { index in
                             ZStack(alignment: .topTrailing) {
                                 Button {
-                                    addLetterViewModel.selectedIndex = index
-                                    addLetterViewModel.showLetterImageFullScreenView = true
+                                    addLetterViewModel.showLetterImageFullScreenView(index: index)
                                 } label: {
                                     Image(uiImage: addLetterViewModel.images[index])
                                         .resizable()
@@ -329,13 +243,14 @@ extension AddLetterView {
                                 } label: {
                                     Image(systemName: "xmark.circle.fill")
                                         .symbolRenderingMode(.palette)
-                                        .foregroundStyle(.white, Color(hex: 0xFF5733))
+                                        .foregroundStyle(.white, ThemeManager.themeColors[isThemeGroupButton].tintColor)
                                 }
                                 .offset(x: 8, y: -8)
                             }
                         }
                     }
                     .padding(.top, 8)
+                    .padding(.trailing, 8)
                 }
                 .scrollIndicators(.never)
             }
@@ -351,7 +266,7 @@ extension AddLetterView {
                 if addLetterViewModel.text.isEmpty {
                     TextEditor(text: .constant("사진을 등록하면 자동으로 편지 내용이 입력됩니다."))
                         .scrollContentBackground(.hidden)
-                        .background(Color(hex: 0xFCFBF7))
+                        .background(ThemeManager.themeColors[isThemeGroupButton].receivedLetterColor)
                         .lineSpacing(5)
                         .clipShape(RoundedRectangle(cornerRadius: 4))
                         .frame(maxWidth: .infinity)
@@ -361,7 +276,7 @@ extension AddLetterView {
 
                 TextEditor(text: $addLetterViewModel.text)
                     .scrollContentBackground(.hidden)
-                    .background(Color(hex: 0xFCFBF7))
+                    .background(ThemeManager.themeColors[isThemeGroupButton].receivedLetterColor)
                     .lineSpacing(5)
                     .clipShape(RoundedRectangle(cornerRadius: 4))
                     .overlay(
@@ -383,21 +298,21 @@ extension AddLetterView {
                 Spacer()
 
                 Button {
-                    addLetterViewModel.showSummaryAlert = true
+                    addLetterViewModel.showSummaryAlert()
                 } label: {
                     Image(systemName: "plus")
                 }
             }
 
-            if addLetterViewModel.showSummaryTextField || !addLetterViewModel.summary.isEmpty {
+            if addLetterViewModel.showingSummaryTextField || !addLetterViewModel.summary.isEmpty {
                 TextField("", text: $addLetterViewModel.summary)
                     .padding(6)
-                    .background(Color(hex: 0xFCFBF7))
+                    .background(ThemeManager.themeColors[isThemeGroupButton].receivedLetterColor)
                     .clipShape(RoundedRectangle(cornerRadius: 4))
-                    .focused($focusField, equals: .receiver)
+                    .focused($focusField, equals: .summary)
             } else {
                 Label("편지를 요약해드릴게요.", systemImage: "text.quote.rtl")
-                    .foregroundStyle(Color(hex: 0xAAAAAA))
+                    .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].dividerColor)
                     .frame(maxWidth: .infinity)
                     .frame(height: 30)
                     .frame(alignment: .center)
@@ -410,5 +325,24 @@ extension AddLetterView {
 #Preview {
     NavigationStack {
         AddLetterView(isReceived: false)
+    }
+}
+
+struct LoadingModifier: ViewModifier {
+    @Binding var isLoading: Bool
+    let text: String
+
+    func body(content: Content) -> some View {
+        ZStack {
+            if isLoading {
+                content
+                    .disabled(isLoading)
+                    .blur(radius: isLoading ? 3 : 0)
+
+                LoadingView(text: text)
+            } else {
+                content
+            }
+        }
     }
 }

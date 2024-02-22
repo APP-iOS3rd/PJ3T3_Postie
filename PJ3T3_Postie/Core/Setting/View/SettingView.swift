@@ -15,6 +15,8 @@ struct SettingView: View {
     //Colors
     private let profileBackgroundColor: Color = .gray
     private let signOutIconColor: Color = Color(uiColor: .lightGray)
+    @State private var content: String = ""
+    @State private var summary: String = ""
     @State private var isDeleteAccountDialogPresented = false
     @State private var showLoading = false
     
@@ -69,6 +71,25 @@ struct SettingView: View {
                         }
                     }
                     
+                    Section("SummaryTest") {
+                        
+                        TextField("content", text: $content)
+                        
+                        Text(summary)
+                        
+                        Button(action: {
+                            Task {
+                                do {
+                                    summary = try await APIClient.shared.postRequestToAPI(title: "", content: content)
+                                } catch {
+                                    summary = "에러 발생"
+                                    print("에러 정보: \(error)")
+                                }
+                            }}, label: {
+                                Text("요약하기")
+                            })
+                    }
+                    
                     Section("Account") {
                         Button {
                             authManager.signOut()
@@ -80,47 +101,6 @@ struct SettingView: View {
                             isDeleteAccountDialogPresented = true
                         } label: {
                             SettingsRowView(imageName: "xmark.circle.fill", title: "Delete Account", tintColor: signOutIconColor)
-                        }
-                        .confirmationDialog("포스티를 떠나시나요?", isPresented: $isDeleteAccountDialogPresented, titleVisibility: .visible) {
-                            Button("계정 삭제", role: .destructive) {
-                                switch authManager.provider {
-                                case .email:
-                                    Task {
-                                        print("Delete Email account")
-                                        //회원 탈퇴를 위해 재로그인하는 과정이 필요합니다.
-                                        //기능 구현여부 테스트를 위해 하드코딩 하였다가 주석처리 했습니다.
-//                                        await authManager.deleteEmailUser(email: "eunice@test.com", password: "123456")
-//                                        showLoading = true
-                                    }
-                                case .google:
-                                    print("Delete Google account")
-                                    Task {
-                                        do {
-                                            try await authManager.deleteGoogleAccount()
-                                            showLoading = true
-                                        } catch {
-                                            print(#function, "Failed to delete Google account: \(error)")
-                                            showLoading = false
-                                        }
-                                    }
-                                case .apple:
-                                    print("Delete Apple account")
-                                    appleSignInHelper.deleteCurrentAppleUser()
-                                default:
-                                    print("Delete account")
-                                    //alert 창 구현
-                                }
-                            }
-                            .onChange(of: authManager.credential) { newValue in
-                                if authManager.credential == nil {
-                                    print(#function, "Canceled to delete account")
-                                    showLoading = false
-                                } else {
-                                    showLoading = true
-                                }
-                            }
-                        } message: {
-                            Text("회원 탈퇴 시에는 계정과 프로필 정보, 그리고 등록된 모든 편지와 편지 이미지가 삭제되며 복구할 수 없습니다. 계정 삭제를 위해서는 재인증을 통해 다시 로그인 해야 합니다.")
                         }
                     }
                     
@@ -140,8 +120,13 @@ struct SettingView: View {
         .onAppear {
             appleSignInHelper.window = window
         }
+        .confirmationDialog("포스티를 떠나시나요?", isPresented: $isDeleteAccountDialogPresented, titleVisibility: .visible) {
+            DeleteAccountButtonView(showLoading: $showLoading)
+        } message: {
+            Text("회원 탈퇴 시에는 계정과 프로필 정보, 그리고 등록된 모든 편지와 편지 이미지가 삭제되며 복구할 수 없습니다. 계정 삭제를 위해서는 재인증을 통해 다시 로그인 해야 합니다.")
+        }
         .fullScreenCover(isPresented: $showLoading) {
-            LoadingView(text: "저장된 편지들을 안전하게 삭제하는 중이에요", isThemeGroupButton: .constant(0))
+            LoadingView(text: "저장된 편지들을 안전하게 삭제하는 중이에요")
                 .background(ClearBackground())
         }
     }
@@ -163,7 +148,7 @@ struct AddDataSectionView: View {
             
             //photoPicker에서 이미지를 선택할 때 마다 onchange로 감지하여 selectedImages에 UIImage가 append 된다.
             Button {
-                uploadLetter(uiImages: selectedImages)
+                newUploadLetter(uiImages: selectedImages)
                 selectedImages = [] //uploadLetter 작업을 수행 한 이후 잘못된 이미지가 업로드 되는 일이 없도록 배열을 초기화 해 준다.
             } label: {
                 Text("Save Letter")
@@ -186,6 +171,9 @@ struct AddDataSectionView: View {
             
             if let uiImage = UIImage(data: image) {
                 selectedImages.append(uiImage)
+                let imgData = NSData(data: uiImage.jpegData(compressionQuality: 1)!)
+                var imageSize: Int = imgData.count
+                print("actual size of image in KB: %f ", Double(imageSize) / 1000.0)
                 print(selectedImages)
             } else {
                 //alert 구현 필요
@@ -195,26 +183,40 @@ struct AddDataSectionView: View {
         }
     }
     
-    //userUid를 AuthManager에서 가져오도록 리팩토링 필요
-    func uploadLetter(uiImages: [UIImage]) {
+    func newUploadLetter(uiImages: [UIImage]) {
+        let docId = UUID().uuidString
+        var newImageFullPaths = [String]()
+        var newImageURLs = [String]()
+        
         Task {
-            //letter객체를 만들어 append한다면 id는 어떻게 하지?
-            //firestore에 document를 저장한다.
-            await firestoreManager.addLetter(writer: "me",
-                                             recipient: "you",
-                                             summary: "refacrorTest",
-                                             date: Date(),
-                                             text: "?.?",
-                                             isReceived: false,
-                                             isFavorite: false)
-            firestoreManager.fetchAllLetters() //변경사항을 fetch한다.
-            //함수가 호출되면 uiImages가 빈 배열이 아닌지 확인해 빈 배열이 아닐 경우 storage에 이미지를 업로드 하고
-            //이미지 업로드가 성공하면 urlString들이 저장된 배열을 return받아 selectedImageUrls에 저장한다.
-            if !uiImages.isEmpty {
-                try await storageManager.saveUIImage(images: uiImages, docId: firestoreManager.docId)
+            for img in uiImages {
+                do {
+                    let fullPath = try await storageManager.uploadUIImage(image: img, docId: docId)
+                    let url = try await storageManager.requestImageURL(fullPath: fullPath)
+                    
+                    newImageFullPaths.append(fullPath)
+                    newImageURLs.append(url)
+                } catch {
+                    print(#function, "Failed to upload image with: \(error)")
+                }
             }
-            
-            firestoreManager.docId = ""
+            do {
+                let newLetter = Letter(id: docId,
+                                       writer: "포스티",
+                                       recipient: "포스티팀",
+                                       summary: "푸시 테스트, 이미지 없음",
+                                       date: Date(),
+                                       text: "푸시를 삭제하자!",
+                                       isReceived: true,
+                                       isFavorite: true,
+                                       imageURLs: newImageURLs,
+                                       imageFullPaths: newImageFullPaths)
+                
+                try await firestoreManager.addLetter(docId: docId, letter: newLetter)
+                firestoreManager.letters.append(newLetter) //fetch 생략 가능
+            } catch {
+                print(#function, "Failed to upload document with: \(error)")
+            }
         }
     }
 }
@@ -252,11 +254,24 @@ struct TestDetailView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
     @ObservedObject var storageManager = StorageManager.shared
     @Environment(\.dismiss) var dismiss
+    //편지 디테일
     var letter: Letter
+    let rows = Array(repeating: GridItem(.adaptive(minimum: 100)), count: 1)
     @State var writer = ""
     @State var recipient = ""
     @State var summary = ""
     @State var text = ""
+    @State var currentFullPaths = [String]()
+    @State var currentUrls = [String]()
+    @State var currentFullPathAndURLs = [[String]]()
+    //이미지 삭제
+    @State var deleteImageFullPaths = [String]()
+    @State var deleteImageURLs = [String]()
+    //새 이미지 추가
+    @State private var selectedItem: PhotosPickerItem? = nil
+    @State private var selectedImages: [UIImage] = []
+    //푸시 추가
+    @State private var notificationDate = Date.now
     
     var body: some View {
         ScrollView {
@@ -281,23 +296,57 @@ struct TestDetailView: View {
                 TextField("\(letter.text)", text: $text)
                     .textFieldStyle(.roundedBorder)
                 
-                if !storageManager.images.isEmpty {
-                    TestImageView(images: storageManager.images)
+                if !currentFullPathAndURLs.isEmpty {
+                    ScrollView(.horizontal) {
+                        LazyHGrid(rows: rows) {
+                            ForEach(currentFullPathAndURLs, id: \.self) { item in
+                                AsyncImage(url: URL(string: item[1])) { image in
+                                    ZStack(alignment: .topTrailing) {
+                                        image
+                                            .resizable()
+                                            .frame(width: 150, height: 150)
+                                            .scaledToFit()
+                                            .padding(.leading, 10)
+                                        
+                                        Button {
+                                            deleteImageFullPaths.append(item[0])
+                                            deleteImageURLs.append(item[1])
+                                            currentFullPathAndURLs.remove(at: currentFullPathAndURLs.firstIndex(of: item)!)
+                                        } label: {
+                                            Image(systemName: "xmark.circle.fill")
+                                                .foregroundStyle(.gray)
+                                                .frame(width: 20, height: 20)
+                                                .padding(5)
+                                        }
+                                    }
+                                } placeholder: {
+                                    ProgressView()
+                                        .frame(width: 150, height: 150)
+                                }
+                            }
+                        }
+                    }
                 }
+                
+                DatePicker("DatePicker", selection: $notificationDate, in: Date.now..., displayedComponents: [.date])
+                    .datePickerStyle(.compact)
             }
             
             HStack {
                 Button {
-                    firestoreManager.editLetter(documentId: letter.id,
-                                                writer: writer,
-                                                recipient: recipient,
-                                                summary: summary,
-                                                date: Date(),
-                                                text: text,
-                                                isReceived: false,
-                                                isFavorite: false)
-                    firestoreManager.fetchAllLetters()
-                    dismiss()
+                    setNotification(docId: letter.id, date: notificationDate)
+                } label: {
+                    Text("푸시 추가")
+                }
+                .buttonStyle(.borderedProminent)
+                
+                PhotosPicker(selection: $selectedItem, matching: .images, photoLibrary: .shared()) {
+                    Text("사진 추가")
+                }
+                .buttonStyle(.borderedProminent)
+                
+                Button {
+                    updateLetter(docId: letter.id, deleteURLs: deleteImageURLs, deleteFullPaths: deleteImageFullPaths)
                 } label: {
                     Text("수정 완료")
                 }
@@ -305,7 +354,9 @@ struct TestDetailView: View {
                 
                 Button {
                     firestoreManager.deleteLetter(documentId: letter.id)
+                    storageManager.deleteFolder(docId: letter.id)
                     firestoreManager.fetchAllLetters()
+                    NotificationManager.shared.removePendingNotificationRequests(docId: letter.id)
                     dismiss()
                 } label: {
                     Text("삭제")
@@ -314,51 +365,103 @@ struct TestDetailView: View {
             }
         }
         .onAppear {
-            writer = letter.writer
-            recipient = letter.recipient
-            summary = letter.summary
-            text = letter.text
-            storageManager.listAllFile(docId: letter.id)
+            initLetterDetail()
         }
-        .onDisappear {
-            //뷰가 dismiss될 때 images 배열 초기화
-            storageManager.images.removeAll()
+        .onChange(of: selectedItem) { newValue in
+            if let newValue {
+                appendImages(item: newValue)
+            }
+            selectedItem = nil
         }
     }
-}
-
-struct TestImageView: View {
-    @ObservedObject var storageManager = StorageManager.shared
-    let rows = Array(repeating: GridItem(.adaptive(minimum: 100)), count: 1)
-    var images: [LetterPhoto]
     
-    var body: some View {
-        ScrollView(.horizontal) {
-            LazyHGrid(rows: rows) {
-                ForEach(images, id: \.self) { img in
-                    //LetterPhoto의 UIImage 타입으로 저장된 변수를 사용할 수도 있다: Image(uiImage: img.image)
-                    AsyncImage(url: URL(string: img.urlString)) { image in
-                        ZStack(alignment: .topTrailing) {
-                            image
-                                .resizable()
-                                .frame(width: 150, height: 150)
-                                .scaledToFit()
-                                .padding(.leading, 10)
-                            
-                            Button {
-                                storageManager.deleteItem(fullPath: img.fullPath)
-                            } label: {
-                                Image(systemName: "xmark.circle.fill")
-                                    .foregroundStyle(.gray)
-                                    .frame(width: 20, height: 20)
-                                    .padding(5)
-                            }
-                        }
-                    } placeholder: {
-                        ProgressView()
-                    }
+    func setNotification(docId: String, date: Date) {
+        let manager = NotificationManager.shared
+        //title이나 body 부분의 문구 여러가지로 배열 작성 해 두었다가 알람 뜰 때 랜덤으로 설정되면 좋을 것 같아요~
+        manager.addNotification(id: docId, title: "포스티가 편지를 배달했어요", body: summary.count == 0 ? "포스티에서 내용을 확인 해 보세요" : summary)
+        manager.setNotification(date: date)
+    }
+    
+    func initLetterDetail() {
+        writer = letter.writer
+        recipient = letter.recipient
+        summary = letter.summary
+        text = letter.text
+        
+        if let currentFullPaths = letter.imageFullPaths {
+            self.currentFullPaths = currentFullPaths
+        }
+        
+        if let currentUrls = letter.imageURLs {
+            self.currentUrls = currentUrls
+        }
+        
+        if currentUrls.count == currentFullPaths.count {
+            let imageCount = currentUrls.count
+            
+            for i in 0..<imageCount {
+                currentFullPathAndURLs.append([currentFullPaths[i], currentUrls[i]])
+            }
+        } else {
+            print("현재 letter는 Image url의 개수와 fullPath의 개수가 다릅니다.")
+        }
+    }
+    
+    func appendImages(item: PhotosPickerItem) {
+        Task {
+            //지정한 타입의 인스턴스를 불러오려고 시도한다. 실패 action 구현 필요
+            guard let image = try await item.loadTransferable(type: Data.self) else { return }
+            
+            if let uiImage = UIImage(data: image) {
+                selectedImages.append(uiImage)
+                let imgData = NSData(data: uiImage.jpegData(compressionQuality: 1)!)
+                let imageSize: Int = imgData.count
+                print("actual size of image in KB: %f ", Double(imageSize) / 1000.0)
+                print(selectedImages)
+            } else {
+                //alert 구현 필요
+                print("\(#function): 이미지를 array에 추가하는데 실패했습니다.")
+                return
+            }
+        }
+    }
+    
+    func updateLetter(docId: String, deleteURLs: [String], deleteFullPaths: [String]) {
+        var newImageFullPaths = [String]()
+        var newImageURLs = [String]()
+        
+        Task {
+            for img in selectedImages {
+                do {
+                    let fullPath = try await storageManager.uploadUIImage(image: img, docId: docId)
+                    let url = try await storageManager.requestImageURL(fullPath: fullPath)
+                    
+                    newImageFullPaths.append(fullPath)
+                    newImageURLs.append(url)
+                } catch {
+                    print(#function, "Failed to upload image with: \(error)")
                 }
             }
+            
+            for deleteFullPath in deleteFullPaths {
+                storageManager.deleteItem(fullPath: deleteFullPath)
+            }
+            
+            print(newImageURLs, newImageFullPaths)
+            
+            firestoreManager.removeFullPathsAndURLs(docId: docId, fullPaths: deleteFullPaths, urls: deleteURLs)
+            firestoreManager.updateLetter(docId: docId,
+                                          writer: writer,
+                                          recipient: recipient,
+                                          summary: summary,
+                                          date: letter.date,
+                                          text: text,
+                                          isReceived: letter.isReceived,
+                                          isFavorite: letter.isFavorite,
+                                          imageURLs: newImageURLs.isEmpty ? nil : newImageURLs,
+                                          imageFullPaths: newImageFullPaths.isEmpty ? nil : newImageFullPaths)
+            firestoreManager.fetchAllLetters()
+            dismiss()
         }
     }
 }
@@ -387,11 +490,9 @@ struct NoticeTestView: View {
     @ObservedObject var firestoreNoticeManager = FirestoreNoticeManager.shared
     
     var body: some View {
-        VStack {            
-            Section {
-                ForEach(firestoreNoticeManager.notices, id:\.self) { notice in
-                    Text(notice.title)
-                }
+        Section("Notices") {
+            ForEach(firestoreNoticeManager.notices, id:\.self) { notice in
+                Text(notice.title)
             }
         }
         .onAppear {
