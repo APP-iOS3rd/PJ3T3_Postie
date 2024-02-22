@@ -26,4 +26,5 @@ enum GIDSignInErrorCode: NSInteger, Error {
 enum AuthErrorCodeCase: Error {
     case userMismatch //로그인 한 유저와 탈퇴 인증 한 유저가 다를 경우
     case requiresRecentLogin //재인증 과정 중 취소 한 경우
+    case invalidCredential //credential 획득에 실패
 }

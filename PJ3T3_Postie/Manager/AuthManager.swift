@@ -187,6 +187,8 @@ class AuthManager: ObservableObject {
             throw AuthErrorCodeCase.userMismatch
         case .requiresRecentLogin:
             throw AuthErrorCodeCase.requiresRecentLogin
+        case .invalidCredential:
+            throw AuthErrorCodeCase.invalidCredential
         default:
             print(#function, "Failed to delete Google account AuthErrorCode: \(error)")
         }
