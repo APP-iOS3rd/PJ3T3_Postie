@@ -101,6 +101,7 @@ struct ShopView: View {
                             }
                         })
                     }
+                    .padding()
                 }
             }
             .onAppear() {
@@ -139,7 +140,7 @@ struct ShopButton: View {
                     
                     ZStack {
                         Rectangle()
-                            .fill(LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.1), Color.clear]), startPoint: .bottom, endPoint: .top))
+                            .fill(LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.2), Color.clear]), startPoint: .bottom, endPoint: .top))
                             .frame(height: 30)
                             .cornerRadius(10)
                         
