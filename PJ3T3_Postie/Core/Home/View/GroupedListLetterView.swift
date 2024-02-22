@@ -10,26 +10,28 @@ import SwiftUI
 struct GroupedListLetterView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
     @ObservedObject var storageManager = StorageManager.shared
-
+    @State private var isMenuActive = false
+    
     var recipient: String
-
+    
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     @State private var isSideMenuOpen = false
-    @Binding var isThemeGroupButton: Int
     
     var body: some View {
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
+        let filteredLetters = firestoreManager.letters.filter { $0.recipient == recipient || $0.writer == recipient }.sorted { $0.date < $1.date }
         
         ZStack(alignment: .bottomTrailing) {
             postieColors.backGroundColor
                 .ignoresSafeArea()
             
             ScrollView {
-                ForEach(firestoreManager.letters, id: \.self) { letter in
+                ForEach(filteredLetters, id: \.self) { letter in
                     NavigationLink {
                         LetterDetailView(letter: letter)
                     } label: {
-                        groupedLetterView(letter: letter)
+                        LetterItemView(letter: letter)
                     }
+                    .disabled(isMenuActive)
                 }
                 
                 // ScrollView margin 임시
@@ -38,8 +40,14 @@ struct GroupedListLetterView: View {
                     .foregroundStyle(Color.postieBlack.opacity(0))
             }
             
-            AddLetterButton(isThemeGroupButton: $isThemeGroupButton)
+            AddLetterButton(isMenuActive: $isMenuActive)
         }
+        .onTapGesture {
+            if self.isMenuActive {
+                self.isMenuActive = false
+            }
+        }
+        .toolbarBackground(postieColors.backGroundColor, for: .navigationBar)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .principal) {
@@ -49,15 +57,6 @@ struct GroupedListLetterView: View {
             }
         }
         .tint(postieColors.tabBarTintColor)
-    }
-    
-    @ViewBuilder
-    private func groupedLetterView(letter: Letter) -> some View {
-        if letter.recipient == recipient || letter.writer == recipient {
-            LetterItemView(letter: letter, isThemeGroupButton: $isThemeGroupButton)
-        } else {
-            EmptyView()
-        }
     }
 }
 

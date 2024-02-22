@@ -8,301 +8,129 @@
 import SwiftUI
 
 struct ProfileEditView: View {
-    @ObservedObject var authManager = AuthManager.shared
     @Environment(\.dismiss) var dismiss
     
-    @State var name: String = "테스트 포스티"
-    @State private var isShowingProfileImageEditor = false
-    @Binding var isThemeGroupButton: Int
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     @Binding var profileImage: String
     @Binding var profileImageTemp: String
     
     var body: some View {
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
+        let profileImages = ["postySmileSketch", "postySmileLine", "postySmileLineColor", "postyThinkingSketch", "postyThinkingLine", "postyThinkingLineColor", "postySendingSketch", "postySendingLine", "postySendingLineColor", "postyReceivingSketch", "postyReceivingLine", "postyReceivingLineColor", "postyHeartSketch", "postyHeartLine", "postyHeartLineColor", "postyTrumpetSketch", "postyTrumpetLine", "postyTrumpetLineColor", "postyQuestionSketch", "postyQuestionLine", "postyQuestionLineColor", "postyNormalSketch", "postyNormalLine", "postyNormalLineColor", "postyWinkSketch", "postyWinkLine", "postyWinkLineColor", "postySleepingSketch", "postySleepingLine", "postySleepingLineColor", "postyNotGoodSketch", "postyNotGoodLine", "postyNotGoodLineColor"]
+        let rows3: [GridItem] = Array(repeating: .init(.fixed(180)), count: 3)
+        let rows2: [GridItem] = Array(repeating: .init(.fixed(180)), count: 2)
         
-        ZStack {
-            postieColors.backGroundColor
-                .ignoresSafeArea()
-            
-            VStack(alignment: .leading) {
-                HStack {
+        GeometryReader { geometry in
+            ZStack {
+                postieColors.backGroundColor
+                    .ignoresSafeArea()
+                
+                VStack {
+                    Text("프로필에 사용될 캐릭터를 선택해주세요!")
+                        .bold()
+                        .font(geometry.size.width < 390 ? .system(size: 18) : .title3)
+                        .foregroundStyle(postieColors.tabBarTintColor)
+                        .padding()
+                    
                     Spacer()
                     
-                    Button (action: {
-                        isShowingProfileImageEditor = true
-                    }) {
-                        ZStack {
-                            Circle()
-                                .frame(width: 170, height: 170)
-                                .foregroundStyle(.postieGray)
-                            
-                            Image(profileImageTemp)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 170, height: 170)
-                                .clipShape(Circle())
-                            
-                            Image(systemName: "pencil.circle.fill")
-                                .font(.title)
-                                .foregroundColor(postieColors.tabBarTintColor)
-                                .offset(x: 60, y: 60)
+                    ScrollView(.horizontal) {
+                        if geometry.size.height > 710 {
+                            LazyHGrid(rows: rows3, alignment: .top) {
+                                ForEach(profileImages, id: \.self) { imageName in
+                                    ProfileImageItemView(imageName: imageName, profileImageTemp: $profileImageTemp)
+                                }
+                            }
+                        } else if geometry.size.height > 600 && geometry.size.height < 710  {
+                            LazyHGrid(rows: rows2, alignment: .top) {
+                                ForEach(profileImages, id: \.self) { imageName in
+                                    ProfileImageItemView(imageName: imageName, profileImageTemp: $profileImageTemp)
+                                }
+                            }
+                        } else {
+                            HStack {
+                                ForEach(profileImages, id: \.self) { imageName in
+                                    ProfileImageItemView(imageName: imageName, profileImageTemp: $profileImageTemp)
+                                }
+                            }
+                            .padding()
                         }
                     }
-                    .sheet(isPresented: $isShowingProfileImageEditor) {
-                        ProfileImageEditView(isThemeGroupButton: $isThemeGroupButton, profileImage: $profileImage, profileImageTemp: $profileImageTemp)
-                            .padding()
-                            .presentationDetents([.medium])
-                    }
                     
                     Spacer()
-                }
-                
-                Text("닉네임")
-                    .foregroundStyle(postieColors.dividerColor)
-                
-                DividerView(isThemeGroupButton: $isThemeGroupButton)
-                
-                TextField(" 닉네임을 입력해주세요! (12자 제한)", text: $name)
-                    .padding(.bottom)
-                    .textFieldStyle(.roundedBorder)
-                    .overlay(
-                        HStack {
-                            Spacer()
-                            if !name.isEmpty {
-                                Button(action: {
-                                    self.name = ""
-                                }) {
-                                    Image(systemName: "multiply.circle.fill")
-                                        .foregroundColor(.postieGray)
-                                }
-                                .padding(.trailing, 5)
-                                .offset(y: -8)
+                    
+                    HStack {
+                        Button(action: {
+                            profileImageTemp = profileImage
+                            dismiss()
+                        }) {
+                            ZStack {
+                                Rectangle()
+                                    .frame(height: 50)
+                                    .cornerRadius(10)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .foregroundStyle(postieColors.receivedLetterColor)
+                                    )
+                                
+                                Text("취소")
+                                    .foregroundStyle(postieColors.tabBarTintColor)
+                                    .padding()
                             }
                         }
-                    )
-                    .onChange(of: name) { newValue in
-                        if newValue.count > 12 {
-                            name = String(newValue.prefix(15))
+                        
+                        Button(action: {
+                            dismiss()
+                            profileImage = profileImageTemp
+                        }) {
+                            ZStack {
+                                Rectangle()
+                                    .frame(height: 50)
+                                    .cornerRadius(10)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .foregroundStyle(postieColors.tintColor)
+                                    )
+                                
+                                Text("선택")
+                                    .foregroundStyle(isThemeGroupButton == 4 ? .postieBlack : .postieWhite)
+                                    .bold()
+                                    .padding()
+                            }
                         }
-                    }
-                
-                HStack {
-                    Button(action: {
-                        profileImageTemp = profileImage
-                        dismiss()
-                    }) {
-                        ZStack {
-                            Rectangle()
-                                .frame(height: 50)
-                                .cornerRadius(10)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .foregroundStyle(postieColors.receivedLetterColor)
-                                )
-                            
-                            Text("취소")
-                                .foregroundStyle(postieColors.tabBarTintColor)
-                                .padding()
+                        .customOnChange(profileImageTemp) { newValue in
+                            saveToUserDefaults(value: newValue, key: "profileImageTemp")
                         }
-                    }
-                    
-                    Button(action: {
-                        profileImage = profileImageTemp
-                        dismiss()
-                    }) {
-                        ZStack {
-                            Rectangle()
-                                .frame(height: 50)
-                                .cornerRadius(10)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .foregroundStyle(postieColors.tintColor)
-                                )
-                            
-                            Text("저장")
-                                .foregroundStyle(isThemeGroupButton == 4 ? .postieBlack : .postieWhite)
-                                .padding()
-                        }
-                    }
-                    .onChange(of: profileImage) { newValue in
-                        saveToUserDefaults(value: newValue, key: "profileImage")
                     }
                 }
+                .padding()
             }
         }
     }
 }
 
-struct ProfileImageEditView: View {
-    @Environment(\.dismiss) var dismiss
+struct ProfileImageItemView: View {
+    let imageName: String
     
-    @Binding var isThemeGroupButton: Int
-    @Binding var profileImage: String
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     @Binding var profileImageTemp: String
     
     var body: some View {
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
-        
-        VStack {
-            Text("나만의 프로필을 설정해보세요!")
-                .bold()
-                .font(.title2)
-                .foregroundStyle(postieColors.tabBarTintColor)
-            
-            ScrollView(.horizontal) {
-                HStack {
-                    Button (action: {
-                        profileImageTemp = "postyReceivingBeige"
-                    }) {
-                        ZStack {
-                            Circle()
-                                .frame(width: 172, height: 172)
-                                .foregroundStyle(profileImageTemp == "postyReceivingBeige" ? postieColors.tintColor : postieColors.tintColor.opacity(0))
-                            
-                            Circle()
-                                .frame(width: 170, height: 170)
-                                .foregroundStyle(postieColors.profileColor)
-                            
-                            Image("postyReceivingBeige")
-                                .resizable()
-                                .frame(width: 170, height: 170)
-                        }
-                    }
-                    
-                    Button (action: {
-                        profileImageTemp = "postySmile"
-                    }) {
-                        ZStack {
-                            Circle()
-                                .frame(width: 172, height: 172)
-                                .foregroundStyle(profileImageTemp == "postySmile" ? postieColors.tintColor : postieColors.tintColor.opacity(0))
-                            
-                            Circle()
-                                .frame(width: 170, height: 170)
-                                .foregroundStyle(postieColors.profileColor)
-                            
-                            Image("postySmile")
-                                .resizable()
-                                .frame(width: 100, height: 100)
-                        }
-                    }
-                    
-                    Button (action: {
-                        profileImageTemp = "postySending"
-                    }) {
-                        ZStack {
-                            Circle()
-                                .frame(width: 172, height: 172)
-                                .foregroundStyle(profileImageTemp == "postySending" ? postieColors.tintColor : postieColors.tintColor.opacity(0))
-                            
-                            Circle()
-                                .frame(width: 170, height: 170)
-                                .foregroundStyle(postieColors.profileColor)
-                            
-                            Image("postySending")
-                                .resizable()
-                                .frame(width: 150, height: 150)
-                        }
-                        
-                    }
-                    
-                    Button (action: {
-                        profileImageTemp = "postyReceiving"
-                    }) {
-                        ZStack {
-                            Circle()
-                                .frame(width: 172, height: 172)
-                                .foregroundStyle(profileImageTemp == "postyReceiving" ? postieColors.tintColor : postieColors.tintColor.opacity(0))
-                            
-                            Circle()
-                                .frame(width: 170, height: 170)
-                                .foregroundStyle(postieColors.profileColor)
-                            
-                            Image("postyReceiving")
-                                .resizable()
-                                .frame(width: 100, height: 100)
-                        }
-                    }
-                    
-                    Button (action: {
-                        profileImageTemp = "postyTrumpet"
-                    }) {
-                        ZStack {
-                            Circle()
-                                .frame(width: 172, height: 172)
-                                .foregroundStyle(profileImageTemp == "postyTrumpet" ? postieColors.tintColor : postieColors.tintColor.opacity(0))
-                            
-                            Circle()
-                                .frame(width: 170, height: 170)
-                                .foregroundStyle(postieColors.profileColor)
-                            
-                            Image("postyTrumpet")
-                                .resizable()
-                                .frame(width: 100, height: 100)
-                        }
-                    }
-                    
-                    Button (action: {
-                        profileImageTemp = "postyThinking"
-                    }) {
-                        ZStack {
-                            Circle()
-                                .frame(width: 172, height: 172)
-                                .foregroundStyle(profileImageTemp == "postyThinking" ? postieColors.tintColor : postieColors.tintColor.opacity(0))
-                            
-                            Circle()
-                                .frame(width: 170, height: 170)
-                                .foregroundStyle(postieColors.profileColor)
-                            
-                            Image("postyThinking")
-                                .resizable()
-                                .frame(width: 100, height: 100)
-                        }
-                    }
-                }
-                .onChange(of: profileImageTemp) { newValue in
-                    saveToUserDefaults(value: newValue, key: "profileImageTemp")
-                }
-                .padding()
-            }
-            
-            HStack {
-                Button(action: {
-                    profileImageTemp = profileImage
-                    dismiss()
-                }) {
-                    ZStack {
-                        Rectangle()
-                            .frame(height: 50)
-                            .cornerRadius(10)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .foregroundStyle(postieColors.receivedLetterColor)
-                            )
-                        
-                        Text("취소")
-                            .foregroundStyle(postieColors.tabBarTintColor)
-                            .padding()
-                    }
-                }
+        Button(action: {
+            profileImageTemp = imageName
+        }) {
+            ZStack {
+                Circle()
+                    .frame(width: 172, height: 172)
+                    .foregroundStyle(profileImageTemp == imageName ? postieColors.tintColor : postieColors.tintColor.opacity(0))
                 
-                Button(action: {
-                    dismiss()
-                }) {
-                    ZStack {
-                        Rectangle()
-                            .frame(height: 50)
-                            .cornerRadius(10)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .foregroundStyle(postieColors.tintColor)
-                            )
-                        
-                        Text("선택")
-                            .foregroundStyle(isThemeGroupButton == 4 ? .postieBlack : .postieWhite)
-                            .padding()
-                    }
-                }
+                Circle()
+                    .frame(width: 170, height: 170)
+                    .foregroundStyle(postieColors.profileColor)
+                
+                Image(imageName)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 100, height: 100)
             }
         }
     }

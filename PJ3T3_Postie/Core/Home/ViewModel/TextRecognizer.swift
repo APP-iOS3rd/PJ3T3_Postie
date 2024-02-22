@@ -12,33 +12,40 @@ import Vision
 
 class TextRecognizer {
     let selectedImage: UIImage
-    var recognizedText = ""
 
     init(selectedImage: UIImage) {
         self.selectedImage = selectedImage
     }
-    
-    /// Vision 프레임워크를 사용해 사용자가 가져온 이미지에서 텍스트를 인식합니다.
-    /// 인식이 끝나면 VNRecognizeTextRquest의 completionHandler가 호출됩니다.
-    func recognizeText() throws {
-        guard let cgImage = selectedImage.cgImage else { return }
 
-        let requestHandler = VNImageRequestHandler(cgImage: cgImage)
+    func recognizeText(completionHandler: @escaping (Result<String, Error>) -> ()) {
+        DispatchQueue.global(qos: .userInitiated).async {
+            guard let cgImage = self.selectedImage.cgImage else { return }
 
-        let request = VNRecognizeTextRequest(completionHandler: recognizeTextHandler)
-        request.recognitionLanguages = ["ko-KR"]
-        request.recognitionLevel = .accurate
-        request.usesLanguageCorrection = true
+            let requestHandler = VNImageRequestHandler(cgImage: cgImage)
 
-        try requestHandler.perform([request])
-    }
-    
-    /// 이미지에서 인식된 텍스트 값으로 TextRecognizer 인스턴스의 recognizedText 변수를 업데이트 합니다.
-    private func recognizeTextHandler(request: VNRequest, error: Error?) {
-        guard let observations = request.results as? [VNRecognizedTextObservation] else { return }
+            let request = VNRecognizeTextRequest()
+            request.recognitionLanguages = ["ko-KR"]
+            request.recognitionLevel = .accurate
+            request.usesLanguageCorrection = true
 
-        recognizedText = observations.compactMap {
-            $0.topCandidates(1).first?.string
-        }.joined(separator: "\n")
+            do {
+                try requestHandler.perform([request])
+
+                guard let observations = request.results else { return }
+
+                let recognizedText = observations.compactMap { observation in
+                    observation.topCandidates(1).first?.string
+
+                }.joined(separator: "\n")
+
+                DispatchQueue.main.async {
+                    completionHandler(.success(recognizedText))
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    completionHandler(.failure(error))
+                }
+            }
+        }
     }
 }

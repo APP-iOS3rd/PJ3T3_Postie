@@ -13,23 +13,40 @@ protocol AuthenticationProtocol {
     var formIsValid: Bool { get }
 }
 
-enum AuthProviderOption: String {
-    case email = "password"
-    case google = "google.com"
-}
-
 class AuthManager: ObservableObject {
     static let shared = AuthManager()
     var userUid: String  = ""
-    var hasAccount: Bool = true
-    var authDataResult: AuthDataResult?
-    var credential: OAuthCredential?
+    var provider: AuthProviderOption?
+    @Published var hasAccount: Bool = true
     @Published var userSession: FirebaseAuth.User? //Firebase user object
     @Published var currentUser: PostieUser? //User Data Model
+    @Published var credential: OAuthCredential?
+    @Published var authDataResult: AuthDataResult?
     
     private init() {
         Task {
+            checkAppLaunch()
             await fetchUser()
+        }
+    }
+    
+    func checkAppLaunch() {
+        let userDefaults = UserDefaults.standard
+        
+        print("UserDefault", userDefaults.value(forKey: "appFirstTimeOpend"))
+        
+        //앱이 설치된 후 처음 실행 되는 것이라면 nil이다.
+        if userDefaults.value(forKey: "appFirstTimeOpend") == nil {
+            userDefaults.setValue(true, forKey: "appFirstTimeOpend")
+            do {
+                try Auth.auth().signOut()
+            } catch {
+                print("Failed to signOut")
+                self.userSession = nil
+                self.currentUser = nil
+            }
+        } else {
+            print("앱 설치 후 최초 실행이 아닙니다.")
         }
     }
     
@@ -91,6 +108,7 @@ class AuthManager: ObservableObject {
             }
         }
         
+        self.getProviders()
         FirestoreManager.shared.fetchReference()
         StorageManager.shared.fetchReference()
     }
@@ -129,52 +147,143 @@ class AuthManager: ObservableObject {
         }
     }
     
-    
-    func deleteAccount() {
-
+    func deleteAccount() async throws {
+        try await self.userSession?.delete()
+        guard let userUid = self.userSession?.uid else {
+            print(#function, "Cannot get userUid from userSession")
+            return
+        }
+        
+        FirestoreManager.shared.deleteUserDocument(userUid: userUid)
+        
+        DispatchQueue.main.async {
+            self.userSession = nil
+            self.currentUser = nil
+            self.credential = nil
+        }
     }
     
-    //google.com, password
-    func getProviders() throws -> [AuthProviderOption] {
+    func getProviders() {
         guard let providerData = Auth.auth().currentUser?.providerData else {
-            throw URLError(.badServerResponse)
+            print(#function, "Failed to get provider")
+            return
         }
         
-        var providers: [AuthProviderOption] = []
         for provider in providerData {
             if let option = AuthProviderOption(rawValue: provider.providerID) {
-                providers.append(option)
+                self.provider = option
             } else {
-//                fatalError() //앱이 종료되므로 사용하지 않기를 권장한다.
-                assertionFailure("Provider option not found: \(provider.providerID)") //fatalError, preconditionFailure와의 차이점은?
+                //fatalError()는 앱이 종료되므로 사용하지 않기를 권장한다. fatalError, preconditionFailure와의 차이점은?
+                assertionFailure("Provider option not found: \(provider.providerID)")
             }
         }
+    }
+    
+    func authErrorCodeConverter(error: NSError) throws {
+        let errorCode = AuthErrorCode.Code(rawValue: error.code)
         
-        return providers
+        switch errorCode {
+        case .userMismatch:
+            throw AuthErrorCodeCase.userMismatch
+        case .requiresRecentLogin:
+            throw AuthErrorCodeCase.requiresRecentLogin
+        case .invalidCredential:
+            throw AuthErrorCodeCase.invalidCredential
+        default:
+            print(#function, "Failed to delete Google account AuthErrorCode: \(error)")
+        }
     }
 }
 
 // MARK: Sign in SSO
 extension AuthManager {
     func signInWithSSO(credential: AuthCredential) async throws -> AuthDataResult {
-            let authDataResult = try await Auth.auth().signIn(with: credential)
-            
-            await fetchUser()
-            
-            return authDataResult
+        let authDataResult = try await Auth.auth().signIn(with: credential)
+        await fetchUser()
+        
+        DispatchQueue.main.async {
+            self.credential = nil
+        }
+        
+        return authDataResult
     }
     
     func signInWithGoogle() async throws -> AuthCredential {
         let helper = GoogleSignInHelper()
         let tokens = try await helper.googleHelperSingIn()
         
+        if userSession != nil {
+            if tokens.email != userSession?.email {
+                throw AuthErrorCode(.userMismatch)
+            } else {
+                return GoogleAuthProvider.credential(withIDToken: tokens.idToken, accessToken: tokens.accessToken)
+            }
+        }
+        
         return GoogleAuthProvider.credential(withIDToken: tokens.idToken, accessToken: tokens.accessToken)
+    }
+    
+    func deleteGoogleAccount() async throws {
+        do {
+            let credential = try await signInWithGoogle()
+            try await self.userSession?.reauthenticate(with: credential)
+        } catch let error as NSError {
+            if error.code == GIDSignInErrorCode.canceled.rawValue {
+                throw GIDSignInErrorCode.canceled
+            } else if let _ = AuthErrorCode.Code(rawValue: error.code) {
+                try authErrorCodeConverter(error: error)
+            } else {
+                print(#function, "Failed to delete Google account: \(error)")
+            }
+        }
     }
     
     func signInwithApple(user: AppleUser) {
         self.credential = OAuthProvider.appleCredential(withIDToken: user.token,
+                                                        rawNonce: user.nonce,
+                                                        fullName: user.fullName)
+    }
+    
+    func reAuthAppleAccount(user: AppleUser) async throws {
+        let credential = OAuthProvider.appleCredential(withIDToken: user.token,
                                                        rawNonce: user.nonce,
                                                        fullName: user.fullName)
+        let authDataResult = try await signInWithSSO(credential: credential)
+        
+        DispatchQueue.main.async {
+            self.authDataResult = authDataResult
+        }
+    }
+    
+    func deleteAppleAccount(credential: OAuthCredential, authCodeString: String) async throws {
+        do {
+            try await self.userSession?.reauthenticate(with: credential)
+            try await Auth.auth().revokeToken(withAuthorizationCode: authCodeString)
+            try await self.deleteAccount()
+        } catch let error as NSError {
+            if let _ = AuthErrorCode.Code(rawValue: error.code) {
+                try authErrorCodeConverter(error: error)
+            } else {
+                print(#function, "Failed to delete Apple account: \(error)")
+            }
+        }
+    }
+    
+    func deleteAppleAccount(user: AppleUser, authCodeString: String) async {
+        let credential = OAuthProvider.appleCredential(withIDToken: user.token,
+                                                       rawNonce: user.nonce,
+                                                       fullName: user.fullName)
+        DispatchQueue.main.async {
+            self.credential = credential
+        }
+        
+        do {
+            try await self.userSession?.reauthenticate(with: credential)
+            try await Auth.auth().revokeToken(withAuthorizationCode: authCodeString)
+            try await self.deleteAccount()
+        } catch {
+            print(#function, "Failed to delete Apple account: \(error)")
+        }
     }
 }
 
@@ -204,5 +313,17 @@ extension AuthManager {
         }
         
         try await createUser(authDataResult: authDataResult, nickname: nickname)
+    }
+    
+    func deleteEmailUser(email: String, password: String) async {
+        do {
+            let credential = EmailAuthProvider.credential(withEmail: email, password: password)
+            
+            try await self.userSession?.reauthenticate(with: credential)
+            try await self.deleteAccount()
+        } catch {
+            print(#function, "Failed to reauth: \(error)")
+        }
+        
     }
 }

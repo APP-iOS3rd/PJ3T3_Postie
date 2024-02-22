@@ -7,18 +7,22 @@
 
 import SwiftUI
 
+import Kingfisher
+
 struct LetterDetailView: View {
     @StateObject private var letterDetailViewModel = LetterDetailViewModel()
     @ObservedObject var firestoreManager = FirestoreManager.shared
     @ObservedObject var storageManager = StorageManager.shared
 
     @Environment(\.dismiss) var dismiss
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
 
     var letter: Letter
 
     var body: some View {
+        
         ZStack {
-            Color(hex: 0xF5F1E8)
+            ThemeManager.themeColors[isThemeGroupButton].backGroundColor
                 .ignoresSafeArea()
             
             VStack {
@@ -31,30 +35,19 @@ struct LetterDetailView: View {
             .padding()
         }
         .navigationBarTitleDisplayMode(.inline)
-        .toolbarBackground(Color(hex: 0xF5F1E8), for: .navigationBar)
+        .toolbarBackground(ThemeManager.themeColors[isThemeGroupButton].backGroundColor, for: .navigationBar)
         .toolbar {
             ToolbarItemGroup(placement: .principal) {
                 Text(letter.isReceived ? "받은 편지" : "보낸 편지")
                     .bold()
-                    .foregroundStyle(Color(hex: 0xFF5733))
+                    .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].tintColor)
             }
 
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button {
-                    letterDetailViewModel.isFavorite.toggle()
-
-                    firestoreManager.editLetter(
-                        documentId: letter.id,
-                        writer: letter.writer,
-                        recipient: letter.recipient,
-                        summary: letter.summary,
-                        date: letter.date,
-                        text: letter.text,
-                        isReceived: letter.isReceived,
-                        isFavorite: letterDetailViewModel.isFavorite
-                    )
-
-                    firestoreManager.fetchAllLetters()
+                    Task {
+                        await letterDetailViewModel.updateIsFavorite(docId: letter.id)
+                    }
                 } label: {
                     Image(systemName: letterDetailViewModel.isFavorite ? "heart.fill" : "heart")
                         .foregroundStyle(.postieOrange)
@@ -87,15 +80,16 @@ struct LetterDetailView: View {
 
             }
         }
+        .modifier(LoadingModifier(isLoading: $letterDetailViewModel.isLoading, text: "편지를 삭제 중이에요."))
         .fullScreenCover(isPresented: $letterDetailViewModel.showLetterImageFullScreenView) {
             LetterImageFullScreenView(
-                images: storageManager.images.map { $0.image },
+                urls: firestoreManager.letter.imageURLs ?? [],
                 pageIndex: $letterDetailViewModel.selectedIndex
             )
         }
         .sheet(isPresented: $letterDetailViewModel.showLetterEditSheet) {
             NavigationStack {
-                AddLetterView(isReceived: letter.isReceived, letter: firestoreManager.letter, letterPhotos: storageManager.images)
+                EditLetterView(letter: firestoreManager.letter)
             }
         }
         .alert("편지 삭제", isPresented: $letterDetailViewModel.showDeleteAlert) {
@@ -106,30 +100,29 @@ struct LetterDetailView: View {
             }
 
             Button(role: .destructive) {
-                firestoreManager.deleteLetter(documentId: letter.id)
-
-                storageManager.images.forEach { letterPhoto in
-                    storageManager.deleteItem(fullPath: letterPhoto.fullPath)
+                Task {
+                    await letterDetailViewModel.deleteLetter(docId: letter.id)
                 }
-
-                firestoreManager.fetchAllLetters()
-
-                dismiss()
             } label: {
                 Text("삭제")
             }
         } message: {
             Text("편지를 삭제하시겠습니까?")
         }
-        .onAppear {
-            storageManager.listAllFile(docId: letter.id)
+        .alert("편지 삭제 실패", isPresented: $letterDetailViewModel.showingDeleteErrorAlert) {
 
+        } message: {
+            Text("편지 삭제에 실패했어요. 다시 시도해 주세요.")
+        }
+        .onAppear {
             letterDetailViewModel.isFavorite = letter.isFavorite
 
             firestoreManager.letter = letter
         }
-        .onDisappear {
-            storageManager.images.removeAll()
+        .customOnChange(letterDetailViewModel.shouldDismiss) { shouldDismiss in
+            if shouldDismiss {
+                dismiss()
+            }
         }
     }
 }
@@ -147,7 +140,7 @@ extension LetterDetailView {
                     .font(.letter(.nanumMyeongjo))
                     .padding()
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color(hex: 0xFFFBF2))
+                    .background(ThemeManager.themeColors[isThemeGroupButton].receivedLetterColor)
                     .clipShape(RoundedRectangle(cornerRadius: 4))
             }
         }
@@ -155,29 +148,28 @@ extension LetterDetailView {
 
     @ViewBuilder
     private var letterImageSection: some View {
-        if !storageManager.images.isEmpty {
+        if let imageUrls = firestoreManager.letter.imageURLs, !imageUrls.isEmpty {
             VStack(alignment: .leading, spacing: 4) {
                 Text("편지 사진")
 
                 ScrollView(.horizontal) {
                     HStack(spacing: 8) {
-                        ForEach(0..<storageManager.images.count, id: \.self) { index in
+                        ForEach(0..<imageUrls.count, id: \.self) { index in
                             ZStack {
                                 Button {
                                     letterDetailViewModel.selectedIndex = index
                                     letterDetailViewModel.showLetterImageFullScreenView = true
                                 } label: {
-                                    AsyncImage(
-                                        url: URL(string: storageManager.images[index].urlString)
-                                    ) { image in
-                                        image
+                                    if let url = URL(string: imageUrls[index]) {
+                                        KFImage(url)
+                                            .placeholder {
+                                                ProgressView()
+                                                    .frame(width: 50, height: 50)
+                                            }
                                             .resizable()
                                             .scaledToFill()
                                             .frame(width: 50, height: 50)
                                             .clipShape(RoundedRectangle(cornerRadius: 4))
-                                    } placeholder: {
-                                        ProgressView()
-                                            .frame(width: 50, height: 50)
                                     }
                                 }
                             }

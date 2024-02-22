@@ -10,24 +10,54 @@ import SwiftUI
 struct GroupedFavoriteListLetterView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
     @ObservedObject var storageManager = StorageManager.shared
-    
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
+    @State private var isMenuActive = false
     @State private var isSideMenuOpen: Bool = false
-    @Binding var isThemeGroupButton: Int
     
     var body: some View {
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
+        let favoriteLetters = firestoreManager.letters.filter { $0.isFavorite }.sorted { $0.date < $1.date }
         
         ZStack(alignment: .bottomTrailing) {
             postieColors.backGroundColor
                 .ignoresSafeArea()
             
+            if favoriteLetters.count == 0 {
+                HStack {
+                    Spacer()
+                    
+                    VStack {
+                        Spacer()
+                        
+                    Image(isThemeGroupButton == 4 ? "postyHeartSketchWhite" : "postyHeartSketch")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 300)
+                        .opacity(0.5)
+                        .padding(.bottom)
+                    
+                    Text("좋아하는 편지가 없어요 ㅠ.ㅠ")
+                        .font(.headline)
+                        .foregroundStyle(postieColors.tintColor)
+                    
+                    Text("저장한 편지에서 하트를 눌러보세요!")
+                        .foregroundStyle(postieColors.dividerColor)
+                        
+                        Spacer()
+                    }
+                    .padding()
+                    
+                    Spacer()
+                }
+            }
+                
             ScrollView {
-                ForEach(firestoreManager.letters, id: \.self) { letter in
+                ForEach(favoriteLetters, id: \.self) { letter in
                     NavigationLink {
                         LetterDetailView(letter: letter)
                     } label: {
-                        favoriteLetterView(letter: letter)
+                        LetterItemView(letter: letter)
                     }
+                    .disabled(isMenuActive)
                 }
                 
                 // ScrollView margin 임시
@@ -36,8 +66,14 @@ struct GroupedFavoriteListLetterView: View {
                     .foregroundStyle(Color.postieBlack.opacity(0))
             }
             
-            AddLetterButton(isThemeGroupButton: $isThemeGroupButton)
+            AddLetterButton(isMenuActive: $isMenuActive)
         }
+        .onTapGesture {
+            if self.isMenuActive {
+                self.isMenuActive = false
+            }
+        }
+        .toolbarBackground(postieColors.backGroundColor, for: .navigationBar)
         .tint(postieColors.tabBarTintColor)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -46,15 +82,6 @@ struct GroupedFavoriteListLetterView: View {
                     .bold()
                     .foregroundStyle(postieColors.tintColor)
             }
-        }
-    }
-    
-    @ViewBuilder
-    private func favoriteLetterView(letter: Letter) -> some View {
-        if letter.isFavorite {
-            LetterItemView(letter: letter, isThemeGroupButton: $isThemeGroupButton)
-        } else {
-            EmptyView()
         }
     }
 }

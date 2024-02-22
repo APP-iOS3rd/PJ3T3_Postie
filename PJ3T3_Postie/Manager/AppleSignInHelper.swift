@@ -11,36 +11,45 @@ import CryptoKit
 final class AppleSignInHelper: NSObject, ObservableObject {
     static let shared = AppleSignInHelper()
     private var nonce = ""
+    var cryptoUtils: CryptoUtils?
+    var window: UIWindow?
+    var isReAuth = false
     
     private override init() { }
     
     func signInWithAppleRequest(_ request: ASAuthorizationOpenIDRequest) {
-        nonce = randomNonceString()
+        self.cryptoUtils = CryptoUtils()
+        
+        guard let cryptoUtils = cryptoUtils else {
+            print(#function, "Failed to ")
+            return
+        }
+        
+        nonce = cryptoUtils.randomNonceString
         request.requestedScopes = [.fullName, .email]
-        request.nonce = sha256(nonce)
+        request.nonce = cryptoUtils.nonce
     }
     
     func signInWithAppleCompletion(_ result: Result<ASAuthorization, Error>) {
         switch result {
         case .success(let user):
             guard let appleIDCredential = user.credential as? ASAuthorizationAppleIDCredential else {
-                print("Credential 23")
+                print(#function, "Unable to retrieve AppleIDCredential")
                 return
             }
             
             guard let appleIDToken = appleIDCredential.identityToken else {
-                print("Error with token 27")
+                print(#function, "Unable to fetch identity token")
                 return
             }
             
             guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
-                print("Error with tokenstring 31")
-                print("Unable to serialize token string from data: \(appleIDToken.debugDescription)")
+                print(#function, "Unable to serialize token string from data: \(appleIDToken.debugDescription)")
                 return
             }
             
             guard let fullName = appleIDCredential.fullName else {
-                print("Unalbe to get PersonNameComponents: \(appleIDToken.debugDescription)")
+                print(#function, "Unalbe to get PersonNameComponents: \(appleIDToken.debugDescription)")
                 return
             }
             
@@ -52,36 +61,94 @@ final class AppleSignInHelper: NSObject, ObservableObject {
         }
     }
     
-    //난수 생성기
-    private func randomNonceString(length: Int = 32) -> String {
-        precondition(length > 0)
-        var randomBytes = [UInt8](repeating: 0, count: length)
-        let errorCode = SecRandomCopyBytes(kSecRandomDefault, randomBytes.count, &randomBytes)
+    func reAuthCurrentAppleUser() {
+        let appleIDProvider = ASAuthorizationAppleIDProvider()
+        let request = appleIDProvider.createRequest()
         
-        if errorCode != errSecSuccess {
-            fatalError(
-                "Unable to generate nonce. SecRandomCopyBytes failed with OSStatus \(errorCode)"
-            )
+        self.cryptoUtils = CryptoUtils()
+        
+        guard let cryptoUtils = cryptoUtils else {
+            print(#function, "Failed to ")
+            return
         }
         
-        let charset: [Character] =
-        Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
+        nonce = cryptoUtils.randomNonceString
+        request.requestedScopes = [.fullName, .email]
+        request.nonce = cryptoUtils.nonce
         
-        let nonce = randomBytes.map { byte in
-            // Pick a random character from the set, wrapping around if needed.
-            charset[Int(byte) % charset.count]
+        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+        
+        authorizationController.delegate = self
+        
+        if let window = window {
+            let provider = ContextProvider(window: window)
+            authorizationController.presentationContextProvider = provider
         }
         
-        return String(nonce)
+        print(#function, "Credential Status: \(AuthManager.shared.credential)")
+        authorizationController.performRequests()
+    }
+}
+
+extension AppleSignInHelper: ASAuthorizationControllerDelegate {
+    func authorizationController(controller: ASAuthorizationController,
+                                 didCompleteWithAuthorization authorization: ASAuthorization) {
+        guard let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential else {
+            print(#function, "Unable to retrieve AppleIDCredential")
+            return
+        }
+        
+        guard let appleAuthCode = appleIDCredential.authorizationCode else {
+            print(#function, "Unable to fetch authorization code")
+            return
+        }
+        
+        guard let authCodeString = String(data: appleAuthCode, encoding: .utf8) else {
+            print(#function, "Unable to serialize auth code string from data: \(appleAuthCode.debugDescription)")
+            return
+        }
+        
+        guard let appleIDToken = appleIDCredential.identityToken else {
+            print(#function, "Unable to fetch identity token")
+            return
+        }
+        
+        guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
+            print(#function, "Unable to serialize token string from data: \(appleIDToken.debugDescription)")
+            return
+        }
+        
+        guard let fullName = appleIDCredential.fullName else {
+            print(#function, "Unalbe to get PersonNameComponents: \(appleIDToken.debugDescription)")
+            return
+        }
+        
+        let appleUser = AppleUser(token: idTokenString, nonce: nonce, fullName: fullName)
+        
+        Task {
+            if !self.isReAuth {
+                await AuthManager.shared.deleteAppleAccount(user: appleUser, authCodeString: authCodeString)
+            } else {
+                do {
+                    print("Called Reauth")
+                    try await AuthManager.shared.reAuthAppleAccount(user: appleUser)
+                    isReAuth = false
+                } catch {
+                    print(#function, "Failed to re-auth Apple account: \(error)")
+                }
+            }
+        }
+    }
+}
+
+final class ContextProvider: NSObject, ASAuthorizationControllerPresentationContextProviding {
+    private var window: UIWindow
+    
+    init(window: UIWindow) {
+        self.window = window
     }
     
-    private func sha256(_ input: String) -> String {
-        let inputData = Data(input.utf8)
-        let hashedData = SHA256.hash(data: inputData)
-        let hashString = hashedData.compactMap {
-            String(format: "%02x", $0)
-        }.joined()
-        
-        return hashString
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        window
     }
 }

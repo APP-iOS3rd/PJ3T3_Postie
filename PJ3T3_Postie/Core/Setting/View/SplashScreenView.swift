@@ -8,16 +8,16 @@
 import SwiftUI
 
 struct SplashScreenView: View {
-    @Binding var isThemeGroupButton: Int
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
     var body: some View {
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
+        let random_number = Int.random(in: 1...5)
         
         ZStack {
             postieColors.backGroundColor
                 .ignoresSafeArea()
             
-            ToFromLabelView(isThemeGroupButton: $isThemeGroupButton)
+            ToFromLabelView()
                 .padding()
             
             VStack {
@@ -32,24 +32,47 @@ struct SplashScreenView: View {
                 Text("언제 어디서나")
                     .foregroundStyle(postieColors.dividerColor)
                 
-                Image("postyReceivingBeige")
-                    .resizable()
-                    .frame(width: 300, height: 300)
+                let imageName: String = {
+                    switch random_number {
+                    case 1: 
+                        return "postyReceivingLineColor"
+                    case 2: 
+                        return "postySendingLineColor"
+                    case 3: 
+                        return "postySmileLineColor"
+                    case 4: 
+                        return "postyTrumpetLineColor"
+                    default: 
+                        return "postyHeartLineColor"
+                    }
+                }()
                 
-                ProgressView()
-                    .offset(y: -40)
+                PostyImageView(imageName: imageName)
+                
+                // 이미지 상단 배치
+                Rectangle()
+                    .frame(height: 50)
+                    .foregroundStyle(postieColors.tabBarTintColor.opacity(0))
             }
             .padding()
         }
     }
 }
 
-struct ToFromLabelView: View {
-    @Binding var isThemeGroupButton: Int
+struct PostyImageView: View {
+    let imageName: String
     
     var body: some View {
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
-        
+        Image(imageName)
+            .resizable()
+            .frame(width: 250, height: 250)
+    }
+}
+
+struct ToFromLabelView: View {
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
+    
+    var body: some View {
         VStack {
             HStack {
                 Text("To.")

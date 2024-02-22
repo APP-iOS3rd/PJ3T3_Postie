@@ -1,5 +1,5 @@
 //
-//  SettingsRowView.swift
+//  FirebaseTestRowView.swift
 //  PJ3T3_Postie
 //
 //  Created by Eunsu JEONG on 1/17/24.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SettingsRowView: View {
+struct FirebaseTestRowView: View {
     let imageName: String
     let title: String
     let tintColor: Color
@@ -29,5 +29,5 @@ struct SettingsRowView: View {
 }
 
 #Preview {
-    SettingsRowView(imageName: "gear", title: "Version", tintColor: Color(uiColor: .darkGray))
+    FirebaseTestRowView(imageName: "gear", title: "Version", tintColor: Color(uiColor: .darkGray))
 }
