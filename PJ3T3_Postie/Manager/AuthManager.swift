@@ -255,6 +255,20 @@ extension AuthManager {
         }
     }
     
+    func deleteAppleAccount(credential: OAuthCredential, authCodeString: String) async throws {
+        do {
+            try await self.userSession?.reauthenticate(with: credential)
+            try await Auth.auth().revokeToken(withAuthorizationCode: authCodeString)
+            try await self.deleteAccount()
+        } catch let error as NSError {
+            if let _ = AuthErrorCode.Code(rawValue: error.code) {
+                try authErrorCodeConverter(error: error)
+            } else {
+                print(#function, "Failed to delete Apple account: \(error)")
+            }
+        }
+    }
+    
     func deleteAppleAccount(user: AppleUser, authCodeString: String) async {
         let credential = OAuthProvider.appleCredential(withIDToken: user.token,
                                                        rawNonce: user.nonce,
