@@ -56,30 +56,18 @@ struct MapView: View {
                                 selectedButtonIndex = index
                             }) {
                                 ZStack {
-                                    if selectedButtonIndex == index {
-                                        Rectangle()
-                                            .foregroundColor(.clear)
-                                            .frame(width: 70, height: 30)
-                                            .background(Color(red: 1, green: 0.98, blue: 0.95)) //색상
-                                            .cornerRadius(16)
-                                            .overlay(
-                                                RoundedRectangle(cornerRadius: 16)
-                                                    .inset(by: 0.5)
-                                                    .stroke(Color(red: 0.45, green: 0.45, blue: 0.45), lineWidth: 1) //색상
-                                            )} else {
-                                                Rectangle()
-                                                    .foregroundColor(.clear)
-                                                    .frame(width: 72, height: 30)
-                                                    .background(Color(red: 1, green: 0.98, blue: 0.95)) //색상
-                                                    .cornerRadius(20)
-                                                    .shadow(color: .black.opacity(0.1), radius: 3, x: 2, y: 2) //색상
-                                            }
+                                    Rectangle()
+                                        .foregroundColor(.clear)
+                                        .frame(width: 72, height: 30)
+                                        .background(selectedButtonIndex == index ? postieColors.tintColor : postieColors.receivedLetterColor)
+                                        .cornerRadius(20)
+                                        .shadow(color: Color.postieBlack.opacity(0.1), radius: 3, x: 2, y: 2)
                                     
                                     Text(name[index])
-                                        .font(Font.custom("SF Pro Text", size: 12))
+                                        .font(.caption)
                                         .multilineTextAlignment(.center)
-                                        .foregroundColor(Color(red: 0.12, green: 0.12, blue: 0.12)) //색상
-                                        .frame(width: 60, alignment: .center)
+                                        .foregroundColor(selectedButtonIndex == index ? Color.postieWhite : Color.postieBlack)
+                                        .frame(width: 60, alignment: .top)
                                 }
                             }
                         }
@@ -93,8 +81,8 @@ struct MapView: View {
                         TextField("장소 검색(서초구, 서초동)", text: $searchText)
                             .foregroundColor(.primary)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
-                                            .keyboardType(.emailAddress)
-                                            .disableAutocorrection(true)
+                            .keyboardType(.emailAddress)
+                            .disableAutocorrection(true)
                         
                             .onSubmit {
                                 naverGeocodeAPI.fetchLocationForPostalCode(searchText) { latitude, longitude in
@@ -138,7 +126,8 @@ struct MapView: View {
                         VStack {
                             Button(action: {
                                 print("현재 위치에서 \(name[selectedButtonIndex]) 찾기 버튼 눌림")
-                                //                                locationManager.stopUpdatingLocation() // 현재 위치 추적 금지
+                                
+                                locationManager.stopUpdatingLocation() // 현재 위치 추적 금지
                                 
                                 coord = MyCoord(coordinator.cameraLocation?.lat ?? coord.lat, coordinator.cameraLocation?.lng ?? coord.lng)
                                 
