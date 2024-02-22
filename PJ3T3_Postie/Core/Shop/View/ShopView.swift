@@ -48,7 +48,7 @@ struct ShopView: View {
                 
                 VStack(spacing: 0) {
                     HStack {
-                        Text("ShopView")
+                        Text("Letter Shop")
                             .font(.custom("SourceSerifPro-Black", size: 40))
                             .foregroundStyle(Color.postieOrange)
                         
