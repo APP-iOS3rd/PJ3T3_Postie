@@ -37,7 +37,7 @@ struct MapView: View {
     var body: some View {
         let postieColors = ThemeManager.themeColors[isThemeGroupButton]
         
-        NavigationView {
+        NavigationStack {
             ZStack {
                 postieColors.backGroundColor
                     .ignoresSafeArea()
@@ -78,11 +78,13 @@ struct MapView: View {
                     .padding()
                     
                     HStack() {
+                        Spacer(minLength: 10)
                         Image(systemName: "magnifyingglass")
+                            .foregroundColor(.gray)
                         
                         TextField("장소 검색(서초구, 서초동)", text: $searchText)
                             .foregroundColor(.primary)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
+//                            .textFieldStyle(RoundedBorderTextFieldStyle())
 //                            .keyboardType(.emailAddress)
                             .disableAutocorrection(true)
                             .focused($isSearchFocused)
@@ -113,6 +115,7 @@ struct MapView: View {
                                 }
                             } message: {
                                 Text("동이나 구 단위로 입력해주세요")
+                                    .foregroundColor(.gray)
                             }
                         
                         if !searchText.isEmpty {
@@ -120,9 +123,17 @@ struct MapView: View {
                                 self.searchText = ""
                             }) {
                                 Image(systemName: "xmark.circle.fill")
+                                    .foregroundColor(.gray)
                             }
                         }
+                        Spacer(minLength: 10)
                     }
+                    .frame(height: 35)
+//                    .background(RoundedRectangle(cornerRadius: 8).stroke(Color.clear))
+                    .background(Color.gray.opacity(0.1))
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .padding(.horizontal, 15)
+                    .padding(.bottom, 15)
                     //                    .onAppear (perform : UIApplication.shared.hideKeyboard)
                     //                    .background(Color(uiColor: .secondarySystemBackground))
                     //                    .textFieldStyle(.roundedBorder)
@@ -214,7 +225,7 @@ struct MapView: View {
                 }
             }
         }
-        .toolbar(.hidden, for: .tabBar)
+//        .toolbar(.hidden, for: .tabBar)
         
         .onAppear() {
             CLLocationManager().requestWhenInUseAuthorization()
