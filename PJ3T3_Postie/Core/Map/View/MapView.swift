@@ -6,36 +6,38 @@
 //
 
 import SwiftUI
+import Foundation
 
 import MapKit
 import CoreLocation
 import NMapsMap
 
 struct MapView: View {
+    
     private let name = ["우체국", "우체통"]
-    //햄버거 구현하기
     
     @StateObject var naverGeocodeAPI = NaverGeocodeAPI.shared
     @StateObject var officeInfoServiceAPI = OfficeInfoServiceAPI.shared
     @StateObject var locationManager = LocationManager() // 지금 위치를 알기 위한 값
     @StateObject var coordinator: Coordinator = Coordinator.shared
     
-    //    @State private var selectedPostDivType: Int = 1 //Dafault 우체국(1)
     @State private var selectedButtonIndex: Int = 0
     @State private var postLatitude: Double = 37.56
     @State private var postLongitude: Double = 126.98
     @State private var isSideMenuOpen = false
+    @State private var isKeyboardVisible = false
     @State private var searchText = ""
     @State private var checkAlert = false
     @State var coord: MyCoord = MyCoord(37.579081, 126.974375) //Dafult값 (서울역)
     
-    
     @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
+    
+    @FocusState private var isSearchFocused: Bool
     
     var body: some View {
         let postieColors = ThemeManager.themeColors[isThemeGroupButton]
         
-        NavigationStack {
+        NavigationView {
             ZStack {
                 postieColors.backGroundColor
                     .ignoresSafeArea()
@@ -44,7 +46,7 @@ struct MapView: View {
                     HStack {
                         Text("Postie Map")
                             .font(.custom("SourceSerifPro-Black", size: 40))
-                            .foregroundStyle(postieColors.tintColor) //색상
+                            .foregroundStyle(postieColors.tintColor)
                         
                         Spacer()
                     }
@@ -81,9 +83,9 @@ struct MapView: View {
                         TextField("장소 검색(서초구, 서초동)", text: $searchText)
                             .foregroundColor(.primary)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .keyboardType(.emailAddress)
+//                            .keyboardType(.emailAddress)
                             .disableAutocorrection(true)
-                        
+                            .focused($isSearchFocused)
                             .onSubmit {
                                 naverGeocodeAPI.fetchLocationForPostalCode(searchText) { latitude, longitude in
                                     locationManager.stopUpdatingLocation()
@@ -116,8 +118,9 @@ struct MapView: View {
                             }
                         }
                     }
-                    .background(Color(uiColor: .secondarySystemBackground))
-                    .textFieldStyle(.roundedBorder)
+                    //                    .onAppear (perform : UIApplication.shared.hideKeyboard)
+                    //                    .background(Color(uiColor: .secondarySystemBackground))
+                    //                    .textFieldStyle(.roundedBorder)
                     
                     ZStack(alignment: .top) {
                         NaverMap(coord: coord)
@@ -154,6 +157,7 @@ struct MapView: View {
                                 }
                             }
                             Spacer()
+                            
                             HStack {
                                 Button( action: {
                                     locationManager.startUpdatingLocation()
@@ -165,6 +169,7 @@ struct MapView: View {
                                         RoundedRectangle(cornerRadius: 6)
                                             .frame(width: 46, height: 46)
                                             .foregroundColor(.white)
+                                        
                                         Image(systemName: "dot.scope")
                                             .resizable()
                                             .scaledToFill()
@@ -183,6 +188,27 @@ struct MapView: View {
                 Spacer()
             }
         }
+        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in
+            isKeyboardVisible = true
+            isSearchFocused = true
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
+            isKeyboardVisible = false
+            isSearchFocused = false
+        }
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                
+                Button {
+                    isSearchFocused = false
+                } label: {
+                    Image(systemName: "keyboard.chevron.compact.down")
+                }
+            }
+        }
+        .toolbar(.hidden, for: .tabBar)
+        
         .onAppear() {
             CLLocationManager().requestWhenInUseAuthorization()
             
@@ -201,8 +227,6 @@ struct MapView: View {
                     lunchtime = result.lunchTime!
                 }
                 coordinator.addMarkerAndInfoWindow(latitude: Double(result.postLat)!, longitude: Double(result.postLon)!, caption: result.postNm, time: result.postTime, lunchtime: lunchtime)
-                print(result.lunchTime,lunchtime)
-                //codingKey
             }
         }
         //초기 화면이 열리 때 위치값을 불러온다.
@@ -221,3 +245,19 @@ struct MapView: View {
         .zIndex(1)
     }
 }
+
+//extension UIApplication {
+//    func hideKeyboard() {
+//        guard let window = windows.first else { return }
+//        let tapRecognizer = UITapGestureRecognizer(target: window, action: #selector(UIView.endEditing))
+//        tapRecognizer.cancelsTouchesInView = false
+//        tapRecognizer.delegate = self
+//        window.addGestureRecognizer(tapRecognizer)
+//    }
+//}
+//
+//extension UIApplication: UIGestureRecognizerDelegate {
+//    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+//        return false
+//    }
+//}
