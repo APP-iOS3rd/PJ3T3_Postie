@@ -40,6 +40,7 @@ struct GroupedLetterView: View {
         let sortedRecipients = sortedLetterData()
         // 좋아하는 편지들만 필터
         let favoriteLetters = firestoreManager.letters.filter { $0.isFavorite }.sorted { $0.date < $1.date }
+        let filteredMyLetters = firestoreManager.letters.filter { $0.recipient == $0.writer}
         
         VStack {
             NavigationLink { // 좋아하는 편지 뷰
@@ -105,7 +106,7 @@ struct GroupedLetterView: View {
                                 .foregroundStyle(postieColors.receivedLetterColor)
                                 .shadow(color: .black.opacity(0.1), radius: 3, x: 3, y: 3)
                         )
-                        .modifier(StackedRoundedRectangleModifier(count: favoriteLetters.count, groupWidth: homeWidth))
+                        .modifier(StackedRoundedRectangleModifier(count: filteredMyLetters.count, groupWidth: homeWidth))
                 }
                 
                 Spacer()

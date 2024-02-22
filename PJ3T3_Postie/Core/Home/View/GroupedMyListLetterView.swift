@@ -13,6 +13,8 @@ struct GroupedMyListLetterView: View {
     @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     @State private var isMenuActive = false
     @State private var isSideMenuOpen: Bool = false
+    @State private var showAlert = false
+    @State private var activeLink: String?
     
     var body: some View {
         let filteredMyLetters = firestoreManager.letters.filter { $0.recipient == $0.writer}.sorted { $0.date < $1.date }
@@ -49,15 +51,31 @@ struct GroupedMyListLetterView: View {
                     Spacer()
                 }
             }
-                
+            
             ScrollView {
                 ForEach(filteredMyLetters, id: \.self) { letter in
-                    NavigationLink {
-                        LetterDetailView(letter: letter)
-                    } label: {
+                    Button(action: {
+                        if letter.date > Date() {
+                            self.showAlert = true
+                        } else {
+                            self.activeLink = letter.id
+                        }
+                    }) {
                         LetterItemView(letter: letter)
                     }
-                    .disabled(isMenuActive)
+                    .alert(isPresented: $showAlert) {
+                        Alert(
+                            title: Text("알림"),
+                            message: Text("아직 도착하지 못한 편지라 열어 볼 수 없습니다. 지정된 날짜 까지 기다려 주세요!"),
+                            dismissButton: .default(Text("확인"))
+                        )
+                    }
+                    .background(
+                        NavigationLink(destination: LetterDetailView(letter: letter), tag: letter.id, selection: $activeLink) {
+                            EmptyView()
+                        }
+                            .hidden()
+                    )
                 }
                 
                 // ScrollView margin 임시
