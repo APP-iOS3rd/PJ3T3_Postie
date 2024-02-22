@@ -136,29 +136,7 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate {
         marker.mapView = view.mapView
         markers.append(marker)
     }
-    
-//    func convertAddressToCoordinates(_ address: String, coord: MyCoord) {
-//        self.coord = coord
-//        
-//        NaverGeocodeAPI.shared.fetchLocationForPostalCode(address) { latitude, longitude in
-//            if let latitude = latitude, let longitude = longitude {
-//                let convertcoord = NMGLatLng(lat: latitude, lng: longitude)
-//                self.moveCamera(coord: convertcoord)
-//                
-//                self.removeAllMakers()
-//                
-//                self.setLocationOverlay(coord: convertcoord)
-//
-//                print("바뀐 위경도\(coord)")
-//                
-//            } else {
-//                // 장소 검색 결과가 없을 경우 처리
-//                print("장소를 찾을 수 없습니다.")
-//            }
-//        }
-//        
-//    }
-//    
+
     // 기존 마커 삭제
     func removeAllMakers() {
         markers.forEach { marker in
