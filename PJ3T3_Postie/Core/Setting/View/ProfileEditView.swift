@@ -27,7 +27,7 @@ struct ProfileEditView: View {
                 VStack {
                     Text("프로필에 사용될 캐릭터를 선택해주세요!")
                         .bold()
-                        .font(geometry.size.height < 430 ? .system(size: 18) : .title3)
+                        .font(geometry.size.width < 390 ? .system(size: 18) : .title3)
                         .foregroundStyle(postieColors.tabBarTintColor)
                         .padding()
                     
@@ -40,7 +40,7 @@ struct ProfileEditView: View {
                                     ProfileImageItemView(imageName: imageName, profileImageTemp: $profileImageTemp)
                                 }
                             }
-                        } else if geometry.size.height > 600 && geometry.size.height < 800  {
+                        } else if geometry.size.height > 600 && geometry.size.height < 710  {
                             LazyHGrid(rows: rows2, alignment: .top) {
                                 ForEach(profileImages, id: \.self) { imageName in
                                     ProfileImageItemView(imageName: imageName, profileImageTemp: $profileImageTemp)
