@@ -54,14 +54,13 @@ struct ContentView: View {
                                 }
                                 .tag(2)
                             
-                            //테스트용 뷰입니다. 추후 삭제 예정입니다.
-                            SettingView()
-                                .tabItem {
-                                    Image(systemName: "person")
-                                    
-                                    Text("세팅")
-                                }
-                                .tag(3)
+//                            테스트용 뷰입니다. 배포시 주석처리
+//                            SettingView()
+//                                .tabItem {
+//                                    Image(systemName: "person")
+//                                    Text("Setting")
+//                                }
+//                                .tag(3)
                         }
                         .accentColor(ThemeManager.themeColors[isThemeGroupButton].tabBarTintColor)
                     } else {

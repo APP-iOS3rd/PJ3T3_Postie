@@ -17,6 +17,8 @@ struct ProfileView: View {
     @State private var isShowingProfileEditView = false
     @State private var isDeleteAccountDialogPresented = false
     @State private var showLoading = false
+    @State private var showAlert = false
+    @State private var alertBody = ""
     @Binding var profileImage: String
     @Binding var profileImageTemp: String
     
@@ -182,6 +184,13 @@ struct ProfileView: View {
                         } message: {
                             Text("회원 탈퇴 하시겠습니까?")
                         }
+                        .alert(isPresented: $showAlert) {
+                            let title = Text("탈퇴 실패")
+                            let message = Text(alertBody)
+                            let confirmButton = Alert.Button.cancel(Text("확인"))
+
+                            return Alert(title: title, message: message, dismissButton: confirmButton)
+                        }
                         
                         Spacer()
                     }
@@ -200,7 +209,7 @@ struct ProfileView: View {
             .navigationBarTitleDisplayMode(.inline)
             .tint(postieColors.tabBarTintColor)
             .confirmationDialog("포스티를 떠나시나요?", isPresented: $isDeleteAccountDialogPresented, titleVisibility: .visible) {
-                DeleteAccountButtonView(showLoading: $showLoading)
+                DeleteAccountButtonView(showLoading: $showLoading, showAlert: $showAlert, alertBody: $alertBody)
             } message: {
                 Text("회원 탈퇴 시에는 계정과 프로필 정보, 그리고 등록된 모든 편지와 편지 이미지가 삭제되며 복구할 수 없습니다.\n계정 삭제를 위해서는 재인증을 통해 다시 로그인 해야 합니다.")
             }
