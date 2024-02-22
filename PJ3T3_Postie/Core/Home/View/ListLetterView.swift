@@ -27,8 +27,8 @@ struct ListLetterView: View {
             }
             .alert(isPresented: $showAlert) {
                 Alert(
-                    title: Text("알림"),
-                    message: Text("아직 도착하지 못한 편지라 열어 볼 수 없습니다. 지정된 날짜 까지 기다려 주세요!"),
+                    title: Text("아직 편지가 배송중이에요!"),
+                    message: Text("도착하지 못한 편지는 열어 볼 수 없어요... 편지가 도착할 때까지 기다려 주세요!"),
                     dismissButton: .default(Text("확인"))
                 )
             }
@@ -91,6 +91,7 @@ struct LetterItemView: View {
                                 .resizable()
                                 .scaledToFit()
                                 .frame(height: 30)
+                                .offset(y: -10)
                                 .foregroundStyle(postieColors.tabBarTintColor)
                         } else if !letter.summary.isEmpty && letter.recipient != letter.writer && Date() < letter.date {
                             Text("“")
