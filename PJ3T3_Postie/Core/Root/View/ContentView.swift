@@ -12,7 +12,7 @@ import SwiftUI
 //        NaverMap(coord: coord)
 //    }
 //}
-
+//
 struct ContentView: View {
     //ViewModels
     @ObservedObject var authViewModel = AuthManager.shared
