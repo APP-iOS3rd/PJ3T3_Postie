@@ -67,7 +67,10 @@ struct LetterItemView: View {
                     HStack {
                         Spacer()
                         
-                        if !letter.summary.isEmpty && Date() > letter.date {
+                        if letter.recipient == letter.writer && Date() < letter.date {
+                            Image(systemName: "lock")
+                                .foregroundStyle(postieColors.tabBarTintColor)
+                        } else if !letter.summary.isEmpty && letter.recipient != letter.writer && Date() < letter.date {
                             Text("“")
                                 .font(.custom("SairaStencilOne-Regular", size: 30))
                                 .foregroundStyle(postieColors.tabBarTintColor)
@@ -78,8 +81,16 @@ struct LetterItemView: View {
                             Text("”")
                                 .font(.custom("SairaStencilOne-Regular", size: 30))
                                 .foregroundStyle(postieColors.tabBarTintColor)
-                        } else if Date() < letter.date {
-                            Image(systemName: "lock")
+                        } else if !letter.summary.isEmpty && Date() > letter.date {
+                            Text("“")
+                                .font(.custom("SairaStencilOne-Regular", size: 30))
+                                .foregroundStyle(postieColors.tabBarTintColor)
+                            
+                            Text(letter.summary)
+                                .foregroundStyle(postieColors.tabBarTintColor)
+                            
+                            Text("”")
+                                .font(.custom("SairaStencilOne-Regular", size: 30))
                                 .foregroundStyle(postieColors.tabBarTintColor)
                         }
                         
