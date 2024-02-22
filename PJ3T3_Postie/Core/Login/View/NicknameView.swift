@@ -40,9 +40,23 @@ struct NicknameView: View {
                         .fontWeight(.semibold)
                         .font(.footnote)
                     
-                    TextField("앱에서 사용할 닉네임을 입력 해 주세요", text: $nickname)
+                    TextField("사용할 닉네임을 입력 해 주세요", text: $nickname)
                         .focused($focusField, equals: "nickname")
                         .autocorrectionDisabled()
+                        .overlay(
+                            HStack {
+                                Spacer()
+                                if !nickname.isEmpty {
+                                    Button{
+                                        nickname = ""
+                                    } label: {
+                                        Image(systemName: "multiply.circle.fill")
+                                            .foregroundColor(.postieGray)
+                                    }
+                                    .padding(.trailing, 5)
+                                }
+                            }
+                        )
                     
                     Divider()
                     
