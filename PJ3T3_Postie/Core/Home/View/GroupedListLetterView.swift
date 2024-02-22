@@ -18,7 +18,7 @@ struct GroupedListLetterView: View {
     @State private var isSideMenuOpen = false
     
     var body: some View {
-        let filteredLetters = firestoreManager.letters.filter { $0.recipient == recipient || $0.writer == recipient }
+        let filteredLetters = firestoreManager.letters.filter { $0.recipient == recipient || $0.writer == recipient }.sorted { $0.date < $1.date }
         
         ZStack(alignment: .bottomTrailing) {
             postieColors.backGroundColor
