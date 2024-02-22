@@ -44,6 +44,20 @@ struct NicknameView: View {
                         .autocorrectionDisabled()
                         .foregroundStyle(postieColors.dividerColor)
                         .disabled(isReAuthing)
+                        .overlay(
+                            HStack {
+                                Spacer()
+                                if !nickname.isEmpty {
+                                    Button{
+                                        nickname = ""
+                                    } label: {
+                                        Image(systemName: "multiply.circle.fill")
+                                            .foregroundColor(.postieGray)
+                                    }
+                                    .padding(.trailing, 5)
+                                }
+                            }
+                        )
                     
                     Divider()
                     

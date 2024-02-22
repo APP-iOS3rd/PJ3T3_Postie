@@ -25,9 +25,11 @@ class EditLetterViewModel: ObservableObject {
     @Published var showingSummaryTextField: Bool = false
     @Published var showingSummaryAlert: Bool = false
     @Published var showingEditErrorAlert: Bool = false
+    @Published var showingSummaryErrorAlert: Bool = false
     @Published var selectedIndex: Int = 0
     @Published var shouldDismiss: Bool = false
     @Published var isLoading: Bool = false
+    @Published var loadingText: String = ""
 
     private(set) var imagePickerSourceType: UIImagePickerController.SourceType = .camera
 
@@ -55,6 +57,10 @@ class EditLetterViewModel: ObservableObject {
 
     func showSummaryAlert() {
         showingSummaryAlert = true
+    }
+
+    func showSummaryErrorAlert() {
+        showingSummaryErrorAlert = true
     }
 
     private func dismissView() {
@@ -126,6 +132,7 @@ class EditLetterViewModel: ObservableObject {
         do {
             await MainActor.run {
                 isLoading = true
+                loadingText = "편지를 수정하고 있어요."
             }
 
             try await removeImages(docId: letter.id, deleteCandidates: deleteCandidatesFromFullPathsANdUrls)
@@ -164,5 +171,23 @@ class EditLetterViewModel: ObservableObject {
         guard let urls = letter.imageURLs, let fullPaths = letter.imageFullPaths else { return }
         fullPathsAndUrls = zip(urls, fullPaths).map { FullPathAndUrl(fullPath: $0.1, url: $0.0) }
         print(fullPathsAndUrls)
+    }
+
+    func getSummary(isReceived: Bool) async {
+        do {
+            let summaryResponse = try await APIClient.shared.postRequestToAPI(
+                title: isReceived ? "\(sender)에게 받은 편지" : "\(receiver)에게 쓴 편지",
+                content: text
+            )
+
+            await MainActor.run {
+                summary = summaryResponse
+                showSummaryTextField()
+            }
+        } catch {
+            await MainActor.run {
+                showSummaryErrorAlert()
+            }
+        }
     }
 }
