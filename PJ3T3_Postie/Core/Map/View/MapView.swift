@@ -86,52 +86,50 @@ struct MapView: View {
                         Spacer()
                     }
                     .padding()
-                    HStack(spacing: 4) {
-                        TextField("장소 검색(서초구, 서초동)", text: $searchText, onCommit: {
-                            print("바꾸기전 위경도 \(coord)")
-                            naverGeocodeAPI.fetchLocationForPostalCode(searchText) { latitude, longitude in
-                                locationManager.stopUpdatingLocation()
-                                
-                                if let latitude = latitude, let longitude = longitude {
-                                    //위경도 값 저장
-                                    self.coord = MyCoord(latitude, longitude)
-                                    officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)
-                                    print("위경도 변환 성공\(coord)")
-                                } else {
-                                    //알럿창 띄우기
-                                    print("위치 정보를 가져오는데 실패했습니다.\(coord)")
-                                    self.checkAlert.toggle()
+                    
+                    HStack() {
+                        Image(systemName: "magnifyingglass")
+                        
+                        TextField("장소 검색(서초구, 서초동)", text: $searchText)
+                            .foregroundColor(.primary)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                                            .keyboardType(.emailAddress)
+                                            .disableAutocorrection(true)
+                        
+                            .onSubmit {
+                                naverGeocodeAPI.fetchLocationForPostalCode(searchText) { latitude, longitude in
+                                    locationManager.stopUpdatingLocation()
+                                    
+                                    if let latitude = latitude, let longitude = longitude {
+                                        //위경도 값 저장
+                                        self.coord = MyCoord(latitude, longitude)
+                                        officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)
+                                        print("위경도 변환 성공\(coord)")
+                                    } else {
+                                        //알럿창 띄우기
+                                        print("위치 정보를 가져오는데 실패했습니다.\(coord)")
+                                        self.checkAlert.toggle()
+                                    }
+                                }
+                            }
+                            .alert("위치 정보가 잘못되었습니다.", isPresented: $checkAlert) {
+                                Button("확인", role: .cancel) {
                                     
                                 }
+                            } message: {
+                                Text("동이나 구 단위로 입력해주세요")
                             }
-                            
-                        })
-                        .padding()
-                        .textFieldStyle(.roundedBorder)
-                        .keyboardType(.webSearch)
-                        .overlay(
-                            HStack() {
-                                Spacer()
-                                if !searchText.isEmpty {
-                                    Button(action: {
-                                        self.searchText = ""
-                                    }) {
-                                        Image(systemName: "multiply.circle.fill")
-                                            .foregroundColor(.postieGray)
-                                    }
-                                    padding(.trailing, 10)
-                                }
+                        
+                        if !searchText.isEmpty {
+                            Button(action: {
+                                self.searchText = ""
+                            }) {
+                                Image(systemName: "xmark.circle.fill")
                             }
-                        )
-                        .alert("위치 정보가 잘못되었습니다.", isPresented: $checkAlert) {
-                            Button("확인", role: .cancel) {
-                                
-                            }
-                        } message: {
-                            Text("동이나 구 단위로 입력해주세요")
                         }
                     }
-                    .padding(.leading, 10)
+                    .background(Color(uiColor: .secondarySystemBackground))
+                    .textFieldStyle(.roundedBorder)
                     
                     ZStack(alignment: .top) {
                         NaverMap(coord: coord)
