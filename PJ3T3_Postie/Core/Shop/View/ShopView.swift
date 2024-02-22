@@ -47,7 +47,7 @@ struct ShopView: View {
                     HStack {
                         Text("Letter Shop")
                             .font(.custom("SourceSerifPro-Black", size: 40))
-                            .foregroundStyle(Color.postieOrange)
+                            .foregroundStyle(postieColors.tintColor)
                         
                         Spacer()
                     }
@@ -82,7 +82,7 @@ struct ShopView: View {
                                             .font(Font.custom("SF Pro Text", size: 12))
                                             .bold()
                                             .multilineTextAlignment(.center)
-                                            .foregroundColor(selectedButtonIndex == index ? Color.postieWhite : Color.postieBlack)
+                                            .foregroundColor(selectedButtonIndex == index ? postieColors.receivedLetterColor : postieColors.tabBarTintColor)
                                             .frame(width: 60, alignment: .center)
                                     }
                                 }
