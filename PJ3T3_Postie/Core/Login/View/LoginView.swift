@@ -14,6 +14,9 @@ struct LoginView: View {
     @ObservedObject var authManager = AuthManager.shared
     @ObservedObject var appleSignInHelper = AppleSignInHelper.shared
     @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
+    @State private var isLoginProcessing = false
+    @State private var alertBody = ""
+    @State private var showAlert = false
     
     var body: some View {
         NavigationStack {
@@ -46,9 +49,11 @@ struct LoginView: View {
                             Task {
                                 do {
                                     let credential = try await authManager.signInWithGoogle()
+                                    isLoginProcessing = true
                                     authManager.authDataResult = try await authManager.signInWithSSO(credential: credential)
                                 } catch {
-                                    print(error)
+                                    isLoginProcessing = false
+                                    loginFailure(error: error)
                                 }
                             }
                         } label: {
@@ -59,9 +64,13 @@ struct LoginView: View {
                                     .foregroundStyle(.white)
                                     .shadow(radius: 3, x: 3, y: 3)
                                 
-                                Image("GoogleSignIn")
-                                    .resizable()
-                                    .scaledToFit()
+                                if isLoginProcessing {
+                                    ProgressView()
+                                } else {
+                                    Image("GoogleSignIn")
+                                        .resizable()
+                                        .scaledToFit()
+                                }
                                 
                                 RoundedRectangle(cornerRadius: 5)
                                     .stroke(Color(.black), lineWidth: 0.5)
@@ -69,7 +78,15 @@ struct LoginView: View {
                             }
                             .frame(height: geometry.size.height > 700 ? 54 : 44)
                         }
+                        .disabled(isLoginProcessing)
                         .padding(.bottom, 10)
+                        .alert("로그인 오류", isPresented: $showAlert) {
+                            Button { } label: {
+                                Text("확인")
+                            }
+                        } message: {
+                            Text(alertBody)
+                        }
                         
                         SignInWithAppleButton { request in
                             appleSignInHelper.signInWithAppleRequest(request)
@@ -83,7 +100,8 @@ struct LoginView: View {
                                     }
                                     authManager.authDataResult = try await AuthManager.shared.signInWithSSO(credential: credential)
                                 } catch {
-                                    print(error)
+                                    isLoginProcessing = false
+                                    loginFailure(error: error)
                                 }
                             }
                         }
@@ -91,6 +109,7 @@ struct LoginView: View {
                         .signInWithAppleButtonStyle(isThemeGroupButton == 4 ? .white : .black)
                         .shadow(radius: 3, x: 3, y: 3)
                         .padding(.bottom, 19)
+                        .disabled(isLoginProcessing)
                         
                         //Email sign in: 테스트용 이메일을 사용하기 위한 것으로 배포시 삭제 예정입니다.
 //                        NavigationLink {
@@ -109,7 +128,48 @@ struct LoginView: View {
 //                        .padding(.bottom, 10)
                     }
                     .padding(.horizontal, 32)
+                    
+                    if isLoginProcessing {
+                        LoadingView(text: "포스티 시작하는 중").background(ClearBackground())
+                    }
                 }
+            }
+        }
+        .customOnChange(authManager.authDataResult) { newValue in
+            if newValue != nil {
+                isLoginProcessing = true
+            } else {
+                isLoginProcessing = false
+            }
+        }
+    }
+    
+    func loginFailure(error: Error) {
+        let error = error as NSError
+        
+        do {
+            if error.code == GIDSignInErrorCode.canceled.rawValue {
+                throw GIDSignInErrorCode.canceled
+            } else {
+                try authManager.authErrorCodeConverter(error: error)
+            }
+        } catch {
+            switch error {
+            case AuthErrorCodeCase.userMismatch:
+                alertBody = "현재 로그인중인 사용자가 아니에요. 계정을 다시 확인해 주세요."
+                showAlert = true
+            case GIDSignInErrorCode.canceled:
+                alertBody = "로그인을 취소하셨습니다. 다시 시도해 주세요."
+                showAlert = false
+            case AuthErrorCodeCase.requiresRecentLogin:
+                alertBody = "로그인을 취소하셨습니다. 다시 시도해 주세요."
+                showAlert = false
+            case AuthErrorCodeCase.invalidCredential:
+                alertBody = "인증에 실패하였습니다. 다시 시도해 주세요."
+                showAlert = true
+            default:
+                alertBody = "알 수 없는 오류가 발생하였습니다. 지속적으로 오류가 발생한다면 관리자에게 문의해 주세요.\nteam.postie@google.com"
+                print(#function, "Failed to delete Google account: \(error)")
             }
         }
     }
