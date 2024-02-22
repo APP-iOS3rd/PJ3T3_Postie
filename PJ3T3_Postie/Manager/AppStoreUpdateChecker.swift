@@ -9,7 +9,7 @@ import Foundation
 
 struct AppStoreUpdateChecker {
     static func isNewVersionAvailable() async -> Bool {
-//        let bundleID = "com.iloen.iphonemelon"
+//        let bundleID = "com.iloen.iphonemelon" //코드 테스트시 12행 활성화, 14행은 주석처리
         guard
             let bundleID = Bundle.main.bundleIdentifier,
             let countryCode = Locale.current.language.region?.identifier,
