@@ -29,7 +29,7 @@ struct DeleteAccountButtonView: View {
                         showLoading = true
                         try await authManager.deleteAccount()
                     } catch {
-                        googleLoginFailure(error: error)
+                        loginFailure(error: error)
                         showLoading = false
                         showAlert = true
                     }
@@ -53,7 +53,7 @@ struct DeleteAccountButtonView: View {
         }
     }
     
-    func googleLoginFailure(error: Error) {
+    func loginFailure(error: Error) {
         switch error {
         case AuthErrorCodeCase.userMismatch:
             alertBody = "현재 로그인중인 사용자가 아니에요. 계정을 다시 확인해 주세요."
