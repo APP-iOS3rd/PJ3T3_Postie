@@ -166,7 +166,7 @@ extension SlowPostBoxView {
             .frame(maxWidth: .infinity)
 
             VStack(alignment: .leading, spacing: 4) {
-                Text(isReceived ? "받은 날짜" : "보낸 날짜")
+                Text("받을 날짜")
 
                 DatePicker(
                     "",
