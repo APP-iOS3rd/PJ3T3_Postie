@@ -98,12 +98,14 @@ struct LoginView: View {
                     NavigationLink {
                         EmailLoginView()
                     } label: {
-                        HStack {
+                        HStack(spacing: 0) {
                             Text("테스트용 이메일 계정으로")
                                 .foregroundColor(postieColors.tabBarTintColor)
                             
                             Text("로그인 하기")
                                 .foregroundColor(postieColors.tintColor)
+                                .bold()
+                                .padding(.leading, 4)
                         }
                     }
                     .padding(.bottom, 10)
