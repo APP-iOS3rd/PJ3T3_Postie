@@ -36,7 +36,7 @@ struct GroupedListLetterView: View {
                 
                 // ScrollView margin 임시
                 Rectangle()
-                    .frame(height: 70)
+                    .frame(height: 80)
                     .foregroundStyle(Color.postieBlack.opacity(0))
             }
             
