@@ -30,21 +30,31 @@ struct HomeView: View {
                         .ignoresSafeArea()
                     
                     if firestoreManager.letters.isEmpty {
-                        VStack {
-                            Image(isThemeGroupButton == 4 ? "postySendingSketchWhite" : "postySendingSketch")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: geometry.size.width * 0.7)
-                                .opacity(0.5)
+                        HStack {
+                            Spacer()
                             
-                            Text("저장된 편지가 없어요...")
-                                .font(.headline)
-                                .foregroundStyle(postieColors.tintColor)
+                            VStack {
+                                Spacer()
+                                
+                                Image(isThemeGroupButton == 4 ? "postySendingSketchWhite" : "postySendingSketch")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: geometry.size.width * 0.7)
+                                    .opacity(0.5)
+                                
+                                Text("저장된 편지가 없어요...")
+                                    .font(.headline)
+                                    .foregroundStyle(postieColors.tintColor)
+                                
+                                Text("우측 하단 편지봉투 버튼을 눌러서 주고받은 편지를 저장해주세요!")
+                                    .foregroundStyle(postieColors.dividerColor)
+                                
+                                Spacer()
+                            }
+                            .padding()
                             
-                            Text("우측 하단 편지봉투 버튼을 눌러서 주고받은 편지를 저장해주세요!")
-                                .foregroundStyle(postieColors.dividerColor)
+                            Spacer()
                         }
-                        .padding()
                     }
                     
                     VStack(spacing: 0) {
@@ -100,7 +110,7 @@ struct HomeView: View {
                                         .foregroundStyle(postieColors.tabBarTintColor.opacity(0))
                                         .id(1)
                                 }
-                                .onAppear {                        
+                                .onAppear {
                                     tabSelection.resetViewAction = {
                                         withAnimation {
                                             value.scrollTo(0, anchor: .top)

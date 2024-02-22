@@ -22,7 +22,12 @@ struct GroupedFavoriteListLetterView: View {
                 .ignoresSafeArea()
             
             if favoriteLetters.count == 0 {
-                VStack {
+                HStack {
+                    Spacer()
+                    
+                    VStack {
+                        Spacer()
+                        
                     Image(isThemeGroupButton == 4 ? "postyHeartSketchWhite" : "postyHeartSketch")
                         .resizable()
                         .scaledToFit()
@@ -36,9 +41,13 @@ struct GroupedFavoriteListLetterView: View {
                     
                     Text("저장한 편지에서 하트를 눌러보세요!")
                         .foregroundStyle(postieColors.dividerColor)
+                        
+                        Spacer()
+                    }
+                    .padding()
+                    
+                    Spacer()
                 }
-                .offset(x: -30, y: -150)
-                .padding()
             }
                 
             ScrollView {

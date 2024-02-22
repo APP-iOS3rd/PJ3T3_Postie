@@ -22,23 +22,32 @@ struct GroupedMyListLetterView: View {
                 .ignoresSafeArea()
             
             if filteredLetters.count == 0 {
-                VStack {
-                    Image(isThemeGroupButton == 4 ? "postySmileSketchWhite" : "postySmileSketch")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 300)
-                        .opacity(0.5)
-                        .padding(.bottom)
+                HStack {
+                    Spacer()
                     
-                    Text("나와 주고받은 편지가 없어요..")
-                        .font(.headline)
-                        .foregroundStyle(postieColors.tintColor)
+                    VStack {
+                        Spacer()
+                        
+                        Image(isThemeGroupButton == 4 ? "postySmileSketchWhite" : "postySmileSketch")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 300)
+                            .opacity(0.5)
+                            .padding(.bottom)
+                        
+                        Text("나와 주고받은 편지가 없어요..")
+                            .font(.headline)
+                            .foregroundStyle(postieColors.tintColor)
+                        
+                        Text("나의 느린 우체통 기능을 사용해보세요!")
+                            .foregroundStyle(postieColors.dividerColor)
+                        
+                        Spacer()
+                    }
+                    .padding()
                     
-                    Text("나의 느린 우체통 기능을 사용해보세요!")
-                        .foregroundStyle(postieColors.dividerColor)
+                    Spacer()
                 }
-                .offset(x: -30, y: -150)
-                .padding()
             }
                 
             ScrollView {
