@@ -73,11 +73,7 @@ struct ContentView: View {
                         if authViewModel.hasAccount {
                             LoadingView(text: "포스티 시작하는 중")
                         } else {
-                            if authViewModel.hasAccount {
-                                ProgressView()
-                            } else {
-                                NicknameView()
-                            }
+                            NicknameView()
                         }
                     }
                 } else {
