@@ -92,8 +92,13 @@ struct MapView: View {
                                     
                                     if let latitude = latitude, let longitude = longitude {
                                         //위경도 값 저장
+                                        coordinator.updateMapView(coord: MyCoord(latitude,longitude))
+                                        
                                         self.coord = MyCoord(latitude, longitude)
+                                        
                                         officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)
+                                        
+                                        
                                         print("위경도 변환 성공\(coord)")
                                     } else {
                                         //알럿창 띄우기
@@ -164,6 +169,8 @@ struct MapView: View {
                                     
                                     coordinator.cameraLocation?.lat = (locationManager.location!.coordinate.latitude)
                                     coordinator.cameraLocation?.lng = (locationManager.location!.coordinate.longitude)
+                                    
+                                    coordinator.updateMapView(coord: MyCoord(coordinator.cameraLocation!.lat, coordinator.cameraLocation!.lng))
                                 }) {
                                     ZStack {
                                         RoundedRectangle(cornerRadius: 6)
