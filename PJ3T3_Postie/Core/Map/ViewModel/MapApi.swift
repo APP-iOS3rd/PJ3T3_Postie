@@ -49,8 +49,8 @@ class NaverGeocodeAPI: ObservableObject {
         guard let clientID = clientID else { return }
         guard let clinetSecret = clinetSecret else { return }
         
-        let urlString = "https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=\(postalCode)"
-        
+        let urlString = "https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=\(postalCode)?"
+
         guard let url = URL(string: urlString) else { return }
         
         let session = URLSession(configuration: .default)
@@ -94,10 +94,15 @@ class NaverGeocodeAPI: ObservableObject {
                     
                     //메인 스레드에서 UI를 업데이트 한다.
                     DispatchQueue.main.async {
-                        //                        self.targetLocation = (latitude: latitude, longitude: longitude)
                         completion(latitude,longitude)
                     }
+                } else {
+                    print("값이 없읍니다")
+                    DispatchQueue.main.async {
+                        completion(nil,nil)
+                    }
                 }
+                
             }
             catch {
                 print("JSON 디코딩 에러: \(error.localizedDescription)")
