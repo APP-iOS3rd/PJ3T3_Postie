@@ -15,7 +15,7 @@ struct InformationView: View {
         var appVersion: String {
             if let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String,
                let build = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String {
-                return "\(version)"
+                return "\(version) (\(build))"
             }
             return "버전 정보 없음"
         }
@@ -81,7 +81,7 @@ struct InformationView: View {
                     DividerView()
                         .padding(.bottom, 5)
                     
-                    LazyVGrid(columns: columns, spacing: 9){
+                    LazyVGrid(columns: columns, spacing: 9) {
                         ForEach(0..<PersonData.count, id: \.self) { person in
                             PersonGridView(person: PersonData[person])
                         }
@@ -96,7 +96,7 @@ struct InformationView: View {
                     DividerView()
                         .padding(.bottom, 5)
                     
-                    LazyVGrid(columns: columns, spacing: 9){
+                    LazyVGrid(columns: columns, spacing: 9) {
                         ForEach(0..<ContributeData.count, id: \.self) { person in
                             PersonGridView(person: ContributeData[person])
                         }
