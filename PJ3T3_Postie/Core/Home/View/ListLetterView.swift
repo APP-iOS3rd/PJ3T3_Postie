@@ -13,7 +13,7 @@ struct ListLetterView: View {
     @Binding var isMenuActive: Bool
     
     var body: some View {
-        ForEach(firestoreManager.letters, id: \.self) { letter in
+        ForEach(firestoreManager.letters.sorted(by: { $0.date < $1.date }), id: \.self) { letter in
             NavigationLink {
                 LetterDetailView(letter: letter)
             } label: {
@@ -67,15 +67,31 @@ struct LetterItemView: View {
                     HStack {
                         Spacer()
                         
-                        if !letter.summary.isEmpty {
+                        if letter.recipient == letter.writer && Date() < letter.date {
+                            Image(systemName: "lock")
+                                .foregroundStyle(postieColors.tabBarTintColor)
+                        } else if !letter.summary.isEmpty && letter.recipient != letter.writer && Date() < letter.date {
                             Text("“")
                                 .font(.custom("SairaStencilOne-Regular", size: 30))
+                                .foregroundStyle(postieColors.tabBarTintColor)
                             
                             Text(letter.summary)
                                 .foregroundStyle(postieColors.tabBarTintColor)
                             
                             Text("”")
                                 .font(.custom("SairaStencilOne-Regular", size: 30))
+                                .foregroundStyle(postieColors.tabBarTintColor)
+                        } else if !letter.summary.isEmpty && Date() > letter.date {
+                            Text("“")
+                                .font(.custom("SairaStencilOne-Regular", size: 30))
+                                .foregroundStyle(postieColors.tabBarTintColor)
+                            
+                            Text(letter.summary)
+                                .foregroundStyle(postieColors.tabBarTintColor)
+                            
+                            Text("”")
+                                .font(.custom("SairaStencilOne-Regular", size: 30))
+                                .foregroundStyle(postieColors.tabBarTintColor)
                         }
                         
                         Spacer()
