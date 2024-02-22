@@ -85,6 +85,7 @@ final class AppleSignInHelper: NSObject, ObservableObject {
             authorizationController.presentationContextProvider = provider
         }
         
+        print(#function, "Credential Status: \(AuthManager.shared.credential)")
         authorizationController.performRequests()
     }
 }
@@ -123,9 +124,6 @@ extension AppleSignInHelper: ASAuthorizationControllerDelegate {
         }
         
         let appleUser = AppleUser(token: idTokenString, nonce: nonce, fullName: fullName)
-        
-        //회원 탈퇴를 위해서는 재인증이 필요하다. 재인증을 위한 credential을 생성 하기 위해서는 로그인을 다시 해야 한다.
-        AuthManager.shared.signInwithApple(user: appleUser)
         
         Task {
             if !self.isReAuth {

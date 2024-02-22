@@ -16,8 +16,8 @@ protocol AuthenticationProtocol {
 class AuthManager: ObservableObject {
     static let shared = AuthManager()
     var userUid: String  = ""
-    var hasAccount: Bool = true
     var provider: AuthProviderOption?
+    @Published var hasAccount: Bool = true
     @Published var userSession: FirebaseAuth.User? //Firebase user object
     @Published var currentUser: PostieUser? //User Data Model
     @Published var credential: OAuthCredential?
@@ -187,6 +187,8 @@ class AuthManager: ObservableObject {
             throw AuthErrorCodeCase.userMismatch
         case .requiresRecentLogin:
             throw AuthErrorCodeCase.requiresRecentLogin
+        case .invalidCredential:
+            throw AuthErrorCodeCase.invalidCredential
         default:
             print(#function, "Failed to delete Google account AuthErrorCode: \(error)")
         }
@@ -253,10 +255,27 @@ extension AuthManager {
         }
     }
     
+    func deleteAppleAccount(credential: OAuthCredential, authCodeString: String) async throws {
+        do {
+            try await self.userSession?.reauthenticate(with: credential)
+            try await Auth.auth().revokeToken(withAuthorizationCode: authCodeString)
+            try await self.deleteAccount()
+        } catch let error as NSError {
+            if let _ = AuthErrorCode.Code(rawValue: error.code) {
+                try authErrorCodeConverter(error: error)
+            } else {
+                print(#function, "Failed to delete Apple account: \(error)")
+            }
+        }
+    }
+    
     func deleteAppleAccount(user: AppleUser, authCodeString: String) async {
         let credential = OAuthProvider.appleCredential(withIDToken: user.token,
                                                        rawNonce: user.nonce,
                                                        fullName: user.fullName)
+        DispatchQueue.main.async {
+            self.credential = credential
+        }
         
         do {
             try await self.userSession?.reauthenticate(with: credential)

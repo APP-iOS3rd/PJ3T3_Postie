@@ -29,7 +29,7 @@ struct DeleteAccountButtonView: View {
                         showLoading = true
                         try await authManager.deleteAccount()
                     } catch {
-                        googleLoginFailure(error: error)
+                        loginFailure(error: error)
                         showLoading = false
                         showAlert = true
                     }
@@ -37,7 +37,6 @@ struct DeleteAccountButtonView: View {
             case .apple:
                 print("Delete Apple account")
                 AppleSignInHelper.shared.reAuthCurrentAppleUser()
-                showLoading = true
             default:
                 print("Delete account")
                 //alert 창 구현
@@ -53,16 +52,18 @@ struct DeleteAccountButtonView: View {
         }
     }
     
-    func googleLoginFailure(error: Error) {
+    func loginFailure(error: Error) {
         switch error {
         case AuthErrorCodeCase.userMismatch:
-            alertBody = "현재 로그인중인 사용자가 아니에요. 계정을 다시 확인 해 주세요."
+            alertBody = "현재 로그인중인 사용자가 아니에요. 계정을 다시 확인해 주세요."
         case GIDSignInErrorCode.canceled:
             alertBody = "재인증이 취소되었습니다. 회원 탈퇴를 위해서는 계정 재인증을 위한 로그인이 필요합니다."
         case AuthErrorCodeCase.requiresRecentLogin:
             alertBody = "재인증이 취소되었습니다. 회원 탈퇴를 위해서는 계정 재인증을 위한 로그인이 필요합니다."
+        case AuthErrorCodeCase.invalidCredential:
+            alertBody = "재인증에 실패하였습니다. 다시 시도해 주세요."
         default:
-            alertBody = "알 수 없는 오류가 발생하였습니다. 회원 탈퇴를 위해서는 관리자에게 문의 해 주세요.\nteam.postie@google.com"
+            alertBody = "알 수 없는 오류가 발생하였습니다. 지속적으로 오류가 발생한다면 관리자에게 문의해 주세요.\nteam.postie@google.com"
             print(#function, "Failed to delete Google account: \(error)")
         }
     }
