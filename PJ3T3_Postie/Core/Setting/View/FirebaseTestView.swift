@@ -1,5 +1,5 @@
 //
-//  SettingView.swift
+//  FirebaseTestView.swift
 //  PJ3T3_Postie
 //
 //  Created by Eunsu JEONG on 1/17/24.
@@ -8,7 +8,7 @@
 import SwiftUI
 import PhotosUI //Storage test를 위한 import로 이후 삭제 예정
 
-struct SettingView: View {
+struct FirebaseTestView: View {
     @Environment(\.window) var window: UIWindow?
     @ObservedObject var authManager = AuthManager.shared
     @ObservedObject var appleSignInHelper = AppleSignInHelper.shared
@@ -513,5 +513,5 @@ struct NoticeTestView: View {
 }
 
 #Preview {
-    SettingView()
+    FirebaseTestView()
 }

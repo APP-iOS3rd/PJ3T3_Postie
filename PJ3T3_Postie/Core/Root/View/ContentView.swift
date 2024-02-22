@@ -62,7 +62,7 @@ struct ContentView: View {
                                 }
                             
                             //테스트용 뷰입니다. 배포시 주석처리
-//                            SettingView()
+//                            FirebaseTestView()
 //                                .tabItem {
 //                                    Image(systemName: "person")
 //                                    Text("Setting")
