@@ -15,13 +15,13 @@ struct GroupedMyListLetterView: View {
     @State private var isSideMenuOpen: Bool = false
     
     var body: some View {
-        let filteredLetters = firestoreManager.letters.filter { $0.recipient == $0.writer}.sorted { $0.date < $1.date }
+        let filteredMyLetters = firestoreManager.letters.filter { $0.recipient == $0.writer}.sorted { $0.date < $1.date }
         
         ZStack(alignment: .bottomTrailing) {
             postieColors.backGroundColor
                 .ignoresSafeArea()
             
-            if filteredLetters.count == 0 {
+            if filteredMyLetters.count == 0 {
                 HStack {
                     Spacer()
                     
@@ -51,7 +51,7 @@ struct GroupedMyListLetterView: View {
             }
                 
             ScrollView {
-                ForEach(filteredLetters, id: \.self) { letter in
+                ForEach(filteredMyLetters, id: \.self) { letter in
                     NavigationLink {
                         LetterDetailView(letter: letter)
                     } label: {
@@ -78,7 +78,7 @@ struct GroupedMyListLetterView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .principal) {
-                Text("좋아하는 편지들")
+                Text("나의 느린 우체통")
                     .bold()
                     .foregroundStyle(postieColors.tintColor)
             }
