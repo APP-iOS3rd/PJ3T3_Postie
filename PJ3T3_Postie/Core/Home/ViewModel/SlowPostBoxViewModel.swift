@@ -31,8 +31,7 @@ class SlowPostBoxViewModel: ObservableObject {
     private(set) var imagePickerSourceType: UIImagePickerController.SourceType = .camera
     var isReceived: Bool
     var isNotEnoughInfo: Bool {
-        (isReceived && (sender.isEmpty || text.isEmpty))
-            || (!isReceived && (receiver.isEmpty || text.isEmpty))
+        text.isEmpty
     }
     var currentUserName: String {
         AuthManager.shared.currentUser?.nickname ??
@@ -98,7 +97,10 @@ class SlowPostBoxViewModel: ObservableObject {
                 let docId = UUID().uuidString
 
                 let (newImageFullPaths, newImageUrls) = try await uploadImages(docId: docId)
+
                 try await addLetter(docId: docId, newImageUrls: newImageUrls, newImageFullPaths: newImageFullPaths, isReceived: isReceived)
+
+                setNotification(docId: docId, date: date)
 
                 await MainActor.run {
                     dismissView()
@@ -168,5 +170,12 @@ class SlowPostBoxViewModel: ObservableObject {
                 showSummaryErrorAlert()
             }
         }
+    }
+
+    func setNotification(docId: String, date: Date) {
+        let manager = NotificationManager.shared
+        //title이나 body 부분의 문구 여러가지로 배열 작성 해 두었다가 알람 뜰 때 랜덤으로 설정되면 좋을 것 같아요~
+        manager.addNotification(id: docId, title: "포스티가 편지를 배달했어요", body: summary.count == 0 ? "포스티에서 내용을 확인 해 보세요" : summary)
+        manager.setNotification(date: date)
     }
 }

@@ -58,7 +58,7 @@ struct SlowPostBoxView: View {
         .toolbarBackground(ThemeManager.themeColors[isThemeGroupButton].backGroundColor, for: .navigationBar)
         .toolbar {
             ToolbarItemGroup(placement: .principal) {
-                Text(isReceived ? "받은 편지 기록" : "보낸 편지 기록")
+                Text("느린우체통")
                     .bold()
                     .foregroundStyle(ThemeManager.themeColors[isThemeGroupButton].tintColor)
             }
