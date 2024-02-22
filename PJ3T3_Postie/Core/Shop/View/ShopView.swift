@@ -66,7 +66,7 @@ struct ShopView: View {
                                             Rectangle()
                                                 .foregroundColor(.clear)
                                                 .frame(width: 70, height: 30)
-                                                .background(Color(red: 1, green: 0.98, blue: 0.95))
+                                                .background(postieColors.tintColor)
                                                 .cornerRadius(16)
                                                 .overlay(
                                                     RoundedRectangle(cornerRadius: 16)
@@ -76,23 +76,23 @@ struct ShopView: View {
                                                     Rectangle()
                                                         .foregroundColor(.clear)
                                                         .frame(width: 72, height: 30)
-                                                        .background(Color(red: 1, green: 0.98, blue: 0.95))
+                                                        .background(postieColors.receivedLetterColor)
                                                         .cornerRadius(20)
                                                         .shadow(color: .black.opacity(0.1), radius: 3, x: 2, y: 2)
                                                 }
                                         
                                         Text(postDivision[index])
                                             .font(Font.custom("SF Pro Text", size: 12))
+                                            .bold()
                                             .multilineTextAlignment(.center)
-                                            .foregroundColor(Color(red: 0.12, green: 0.12, blue: 0.12))
+                                            .foregroundColor(selectedButtonIndex == index ? Color.postieWhite : Color.postieBlack)
                                             .frame(width: 60, alignment: .center)
                                     }
                                 }
                             }
-                        }.padding(EdgeInsets(top: 0, leading: 20, bottom: 10, trailing: 20)) // 스크롤에 대한 간격 넓히기
+                        }
+                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 10))  //스크롤에 대한 간격 넓히기
                     })
-                    .padding()
-                    Spacer()
                     
                     ScrollView {
                         LazyVGrid(columns: columns, spacing: 9, content: {
