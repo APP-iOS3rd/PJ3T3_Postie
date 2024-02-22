@@ -21,10 +21,10 @@ struct TabItemContent: View {
 }
 
 struct ContentView: View {
-    //ViewModels
     @ObservedObject var authViewModel = AuthManager.shared
     @StateObject private var viewModel = AppViewModel()
     @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
+    @State var showUpdate: Bool = false
     
     init() {
         let tbAppearance: UITabBarAppearance = UITabBarAppearance()
@@ -85,6 +85,25 @@ struct ContentView: View {
                 }
             } else {
                 SplashScreenView()
+            }
+        }
+        .alert("업데이트 알림", isPresented: $showUpdate) {
+//                    Button("나중에") {}
+            let appleID = 6478052812 //테스트용 멜론 앱으로 연결: 415597317
+            if let url = URL(string: "itms-apps://itunes.apple.com/app/apple-store/\(appleID)") {
+                Link("업데이트", destination: url)
+            }
+        } message: {
+            Text("새로운 버전 업데이트가 있어요! 더 나은 서비스를 위해 포스티를 업데이트 해 주세요.")
+        }
+        .onAppear {
+            Task {
+                if await AppStoreUpdateChecker.isNewVersionAvailable() {
+                    showUpdate = true
+                    print("신규 버전 있음, alert 띄우자")
+                } else {
+                    print("신규 버전 없음")
+                }
             }
         }
     }
