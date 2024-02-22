@@ -85,7 +85,7 @@ struct EditLetterView: View {
         }
         .toolbar(.hidden, for: .tabBar)
         .scrollDismissesKeyboard(.interactively)
-        .modifier(LoadingModifier(isLoading: $editLetterViewModel.isLoading, text: "편지를 수정하고 있어요."))
+        .modifier(LoadingModifier(isLoading: $editLetterViewModel.isLoading, text: editLetterViewModel.loadingText))
         .fullScreenCover(isPresented: $editLetterViewModel.showingLetterImageFullScreenView) {
             LetterImageFullScreenView(
                 images: editLetterViewModel.newImages,
@@ -98,7 +98,9 @@ struct EditLetterView: View {
                 sourceType: editLetterViewModel.imagePickerSourceType,
                 selectedImages: $editLetterViewModel.newImages,
                 text: $editLetterViewModel.text,
-                showingTextRecognizerErrorAlert: $editLetterViewModel.showingTextRecognizerErrorAlert
+                isLoading: $editLetterViewModel.isLoading,
+                showingTextRecognizerErrorAlert: $editLetterViewModel.showingTextRecognizerErrorAlert,
+                loadingText: $editLetterViewModel.loadingText
             )
             .ignoresSafeArea(.all, edges: .bottom)
         }
@@ -113,8 +115,9 @@ struct EditLetterView: View {
             }
 
             Button("AI 완성") {
-                // TODO: 네이버 클로바 API 호출
-                editLetterViewModel.showSummaryTextField()
+                Task {
+                    await editLetterViewModel.getSummary(isReceived: letter.isReceived)
+                }
                 focusField = .summary
             }
         }
@@ -122,6 +125,11 @@ struct EditLetterView: View {
             
         } message: {
             Text("편지 수정에 실패했어요. 다시 시도해 주세요")
+        }
+        .alert("편지 요약 실패", isPresented: $editLetterViewModel.showingSummaryErrorAlert) {
+
+        } message: {
+            Text("편지 요약에 실패했어요. 직접 요약해주세요.")
         }
         .onAppear {
             editLetterViewModel.syncViewModelProperties(letter: letter)
