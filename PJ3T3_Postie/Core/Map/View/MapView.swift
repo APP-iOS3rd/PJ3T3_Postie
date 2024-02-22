@@ -134,7 +134,7 @@ struct MapView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                     .padding(.horizontal, 15)
                     .padding(.bottom, 15)
-                    //                    .onAppear (perform : UIApplication.shared.hideKeyboard)
+                                        .onAppear (perform : UIApplication.shared.hideKeyboard)
                     //                    .background(Color(uiColor: .secondarySystemBackground))
                     //                    .textFieldStyle(.roundedBorder)
                     
@@ -264,18 +264,18 @@ struct MapView: View {
     }
 }
 
-//extension UIApplication {
-//    func hideKeyboard() {
-//        guard let window = windows.first else { return }
-//        let tapRecognizer = UITapGestureRecognizer(target: window, action: #selector(UIView.endEditing))
-//        tapRecognizer.cancelsTouchesInView = false
-//        tapRecognizer.delegate = self
-//        window.addGestureRecognizer(tapRecognizer)
-//    }
-//}
-//
-//extension UIApplication: UIGestureRecognizerDelegate {
-//    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-//        return false
-//    }
-//}
+extension UIApplication {
+    func hideKeyboard() {
+        guard let window = windows.first else { return }
+        let tapRecognizer = UITapGestureRecognizer(target: window, action: #selector(UIView.endEditing))
+        tapRecognizer.cancelsTouchesInView = false
+        tapRecognizer.delegate = self
+        window.addGestureRecognizer(tapRecognizer)
+    }
+}
+
+extension UIApplication: UIGestureRecognizerDelegate {
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return false
+    }
+}
