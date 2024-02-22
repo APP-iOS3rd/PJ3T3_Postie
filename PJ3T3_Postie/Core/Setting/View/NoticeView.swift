@@ -9,6 +9,7 @@ import SwiftUI
 
 struct NoticeView: View {
     @ObservedObject var firestoreNoticeManager = FirestoreNoticeManager.shared
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     @State private var isExpanded = false
     
     var body: some View {
@@ -20,7 +21,7 @@ struct NoticeView: View {
                 VStack(alignment: .leading) {
                     if firestoreNoticeManager.notices.isEmpty {
                         VStack {
-                            Image("postyThinkingSketch")
+                            Image(isThemeGroupButton == 4 ? "postyThinkingSketchWhite" : "postyThinkingSketch")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(height: 200)
