@@ -9,38 +9,33 @@ import SwiftUI
 import SafariServices
 
 struct ShopView: View {
-    let columns: [GridItem] = Array(repeating: .init(.flexible()), count: 2)
-    let dummyData = [["poketmon2", "sanrio", "digimon"],["kuma", "crayon", "poketmon"], [], [], []]
-    let postDivision: [String] = ["캐릭터", "심플", "일러스트", "풍경", "컬러풀"]
-    let postImage0: [String] = ["poketmon", "poketmon2", "sanrio", "digimon", "kuma", "crayon"]
-    let postImage1: [String] = ["poketmon2", "sanrio", "digimon", "kuma", "crayon", "poketmon"]
-    let urls: [String: String] = [
-        "poketmon" : "https://gloomy.co.kr/product/%ED%8F%AC%EC%BC%93%EB%AA%AC%EC%8A%A4%ED%84%B0-%EC%BA%90%EB%A6%AD%ED%84%B0-%ED%8E%B8%EC%A7%80%EC%A7%80-4p%EC%84%B8%ED%8A%B8%EB%9E%9C%EB%8D%A4%EB%B0%9C%EC%86%A1-129693/101233/",
-        "poketmon2" :
-            "https://www.pokemonstore.co.kr/pages/product/view.html?productNo=114168879",
-        
-        "sanrio" :  "https://usagimall.com/product/%EC%82%B0%EB%A6%AC%EC%98%A4-%EC%BA%90%EB%A6%AD%ED%84%B0-%EB%AA%A8%EC%96%91-%ED%8E%B8%EC%A7%80%EC%A7%80-10%EC%84%B8%ED%8A%B8/8154/",
-        
-        "digimon" : "https://www.cheonyu.com/product/view.html?qIDX=62957",
-        
-        "kuma" : "https://akaikaze00.cafe24.com/product/%EC%9D%BC%EB%B3%B8-%EB%A6%AC%EB%9D%BD%EC%BF%A0%EB%A7%88-%ED%8E%B8%EC%A7%80%EC%A7%80-%ED%8E%B8%EC%A7%80%EB%B4%89%ED%88%AC%EC%84%B8%ED%8A%B8%EA%B3%BC%EC%9D%BC/17384/",
-        "crayon" : "https://akaikaze00.cafe24.com/product/%EC%A7%B1%EA%B5%AC%EB%8A%94%EB%AA%BB%EB%A7%90%EB%A0%A4-%ED%8E%B8%EC%84%A0%EC%A7%80-%ED%8E%B8%EC%A7%80%EC%A7%80%EC%84%B8%ED%8A%B8%EC%8B%9C%EC%A6%8C6-4color/18003/"
+    let columns: [GridItem] = [
+        GridItem(.flexible(), spacing: 9, alignment: .center),
+        GridItem(.flexible(), spacing: 9, alignment: .center)
     ]
+    let postDivision: [String] = ["캐릭터", "심플", "일러스트", "풍경", "맞춤제작"]
     
+    @Binding var isThemeGroupButton: Int
     @State private var safariURL: String?
     @State private var selectedButtonIndex: Int = 0
     @State private var showDetails = false
-    @State private var randomHeight: CGFloat = 200
+    @ObservedObject private var shopViewModel = ShopViewModel()
     
     var body: some View {
         NavigationStack {
-            VStack {
+            VStack(spacing: 0) {
+                HStack {
+                    Text("ShopView")
+                        .font(.custom("SourceSerifPro-Black", size: 40))
+                        .foregroundStyle(Color.postieOrange)
+                    
+                    Spacer()
+                }
                 // 카테고리 버튼
                 ScrollView(.horizontal, showsIndicators: false, content: {
                     HStack(spacing: 10) {
                         ForEach(0...4, id: \.self) { index in
                             Button(action: {
-                                randomHeight = CGFloat.random(in: 150...300)
                                 selectedButtonIndex = index
                             }) {
                                 ZStack {
