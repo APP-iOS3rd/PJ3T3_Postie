@@ -36,6 +36,7 @@
 		9E7E05B92B7DE6D200ACF177 /* FirestoreNoticeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7E05B82B7DE6D200ACF177 /* FirestoreNoticeManager.swift */; };
 		9E7E05BB2B7DE96500ACF177 /* OfficialLetter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7E05BA2B7DE96500ACF177 /* OfficialLetter.swift */; };
 		9E7F8C782B5E69B000F1A6BF /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7F8C772B5E69B000F1A6BF /* StorageManager.swift */; };
+		9E865CC52B839CC300CD7CAD /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E865CC42B839CC300CD7CAD /* NotificationManager.swift */; };
 		9E93042D2B745DF1000B7F75 /* Shop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E93042C2B745DF1000B7F75 /* Shop.swift */; };
 		9E93042F2B74A4B5000B7F75 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E93042E2B74A4B5000B7F75 /* View.swift */; };
 		9E9A8BE02B6AB09D0072CB75 /* PJ3T3-Postie-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9E9A8BDF2B6AB09D0072CB75 /* PJ3T3-Postie-Info.plist */; };
@@ -153,6 +154,7 @@
 		9E7E05B82B7DE6D200ACF177 /* FirestoreNoticeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreNoticeManager.swift; sourceTree = "<group>"; };
 		9E7E05BA2B7DE96500ACF177 /* OfficialLetter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfficialLetter.swift; sourceTree = "<group>"; };
 		9E7F8C772B5E69B000F1A6BF /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
+		9E865CC42B839CC300CD7CAD /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		9E93042C2B745DF1000B7F75 /* Shop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shop.swift; sourceTree = "<group>"; };
 		9E93042E2B74A4B5000B7F75 /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		9E9A8BDF2B6AB09D0072CB75 /* PJ3T3-Postie-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "PJ3T3-Postie-Info.plist"; sourceTree = SOURCE_ROOT; };
@@ -537,6 +539,7 @@
 				9E7E05B82B7DE6D200ACF177 /* FirestoreNoticeManager.swift */,
 				9E7E05B42B7DE54200ACF177 /* FirestoreShopManager.swift */,
 				9E9A8BE82B6B704E0072CB75 /* GoogleSignInHelper.swift */,
+				9E865CC42B839CC300CD7CAD /* NotificationManager.swift */,
 				9E7F8C772B5E69B000F1A6BF /* StorageManager.swift */,
 			);
 			path = Manager;
@@ -848,6 +851,7 @@
 				9E46837C2B7BBBA100EFB90B /* LoadingView.swift in Sources */,
 				9E5889E32B72221B00B4AD20 /* SearchView.swift in Sources */,
 				9E9F6AB82B5762EF003DFE83 /* HomeViewModel.swift in Sources */,
+				9E865CC52B839CC300CD7CAD /* NotificationManager.swift in Sources */,
 				9E9F6ADC2B57643F003DFE83 /* Letter.swift in Sources */,
 				9E9F6AC62B5763A3003DFE83 /* SettingView.swift in Sources */,
 			);
