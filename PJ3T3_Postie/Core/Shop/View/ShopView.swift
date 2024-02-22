@@ -101,12 +101,13 @@ struct ShopView: View {
                             }
                         })
                     }
-                    .padding()
                 }
+                .padding()
             }
-            .onAppear() {
-                shopViewModel.fetchData()
-            }
+        }
+        .onAppear() {
+            shopViewModel.fetchData()
+            
         }
     }
 }
