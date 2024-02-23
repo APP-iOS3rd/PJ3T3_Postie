@@ -55,8 +55,22 @@ struct SlowPostBoxView: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden()
         .toolbarBackground(ThemeManager.themeColors[isThemeGroupButton].backGroundColor, for: .navigationBar)
         .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button {
+                    slowPostBoxViewModel.showDismissAlert()
+                } label: {
+                    HStack {
+                        Image(systemName: "chevron.backward")
+                            .bold()
+
+                        Text("Back")
+                    }
+                }
+            }
+
             ToolbarItemGroup(placement: .principal) {
                 Text("느린우체통")
                     .bold()
@@ -136,6 +150,17 @@ struct SlowPostBoxView: View {
 
         } message: {
             Text("편지 요약에 실패했어요. 직접 요약해주세요.")
+        }
+        .alert("작성을 취소하실 건가요?", isPresented: $slowPostBoxViewModel.showingDismissAlert) {
+            Button("아니요", role: .cancel) {
+
+            }
+
+            Button("네", role: .destructive) {
+                dismiss()
+            }
+        } message: {
+            Text("변경된 내용이 저장되지 않아요!")
         }
         .customOnChange(slowPostBoxViewModel.shouldDismiss) { shouldDismiss in
             if shouldDismiss {

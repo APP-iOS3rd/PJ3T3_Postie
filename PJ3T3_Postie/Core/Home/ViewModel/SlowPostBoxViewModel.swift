@@ -19,6 +19,7 @@ class SlowPostBoxViewModel: ObservableObject {
     @Published var showingUIImagePicker = false
     @Published var showingLetterImageFullScreenView: Bool = false
     @Published var showingTextRecognizerErrorAlert: Bool = false
+    @Published var showingDismissAlert: Bool = false
     @Published var showingSummaryTextField: Bool = false
     @Published var showingSummaryAlert: Bool = false
     @Published var showingNotEnoughInfoAlert: Bool = false
@@ -80,6 +81,10 @@ class SlowPostBoxViewModel: ObservableObject {
 
     func showUploadErrorAlert() {
         showingUploadErrorAlert = true
+    }
+
+    func showDismissAlert() {
+        showingDismissAlert = true
     }
 
     func uploadLetter() async {
