@@ -26,7 +26,7 @@ struct ReAuthButtonView: View {
                         authManager.authDataResult = try await authManager.signInWithSSO(credential: credential)
                     } catch let error as NSError {
                         if error.code == GIDSignInErrorCode.canceled.rawValue {
-                            alertBody = "재인증이 취소되었습니다. 계정 생성을 위해서는 재인증을 해 주세요."
+                            alertBody = "재인증이 취소되었습니다. 계정 생성을 위해 재인증 해 주세요."
                         } else {
                             do {
                                 try authManager.authErrorCodeConverter(error: error)
@@ -64,7 +64,7 @@ struct ReAuthButtonView: View {
             alertBody = "현재 로그인중인 사용자가 아니에요. 계정을 다시 확인 해 주세요."
         case AuthErrorCodeCase.requiresRecentLogin:
             Logger.auth.info("FIR")
-            alertBody = "재인증이 취소되었습니다. 계정 생성을 위해서는 재인증을 해 주세요."
+            alertBody = "재인증이 취소되었습니다. 계정 생성을 위해 재인증 해 주세요."
         default:
             Logger.auth.info("FIR")
             alertBody = "알 수 없는 오류가 발생하였습니다. 계정 생성을 위해서는 관리자에게 문의 해 주세요.\nteam.postie@google.com"

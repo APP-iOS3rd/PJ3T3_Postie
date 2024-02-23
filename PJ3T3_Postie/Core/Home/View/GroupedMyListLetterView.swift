@@ -37,7 +37,7 @@ struct GroupedMyListLetterView: View {
                     .alert(isPresented: $showAlert) {
                         Alert(
                             title: Text("아직 편지가 배송중이에요!"),
-                            message: Text("도착하지 못한 편지는 열어 볼 수 없어요... 편지가 도착할 때까지 기다려 주세요!"),
+                            message: Text("도착하지 못한 편지는 열어 볼 수 없어요 \n 편지가 도착할 때까지 기다려 주세요!"),
                             dismissButton: .default(Text("확인"))
                         )
                     }

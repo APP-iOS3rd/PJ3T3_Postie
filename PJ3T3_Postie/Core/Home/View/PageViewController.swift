@@ -25,6 +25,7 @@ struct Page: View {
                 .font(.letter(.nanumMyeongjo))
                 .lineSpacing(10.0)
                 .padding(.vertical, 8)
+                .frame(maxWidth: .infinity, alignment: .leading)
 
             Spacer()
 

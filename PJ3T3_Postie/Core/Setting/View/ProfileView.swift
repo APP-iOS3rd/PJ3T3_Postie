@@ -165,11 +165,11 @@ struct ProfileView: View {
                         Button {
                             isSignOutAlert = true
                         } label: {
-                            Text("회원탈퇴")
+                            Text("회원 탈퇴")
                                 .foregroundStyle(postieColors.dividerColor)
                                 .padding(.leading, 3)
                         }
-                        .alert("회원탈퇴", isPresented: $isSignOutAlert) {
+                        .alert("회원 탈퇴", isPresented: $isSignOutAlert) {
                             Button(role: .cancel) {
                                 
                             } label: {

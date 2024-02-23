@@ -43,13 +43,14 @@ struct HomeView: View {
                                     .scaledToFit()
                                     .frame(width: geometry.size.width * 0.7)
                                     .opacity(0.5)
-                                
-                                Text("저장된 편지가 없어요...")
-                                    .font(.headline)
+
+                                Text("보관함에 편지가 없어요")
                                     .foregroundStyle(postieColors.tintColor)
+                                    .padding(.vertical,10)
                                 
-                                Text("우측 하단 편지봉투 버튼을 눌러서 주고받은 편지를 저장해주세요!")
+                                Text("우측 하단 편지봉투 버튼을 눌러서 주고받은 편지를 보관해 보세요!")
                                     .foregroundStyle(postieColors.dividerColor)
+                                    .multilineTextAlignment(.center)
                                 
                                 Spacer()
                             }
@@ -321,11 +322,11 @@ struct AddLetterButton: View {
             }
             
             NavigationLink(destination: AddLetterView(isReceived: true)) {
-                Label("받은 편지 저장", systemImage: "envelope.open")
+                Label("받은 편지 보관", systemImage: "envelope.open")
             }
             
             NavigationLink(destination: AddLetterView(isReceived: false)) {
-                Label("보낸 편지 저장", systemImage: "paperplane")
+                Label("보낸 편지 보관", systemImage: "paperplane")
             }
         } label: {
             ZStack {

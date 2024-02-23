@@ -112,7 +112,7 @@ struct MapView: View {
                                     }
                                 }
                             }
-                            .alert("위치 정보가 잘못되었습니다.", isPresented: $checkAlert) {
+                            .alert("검색어 안내.", isPresented: $checkAlert) {
                                 Button("확인", role: .cancel) {
                                     
                                 }
