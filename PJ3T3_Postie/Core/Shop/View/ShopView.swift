@@ -99,10 +99,6 @@ struct ShopView: View {
                 .padding()
             }
         }
-        .onAppear() {
-            shopViewModel.fetchAllShops()
-            
-        }
     }
 }
 //sheet(item:onDismiss:content:)호출시 해당 타입은 Identifiable 프로토콜 채택
@@ -133,8 +129,8 @@ struct ShopButton: View {
                     
                     ZStack {
                         Rectangle()
-                            .fill(LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.2), Color.clear]), startPoint: .bottom, endPoint: .top))
-                            .frame(height: 30)
+                            .fill(LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.5), Color.clear]), startPoint: .bottom, endPoint: .top))
+                            .frame(height: 80)
                             .cornerRadius(10)
                         
                         HStack {
@@ -144,6 +140,7 @@ struct ShopButton: View {
                                 .font(.custom("SourceSerifPro-Light", size: 12))
                                 .lineLimit(1)
                                 .padding(.leading, 8)
+                                .offset(y: 26)
                             
                             Spacer()
                         }
