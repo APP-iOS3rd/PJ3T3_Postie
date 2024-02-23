@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Foundation
+import OSLog
 
 import MapKit
 import CoreLocation
@@ -101,10 +102,10 @@ struct MapView: View {
                                         officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)
                                         
                                         
-                                        print("위경도 변환 성공\(coord)")
+                                        Logger.map.info("위경도 변환 성공\(coord.lat) \(coord.lng)")
                                     } else {
                                         //알럿창 띄우기
-                                        print("위치 정보를 가져오는데 실패했습니다.\(coord)")
+                                        Logger.map.error("위치 정보를 가져오는데 실패했습니다.\(coord.lat) \(coord.lng)")
                                         self.checkAlert.toggle()
                                     }
                                 }
@@ -144,8 +145,8 @@ struct MapView: View {
                         
                         VStack {
                             Button(action: {
-                                print("현재 위치에서 \(name[selectedButtonIndex]) 찾기 버튼 눌림")
-                                
+                                Logger.map.info("현재 위치에서 \(name[selectedButtonIndex]) 찾기 버튼 눌림")
+
                                 locationManager.stopUpdatingLocation() // 현재 위치 추적 금지
                                 
                                 coord = MyCoord(coordinator.cameraLocation?.lat ?? coord.lat, coordinator.cameraLocation?.lng ?? coord.lng)
@@ -252,8 +253,8 @@ struct MapView: View {
             if let location = newLocation {
                 coord = MyCoord(location.coordinate.latitude, location.coordinate.longitude)
                 
-                print("현재위치: \(coord)")
-                
+                Logger.map.info("현재위치: \(coord.lat), \(coord.lng)")
+
                 locationManager.stopUpdatingLocation()
             }
         }

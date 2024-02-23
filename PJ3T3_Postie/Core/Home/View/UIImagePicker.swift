@@ -57,7 +57,6 @@ struct UIImagePicker: UIViewControllerRepresentable {
                         case.failure(let error):
                             self.parent.showingTextRecognizerErrorAlert = true
                             self.parent.isLoading = false
-                            print("Text recognition error: \(error)")
                         }
                     }
                 }

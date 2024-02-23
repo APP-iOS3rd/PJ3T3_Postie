@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import OSLog
 import UIKit
 
 struct FullPathAndUrl {
@@ -164,7 +165,7 @@ class EditLetterViewModel: ObservableObject {
 
                 showEditErrorAlert()
             }
-            print("Failed to edit letter: \(error)")
+            Logger.firebase.error("Failed to edit letter: \(error)")
         }
     }
 

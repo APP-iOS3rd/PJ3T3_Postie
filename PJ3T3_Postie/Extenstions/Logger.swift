@@ -14,4 +14,5 @@ extension Logger {
     static let firebase = Logger(subsystem: subsystem, category: "firebase")
     static let map = Logger(subsystem: subsystem, category: "map")
     static let notification = Logger(subsystem: subsystem, category: "notification")
+    static let version = Logger(subsystem: subsystem, category: "version")
 }

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import OSLog
 
 struct AppStoreUpdateChecker {
     static func isNewVersionAvailable() async -> Bool {
@@ -16,15 +17,16 @@ struct AppStoreUpdateChecker {
             let currentVersionNumber = Bundle.main.releaseVersionNumber,
             let url = URL(string: "https://itunes.apple.com/lookup?bundleId=\(bundleID)&country=\(countryCode)")
         else {
-            print("bunldeID 또는 countryCode 찾지 못함")
+            Logger.version.error("bunldeID 또는 countryCode 찾지 못함")
             return false
         }
-        print("---> url:", url)
+        Logger.version.info("---> url: \(url)")
+
         do {
             // Fetches and parses the response
             let (data, response) = try await URLSession.shared.data(from: url)
             guard (response as? HTTPURLResponse)?.statusCode == 200 else {
-                print("badServerResponse")
+                Logger.version.error("badServerResponse")
                 throw URLError(.badServerResponse)
             }
             let appStoreResponse = try JSONDecoder().decode(AppStoreResponse.self, from: data)
@@ -32,7 +34,7 @@ struct AppStoreUpdateChecker {
             // Retrieves the version number
             guard let latestVersionNumber = appStoreResponse.results.first?.version else {
                 // Error: no app with matching bundle ID found
-                print("Error: no app with matching bundle ID found")
+                Logger.version.error("Error: no app with matching bundle ID found")
                 return false
             }
             
@@ -57,12 +59,12 @@ struct AppStoreUpdateChecker {
             return false
              */
             
-            print("----> 최신 버전:", latestVersionNumber)
-            print("----> 현재 버전:", currentVersionNumber)
+            Logger.version.info("----> 최신 버전: \(latestVersionNumber)")
+            Logger.version.info("----> 현재 버전: \(currentVersionNumber)")
             // Checks if there's a mismatch in version numbers
             return currentVersionNumber != latestVersionNumber
         } catch {
-            print("버전 찾지 못함: \(error)")
+            Logger.version.error("버전 찾지 못함: \(error)")
             return false
         }
     }

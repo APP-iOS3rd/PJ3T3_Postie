@@ -81,7 +81,6 @@ class APIClient {
                         
             throw URLError(.badServerResponse)
         } else {
-            print("된건가")
             do {
                 let decoder = JSONDecoder()
                 let decodedData = try decoder.decode(ApiResponse.self, from: data)

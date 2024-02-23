@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AuthenticationServices
+import OSLog
 
 import GoogleSignInSwift
 
@@ -95,7 +96,7 @@ struct LoginView: View {
                                 do {
                                     appleSignInHelper.signInWithAppleCompletion(result)
                                     guard let credential = authManager.credential else {
-                                        print("Unable to fetch credential")
+                                        Logger.auth.error("Unable to fetch credential")
                                         return
                                     }
                                     authManager.authDataResult = try await AuthManager.shared.signInWithSSO(credential: credential)
@@ -169,7 +170,7 @@ struct LoginView: View {
                 showAlert = true
             default:
                 alertBody = "알 수 없는 오류가 발생하였습니다. 지속적으로 오류가 발생한다면 관리자에게 문의해 주세요.\nteam.postie@google.com"
-                print(#function, "Failed to delete Google account: \(error)")
+                Logger.auth.error("\(#function) Failed to delete Google account: \(error)")
             }
         }
     }
