@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		011DF2D02B87A1EB00CFA148 /* MembershipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D466DA2B733B5B00DFE93F /* MembershipView.swift */; };
+		011DF2D12B87A1EF00CFA148 /* ProfileEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B41DA52B730E0300CB9E7A /* ProfileEditView.swift */; };
+		019035552B7B36340080B370 /* AppleUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E078CBF2B7207660072E5FC /* AppleUser.swift */; };
+		019035582B7B38080080B370 /* Shop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019035572B7B38080080B370 /* Shop.swift */; };
+		0190355A2B7B38690080B370 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 019035592B7B38690080B370 /* GoogleService-Info.plist */; };
 		02DCDCD8D590DE7D9E6F06F9 /* Pods_PJ3T3_Postie.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 19068E0481D2E4323D4AC3E2 /* Pods_PJ3T3_Postie.framework */; };
 		0E29F0D32B5ED136005B86FB /* MapApiKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0E29F0D22B5ED136005B86FB /* MapApiKeys.plist */; };
 		0E29F0D62B5EDC30005B86FB /* XMLCoder in Frameworks */ = {isa = PBXBuildFile; productRef = 0E29F0D52B5EDC30005B86FB /* XMLCoder */; };
@@ -17,7 +22,6 @@
 		0E882AEE2B6B73DE00D8F2FC /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E882AED2B6B73DE00D8F2FC /* LocationManager.swift */; };
 		0E882AF02B6B79D800D8F2FC /* CoordinaterEtc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E882AEF2B6B79D800D8F2FC /* CoordinaterEtc.swift */; };
 		0E882AF12B6B907200D8F2FC /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9F6ACD2B5763CA003DFE83 /* AuthManager.swift */; };
-		9E078CC02B7207660072E5FC /* AppleUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E078CBF2B7207660072E5FC /* AppleUser.swift */; };
 		9E0FA11C2B54D27A001CEEB9 /* PJ3T3_PostieApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0FA11B2B54D27A001CEEB9 /* PJ3T3_PostieApp.swift */; };
 		9E0FA11E2B54D27A001CEEB9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0FA11D2B54D27A001CEEB9 /* ContentView.swift */; };
 		9E0FA1202B54D27C001CEEB9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E0FA11F2B54D27C001CEEB9 /* Assets.xcassets */; };
@@ -25,7 +29,6 @@
 		9E0FA12A2B54D2EF001CEEB9 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 9E0FA1292B54D2EF001CEEB9 /* README.md */; };
 		9E0FA12C2B54D2FC001CEEB9 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 9E0FA12B2B54D2FC001CEEB9 /* .gitignore */; };
 		9E1D9DBB2B87659100651F6E /* AppStoreUpdateChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1D9DBA2B87659100651F6E /* AppStoreUpdateChecker.swift */; };
-		9E25C2C72B7A79E000B04BA1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9E25C2C62B7A79DF00B04BA1 /* GoogleService-Info.plist */; };
 		9E25C2CD2B7B454000B04BA1 /* EnvironmentValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E25C2CC2B7B454000B04BA1 /* EnvironmentValues.swift */; };
 		9E25C2D12B7B8F8A00B04BA1 /* CryptoUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E25C2D02B7B8F8A00B04BA1 /* CryptoUtils.swift */; };
 		9E28934C2B7E9314009A7D40 /* DeleteAccountButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E28934B2B7E9314009A7D40 /* DeleteAccountButtonView.swift */; };
@@ -38,7 +41,6 @@
 		9E7E05BB2B7DE96500ACF177 /* OfficialLetter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7E05BA2B7DE96500ACF177 /* OfficialLetter.swift */; };
 		9E7F8C782B5E69B000F1A6BF /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7F8C772B5E69B000F1A6BF /* StorageManager.swift */; };
 		9E865CC52B839CC300CD7CAD /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E865CC42B839CC300CD7CAD /* NotificationManager.swift */; };
-		9E93042D2B745DF1000B7F75 /* Shop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E93042C2B745DF1000B7F75 /* Shop.swift */; };
 		9E93042F2B74A4B5000B7F75 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E93042E2B74A4B5000B7F75 /* View.swift */; };
 		9E9A8BE02B6AB09D0072CB75 /* PJ3T3-Postie-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9E9A8BDF2B6AB09D0072CB75 /* PJ3T3-Postie-Info.plist */; };
 		9E9A8BE32B6B51940072CB75 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 9E9A8BE22B6B51940072CB75 /* GoogleSignIn */; };
@@ -129,6 +131,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		019035572B7B38080080B370 /* Shop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shop.swift; sourceTree = "<group>"; };
+		019035592B7B38690080B370 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		0E29F0D22B5ED136005B86FB /* MapApiKeys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = MapApiKeys.plist; sourceTree = "<group>"; };
 		0E29F0D72B5FA2FC005B86FB /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		0E29F0DA2B5FDC0F005B86FB /* NaverMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverMap.swift; sourceTree = "<group>"; };
@@ -148,7 +152,6 @@
 		9E0FA1292B54D2EF001CEEB9 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		9E0FA12B2B54D2FC001CEEB9 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		9E1D9DBA2B87659100651F6E /* AppStoreUpdateChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStoreUpdateChecker.swift; sourceTree = "<group>"; };
-		9E25C2C62B7A79DF00B04BA1 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		9E25C2CC2B7B454000B04BA1 /* EnvironmentValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvironmentValues.swift; sourceTree = "<group>"; };
 		9E25C2D02B7B8F8A00B04BA1 /* CryptoUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoUtils.swift; sourceTree = "<group>"; };
 		9E28934B2B7E9314009A7D40 /* DeleteAccountButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteAccountButtonView.swift; sourceTree = "<group>"; };
@@ -161,7 +164,6 @@
 		9E7E05BA2B7DE96500ACF177 /* OfficialLetter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfficialLetter.swift; sourceTree = "<group>"; };
 		9E7F8C772B5E69B000F1A6BF /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		9E865CC42B839CC300CD7CAD /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
-		9E93042C2B745DF1000B7F75 /* Shop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shop.swift; sourceTree = "<group>"; };
 		9E93042E2B74A4B5000B7F75 /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		9E9A8BDF2B6AB09D0072CB75 /* PJ3T3-Postie-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "PJ3T3-Postie-Info.plist"; sourceTree = SOURCE_ROOT; };
 		9E9A8BE82B6B704E0072CB75 /* GoogleSignInHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSignInHelper.swift; sourceTree = "<group>"; };
@@ -299,7 +301,7 @@
 				9E9F6AA12B5761C5003DFE83 /* Model */,
 				9E0FA1212B54D27C001CEEB9 /* Preview Content */,
 				9E0FA11F2B54D27C001CEEB9 /* Assets.xcassets */,
-				9E25C2C62B7A79DF00B04BA1 /* GoogleService-Info.plist */,
+                019035592B7B38690080B370 /* GoogleService-Info.plist */,
 				9E9A8BDF2B6AB09D0072CB75 /* PJ3T3-Postie-Info.plist */,
 				9E9A8BF52B70B6790072CB75 /* PJ3T3_Postie.entitlements */,
 			);
@@ -323,7 +325,7 @@
 				9EA106762B63C5C90033E7A8 /* LetterPhoto.swift */,
 				9E7E05BA2B7DE96500ACF177 /* OfficialLetter.swift */,
 				9E9A8BF02B6B85640072CB75 /* PostieUser.swift */,
-				9E93042C2B745DF1000B7F75 /* Shop.swift */,
+				019035572B7B38080080B370 /* Shop.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -714,7 +716,7 @@
 				CE5FF9272B6CF8A400DDA5BF /* NanumMyeongjo.otf in Resources */,
 				E3EECAF02B5F957A00E639F2 /* SourceSerifPro-Black.otf in Resources */,
 				9E0FA1232B54D27C001CEEB9 /* Preview Assets.xcassets in Resources */,
-				9E25C2C72B7A79E000B04BA1 /* GoogleService-Info.plist in Resources */,
+				0190355A2B7B38690080B370 /* GoogleService-Info.plist in Resources */,
 				9E0FA1202B54D27C001CEEB9 /* Assets.xcassets in Resources */,
 				E3EECAF22B5F958300E639F2 /* SourceSerifPro-Light.otf in Resources */,
 			);
@@ -792,7 +794,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9E078CC02B7207660072E5FC /* AppleUser.swift in Sources */,
+				011DF2D12B87A1EF00CFA148 /* ProfileEditView.swift in Sources */,
+				011DF2D02B87A1EB00CFA148 /* MembershipView.swift in Sources */,
+				019035552B7B36340080B370 /* AppleUser.swift in Sources */,
 				0E882AF12B6B907200D8F2FC /* AuthManager.swift in Sources */,
 				E3CD1CA42B872C7D009D96A5 /* GroupedMyListLetterView.swift in Sources */,
 				E349F8712B6918B500253B02 /* ThemeView.swift in Sources */,
@@ -831,12 +835,10 @@
 				9E9F6AC42B57639D003DFE83 /* ShopViewModel.swift in Sources */,
 				9E7E057B2B7CC37800ACF177 /* AuthCaseHelper.swift in Sources */,
 				9E9A8BE92B6B704E0072CB75 /* GoogleSignInHelper.swift in Sources */,
-				E3B41DA62B730E0300CB9E7A /* ProfileEditView.swift in Sources */,
 				CEF09E452B57B6C500BE67E4 /* UIImagePicker.swift in Sources */,
 				E349F88A2B6B7DA500253B02 /* GroupedListLetterView.swift in Sources */,
 				0E29F0DD2B5FDC6A005B86FB /* Coordinator.swift in Sources */,
 				9E9F6AC22B576393003DFE83 /* MapApi.swift in Sources */,
-				9E93042D2B745DF1000B7F75 /* Shop.swift in Sources */,
 				9E25C2D12B7B8F8A00B04BA1 /* CryptoUtils.swift in Sources */,
 				9E7E05B52B7DE54200ACF177 /* FirestoreShopManager.swift in Sources */,
 				0E882AF02B6B79D800D8F2FC /* CoordinaterEtc.swift in Sources */,
@@ -852,6 +854,7 @@
 				9E28934C2B7E9314009A7D40 /* DeleteAccountButtonView.swift in Sources */,
 				CE4F1AD42B7CE06D00FE7CF6 /* EditLetterViewModel.swift in Sources */,
 				E349F8862B6B672E00253B02 /* ListLetterView.swift in Sources */,
+				019035582B7B38080080B370 /* Shop.swift in Sources */,
 				E3EECAF52B5FD2E100E639F2 /* ProfileView.swift in Sources */,
 				9EBAFDC42B70ED900020EE6F /* AppleSignInHelper.swift in Sources */,
 				9E9F6ABE2B576358003DFE83 /* MapViewModel.swift in Sources */,
