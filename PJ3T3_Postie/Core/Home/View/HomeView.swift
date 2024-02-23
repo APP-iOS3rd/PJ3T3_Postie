@@ -299,7 +299,7 @@ struct AddLetterButton: View {
     
     var body: some View {
         Menu {
-            NavigationLink(destination: AddLetterView(isReceived: false)) {
+            NavigationLink(destination: SlowPostBoxView(isReceived: false)) {
                 Label("나의 느린 우체통", systemImage: "envelope.open.badge.clock")
             }
             
