@@ -64,14 +64,45 @@ struct LetterImageFullScreenView: View {
                             dismiss()
                         } label: {
                             Image(systemName: "xmark")
+                                .foregroundStyle(.postieWhite)
                         }
                     }
                 }
+                .modifier(SwipeToDismissModifier(onDismiss: {
+                    dismiss()
+                }))
             }
         }
     }
 }
 
-//#Preview {
-//    LetterImageFullScreenView()
-//}
+struct SwipeToDismissModifier: ViewModifier {
+    var onDismiss: () -> Void
+    @State private var offset: CGSize = .zero
+
+    func body(content: Content) -> some View {
+        content
+            .offset(y: offset.height)
+            .animation(.interactiveSpring(), value: offset)
+            .simultaneousGesture(
+                DragGesture()
+                    .onChanged { gesture in
+                        if gesture.translation.width < 50 {
+                            offset = gesture.translation
+                        }
+                    }
+                    .onEnded { _ in
+                        if abs(offset.height) > 100 {
+                            onDismiss()
+                        } else {
+                            offset = .zero
+                        }
+                    }
+            )
+    }
+}
+
+
+#Preview {
+    LetterImageFullScreenView(images: [UIImage(systemName: "heart")!], urls: nil, pageIndex: .constant(0))
+}
