@@ -337,9 +337,9 @@ struct LoadingModifier: ViewModifier {
             if isLoading {
                 content
                     .disabled(isLoading)
-                    .blur(radius: isLoading ? 3 : 0)
 
                 LoadingView(text: text)
+                    .background(ClearBackground())
             } else {
                 content
             }
