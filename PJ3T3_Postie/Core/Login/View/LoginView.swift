@@ -40,7 +40,7 @@ struct LoginView: View {
                             .scaledToFit()
                             .frame(width: 152)
                         
-                        Text("내 손안의 편지 보관함\n언제 어디서나")
+                        Text("손으로 쓴 감동 \n 내 손안의 편지 보관함")
                             .foregroundStyle(postieColors.dividerColor)
                             .padding(.bottom, geometry.size.height > 700 ? 48 : 28)
                             .multilineTextAlignment(.center)
