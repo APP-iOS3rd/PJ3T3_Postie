@@ -180,7 +180,6 @@ class EditLetterViewModel: ObservableObject {
 
         guard let urls = letter.imageURLs, let fullPaths = letter.imageFullPaths else { return }
         fullPathsAndUrls = zip(urls, fullPaths).map { FullPathAndUrl(fullPath: $0.1, url: $0.0) }
-        print(fullPathsAndUrls)
     }
 
     func getSummary(isReceived: Bool) async {
