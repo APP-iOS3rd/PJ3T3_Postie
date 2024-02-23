@@ -25,7 +25,7 @@ struct LetterDetailView: View {
             ThemeManager.themeColors[isThemeGroupButton].backGroundColor
                 .ignoresSafeArea()
             
-            VStack {
+            VStack(spacing: 16) {
                 Page(letter: $firestoreManager.letter)
 
                 letterSummarySection

@@ -98,6 +98,8 @@
 		CE67D55E2B58FF8500C0050B /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE67D55D2B58FF8500C0050B /* String.swift */; };
 		CE6E08452B5E09D900CFBF2A /* LetterDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6E08442B5E09D800CFBF2A /* LetterDetailViewModel.swift */; };
 		CE7E50782B579D6800955F31 /* AddLetterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7E50772B579D6800955F31 /* AddLetterViewModel.swift */; };
+		CE8E67092B8715E50090A6EE /* SlowPostBoxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8E67082B8715E50090A6EE /* SlowPostBoxView.swift */; };
+		CE8E670B2B87163B0090A6EE /* SlowPostBoxViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8E670A2B87163B0090A6EE /* SlowPostBoxViewModel.swift */; };
 		CEF09E452B57B6C500BE67E4 /* UIImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF09E442B57B6C500BE67E4 /* UIImagePicker.swift */; };
 		CEF09E472B57BD8500BE67E4 /* LetterImageFullScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF09E462B57BD8500BE67E4 /* LetterImageFullScreenView.swift */; };
 		CEF09E492B57BFBF00BE67E4 /* TextRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF09E482B57BFBF00BE67E4 /* TextRecognizer.swift */; };
@@ -200,6 +202,8 @@
 		CE67D55D2B58FF8500C0050B /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		CE6E08442B5E09D800CFBF2A /* LetterDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterDetailViewModel.swift; sourceTree = "<group>"; };
 		CE7E50772B579D6800955F31 /* AddLetterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLetterViewModel.swift; sourceTree = "<group>"; };
+		CE8E67082B8715E50090A6EE /* SlowPostBoxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlowPostBoxView.swift; sourceTree = "<group>"; };
+		CE8E670A2B87163B0090A6EE /* SlowPostBoxViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlowPostBoxViewModel.swift; sourceTree = "<group>"; };
 		CEF09E442B57B6C500BE67E4 /* UIImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImagePicker.swift; sourceTree = "<group>"; };
 		CEF09E462B57BD8500BE67E4 /* LetterImageFullScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterImageFullScreenView.swift; sourceTree = "<group>"; };
 		CEF09E482B57BFBF00BE67E4 /* TextRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextRecognizer.swift; sourceTree = "<group>"; };
@@ -405,6 +409,7 @@
 				CE6E08442B5E09D800CFBF2A /* LetterDetailViewModel.swift */,
 				CEF09E482B57BFBF00BE67E4 /* TextRecognizer.swift */,
 				E36587AA2B7E34E400584965 /* GroupedLetterViewModel.swift */,
+				CE8E670A2B87163B0090A6EE /* SlowPostBoxViewModel.swift */,
 				E36587AC2B7E6ED200584965 /* SummaryApi.swift */,
 			);
 			path = ViewModel;
@@ -425,6 +430,7 @@
 				E349F8852B6B672E00253B02 /* ListLetterView.swift */,
 				CE67D55B2B58E9F700C0050B /* PageViewController.swift */,
 				9E5889E22B72221B00B4AD20 /* SearchView.swift */,
+				CE8E67082B8715E50090A6EE /* SlowPostBoxView.swift */,
 				CEF09E442B57B6C500BE67E4 /* UIImagePicker.swift */,
 			);
 			path = View;
@@ -836,6 +842,7 @@
 				0E882AF02B6B79D800D8F2FC /* CoordinaterEtc.swift in Sources */,
 				CE4F1AD22B7CDF8800FE7CF6 /* EditLetterView.swift in Sources */,
 				0E882AEE2B6B73DE00D8F2FC /* LocationManager.swift in Sources */,
+				CE8E670B2B87163B0090A6EE /* SlowPostBoxViewModel.swift in Sources */,
 				E36587A92B7C44EB00584965 /* AlertView.swift in Sources */,
 				9E9F6AD42B576411003DFE83 /* LetterDetailView.swift in Sources */,
 				E3D466DB2B733B5B00DFE93F /* MembershipView.swift in Sources */,
@@ -858,6 +865,7 @@
 				E39C35F12B71F820001F6E5F /* ContenViewModel.swift in Sources */,
 				9E9F6ACA2B5763B8003DFE83 /* LoginView.swift in Sources */,
 				9E7E05BB2B7DE96500ACF177 /* OfficialLetter.swift in Sources */,
+				CE8E67092B8715E50090A6EE /* SlowPostBoxView.swift in Sources */,
 				E349F8882B6B673C00253B02 /* GroupedLetterView.swift in Sources */,
 				9E25C2CD2B7B454000B04BA1 /* EnvironmentValues.swift in Sources */,
 				9E46837C2B7BBBA100EFB90B /* LoadingView.swift in Sources */,
