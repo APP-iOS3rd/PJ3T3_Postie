@@ -61,7 +61,7 @@ struct LetterItemView: View {
                             .font(.custom("SourceSerifPro-Black", size: 18))
                             .foregroundColor(postieColors.tabBarTintColor)
                         
-                        Text("\(letter.recipient)")
+                        Text(!letter.isReceived ? "\(letter.recipient)" : "\(letter.writer)")
                             .foregroundColor(postieColors.tabBarTintColor)
                         
                         Spacer()

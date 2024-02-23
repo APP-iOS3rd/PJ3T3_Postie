@@ -125,7 +125,7 @@ struct PersonGridView: View {
     var person: Person
     
     var body: some View {
-        Link(destination: URL(string: person.link)!) {
+//        Link(destination: URL(string: person.link)!) {
             VStack {
                 ZStack {
                     Rectangle()
@@ -149,7 +149,7 @@ struct PersonGridView: View {
                     .foregroundStyle(.postieWhite)
                 }
             }
-        }
+//        }
     }
 }
 

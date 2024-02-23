@@ -273,7 +273,7 @@ struct SideMenuView: View {
                 
                 Spacer()
                 
-                Text("COPYRIGHT 2024 ComeOn12 RIGHTS RESERVED")
+                Text("COPYRIGHT 2024 Team Postie RIGHTS RESERVED")
                     .font(.caption2)
                     .foregroundStyle(postieColors.dividerColor)
             }

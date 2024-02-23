@@ -102,34 +102,34 @@ struct ProfileView: View {
                             .padding(.bottom)
                             .padding(.leading, 3)
                         
-                        Text("구독정보")
-                            .font(.subheadline)
-                            .foregroundStyle(postieColors.tintColor)
-                            .padding(.leading, 3)
-                        
-                        DividerView()
-                            .padding(.bottom, 3)
-                        
-                        Button {
-                            isshowingMembershipView = true
-                        } label: {
-                            HStack {
-                                Text("일반회원")
-                                    .foregroundStyle(postieColors.tabBarTintColor)
-                                    .padding(.bottom)
-                                    .padding(.leading, 3)
-                                
-                                Spacer()
-                                
-                                Image(systemName: "chevron.right")
-                                    .foregroundStyle(postieColors.dividerColor)
-                            }
-                        }
-                        .fullScreenCover(isPresented: $isshowingMembershipView) {
-                            // 멤버십 뷰, 실제 배포시에는 사라질 수도 있음
-                            MembershipView()
-                        }
-                        
+//                        Text("구독정보")
+//                            .font(.subheadline)
+//                            .foregroundStyle(postieColors.tintColor)
+//                            .padding(.leading, 3)
+//                        
+//                        DividerView()
+//                            .padding(.bottom, 3)
+//                        
+//                        Button {
+//                            isshowingMembershipView = true
+//                        } label: {
+//                            HStack {
+//                                Text("일반회원")
+//                                    .foregroundStyle(postieColors.tabBarTintColor)
+//                                    .padding(.bottom)
+//                                    .padding(.leading, 3)
+//                                
+//                                Spacer()
+//                                
+//                                Image(systemName: "chevron.right")
+//                                    .foregroundStyle(postieColors.dividerColor)
+//                            }
+//                        }
+//                        .fullScreenCover(isPresented: $isshowingMembershipView) {
+//                            // 멤버십 뷰, 실제 배포시에는 사라질 수도 있음
+//                            MembershipView()
+//                        }
+//                        
                         Text("계정 관리")
                             .font(.subheadline)
                             .foregroundStyle(postieColors.tintColor)
