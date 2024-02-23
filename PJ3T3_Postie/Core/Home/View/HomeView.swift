@@ -88,6 +88,7 @@ struct HomeView: View {
                         .background(postieColors.backGroundColor)
                         .disabled(isMenuActive)
                         .padding(.horizontal)
+                        .padding(.top)
                         
                         ZStack(alignment: .bottomTrailing) {
                             ScrollViewReader { value in

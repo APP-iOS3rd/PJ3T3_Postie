@@ -23,35 +23,6 @@ struct GroupedMyListLetterView: View {
             postieColors.backGroundColor
                 .ignoresSafeArea()
             
-            if filteredMyLetters.count == 0 {
-                HStack {
-                    Spacer()
-                    
-                    VStack {
-                        Spacer()
-                        
-                        Image(isThemeGroupButton == 4 ? "postySmileSketchWhite" : "postySmileSketch")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 300)
-                            .opacity(0.5)
-                            .padding(.bottom)
-                        
-                        Text("나와 주고받은 편지가 없어요..")
-                            .font(.headline)
-                            .foregroundStyle(postieColors.tintColor)
-                        
-                        Text("나의 느린 우체통 기능을 사용해보세요!")
-                            .foregroundStyle(postieColors.dividerColor)
-                        
-                        Spacer()
-                    }
-                    .padding()
-                    
-                    Spacer()
-                }
-            }
-            
             ScrollView {
                 ForEach(filteredMyLetters, id: \.self) { letter in
                     Button(action: {
