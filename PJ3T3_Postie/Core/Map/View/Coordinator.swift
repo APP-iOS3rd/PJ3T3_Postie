@@ -29,7 +29,7 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate {
     @Published var currentLocation: CLLocation?
     @Published var isUpdatingLocation: Bool = false
     @Published var cameraLocation: NMGLatLng?
-    @Published var checkMyLocation: Bool = true
+//    @Published var checkMyLocation: Bool = true
     
     override init() {
         super.init()
@@ -107,9 +107,9 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate {
         
         
         // 뷰 업데이트가 완료된 후에 checkMyLocation을 변경
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                self.checkMyLocation = false
-            }
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+//                self.checkMyLocation = false
+//            }
     }
     
     // 카메라 위치 이동
@@ -117,7 +117,7 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate {
         let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: latitude, lng: longitude), zoomTo: 15)
         // 뷰 업데이트가 완료된 후에 checkMyLocation을 변경
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                self.checkMyLocation = false
+//                self.checkMyLocation = false
             }
         
         print("움직인다 움직여 \(coord)")

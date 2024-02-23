@@ -27,8 +27,8 @@ struct MapView: View {
     @State private var isSideMenuOpen = false
     @State private var isKeyboardVisible = false
     @State private var searchText = ""
-    @State private var showButton = true
-//    @State private var CheckMyLocation = false
+    @State private var showButton = false
+    @State private var checkMyLocation = false
     @State private var checkAlert = false
     @State var coord: MyCoord = MyCoord(37.579081, 126.974375) //Dafult값 (서울역)
     
@@ -186,10 +186,12 @@ struct MapView: View {
                                     // 내 위치
                                     locationManager.startUpdatingLocation()
                                     
-                                    coordinator.cameraLocation?.lat = (locationManager.location!.coordinate.latitude)
-                                    coordinator.cameraLocation?.lng = (locationManager.location!.coordinate.longitude)
+                                    coordinator.cameraLocation?.lat = (locationManager.location?.coordinate.latitude ?? coordinator.cameraLocation?.lat)!
+                                    coordinator.cameraLocation?.lng = (locationManager.location?.coordinate.longitude ?? coordinator.cameraLocation?.lng)!
                                     
                                     coordinator.updateMapView(coord: MyCoord(coordinator.cameraLocation!.lat, coordinator.cameraLocation!.lng))
+                                    
+                                    checkMyLocation = false
                                 }) {
                                     ZStack {
                                         RoundedRectangle(cornerRadius: 6)
@@ -201,9 +203,11 @@ struct MapView: View {
                                             .scaledToFill()
                                             .frame(width: 27, height: 20)
                                             .clipShape(Circle())
-                                            .foregroundColor(.blue)
+                                            .foregroundColor(checkMyLocation ? .blue : .gray)
                                     }
                                 }
+                                .disabled(!checkMyLocation)
+                                
                                 Spacer()
                             }
                             .padding(.bottom, 25)
@@ -243,7 +247,7 @@ struct MapView: View {
                 loadInitialData()
         }
         .onChange(of: officeInfoServiceAPI.infos) { newInfos in
-            coordinator.removeAllMakers()
+//            coordinator.removeAllMakers()
             
             for result in newInfos {
                 var lunchtime: String = ""
@@ -258,6 +262,7 @@ struct MapView: View {
         
         .onChange(of: coordinator.cameraLocation) { result in
             self.showButton = true
+            self.checkMyLocation = true
         }
         
         //초기 화면이 열리 때 위치값을 불러온다.
