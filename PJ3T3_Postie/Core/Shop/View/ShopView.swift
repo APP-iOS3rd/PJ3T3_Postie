@@ -39,19 +39,20 @@ struct ShopView: View {
     @ObservedObject private var shopViewModel = FirestoreShopManager.shared
     
     var body: some View {
-        NavigationStack {
+        NavigationView {
             ZStack {
                 postieColors.backGroundColor
                     .ignoresSafeArea()
                 
                 VStack(spacing: 0) {
-                    HStack {
+                    HStack(spacing: 10) {
                         Text("Letter Shop")
                             .font(.custom("SourceSerifPro-Black", size: 40))
                             .foregroundStyle(postieColors.tintColor)
                         
                         Spacer()
                     }
+
                     // 카테고리 버튼
                     ScrollView(.horizontal, showsIndicators: false, content: {
                         HStack(spacing: 10) {
@@ -63,9 +64,9 @@ struct ShopView: View {
                                         if selectedButtonIndex == index {
                                             Rectangle()
                                                 .foregroundColor(.clear)
-                                                .frame(width: 70, height: 30)
+                                                .frame(width: 72, height: 30)
                                                 .background(postieColors.tintColor)
-                                                .cornerRadius(16)
+                                                .cornerRadius(20)
                                                 } else {
                                                     Rectangle()
                                                         .foregroundColor(.clear)
@@ -76,8 +77,8 @@ struct ShopView: View {
                                                 }
                                         
                                         Text(postDivision[index])
-                                            .font(Font.custom("SF Pro Text", size: 12))
-                                            .bold()
+                                            .font(.caption)
+                                            .fontWeight(selectedButtonIndex == index ? .bold : .regular)
                                             .multilineTextAlignment(.center)
                                             .foregroundColor(selectedButtonIndex == index ? postieColors.receivedLetterColor : postieColors.tabBarTintColor)
                                             .frame(width: 60, alignment: .center)
@@ -85,7 +86,7 @@ struct ShopView: View {
                                 }
                             }
                         }
-                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 10))  //스크롤에 대한 간격 넓히기
+                        .padding(EdgeInsets(top: 5, leading: 0, bottom: 10, trailing: 10))  //스크롤에 대한 간격 넓히기
                     })
                     
                     ScrollView {
@@ -97,6 +98,8 @@ struct ShopView: View {
                     }
                 }
                 .padding()
+                Spacer()
+                
             }
         }
     }

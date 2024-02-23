@@ -53,7 +53,7 @@ struct MapView: View {
                         
                         Spacer()
                     }
-                    .padding(.horizontal)
+                    .padding(.horizontal) // 옆에 리인 맞춤
                     .padding(.top)
 
                     HStack(spacing: 10) {
@@ -73,14 +73,15 @@ struct MapView: View {
                                         .font(.caption)
                                         .fontWeight(selectedButtonIndex == index ? .bold : .regular)
                                         .multilineTextAlignment(.center)
-                                        .foregroundColor(selectedButtonIndex == index ? Color.postieWhite : Color.postieBlack)
+                                        .foregroundColor(selectedButtonIndex == index ? postieColors.receivedLetterColor : postieColors.tabBarTintColor)
                                         .frame(width: 60, alignment: .top)
                                 }
                             }
                         }
                         Spacer()
                     }
-                    .padding()
+                    .padding(EdgeInsets(top: 5, leading: 15, bottom: 10, trailing: 0)) 
+//                    .padding()
                     
                     HStack() {
                         Spacer(minLength: 10)
@@ -111,7 +112,7 @@ struct MapView: View {
                                     }
                                 }
                             }
-                            .alert("위치 정보가 잘못되었습니다.", isPresented: $checkAlert) {
+                            .alert("검색어 안내.", isPresented: $checkAlert) {
                                 Button("확인", role: .cancel) {
                                     
                                 }
@@ -217,6 +218,7 @@ struct MapView: View {
                     }
                 }
                 Spacer()
+                    
             }
             .toolbar {
                 ToolbarItemGroup(placement: .keyboard) {

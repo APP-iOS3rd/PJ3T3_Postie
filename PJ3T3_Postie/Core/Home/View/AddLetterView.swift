@@ -138,16 +138,16 @@ struct AddLetterView: View {
         } message: {
             Text("편지 요약에 실패했어요. 직접 요약해주세요.")
         }
-        .alert("작성을 취소하실 건가요?", isPresented: $addLetterViewModel.showingDismissAlert) {
-            Button("아니요", role: .cancel) {
+        .alert("편지 작성을 그만두시겠어요?", isPresented: $addLetterViewModel.showingDismissAlert) {
+            Button("그만할래요", role: .cancel) {
 
             }
 
-            Button("네", role: .destructive) {
+            Button("계속 쓸래요", role: .destructive) {
                 dismiss()
             }
         } message: {
-            Text("변경된 내용이 저장되지 않아요!")
+            Text("작성을 그만두면 내용이 사라져요")
         }
         .confirmationDialog("편지 사진 가져오기", isPresented: $addLetterViewModel.showingImageConfirmationDialog, titleVisibility: .visible) {
             Button {
