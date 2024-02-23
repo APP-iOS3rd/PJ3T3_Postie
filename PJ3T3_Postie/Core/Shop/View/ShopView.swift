@@ -7,25 +7,26 @@
 
 import SwiftUI
 import SafariServices
+import Kingfisher
 
 struct ShopView: View {
     let columns: [GridItem] = [
         GridItem(.flexible(), spacing: 9, alignment: .center),
         GridItem(.flexible(), spacing: 9, alignment: .center)
     ]
-    let postDivision: [String] = ["캐릭터", "심플", "일러스트", "풍경", "맞춤제작"]
+    let postDivision: [String] = ["심플", "일러스트", "캐릭터", "커스텀", "풍경"]
     var filteredLetters: [Shop] {
         switch selectedButtonIndex {
         case 0:
-            return shopViewModel.shops.filter { $0.category == "character" }
-        case 1:
             return shopViewModel.shops.filter { $0.category == "simple" }
-        case 2:
+        case 1:
             return shopViewModel.shops.filter { $0.category == "illustration" }
+        case 2:
+            return shopViewModel.shops.filter { $0.category == "character" }
         case 3:
-            return shopViewModel.shops.filter { $0.category == "sight" }
+            return shopViewModel.shops.filter { $0.category == "custom" }
         case 4:
-            return shopViewModel.shops.filter { $0.category == "selfOrder" }
+            return shopViewModel.shops.filter { $0.category == "sight" }
             // 추가적인 카테고리에 대한 필터링 추가
         default:
             return []
@@ -35,7 +36,7 @@ struct ShopView: View {
     @State private var safariURL: String?
     @State private var selectedButtonIndex: Int = 0
     @State private var showDetails = false
-    @ObservedObject private var shopViewModel = ShopViewModel()
+    @ObservedObject private var shopViewModel = FirestoreShopManager.shared
     
     var body: some View {
         NavigationStack {
@@ -65,11 +66,7 @@ struct ShopView: View {
                                                 .frame(width: 70, height: 30)
                                                 .background(postieColors.tintColor)
                                                 .cornerRadius(16)
-                                                .overlay(
-                                                    RoundedRectangle(cornerRadius: 16)
-                                                        .inset(by: 0.5)
-                                                        .stroke(Color(red: 0.45, green: 0.45, blue: 0.45), lineWidth: 1)
-                                                )} else {
+                                                } else {
                                                     Rectangle()
                                                         .foregroundColor(.clear)
                                                         .frame(width: 72, height: 30)
@@ -103,7 +100,7 @@ struct ShopView: View {
             }
         }
         .onAppear() {
-            shopViewModel.fetchData()
+            shopViewModel.fetchAllShops()
             
         }
     }
@@ -123,15 +120,13 @@ struct ShopButton: View {
             safariURL = shop.shopUrl
         }) {
             ZStack {
-                AsyncImage(url: URL(string: shop.thumbUrl)) { image in
-                    image
-                        .resizable()
-                        .scaledToFill() //이미지 비율 조정
-                        .clipped()
-                        .cornerRadius(15)
-                } placeholder: {
-                    ProgressView()
-                }
+                KFImage(URL(string: shop.thumbUrl))
+                    .resizable()
+                    .placeholder({
+                        ProgressView()
+                    })
+                    .scaledToFill()
+                    .clipShape(RoundedRectangle(cornerRadius: 15))
                 
                 VStack {
                     Spacer()
@@ -154,12 +149,15 @@ struct ShopButton: View {
                         }
                     }
                 }
+                
             }
-            .sheet(item: $safariURL) { url in
-                if let url = URL(string: url) {
-                    SafariView(url: url)
-                        .ignoresSafeArea() //외부링크가 화면에 맞게 조절
-                }
+            
+            
+        }
+        .sheet(item: $safariURL) { url in
+            if let url = URL(string: url) {
+                SafariView(url: url)
+                    .ignoresSafeArea() //외부링크가 화면에 맞게 조절
             }
         }
     }
