@@ -16,12 +16,12 @@ protocol AuthenticationProtocol {
 class AuthManager: ObservableObject {
     static let shared = AuthManager()
     var userUid: String  = ""
-    var hasAccount: Bool = true
-    var authDataResult: AuthDataResult?
     var provider: AuthProviderOption?
+    @Published var hasAccount: Bool = true
     @Published var userSession: FirebaseAuth.User? //Firebase user object
     @Published var currentUser: PostieUser? //User Data Model
     @Published var credential: OAuthCredential?
+    @Published var authDataResult: AuthDataResult?
     
     private init() {
         Task {
@@ -147,24 +147,19 @@ class AuthManager: ObservableObject {
         }
     }
     
-    func deleteAccount() {
-        self.userSession?.delete { error in
-            if let error = error {
-                print("DEBUG: Failed to remove account with error \(error.localizedDescription)")
-            } else {
-                guard let userUid = self.userSession?.uid else {
-                    print(#function, "Cannot get userUid from userSession")
-                    return
-                }
-                
-                FirestoreManager.shared.deleteUserDocument(userUid: userUid)
-                self.userSession = nil
-                self.currentUser = nil
-                
-                DispatchQueue.main.async {
-                    self.credential = nil
-                }
-            }
+    func deleteAccount() async throws {
+        try await self.userSession?.delete()
+        guard let userUid = self.userSession?.uid else {
+            print(#function, "Cannot get userUid from userSession")
+            return
+        }
+        
+        FirestoreManager.shared.deleteUserDocument(userUid: userUid)
+        
+        DispatchQueue.main.async {
+            self.userSession = nil
+            self.currentUser = nil
+            self.credential = nil
         }
     }
     
@@ -181,6 +176,21 @@ class AuthManager: ObservableObject {
                 //fatalError()는 앱이 종료되므로 사용하지 않기를 권장한다. fatalError, preconditionFailure와의 차이점은?
                 assertionFailure("Provider option not found: \(provider.providerID)")
             }
+        }
+    }
+    
+    func authErrorCodeConverter(error: NSError) throws {
+        let errorCode = AuthErrorCode.Code(rawValue: error.code)
+        
+        switch errorCode {
+        case .userMismatch:
+            throw AuthErrorCodeCase.userMismatch
+        case .requiresRecentLogin:
+            throw AuthErrorCodeCase.requiresRecentLogin
+        case .invalidCredential:
+            throw AuthErrorCodeCase.invalidCredential
+        default:
+            print(#function, "Failed to delete Google account AuthErrorCode: \(error)")
         }
     }
 }
@@ -202,6 +212,14 @@ extension AuthManager {
         let helper = GoogleSignInHelper()
         let tokens = try await helper.googleHelperSingIn()
         
+        if userSession != nil {
+            if tokens.email != userSession?.email {
+                throw AuthErrorCode(.userMismatch)
+            } else {
+                return GoogleAuthProvider.credential(withIDToken: tokens.idToken, accessToken: tokens.accessToken)
+            }
+        }
+        
         return GoogleAuthProvider.credential(withIDToken: tokens.idToken, accessToken: tokens.accessToken)
     }
     
@@ -209,10 +227,11 @@ extension AuthManager {
         do {
             let credential = try await signInWithGoogle()
             try await self.userSession?.reauthenticate(with: credential)
-            self.deleteAccount()
         } catch let error as NSError {
             if error.code == GIDSignInErrorCode.canceled.rawValue {
                 throw GIDSignInErrorCode.canceled
+            } else if let _ = AuthErrorCode.Code(rawValue: error.code) {
+                try authErrorCodeConverter(error: error)
             } else {
                 print(#function, "Failed to delete Google account: \(error)")
             }
@@ -225,16 +244,43 @@ extension AuthManager {
                                                         fullName: user.fullName)
     }
     
-    func deleteAppleAccount(authCodeString: String) async {
+    func reAuthAppleAccount(user: AppleUser) async throws {
+        let credential = OAuthProvider.appleCredential(withIDToken: user.token,
+                                                       rawNonce: user.nonce,
+                                                       fullName: user.fullName)
+        let authDataResult = try await signInWithSSO(credential: credential)
+        
+        DispatchQueue.main.async {
+            self.authDataResult = authDataResult
+        }
+    }
+    
+    func deleteAppleAccount(credential: OAuthCredential, authCodeString: String) async throws {
         do {
-            guard let credential = self.credential else {
-                print(#function, "Failed to get credential")
-                return
-            }
-            
             try await self.userSession?.reauthenticate(with: credential)
             try await Auth.auth().revokeToken(withAuthorizationCode: authCodeString)
-            self.deleteAccount()
+            try await self.deleteAccount()
+        } catch let error as NSError {
+            if let _ = AuthErrorCode.Code(rawValue: error.code) {
+                try authErrorCodeConverter(error: error)
+            } else {
+                print(#function, "Failed to delete Apple account: \(error)")
+            }
+        }
+    }
+    
+    func deleteAppleAccount(user: AppleUser, authCodeString: String) async {
+        let credential = OAuthProvider.appleCredential(withIDToken: user.token,
+                                                       rawNonce: user.nonce,
+                                                       fullName: user.fullName)
+        DispatchQueue.main.async {
+            self.credential = credential
+        }
+        
+        do {
+            try await self.userSession?.reauthenticate(with: credential)
+            try await Auth.auth().revokeToken(withAuthorizationCode: authCodeString)
+            try await self.deleteAccount()
         } catch {
             print(#function, "Failed to delete Apple account: \(error)")
         }
@@ -274,7 +320,7 @@ extension AuthManager {
             let credential = EmailAuthProvider.credential(withEmail: email, password: password)
             
             try await self.userSession?.reauthenticate(with: credential)
-            self.deleteAccount()
+            try await self.deleteAccount()
         } catch {
             print(#function, "Failed to reauth: \(error)")
         }

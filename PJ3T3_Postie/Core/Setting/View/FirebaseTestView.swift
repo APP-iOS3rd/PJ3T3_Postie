@@ -1,5 +1,5 @@
 //
-//  SettingView.swift
+//  FirebaseTestView.swift
 //  PJ3T3_Postie
 //
 //  Created by Eunsu JEONG on 1/17/24.
@@ -8,7 +8,7 @@
 import SwiftUI
 import PhotosUI //Storage test를 위한 import로 이후 삭제 예정
 
-struct SettingView: View {
+struct FirebaseTestView: View {
     @Environment(\.window) var window: UIWindow?
     @ObservedObject var authManager = AuthManager.shared
     @ObservedObject var appleSignInHelper = AppleSignInHelper.shared
@@ -19,6 +19,8 @@ struct SettingView: View {
     @State private var summary: String = ""
     @State private var isDeleteAccountDialogPresented = false
     @State private var showLoading = false
+    @State private var showAlert = false
+    @State private var alertBody = ""
     
     var body: some View {
         NavigationStack {
@@ -61,7 +63,7 @@ struct SettingView: View {
                     
                     Section("General") {
                         HStack {
-                            SettingsRowView(imageName: "gear", title: "Version", tintColor: profileBackgroundColor)
+                            FirebaseTestRowView(imageName: "gear", title: "Version", tintColor: profileBackgroundColor)
                             
                             Spacer()
                             
@@ -94,14 +96,21 @@ struct SettingView: View {
                         Button {
                             authManager.signOut()
                         } label: {
-                            SettingsRowView(imageName: "arrow.left.circle.fill", title: "Sign Out", tintColor: signOutIconColor)
+                            FirebaseTestRowView(imageName: "arrow.left.circle.fill", title: "Sign Out", tintColor: signOutIconColor)
                         }
                         
                         Button {
                             isDeleteAccountDialogPresented = true
                         } label: {
-                            SettingsRowView(imageName: "xmark.circle.fill", title: "Delete Account", tintColor: signOutIconColor)
+                            FirebaseTestRowView(imageName: "xmark.circle.fill", title: "Delete Account", tintColor: signOutIconColor)
                         }
+                    }
+                    .alert(isPresented: $showAlert) {
+                        let title = Text("탈퇴 실패")
+                        let message = Text(alertBody)
+                        let confirmButton = Alert.Button.cancel(Text("확인"))
+
+                        return Alert(title: title, message: message, dismissButton: confirmButton)
                     }
                     
                     NoticeTestView()
@@ -121,7 +130,7 @@ struct SettingView: View {
             appleSignInHelper.window = window
         }
         .confirmationDialog("포스티를 떠나시나요?", isPresented: $isDeleteAccountDialogPresented, titleVisibility: .visible) {
-            DeleteAccountButtonView(showLoading: $showLoading)
+            DeleteAccountButtonView(showLoading: $showLoading, showAlert: $showAlert, alertBody: $alertBody)
         } message: {
             Text("회원 탈퇴 시에는 계정과 프로필 정보, 그리고 등록된 모든 편지와 편지 이미지가 삭제되며 복구할 수 없습니다. 계정 삭제를 위해서는 재인증을 통해 다시 로그인 해야 합니다.")
         }
@@ -504,5 +513,5 @@ struct NoticeTestView: View {
 }
 
 #Preview {
-    SettingView()
+    FirebaseTestView()
 }

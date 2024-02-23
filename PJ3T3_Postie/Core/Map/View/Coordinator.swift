@@ -20,12 +20,12 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate {
     static let shared = Coordinator()
     
     let view = NMFNaverMapView(frame: .zero) // 지도 객체 생성
-//    let locationManager = CLLocationManager()
-//    let startInfoWindow = NMFInfoWindow()
+    //    let locationManager = CLLocationManager()
+    //    let startInfoWindow = NMFInfoWindow()
     
     var markers: [NMFMarker] = []
     var coord: MyCoord = MyCoord(0.0,0.0) // 내 위치값 초기 설정
-
+    
     @Published var currentLocation: CLLocation?
     @Published var isUpdatingLocation: Bool = false
     @Published var cameraLocation: NMGLatLng?
@@ -39,7 +39,7 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate {
         view.mapView.minZoomLevel = 10 // 최소 줌 레벨
         view.mapView.maxZoomLevel = 17 // 최대 줌 레벨
         
-        view.showLocationButton = true // 현위치 버튼: 위치 추적 모드를 표현합니다. 탭하면 모드가 변경됩니다.
+        view.showLocationButton = false // 현위치 버튼: 위치 추적 모드를 표현합니다. 탭하면 모드가 변경됩니다.
         view.showZoomControls = true // 줌 버튼: 탭하면 지도의 줌 레벨을 1씩 증가 또는 감소합니다.
         view.showCompass = true //  나침반 : 카메라의 회전 및 틸트 상태를 표현합니다. 탭하면 카메라의 헤딩과 틸트가 0으로 초기화됩니다. 헤딩과 틸트가 0이 되면 자동으로 사라집니다
         view.showScaleBar = true // 스케일 바 : 지도의 축척을 표현합니다. 지도를 조작하는 기능은 없습니다.
@@ -58,38 +58,36 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate {
     func mapView(_ mapView: NMFMapView, cameraIsChangingByReason reason: Int) {
         // 현재 지도 중심 좌표 가져오기
         cameraLocation = mapView.cameraPosition.target
-        
-//        print("change position")
-//        print(center)
-        // 값이 이동했는지 확인하는용
-//        DispatchQueue.main.async {
-//            print("바껴랏!! \(self.cameraLocation)")
-//            }
+    }
+    
+    func mapView(_ mapView: NMFMapView, cameraDidChangeByReason reason: Int) {
+        // 현재 지도 중심 좌표 가져오기
+        cameraLocation = mapView.cameraPosition.target
     }
     
     // 맵을 업데이트 -> 해당 위치에서 우체국 찾기 때 사용 예정
     func updateMapView(coord: MyCoord) {
-//        self.coord = coord
-
+        self.coord = coord //클래스 속성인 coord를 함수 인자로 전달된 값으로 변경
+        
         // NMGLatLng: 하나의 위경도 좌표를 나타내는 클래스
         // https://navermaps.github.io/ios-map-sdk/guide-ko/2-2.html
-        let coord = NMGLatLng(lat: coord.lat, lng: coord.lng)
+        let updatecoord = NMGLatLng(lat: coord.lat, lng: coord.lng)
         
-//        print(currentLocation ?? "못찾음")
-        moveCamera(coord: coord) //카메라 바로 이동
+        moveCamera(coord: updatecoord) //카메라 바로 이동
         
         // 마커와 정보 창을 새롭게 추가하기 위해 기존 내용을 삭제
         removeAllMakers()
         
         // 위치 오버레이
-        setLocationOverlay(coord: coord)
-
+        setLocationOverlay(coord: updatecoord)
+        
         // 정보창과 연결된 마커를 추가
-//        addMarkerAndInfoWindow(coord: coord,
-//                               caption: self.coord.name,
-//                               infoTitle: "정보 창 내용/마커를 탭하면 닫힘")
+        //        addMarkerAndInfoWindow(coord: coord,
+        //                               caption: self.coord.name,
+        //                               infoTitle: "정보 창 내용/마커를 탭하면 닫힘")
     }
     
+    //이건 뭐야
     func setLocationOverlay(coord: NMGLatLng) {
         let locationOverlay = view.mapView.locationOverlay
         locationOverlay.hidden = false
@@ -110,35 +108,35 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate {
         view.mapView.moveCamera(cameraUpdate)
     }
     
-    // 현재 위치 전달
-//    func getCurrentLocation() {
-//        // https://developer.apple.com/documentation/corelocation/cllocationmanager/1620548-requestlocation
-//        locationManager.requestLocation()
-//        currentLocation = locationManager.location
-//        print(currentLocation)
-//    }
+    // 내 위치 주변에 원 그리기
+    func drawCircleOvelay(center: NMGLatLng, radius: Double) {
+        let circleOverlay = NMFCircleOverlay()
+        circleOverlay.center = center
+        circleOverlay.radius = radius // 미터 단위
+        //        circleOverlay.fillColor = UIColor(red: 0, green: 0, blue: 1, alpha: 0.2) // 원의 내부 색상
+        circleOverlay.outlineWidth = 2 // 원의 외곽선 두께
+        circleOverlay.outlineColor = UIColor.blue // 원의 외곽선 색상
+        circleOverlay.mapView = view.mapView
+        let cameraUpdate = NMFCameraUpdate(fit: NMGLatLngBounds(southWest: NMGLatLng(lat: center.lat - 0.01, lng: center.lng - 0.01),
+                                                                northEast: NMGLatLng(lat: center.lat + 0.01, lng: center.lng + 0.01)))
+        view.mapView.moveCamera(cameraUpdate)
+    }
     
     // 마커 찍는 행위
     func addMarkerAndInfoWindow(latitude: Double, longitude: Double, caption: String, time: String, lunchtime: String) {
         let marker = NMFMarker()
         
         marker.captionText = caption
-        marker.iconTintColor = UIColor.red
-        marker.captionColor = UIColor.orange
+        //        marker.iconTintColor = UIColor.red
+        //        marker.captionColor = UIColor.orange
         marker.captionTextSize = 16
         marker.subCaptionText = "영업시간 \(time) \n 점심시간 \(lunchtime)"
         
         marker.position = NMGLatLng(lat: latitude, lng: longitude)
         marker.mapView = view.mapView
         markers.append(marker)
-        
-        //        let infoWindow = NMFInfoWindow()
-        //        let dataSource = NMFInfoWindowDefaultTextSource.data()
-        //        //시간 설정, 나중에 구현 예정
-        //        dataSource.title = time
-        //        infoWindow.dataSource = dataSource
     }
-    
+
     // 기존 마커 삭제
     func removeAllMakers() {
         markers.forEach { marker in

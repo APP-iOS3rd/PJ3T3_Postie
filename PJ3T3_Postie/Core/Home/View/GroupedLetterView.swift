@@ -39,7 +39,7 @@ struct GroupedLetterView: View {
         // 편지 데이터 정렬
         let sortedRecipients = sortedLetterData()
         // 좋아하는 편지들만 필터
-        let favoriteLetters = firestoreManager.letters.filter { $0.isFavorite }
+        let favoriteLetters = firestoreManager.letters.filter { $0.isFavorite }.sorted { $0.date < $1.date }
         
         VStack {
             NavigationLink { // 좋아하는 편지 뷰
@@ -47,6 +47,27 @@ struct GroupedLetterView: View {
             } label: {
                 HStack {
                     GroupedLetterItemView(firstWord: "My favorite.", title: "좋아하는 편지", content: "좋아하는 편지 꾸러미", isFavorite: true)
+                        .padding()
+                        .frame(width:homeWidth * 0.9, height: 130)
+                        .background(
+                            RoundedRectangle(cornerRadius: 4)
+                                .foregroundStyle(postieColors.receivedLetterColor)
+                                .shadow(color: .black.opacity(0.1), radius: 3, x: 3, y: 3)
+                        )
+                        .modifier(StackedRoundedRectangleModifier(count: favoriteLetters.count, groupWidth: homeWidth))
+                }
+                
+                Spacer()
+            }
+            .disabled(isMenuActive)
+            .padding(.horizontal)
+            .padding(.bottom, 8)
+            
+            NavigationLink { // 나의 느린 우체통
+                GroupedMyListLetterView()
+            } label: {
+                HStack {
+                    GroupedLetterItemView(firstWord: "Mine.", title: "나의 느린 우체통", content: "나와 주고받은 편지 꾸러미", isFavorite: false)
                         .padding()
                         .frame(width:homeWidth * 0.9, height: 130)
                         .background(
@@ -136,12 +157,14 @@ struct GroupedLetterItemView: View {
                     
                     Text("“")
                         .font(.custom("SairaStencilOne-Regular", size: 30))
+                        .foregroundStyle(postieColors.tabBarTintColor)
                     
                     Text(content)
                         .foregroundStyle(postieColors.tabBarTintColor)
                     
                     Text("”")
                         .font(.custom("SairaStencilOne-Regular", size: 30))
+                        .foregroundStyle(postieColors.tabBarTintColor)
                     
                     Spacer()
                 }

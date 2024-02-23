@@ -15,6 +15,10 @@ struct ProfileView: View {
     @State private var isSignOutAlert: Bool = false
     @State private var isshowingMembershipView = false
     @State private var isShowingProfileEditView = false
+    @State private var isDeleteAccountDialogPresented = false
+    @State private var showLoading = false
+    @State private var showAlert = false
+    @State private var alertBody = ""
     @Binding var profileImage: String
     @Binding var profileImageTemp: String
     
@@ -28,22 +32,35 @@ struct ProfileView: View {
                 
                 ScrollView {
                     VStack(alignment: .leading, spacing: 5) {
-                        HStack {
-                            Spacer()
-                            
-                            ZStack {
-                                Circle()
-                                    .frame(width: 170, height: 170)
-                                    .foregroundStyle(postieColors.profileColor)
+                        Button (action: {
+                            isShowingProfileEditView = true
+                            profileImageTemp = profileImage
+                        }) {
+                            HStack {
+                                Spacer()
                                 
-                                Image(profileImage)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 110, height: 110)
-                                    .offset(y: -10)
+                                ZStack {
+                                    Circle()
+                                        .frame(width: 170, height: 170)
+                                        .foregroundStyle(postieColors.profileColor)
+                                    
+                                    Image(profileImage)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 110, height: 110)
+                                        .offset(y: -10)
+                                    
+                                    Image(systemName: "pencil.circle.fill")
+                                        .font(.title)
+                                        .offset(x: 60, y: 60)
+                                }
+                                
+                                Spacer()
                             }
-                            
-                            Spacer()
+                        }
+                        .sheet(isPresented: $isShowingProfileEditView) {
+                            ProfileEditView(profileImage: $profileImage, profileImageTemp: $profileImageTemp)
+                                .presentationDetents([.medium, .large])
                         }
                         
                         Text("이름")
@@ -84,7 +101,7 @@ struct ProfileView: View {
                             .foregroundStyle(postieColors.tabBarTintColor)
                             .padding(.bottom)
                             .padding(.leading, 3)
-                             
+                        
                         Text("구독정보")
                             .font(.subheadline)
                             .foregroundStyle(postieColors.tintColor)
@@ -160,12 +177,19 @@ struct ProfileView: View {
                             }
                             
                             Button(role: .destructive) {
-                                authManager.signOut()
+                                isDeleteAccountDialogPresented = true
                             } label: {
                                 Text("확인")
                             }
                         } message: {
-                            Text("회원 탈퇴 시에는 계정과 프로필 정보, 그리고 등록된 모든 편지와 편지 이미지가 삭제되며 복구할 수 없습니다. 계정 삭제를 위해서는 재인증을 통해 다시 로그인 해야 합니다.")
+                            Text("회원 탈퇴 하시겠습니까?")
+                        }
+                        .alert(isPresented: $showAlert) {
+                            let title = Text("탈퇴 실패")
+                            let message = Text(alertBody)
+                            let confirmButton = Alert.Button.cancel(Text("확인"))
+
+                            return Alert(title: title, message: message, dismissButton: confirmButton)
                         }
                         
                         Spacer()
@@ -180,23 +204,19 @@ struct ProfileView: View {
                         .bold()
                         .foregroundStyle(postieColors.tintColor)
                 }
-                
-                ToolbarItemGroup(placement: .topBarTrailing) {
-                    Button (action: {
-                        isShowingProfileEditView = true
-                    }) {
-                        Text("수정")
-                            .foregroundStyle(postieColors.tabBarTintColor)
-                    }
-                    .sheet(isPresented: $isShowingProfileEditView) {
-                        ProfileEditView(profileImage: $profileImage, profileImageTemp: $profileImageTemp)
-                            .presentationDetents([.medium])
-                    }
-                }
             }
             .toolbarBackground(postieColors.backGroundColor, for: .navigationBar)
             .navigationBarTitleDisplayMode(.inline)
             .tint(postieColors.tabBarTintColor)
+            .confirmationDialog("포스티를 떠나시나요?", isPresented: $isDeleteAccountDialogPresented, titleVisibility: .visible) {
+                DeleteAccountButtonView(showLoading: $showLoading, showAlert: $showAlert, alertBody: $alertBody)
+            } message: {
+                Text("회원 탈퇴 시에는 계정과 프로필 정보, 그리고 등록된 모든 편지와 편지 이미지가 삭제되며 복구할 수 없습니다.\n계정 삭제를 위해서는 재인증을 통해 다시 로그인 해야 합니다.")
+            }
+            .fullScreenCover(isPresented: $showLoading) {
+                LoadingView(text: "저장된 편지들을 안전하게 삭제하는 중이에요")
+                    .background(ClearBackground())
+            }
         }
     }
 }
