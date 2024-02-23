@@ -25,6 +25,8 @@ class SlowPostBoxViewModel: ObservableObject {
     @Published var showingNotEnoughInfoAlert: Bool = false
     @Published var showingUploadErrorAlert: Bool = false
     @Published var showingSummaryErrorAlert: Bool = false
+    @Published var showingImageConfirmationDialog: Bool = false
+    @Published var showingSummaryConfirmationDialog: Bool = false
     @Published var shouldDismiss: Bool = false
     @Published var isLoading: Bool = false
     @Published var loadingText: String = "편지를 저장하고 있어요."
@@ -85,6 +87,14 @@ class SlowPostBoxViewModel: ObservableObject {
 
     func showDismissAlert() {
         showingDismissAlert = true
+    }
+
+    func showConfirmationDialog() {
+        showingImageConfirmationDialog = true
+    }
+
+    func showSummaryConfirmationDialog() {
+        showingSummaryConfirmationDialog = true
     }
 
     func uploadLetter() async {

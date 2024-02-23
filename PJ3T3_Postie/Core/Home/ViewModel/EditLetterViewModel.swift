@@ -25,6 +25,8 @@ class EditLetterViewModel: ObservableObject {
     @Published var showingSummaryTextField: Bool = false
     @Published var showingSummaryAlert: Bool = false
     @Published var showingEditErrorAlert: Bool = false
+    @Published var showingImageConfirmationDialog: Bool = false
+    @Published var showingSummaryConfirmationDialog: Bool = false
     @Published var showingSummaryErrorAlert: Bool = false
     @Published var selectedIndex: Int = 0
     @Published var shouldDismiss: Bool = false
@@ -65,6 +67,14 @@ class EditLetterViewModel: ObservableObject {
 
     private func dismissView() {
         shouldDismiss = true
+    }
+
+    func showConfirmationDialog() {
+        showingImageConfirmationDialog = true
+    }
+
+    func showSummaryConfirmationDialog() {
+        showingSummaryConfirmationDialog = true
     }
 
     // MARK: - Images
