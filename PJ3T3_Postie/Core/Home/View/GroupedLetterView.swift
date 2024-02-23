@@ -143,15 +143,17 @@ struct GroupedLetterItemView: View {
                 
                 Spacer()
                 
-                ZStack {
-                    Image(systemName: "water.waves")
-                        .font(.headline)
-                        .offset(x:18)
-                    
-                    Image(systemName: "sleep.circle")
-                        .font(.largeTitle)
+                if postieColors.backGroundColor == .postieBlack {
+                    Image("heartWhite")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 30, height: 30)
+                } else {
+                    Image("heart")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 30, height: 30)
                 }
-                .foregroundStyle(postieColors.dividerColor)
             }
             
             Spacer()

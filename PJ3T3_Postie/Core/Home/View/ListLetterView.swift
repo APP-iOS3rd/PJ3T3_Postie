@@ -70,15 +70,26 @@ struct LetterItemView: View {
                             .font(.custom("SourceSerifPro-Light", size: 15))
                             .foregroundStyle(postieColors.tabBarTintColor)
                         
-                        ZStack {
-                            Image(systemName: "water.waves")
-                                .font(.headline)
-                                .offset(x: 18)
-                            
-                            Image(systemName: "sleep.circle")
-                                .font(.largeTitle)
+                        if postieColors.backGroundColor == .postieBlack {
+                            Image(!letter.isReceived ? "sendWhite" : "takeWhite")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 30, height: 30)
+                        } else {
+                            Image(!letter.isReceived ? "send" : "take")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 30, height: 30)
                         }
-                        .foregroundStyle(postieColors.dividerColor)
+//                        ZStack {
+//                            Image(systemName: "water.waves")
+//                                .font(.headline)
+//                                .offset(x: 18)
+//                            
+//                            Image(systemName: "sleep.circle")
+//                                .font(.largeTitle)
+//                        }
+//                        .foregroundStyle(postieColors.dividerColor)
                     }
                     
                     Spacer()
