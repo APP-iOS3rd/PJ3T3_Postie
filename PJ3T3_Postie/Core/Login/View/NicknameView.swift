@@ -42,7 +42,7 @@ struct NicknameView: View {
                     TextField("사용할 닉네임을 입력 해 주세요", text: $nickname)
                         .focused($focusField, equals: "nickname")
                         .autocorrectionDisabled()
-                        .foregroundStyle(postieColors.dividerColor)
+                        .foregroundStyle(postieColors.tabBarTintColor)
                         .disabled(isReAuthing)
                         .overlay(
                             HStack {

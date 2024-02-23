@@ -9,6 +9,7 @@ import SwiftUI
 
 struct HomeView: View {
     @ObservedObject var firestoreManager = FirestoreManager.shared
+    @ObservedObject private var counter = Counter(interval: 1)
     @AppStorage("isTabGroupButton") private var isTabGroupButton: Bool = true
     @AppStorage("profileImage") private var profileImage: String = "postyReceivingLineColor"
     @AppStorage("profileImageTemp") private var profileImageTemp: String = "postyReceivingLineColor"
@@ -19,6 +20,7 @@ struct HomeView: View {
     @State private var currentGroupPage: Int = 0
     @State private var currentColorPage: Int = 0
     @State private var scrollTarget: Int? = nil
+    @State private var isBouncing = true
     
     var tabSelection: TabSelection
     
@@ -119,7 +121,22 @@ struct HomeView: View {
                                 }
                             }
                             
-                            AddLetterButton(isMenuActive: $isMenuActive)
+                            if !firestoreManager.letters.isEmpty {
+                                AddLetterButton(isMenuActive: $isMenuActive)
+                            } else {
+                                AddLetterButton(isMenuActive: $isMenuActive)
+                                    .offset(y: isBouncing ? 0 : -40)
+                                    .onAppear{
+                                        withAnimation(.spring(response: 0.3, dampingFraction: 0.4, blendDuration: 0.5)) {
+                                            isBouncing.toggle()
+                                        }
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                            withAnimation(.spring(response: 0.3, dampingFraction: 0.4, blendDuration: 0.5)) {
+                                                isBouncing.toggle()
+                                            }
+                                        }
+                                    }
+                            }
                         }
                         .preferredColorScheme(isThemeGroupButton == 4 ? .dark : .light)
                     }
