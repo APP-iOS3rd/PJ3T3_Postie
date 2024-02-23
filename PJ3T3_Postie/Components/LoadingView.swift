@@ -48,7 +48,7 @@ struct LoadingView: View {
     LoadingView(text: "프리뷰에 로딩이 표시되고 있어요\n공백 미포함 15자 초과시 줄 바꾸기")
 }
 
-private class Counter: ObservableObject {
+class Counter: ObservableObject {
     private var timer: Timer?
 
     @Published var value: Int = 0

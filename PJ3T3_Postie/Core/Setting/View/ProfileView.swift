@@ -143,7 +143,7 @@ struct ProfileView: View {
                         } label: {
                             Text("로그아웃")
                                 .foregroundStyle(postieColors.tabBarTintColor)
-                                .padding(.bottom, 10)
+                                .padding(.bottom, 15)
                                 .padding(.leading, 3)
                         }
                         .alert("로그아웃", isPresented: $isLogOutAlert) {
@@ -166,7 +166,7 @@ struct ProfileView: View {
                             isSignOutAlert = true
                         } label: {
                             Text("회원탈퇴")
-                                .foregroundStyle(postieColors.tabBarTintColor)
+                                .foregroundStyle(postieColors.dividerColor)
                                 .padding(.leading, 3)
                         }
                         .alert("회원탈퇴", isPresented: $isSignOutAlert) {

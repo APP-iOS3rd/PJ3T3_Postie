@@ -52,14 +52,14 @@ struct ThemeView: View {
                                         .bold(selectedThemeButton)
                                         .multilineTextAlignment(.center)
                                         .foregroundColor(selectedThemeButton ? Color.postieBlack : Color.postieWhite)
-                                        .frame(width: 60, alignment: .top)
+                                        .frame(width: 70, alignment: .top)
                                 } else {
                                     Text("테마 설정")
                                         .font(.caption)
                                         .bold(selectedThemeButton)
                                         .multilineTextAlignment(.center)
                                         .foregroundColor(selectedThemeButton ? Color.postieWhite : Color.postieBlack)
-                                        .frame(width: 60, alignment: .top)
+                                        .frame(width: 70, alignment: .top)
                                 }
                             }
                         }
@@ -81,14 +81,14 @@ struct ThemeView: View {
                                         .multilineTextAlignment(.center)
                                         .bold(!selectedThemeButton)
                                         .foregroundColor(selectedThemeButton ? Color.postieWhite : Color.postieBlack)
-                                        .frame(width: 60, alignment: .top)
+                                        .frame(width: 70, alignment: .top)
                                 } else {
                                     Text("나열 변경")
                                         .font(.caption)
                                         .multilineTextAlignment(.center)
                                         .bold(!selectedThemeButton)
                                         .foregroundColor(selectedThemeButton ? Color.postieBlack : Color.postieWhite)
-                                        .frame(width: 60, alignment: .top)
+                                        .frame(width: 70, alignment: .top)
                                 }
                             }
                         }

@@ -9,10 +9,11 @@ import SwiftUI
 
 struct SplashScreenView: View {
     @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
+    @ObservedObject private var counter = Counter(interval: 1)
+    
+    let image = ["postyReceivingLineColor", "postySendingLineColor", "postySmileLineColor", "postyTrumpetLineColor", "postyHeartLineColor"].shuffled()
     
     var body: some View {
-        let random_number = Int.random(in: 1...5)
-        
         ZStack {
             postieColors.backGroundColor
                 .ignoresSafeArea()
@@ -32,40 +33,16 @@ struct SplashScreenView: View {
                 Text("언제 어디서나")
                     .foregroundStyle(postieColors.dividerColor)
                 
-                let imageName: String = {
-                    switch random_number {
-                    case 1: 
-                        return "postyReceivingLineColor"
-                    case 2: 
-                        return "postySendingLineColor"
-                    case 3: 
-                        return "postySmileLineColor"
-                    case 4: 
-                        return "postyTrumpetLineColor"
-                    default: 
-                        return "postyHeartLineColor"
-                    }
-                }()
+                Image(image[counter.value])
+                    .resizable()
+                    .frame(width: 250, height: 250)
                 
-                PostyImageView(imageName: imageName)
-                
-                // 이미지 상단 배치
                 Rectangle()
                     .frame(height: 50)
                     .foregroundStyle(postieColors.tabBarTintColor.opacity(0))
             }
             .padding()
         }
-    }
-}
-
-struct PostyImageView: View {
-    let imageName: String
-    
-    var body: some View {
-        Image(imageName)
-            .resizable()
-            .frame(width: 250, height: 250)
     }
 }
 
