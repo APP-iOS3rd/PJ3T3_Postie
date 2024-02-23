@@ -5,6 +5,7 @@
 //  Created by Eunsu JEONG on 2/16/24.
 //
 
+import OSLog
 import SwiftUI
 
 struct DeleteAccountButtonView: View {
@@ -18,11 +19,11 @@ struct DeleteAccountButtonView: View {
             switch authManager.provider {
             case .email:
                 Task {
-                    print("Cannot delete Email account")
+                    Logger.auth.info("Cannot delete Email account")
                     authManager.signOut()
                 }
             case .google:
-                print("Delete Google account")
+                Logger.auth.info("Delete Google account")
                 Task {
                     do {
                         try await authManager.deleteGoogleAccount()
@@ -35,16 +36,16 @@ struct DeleteAccountButtonView: View {
                     }
                 }
             case .apple:
-                print("Delete Apple account")
+                Logger.auth.info("Delete Apple account")
                 AppleSignInHelper.shared.reAuthCurrentAppleUser()
             default:
-                print("Delete account")
+                Logger.auth.info("Delete account")
                 //alert 창 구현
             }
         }
         .customOnChange(authManager.credential) { newValue in
             if authManager.credential == nil {
-                print(#function, "Canceled to delete account")
+                Logger.auth.info("\(#function) Canceled to delete account")
                 showLoading = false
             } else {
                 showLoading = true
@@ -64,7 +65,7 @@ struct DeleteAccountButtonView: View {
             alertBody = "재인증에 실패하였습니다. 다시 시도해 주세요."
         default:
             alertBody = "알 수 없는 오류가 발생하였습니다. 지속적으로 오류가 발생한다면 관리자에게 문의해 주세요.\nteam.postie@google.com"
-            print(#function, "Failed to delete Google account: \(error)")
+            Logger.auth.info("\(#function) Failed to delete Google account: \(error)")
         }
     }
 }

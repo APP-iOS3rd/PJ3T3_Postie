@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import OSLog
 
 class LetterDetailViewModel: ObservableObject {
     @Published var showLetterImageFullScreenView = false
@@ -56,7 +57,7 @@ class LetterDetailViewModel: ObservableObject {
             }
 
             showingDeleteErrorAlert = true
-            print("Failed to delete Letter: \(error)")
+            Logger.firebase.error("Failed to delete Letter: \(error)")
         }
     }
 

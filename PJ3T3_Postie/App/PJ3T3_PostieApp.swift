@@ -5,7 +5,9 @@
 //  Created by Eunsu JEONG on 1/15/24.
 //
 
+import OSLog
 import SwiftUI
+
 import FirebaseCore
 import NMapsMap
 
@@ -55,7 +57,7 @@ struct PJ3T3_PostieApp: App {
                               return
                             }
                             // Replace this with proper error handling
-                            print("Failed to reset badge count: \(error)")
+                            Logger.notification.info("Failed to reset badge count: \(error) info")
                           }
                     }
                 }

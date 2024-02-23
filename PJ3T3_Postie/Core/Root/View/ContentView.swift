@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OSLog
 
 //struct TestView: View {
 //    var body: some View {
@@ -96,9 +97,9 @@ struct ContentView: View {
             Task {
                 if await AppStoreUpdateChecker.isNewVersionAvailable() {
                     showUpdate = true
-                    print("신규 버전 있음, alert 띄우자")
+                    Logger.firebase.info("신규 버전 있음, alert 띄우자")
                 } else {
-                    print("신규 버전 없음")
+                    Logger.firebase.info("신규 버전 없음")
                 }
             }
         }

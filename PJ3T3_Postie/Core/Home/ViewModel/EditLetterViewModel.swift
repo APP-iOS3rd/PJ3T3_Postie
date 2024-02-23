@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import OSLog
 import UIKit
 
 struct FullPathAndUrl {
@@ -25,6 +26,8 @@ class EditLetterViewModel: ObservableObject {
     @Published var showingSummaryTextField: Bool = false
     @Published var showingSummaryAlert: Bool = false
     @Published var showingEditErrorAlert: Bool = false
+    @Published var showingImageConfirmationDialog: Bool = false
+    @Published var showingSummaryConfirmationDialog: Bool = false
     @Published var showingSummaryErrorAlert: Bool = false
     @Published var selectedIndex: Int = 0
     @Published var shouldDismiss: Bool = false
@@ -65,6 +68,14 @@ class EditLetterViewModel: ObservableObject {
 
     private func dismissView() {
         shouldDismiss = true
+    }
+
+    func showConfirmationDialog() {
+        showingImageConfirmationDialog = true
+    }
+
+    func showSummaryConfirmationDialog() {
+        showingSummaryConfirmationDialog = true
     }
 
     // MARK: - Images
@@ -154,7 +165,7 @@ class EditLetterViewModel: ObservableObject {
 
                 showEditErrorAlert()
             }
-            print("Failed to edit letter: \(error)")
+            Logger.firebase.error("Failed to edit letter: \(error)")
         }
     }
 
@@ -170,7 +181,6 @@ class EditLetterViewModel: ObservableObject {
 
         guard let urls = letter.imageURLs, let fullPaths = letter.imageFullPaths else { return }
         fullPathsAndUrls = zip(urls, fullPaths).map { FullPathAndUrl(fullPath: $0.1, url: $0.0) }
-        print(fullPathsAndUrls)
     }
 
     func getSummary(isReceived: Bool) async {

@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import OSLog
 
 import CoreLocation
 import NMapsMap
@@ -62,24 +63,24 @@ class NaverGeocodeAPI: ObservableObject {
         
         let task = session.dataTask(with: request) { data, response, error in
             if let error = error {
-                print(error.localizedDescription)
+                Logger.map.error("\(error.localizedDescription)")
                 return
             }
             
             guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
-                print("error!!!")
+                Logger.map.error("error!!!")
                 // 정상적으로 값이 오지 않았을 때 처리
                 //여기서 오류가 남
                 return
             }
             
             guard let data = data else {
-                print("No data received")
+                Logger.map.error("No data received")
                 return
             }
             
             if let jsonString = String(data: data, encoding: .utf8) {
-                print("API응답: \(jsonString)")
+                Logger.map.error("API응답: \(jsonString)")
             }
             
             //API응답시 파싱하기
@@ -97,7 +98,7 @@ class NaverGeocodeAPI: ObservableObject {
                         completion(latitude,longitude)
                     }
                 } else {
-                    print("값이 없읍니다")
+                    Logger.map.error("값이 없읍니다")
                     DispatchQueue.main.async {
                         completion(nil,nil)
                     }
@@ -105,7 +106,7 @@ class NaverGeocodeAPI: ObservableObject {
                 
             }
             catch {
-                print("JSON 디코딩 에러: \(error.localizedDescription)")
+                Logger.map.error("JSON 디코딩 에러: \(error.localizedDescription)")
             }
         }   
         task.resume()
@@ -129,8 +130,8 @@ class OfficeInfoServiceAPI: ObservableObject {
         //postDivType 데이터 대상 null=전체대상, 1=우체국, 2=우체통
         //postGap 반경 코드 1km = 1, 0.5km = 0.5
         let urlString = "https://www.koreapost.go.kr/koreapost/openapi/searchPostScopeList.do?serviceKey=\(apiKey)&postLatitude=\(postLatitude)&postLongitude=\(postLongitude)&postGap=1&postDivType=\(postDivType)&pageCount=20"
-        print(urlString)
-        
+        Logger.map.info("\(urlString)")
+
         //URL주소로 받아와 지면 값을 url로 저장해라
         //url설정 부터 str까진 공통 작업
         guard let url = URL(string: urlString) else { return }
@@ -139,28 +140,26 @@ class OfficeInfoServiceAPI: ObservableObject {
         
         let task = session.dataTask(with: url) { data, response, error in
             if let error = error {
-                print(error.localizedDescription)
+                Logger.map.error("\(error.localizedDescription)")
                 return
             }
             
             guard let response = response as? HTTPURLResponse, response.statusCode == 200 else { return }
             
             guard let data = data else {
-                print("No data received")
+                Logger.map.error("No data received")
                 return
             }
             
             let str = String(decoding: data, as: UTF8.self)
-//            print(str)
-            
+
             do {
                 let postListResponse = try XMLDecoder().decode(PostListResponse.self, from: data)
                 DispatchQueue.main.async {
                     self.infos = postListResponse.postItems
                 }
-//                print(postListResponse.postItems)
             } catch {
-                print(error)
+                Logger.map.error("\(error)")
             }
         }
         task.resume()

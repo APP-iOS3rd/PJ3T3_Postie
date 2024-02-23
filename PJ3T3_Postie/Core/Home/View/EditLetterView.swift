@@ -108,19 +108,6 @@ struct EditLetterView: View {
         } message: {
             Text("문자 인식에 실패했습니다. 다시 시도해 주세요.")
         }
-        .alert("한 줄 요약", isPresented: $editLetterViewModel.showingSummaryAlert) {
-            Button("직접 작성") {
-                editLetterViewModel.showSummaryTextField()
-                focusField = .summary
-            }
-
-            Button("AI 완성") {
-                Task {
-                    await editLetterViewModel.getSummary(isReceived: letter.isReceived)
-                }
-                focusField = .summary
-            }
-        }
         .alert("편지 수정 실패", isPresented: $editLetterViewModel.showingEditErrorAlert) {
             
         } message: {
@@ -133,6 +120,38 @@ struct EditLetterView: View {
         }
         .onAppear {
             editLetterViewModel.syncViewModelProperties(letter: letter)
+        }
+        .confirmationDialog("편지 사진 가져오기", isPresented: $editLetterViewModel.showingImageConfirmationDialog, titleVisibility: .visible) {
+            Button {
+                editLetterViewModel.showUIImagePicker(sourceType: .photoLibrary)
+            } label: {
+                Label("사진 보관함", systemImage: "photo.on.rectangle")
+            }
+
+            Button {
+                editLetterViewModel.showUIImagePicker(sourceType: .camera)
+            } label: {
+                HStack {
+                    Text("사진 찍기")
+
+                    Spacer()
+
+                    Image(systemName: "camera")
+                }
+            }
+        }
+        .confirmationDialog("편지 요약하기", isPresented: $editLetterViewModel.showingSummaryConfirmationDialog, titleVisibility: .visible) {
+            Button("직접 작성") {
+                editLetterViewModel.showSummaryTextField()
+                focusField = .summary
+            }
+
+            Button("AI 완성") {
+                Task {
+                    await editLetterViewModel.getSummary(isReceived: letter.isReceived)
+                }
+                focusField = .summary
+            }
         }
         .customOnChange(editLetterViewModel.shouldDismiss) { shouldDismiss in
             if shouldDismiss {
@@ -183,30 +202,8 @@ extension EditLetterView {
 
                 Spacer()
 
-                Menu {
-                    Button {
-                        editLetterViewModel.showUIImagePicker(sourceType: .photoLibrary)
-                    } label: {
-                        HStack {
-                            Text("사진 보관함")
-
-                            Spacer()
-
-                            Image(systemName: "photo.on.rectangle")
-                        }
-                    }
-
-                    Button {
-                        editLetterViewModel.showUIImagePicker(sourceType: .camera)
-                    } label: {
-                        HStack {
-                            Text("사진 찍기")
-
-                            Spacer()
-
-                            Image(systemName: "camera")
-                        }
-                    }
+                Button {
+                    editLetterViewModel.showConfirmationDialog()
                 } label: {
                     Image(systemName: "plus")
                 }
@@ -217,6 +214,9 @@ extension EditLetterView {
                     .frame(maxWidth: .infinity)
                     .frame(height: 100)
                     .frame(alignment: .center)
+                    .onTapGesture {
+                        editLetterViewModel.showConfirmationDialog()
+                    }
             } else {
                 ScrollView(.horizontal) {
                     HStack(spacing: 8) {
@@ -325,7 +325,7 @@ extension EditLetterView {
                 Spacer()
 
                 Button {
-                    editLetterViewModel.showSummaryAlert()
+                    editLetterViewModel.showSummaryConfirmationDialog()
                 } label: {
                     Image(systemName: "plus")
                 }
@@ -343,7 +343,9 @@ extension EditLetterView {
                     .frame(maxWidth: .infinity)
                     .frame(height: 30)
                     .frame(alignment: .center)
-
+                    .onTapGesture {
+                        editLetterViewModel.showSummaryConfirmationDialog()
+                    }
             }
         }
     }

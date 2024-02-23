@@ -55,8 +55,22 @@ struct AddLetterView: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden()
         .toolbarBackground(ThemeManager.themeColors[isThemeGroupButton].backGroundColor, for: .navigationBar)
         .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button {
+                    addLetterViewModel.showDismissAlert()
+                } label: {
+                    HStack {
+                        Image(systemName: "chevron.backward")
+                            .bold()
+
+                        Text("Back")
+                    }
+                }
+            }
+
             ToolbarItemGroup(placement: .principal) {
                 Text(isReceived ? "받은 편지 기록" : "보낸 편지 기록")
                     .bold()
@@ -109,19 +123,6 @@ struct AddLetterView: View {
         } message: {
             Text("문자 인식에 실패했습니다. 다시 시도해 주세요.")
         }
-        .alert("한 줄 요약", isPresented: $addLetterViewModel.showingSummaryAlert) {
-            Button("직접 작성") {
-                addLetterViewModel.showSummaryTextField()
-                focusField = .summary
-            }
-
-            Button("AI 완성") {
-                Task {
-                    await addLetterViewModel.getSummary()
-                }
-                focusField = .summary
-            }
-        }
         .alert("편지 정보 부족", isPresented: $addLetterViewModel.showingNotEnoughInfoAlert) {
 
         } message: {
@@ -136,6 +137,49 @@ struct AddLetterView: View {
 
         } message: {
             Text("편지 요약에 실패했어요. 직접 요약해주세요.")
+        }
+        .alert("작성을 취소하실 건가요?", isPresented: $addLetterViewModel.showingDismissAlert) {
+            Button("아니요", role: .cancel) {
+
+            }
+
+            Button("네", role: .destructive) {
+                dismiss()
+            }
+        } message: {
+            Text("변경된 내용이 저장되지 않아요!")
+        }
+        .confirmationDialog("편지 사진 가져오기", isPresented: $addLetterViewModel.showingImageConfirmationDialog, titleVisibility: .visible) {
+            Button {
+                addLetterViewModel.showUIImagePicker(sourceType: .photoLibrary)
+            } label: {
+                Label("사진 보관함", systemImage: "photo.on.rectangle")
+            }
+
+            Button {
+                addLetterViewModel.showUIImagePicker(sourceType: .camera)
+            } label: {
+                HStack {
+                    Text("사진 찍기")
+
+                    Spacer()
+
+                    Image(systemName: "camera")
+                }
+            }
+        }
+        .confirmationDialog("편지 요약하기", isPresented: $addLetterViewModel.showingSummaryConfirmationDialog, titleVisibility: .visible) {
+            Button("직접 작성") {
+                addLetterViewModel.showSummaryTextField()
+                focusField = .summary
+            }
+
+            Button("AI 완성") {
+                Task {
+                    await addLetterViewModel.getSummary()
+                }
+                focusField = .summary
+            }
         }
         .customOnChange(addLetterViewModel.shouldDismiss) { shouldDismiss in
             if shouldDismiss {
@@ -186,30 +230,8 @@ extension AddLetterView {
 
                 Spacer()
 
-                Menu {
-                    Button {
-                        addLetterViewModel.showUIImagePicker(sourceType: .photoLibrary)
-                    } label: {
-                        HStack {
-                            Text("사진 보관함")
-
-                            Spacer()
-
-                            Image(systemName: "photo.on.rectangle")
-                        }
-                    }
-
-                    Button {
-                        addLetterViewModel.showUIImagePicker(sourceType: .camera)
-                    } label: {
-                        HStack {
-                            Text("사진 찍기")
-
-                            Spacer()
-
-                            Image(systemName: "camera")
-                        }
-                    }
+                Button {
+                    addLetterViewModel.showConfirmationDialog()
                 } label: {
                     Image(systemName: "plus")
                 }
@@ -221,6 +243,9 @@ extension AddLetterView {
                     .frame(maxWidth: .infinity)
                     .frame(height: 100)
                     .frame(alignment: .center)
+                    .onTapGesture {
+                        addLetterViewModel.showConfirmationDialog()
+                    }
             } else {
                 ScrollView(.horizontal) {
                     HStack(spacing: 8) {
@@ -298,7 +323,7 @@ extension AddLetterView {
                 Spacer()
 
                 Button {
-                    addLetterViewModel.showSummaryAlert()
+                    addLetterViewModel.showSummaryConfirmationDialog()
                 } label: {
                     Image(systemName: "plus")
                 }
@@ -316,7 +341,9 @@ extension AddLetterView {
                     .frame(maxWidth: .infinity)
                     .frame(height: 30)
                     .frame(alignment: .center)
-
+                    .onTapGesture {
+                        addLetterViewModel.showSummaryConfirmationDialog()
+                    }
             }
         }
     }
@@ -337,9 +364,9 @@ struct LoadingModifier: ViewModifier {
             if isLoading {
                 content
                     .disabled(isLoading)
-                    .blur(radius: isLoading ? 3 : 0)
 
                 LoadingView(text: text)
+                    .background(ClearBackground())
             } else {
                 content
             }

@@ -78,15 +78,9 @@ class APIClient {
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
             let decoder = JSONDecoder()
             let errorResponse = try decoder.decode(APIErrorResponse.self, from: data)
-            
-            print("실패ㅠㅠ")
-            print(httpResponse.statusCode)
-            print(errorResponse.error.errorCode)
-            print(errorMessage(httpResponse.statusCode, errorCode: errorResponse.error.errorCode))
-            
+                        
             throw URLError(.badServerResponse)
         } else {
-            print("된건가")
             do {
                 let decoder = JSONDecoder()
                 let decodedData = try decoder.decode(ApiResponse.self, from: data)
