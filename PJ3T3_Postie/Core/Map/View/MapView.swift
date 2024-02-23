@@ -54,7 +54,8 @@ struct MapView: View {
                         Spacer()
                     }
                     .padding(.horizontal)
-                    
+                    .padding(.top)
+
                     HStack(spacing: 10) {
                         ForEach(0...1, id: \.self) { index in
                             Button(action: {
