@@ -26,5 +26,6 @@ var PersonData: [Person] = [
 ]
 
 var ContributeData: [Person] = [
-    Person(name: "Ohtt", subtitle: "iOS Developer", image: "postyHeartLineColor", color: Color(hex: 0xFF8599), link: "https://github.com/ohtt-iOS")
+    Person(name: "Ohtt", subtitle: "iOS Developer", image: "postyHeartLineColor", color: Color(hex: 0xFF8599), link: "https://github.com/ohtt-iOS"),
+    Person(name: "Tuna", subtitle: "Designer", image: "postySendingLineColor", color: Color(hex: 0xED3025), link: "https://github.com/hellotunamayo")
 ]

@@ -109,7 +109,6 @@ struct HomeView: View {
                                     Rectangle()
                                         .frame(height: 80)
                                         .foregroundStyle(postieColors.tabBarTintColor.opacity(0))
-                                        .id(1)
                                 }
                                 .onAppear {
                                     tabSelection.resetViewAction = {

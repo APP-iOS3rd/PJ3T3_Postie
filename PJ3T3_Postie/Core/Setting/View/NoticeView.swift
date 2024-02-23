@@ -26,7 +26,7 @@ struct NoticeView: View {
                                 .scaledToFit()
                                 .frame(height: 200)
                             
-                            Text("공지가 로딩중입니다.")
+                            Text("공지사항을 불러오는 중입니다.")
                                 .foregroundStyle(postieColors.tabBarTintColor)
                         }
                     }
@@ -38,7 +38,7 @@ struct NoticeView: View {
                                     .ignoresSafeArea()
                                 
                                 VStack(alignment: .leading) {
-                                    Text("안녕하세요 포스티팀입니다.\n")
+                                    Text("안녕하세요. 포스티 팀입니다.\n")
                                         .font(.callout)
                                     
 //                                    if let imageURL = post.imageURL {
