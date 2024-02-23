@@ -49,7 +49,7 @@ struct InformationView: View {
                     DividerView()
                         .padding(.bottom, 5)
                     
-                    NavigationLink(destination: TermOfUserView()) {
+                    NavigationLink(destination: InformationWebView(urlToLoad: "https://delirious-antler-185.notion.site/5d018b0df8754b90a70a2ce2e5eedb7a?pvs=4")) {
                         HStack {
                             Text("이용약관")
                                 .foregroundStyle(postieColors.tabBarTintColor)
@@ -62,7 +62,7 @@ struct InformationView: View {
                         .padding(.bottom)
                     }
                     
-                    NavigationLink(destination: PrivacyView()) {
+                    NavigationLink(destination: InformationWebView(urlToLoad: "https://delirious-antler-185.notion.site/b6b289d7404c47099b5beefc14acdd35?pvs=4")) {
                         HStack {
                             Text("개인정보 처리방침")
                                 .foregroundStyle(postieColors.tabBarTintColor)
