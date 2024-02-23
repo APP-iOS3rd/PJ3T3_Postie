@@ -7,6 +7,12 @@
 
 import SwiftUI
 
+//struct TestView: View {
+//    var body: some View {
+//        NaverMap(coord: coord)
+//    }
+//}
+
 struct ContentView: View {
     @ObservedObject var authViewModel = AuthManager.shared
     @StateObject private var viewModel = AppViewModel()
