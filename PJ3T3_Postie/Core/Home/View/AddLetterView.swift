@@ -139,11 +139,11 @@ struct AddLetterView: View {
             Text("편지 요약에 실패했어요. 직접 요약해주세요.")
         }
         .alert("편지 작성을 그만두시겠어요?", isPresented: $addLetterViewModel.showingDismissAlert) {
-            Button("그만할래요", role: .cancel) {
+            Button("계속 쓸래요", role: .cancel) {
 
             }
 
-            Button("계속 쓸래요", role: .destructive) {
+            Button("그만 할래요", role: .destructive) {
                 dismiss()
             }
         } message: {
