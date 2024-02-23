@@ -34,6 +34,7 @@
 		9E28934C2B7E9314009A7D40 /* DeleteAccountButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E28934B2B7E9314009A7D40 /* DeleteAccountButtonView.swift */; };
 		9E46837C2B7BBBA100EFB90B /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E46837B2B7BBBA100EFB90B /* LoadingView.swift */; };
 		9E5889E32B72221B00B4AD20 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5889E22B72221B00B4AD20 /* SearchView.swift */; };
+		9E747CD32B88F4EE007DD0C3 /* InformationWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E747CD22B88F4EE007DD0C3 /* InformationWebView.swift */; };
 		9E7E05792B7C465D00ACF177 /* ClearBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7E05782B7C465D00ACF177 /* ClearBackground.swift */; };
 		9E7E057B2B7CC37800ACF177 /* AuthCaseHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7E057A2B7CC37800ACF177 /* AuthCaseHelper.swift */; };
 		9E7E05B52B7DE54200ACF177 /* FirestoreShopManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7E05B42B7DE54200ACF177 /* FirestoreShopManager.swift */; };
@@ -157,6 +158,7 @@
 		9E28934B2B7E9314009A7D40 /* DeleteAccountButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteAccountButtonView.swift; sourceTree = "<group>"; };
 		9E46837B2B7BBBA100EFB90B /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		9E5889E22B72221B00B4AD20 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
+		9E747CD22B88F4EE007DD0C3 /* InformationWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformationWebView.swift; sourceTree = "<group>"; };
 		9E7E05782B7C465D00ACF177 /* ClearBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearBackground.swift; sourceTree = "<group>"; };
 		9E7E057A2B7CC37800ACF177 /* AuthCaseHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthCaseHelper.swift; sourceTree = "<group>"; };
 		9E7E05B42B7DE54200ACF177 /* FirestoreShopManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreShopManager.swift; sourceTree = "<group>"; };
@@ -517,16 +519,17 @@
 		9E9F6AB42B5762C8003DFE83 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				E3EECAF42B5FD2E000E639F2 /* ProfileView.swift */,
-				E3B41DA52B730E0300CB9E7A /* ProfileEditView.swift */,
+				E36587A82B7C44EB00584965 /* AlertView.swift */,
 				9E9F6AD12B5763F3003DFE83 /* FirebaseTestRowView.swift */,
 				9E9F6AC52B5763A3003DFE83 /* FirebaseTestView.swift */,
-				E30DED6E2B6FD25B00FA70A6 /* SplashScreenView.swift */,
+				E36587982B78F32900584965 /* InformationView.swift */,
+				9E747CD22B88F4EE007DD0C3 /* InformationWebView.swift */,
 				E3D466DA2B733B5B00DFE93F /* MembershipView.swift */,
 				E36587962B78F30F00584965 /* NoticeView.swift */,
-				E36587982B78F32900584965 /* InformationView.swift */,
+				E3B41DA52B730E0300CB9E7A /* ProfileEditView.swift */,
+				E3EECAF42B5FD2E000E639F2 /* ProfileView.swift */,
 				E365879A2B790ADA00584965 /* QuestionView.swift */,
-				E36587A82B7C44EB00584965 /* AlertView.swift */,
+				E30DED6E2B6FD25B00FA70A6 /* SplashScreenView.swift */,
 				E349F8702B6918B500253B02 /* ThemeView.swift */,
 			);
 			path = View;
@@ -841,6 +844,7 @@
 				CEF09E452B57B6C500BE67E4 /* UIImagePicker.swift in Sources */,
 				E349F88A2B6B7DA500253B02 /* GroupedListLetterView.swift in Sources */,
 				0E29F0DD2B5FDC6A005B86FB /* Coordinator.swift in Sources */,
+				9E747CD32B88F4EE007DD0C3 /* InformationWebView.swift in Sources */,
 				9E9F6AC22B576393003DFE83 /* MapApi.swift in Sources */,
 				9E25C2D12B7B8F8A00B04BA1 /* CryptoUtils.swift in Sources */,
 				9E7E05B52B7DE54200ACF177 /* FirestoreShopManager.swift in Sources */,
