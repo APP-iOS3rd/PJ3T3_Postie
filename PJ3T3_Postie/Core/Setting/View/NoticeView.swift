@@ -9,6 +9,7 @@ import SwiftUI
 
 struct NoticeView: View {
     @ObservedObject var firestoreNoticeManager = FirestoreNoticeManager.shared
+    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     @State private var isExpanded = false
     
     var body: some View {
@@ -20,7 +21,7 @@ struct NoticeView: View {
                 VStack(alignment: .leading) {
                     if firestoreNoticeManager.notices.isEmpty {
                         VStack {
-                            Image("postyThinkingSketch")
+                            Image(isThemeGroupButton == 4 ? "postyThinkingSketchWhite" : "postyThinkingSketch")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(height: 200)
@@ -46,7 +47,7 @@ struct NoticeView: View {
 //                                            .scaledToFit()
 //                                    }
                                     
-                                    Text("\(notice.content.replacingOccurrences(of: "\\n", with: "\n"))\n")
+                                    Text("\(parseText(notice.content.replacingOccurrences(of: "\\n", with: "\n")))\n")
                                         .font(.callout)
                                     
                                     HStack {
@@ -94,6 +95,27 @@ struct NoticeView: View {
         .toolbarBackground(postieColors.backGroundColor, for: .navigationBar)
         .navigationBarTitleDisplayMode(.inline)
     }
+}
+
+func parseText(_ text: String) -> Text {
+    var resultText = Text("")
+    var tempText = text
+    
+    while let range = tempText.range(of: "bold(") {
+        let textBeforeBold = tempText[..<range.lowerBound]
+        tempText.removeSubrange(..<range.upperBound)
+        
+        if let endRange = tempText.range(of: ")") {
+            let boldText = tempText[..<endRange.lowerBound]
+            tempText.removeSubrange(..<endRange.upperBound)
+            
+            resultText = resultText + Text(textBeforeBold) + Text(boldText).bold()
+        }
+    }
+    
+    resultText = resultText + Text(tempText) // 나머지 텍스트 추가
+    
+    return resultText
 }
 
 //#Preview {

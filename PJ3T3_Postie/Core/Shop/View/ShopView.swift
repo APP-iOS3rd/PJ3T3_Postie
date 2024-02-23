@@ -7,111 +7,157 @@
 
 import SwiftUI
 import SafariServices
+import Kingfisher
 
 struct ShopView: View {
-    let columns: [GridItem] = Array(repeating: .init(.flexible()), count: 2)
-    let dummyData = [["poketmon2", "sanrio", "digimon"],["kuma", "crayon", "poketmon"], [], [], []]
-    let postDivision: [String] = ["캐릭터", "심플", "일러스트", "풍경", "컬러풀"]
-    let postImage0: [String] = ["poketmon", "poketmon2", "sanrio", "digimon", "kuma", "crayon"]
-    let postImage1: [String] = ["poketmon2", "sanrio", "digimon", "kuma", "crayon", "poketmon"]
-    let urls: [String: String] = [
-        "poketmon" : "https://gloomy.co.kr/product/%ED%8F%AC%EC%BC%93%EB%AA%AC%EC%8A%A4%ED%84%B0-%EC%BA%90%EB%A6%AD%ED%84%B0-%ED%8E%B8%EC%A7%80%EC%A7%80-4p%EC%84%B8%ED%8A%B8%EB%9E%9C%EB%8D%A4%EB%B0%9C%EC%86%A1-129693/101233/",
-        "poketmon2" :
-            "https://www.pokemonstore.co.kr/pages/product/view.html?productNo=114168879",
-        
-        "sanrio" :  "https://usagimall.com/product/%EC%82%B0%EB%A6%AC%EC%98%A4-%EC%BA%90%EB%A6%AD%ED%84%B0-%EB%AA%A8%EC%96%91-%ED%8E%B8%EC%A7%80%EC%A7%80-10%EC%84%B8%ED%8A%B8/8154/",
-        
-        "digimon" : "https://www.cheonyu.com/product/view.html?qIDX=62957",
-        
-        "kuma" : "https://akaikaze00.cafe24.com/product/%EC%9D%BC%EB%B3%B8-%EB%A6%AC%EB%9D%BD%EC%BF%A0%EB%A7%88-%ED%8E%B8%EC%A7%80%EC%A7%80-%ED%8E%B8%EC%A7%80%EB%B4%89%ED%88%AC%EC%84%B8%ED%8A%B8%EA%B3%BC%EC%9D%BC/17384/",
-        "crayon" : "https://akaikaze00.cafe24.com/product/%EC%A7%B1%EA%B5%AC%EB%8A%94%EB%AA%BB%EB%A7%90%EB%A0%A4-%ED%8E%B8%EC%84%A0%EC%A7%80-%ED%8E%B8%EC%A7%80%EC%A7%80%EC%84%B8%ED%8A%B8%EC%8B%9C%EC%A6%8C6-4color/18003/"
+    let columns: [GridItem] = [
+        GridItem(.flexible(), spacing: 9, alignment: .center),
+        GridItem(.flexible(), spacing: 9, alignment: .center)
     ]
+    let postDivision: [String] = ["심플", "일러스트", "캐릭터", "커스텀", "풍경"]
+    var filteredLetters: [Shop] {
+        switch selectedButtonIndex {
+        case 0:
+            return shopViewModel.shops.filter { $0.category == "simple" }
+        case 1:
+            return shopViewModel.shops.filter { $0.category == "illustration" }
+        case 2:
+            return shopViewModel.shops.filter { $0.category == "character" }
+        case 3:
+            return shopViewModel.shops.filter { $0.category == "custom" }
+        case 4:
+            return shopViewModel.shops.filter { $0.category == "sight" }
+            // 추가적인 카테고리에 대한 필터링 추가
+        default:
+            return []
+        }
+    }
     
     @State private var safariURL: String?
     @State private var selectedButtonIndex: Int = 0
     @State private var showDetails = false
+    @ObservedObject private var shopViewModel = FirestoreShopManager.shared
     
     var body: some View {
         NavigationStack {
-            VStack {
-                // 카테고리 버튼
-                ScrollView(.horizontal, showsIndicators: false, content: {
-                    HStack(spacing: 10) {
-                        ForEach(0...4, id: \.self) { index in
-                            Button(action: {
-                                selectedButtonIndex = index
-                            }) {
-                                ZStack {
-                                    if selectedButtonIndex == index {
-                                        Rectangle()
-                                            .frame(width: 70, height: 30)
-                                            .foregroundColor(.clear)
-                                            .font(.system(size: 13))
-                                            .background(Color(red: 1, green: 0.98, blue: 0.95))
-                                            .cornerRadius(20)
-                                            .shadow(color: .black.opacity(0.88), radius: 3, x: 2, y: 2)
-                                            .overlay(
-                                                RoundedRectangle(cornerRadius: 20)
-                                                    .inset(by: 0.5)
-                                                    .stroke(Color(red: 0.45, green: 0.45, blue: 0.45), lineWidth: 2)
-                                            )
-                                    } else {
-                                        Rectangle()
-                                            .frame(width: 70, height: 30)
-                                            .foregroundColor(.clear)
-                                            .font(.system(size: 13))
-                                            .background(Color(red: 1, green: 0.98, blue: 0.95))
-                                            .cornerRadius(20)
-                                            .shadow(color: .black.opacity(0.1), radius: 4, x: 3, y: 3)
-                                            .overlay(
-                                                RoundedRectangle(cornerRadius: 20)
-                                                    .inset(by: 0.5)
-                                                    .stroke(Color(red: 0.45, green: 0.45, blue: 0.45), lineWidth: 1)
-                                            )
-                                    }
-                                    
-                                    Text(postDivision[index])
-                                        .font(Font.custom("SF Pro Text", size: 12))
-                                        .multilineTextAlignment(.center)
-                                        .foregroundColor(Color(red:  0.12, green: 0.12, blue: 0.12))
-                                        .frame(width: 70)
-                                }
-                            }
-                        }
-                    }.padding(EdgeInsets(top: 0, leading: 20, bottom: 10, trailing: 20)) // 스크롤에 대한 간격 넓히기
-                })
-                .padding()
-                Spacer()
+            ZStack {
+                postieColors.backGroundColor
+                    .ignoresSafeArea()
                 
-                ScrollView {
-                    LazyVGrid(columns: columns, content: {
-                        ForEach(dummyData[selectedButtonIndex], id:\.self) { character in
-                            Button(action: {
-                                safariURL = urls[character]!
-                            }) {
-                                Image(character)
-                                    .resizable()
-                                    .scaledToFit() //이미지 비율 조정
-                                    .frame(width: 157, height: 180)
-                                    .padding()
-                            }
-                            .sheet(item: $safariURL) { url in
-                                if let url = URL(string: url) {
-                                    SafariView(url: url)
-                                        .ignoresSafeArea() //외부링크가 화면에 맞게 조절
+                VStack(spacing: 0) {
+                    HStack {
+                        Text("Letter Shop")
+                            .font(.custom("SourceSerifPro-Black", size: 40))
+                            .foregroundStyle(postieColors.tintColor)
+                        
+                        Spacer()
+                    }
+                    // 카테고리 버튼
+                    ScrollView(.horizontal, showsIndicators: false, content: {
+                        HStack(spacing: 10) {
+                            ForEach(0...4, id: \.self) { index in
+                                Button(action: {
+                                    selectedButtonIndex = index
+                                }) {
+                                    ZStack {
+                                        if selectedButtonIndex == index {
+                                            Rectangle()
+                                                .foregroundColor(.clear)
+                                                .frame(width: 70, height: 30)
+                                                .background(postieColors.tintColor)
+                                                .cornerRadius(16)
+                                                } else {
+                                                    Rectangle()
+                                                        .foregroundColor(.clear)
+                                                        .frame(width: 72, height: 30)
+                                                        .background(postieColors.receivedLetterColor)
+                                                        .cornerRadius(20)
+                                                        .shadow(color: .black.opacity(0.1), radius: 3, x: 2, y: 2)
+                                                }
+                                        
+                                        Text(postDivision[index])
+                                            .font(Font.custom("SF Pro Text", size: 12))
+                                            .bold()
+                                            .multilineTextAlignment(.center)
+                                            .foregroundColor(selectedButtonIndex == index ? postieColors.receivedLetterColor : postieColors.tabBarTintColor)
+                                            .frame(width: 60, alignment: .center)
+                                    }
                                 }
                             }
                         }
+                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 10))  //스크롤에 대한 간격 넓히기
                     })
+                    
+                    ScrollView {
+                        LazyVGrid(columns: columns, spacing: 9, content: {
+                            ForEach(filteredLetters, id:\.self) { shop in
+                                ShopButton(shop: shop, safariURL: $safariURL)
+                            }
+                        })
+                    }
                 }
+                .padding()
             }
-            .navigationTitle("ShopView")
         }
     }
 }
 //sheet(item:onDismiss:content:)호출시 해당 타입은 Identifiable 프로토콜 채택
 extension String: Identifiable {
     public var id: Self { self }
+}
+
+struct ShopButton: View {
+    let shop: Shop
+    
+    @Binding var safariURL: String?
+    
+    var body: some View {
+        Button(action: {
+            safariURL = shop.shopUrl
+        }) {
+            ZStack {
+                KFImage(URL(string: shop.thumbUrl))
+                    .resizable()
+                    .placeholder({
+                        ProgressView()
+                    })
+                    .scaledToFill()
+                    .clipShape(RoundedRectangle(cornerRadius: 15))
+                
+                VStack {
+                    Spacer()
+                    
+                    ZStack {
+                        Rectangle()
+                            .fill(LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.5), Color.clear]), startPoint: .bottom, endPoint: .top))
+                            .frame(height: 80)
+                            .cornerRadius(10)
+                        
+                        HStack {
+                            Text(shop.title)
+                                .foregroundColor(.white)
+                                .fontWeight(.semibold)
+                                .font(.custom("SourceSerifPro-Light", size: 12))
+                                .lineLimit(1)
+                                .padding(.leading, 8)
+                                .offset(y: 26)
+                            
+                            Spacer()
+                        }
+                    }
+                }
+                
+            }
+            
+            
+        }
+        .sheet(item: $safariURL) { url in
+            if let url = URL(string: url) {
+                SafariView(url: url)
+                    .ignoresSafeArea() //외부링크가 화면에 맞게 조절
+            }
+        }
+    }
 }
 
 struct SafariView: UIViewControllerRepresentable {
@@ -126,6 +172,3 @@ struct SafariView: UIViewControllerRepresentable {
     }
 }
 
-#Preview {
-    ShopView()
-}
