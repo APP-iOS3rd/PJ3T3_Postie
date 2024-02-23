@@ -9,27 +9,28 @@ import SwiftUI
 
 struct InformationView: View {
     @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
+    @State private var columns = Array(repeating: GridItem(.flexible(), spacing: 9), count: 2)
     
     var body: some View {
         var appVersion: String {
-                if let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String,
-                   let build = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String {
-                    return "\(version)"
-                }
-                return "버전 정보 없음"
+            if let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String,
+               let build = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String {
+                return "\(version) (\(build))"
             }
+            return "버전 정보 없음"
+        }
         
         ZStack {
             postieColors.backGroundColor
                 .ignoresSafeArea()
             
-            ScrollView {
+            ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading) {
                     Text("앱 정보")
                         .foregroundStyle(postieColors.dividerColor)
                     
                     DividerView()
-                        .padding(.bottom)
+                        .padding(.bottom, 5)
                     
                     HStack {
                         Text("버전정보")
@@ -46,7 +47,7 @@ struct InformationView: View {
                         .foregroundStyle(postieColors.dividerColor)
                     
                     DividerView()
-                        .padding(.bottom)
+                        .padding(.bottom, 5)
                     
                     NavigationLink(destination: TermOfUserView()) {
                         HStack {
@@ -71,10 +72,42 @@ struct InformationView: View {
                             Image(systemName: "chevron.right")
                                 .foregroundStyle(postieColors.dividerColor)
                         }
+                        .padding(.bottom)
                     }
+                    
+                    Text("함께하신 분들")
+                        .foregroundStyle(postieColors.dividerColor)
+                    
+                    DividerView()
+                        .padding(.bottom, 5)
+                    
+                    LazyVGrid(columns: columns, spacing: 9) {
+                        ForEach(0..<PersonData.count, id: \.self) { person in
+                            PersonGridView(person: PersonData[person])
+                        }
+                    }
+                    .padding(.leading, 2)
+                    .padding(.trailing, 2)
+                    .padding(.bottom)
+                    
+                    Text("도움주신 분들")
+                        .foregroundStyle(postieColors.dividerColor)
+                    
+                    DividerView()
+                        .padding(.bottom, 5)
+                    
+                    LazyVGrid(columns: columns, spacing: 9) {
+                        ForEach(0..<ContributeData.count, id: \.self) { person in
+                            PersonGridView(person: ContributeData[person])
+                        }
+                    }
+                    .padding(.leading, 2)
+                    .padding(.trailing, 2)
+                    .padding(.bottom)
                 }
             }
-            .padding()
+            .padding(.leading)
+            .padding(.trailing)
         }
         .toolbar {
             ToolbarItemGroup(placement: .principal) {
@@ -85,6 +118,38 @@ struct InformationView: View {
         }
         .toolbarBackground(postieColors.backGroundColor, for: .navigationBar)
         .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+struct PersonGridView: View {
+    var person: Person
+    
+    var body: some View {
+        Link(destination: URL(string: person.link)!) {
+            VStack {
+                ZStack {
+                    Rectangle()
+                        .frame(height: 190)
+                        .clipShape(RoundedRectangle(cornerRadius: 25))
+                        .foregroundStyle(person.color)
+                        .shadow(color: .black, radius: 0.8)
+                    
+                    VStack {
+                        Text(person.name)
+                            .bold()
+                        
+                        Text(person.subtitle)
+                            .font(.footnote)
+                        
+                        Image(person.image)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 100)
+                    }
+                    .foregroundStyle(.postieWhite)
+                }
+            }
+        }
     }
 }
 

@@ -47,9 +47,16 @@ struct PJ3T3_PostieApp: App {
         WindowGroup {
             ContentView()
                 .tint(ThemeManager.themeColors[isThemeGroupButton].tabBarTintColor)
-                .onChange(of: scenePhase) { newPhase in
+                .customOnChange(scenePhase) { newPhase in
                     if newPhase == .active {
-                        UIApplication.shared.applicationIconBadgeNumber = 0
+                        UNUserNotificationCenter.current().setBadgeCount(0) { error in
+                            guard let error else {
+                              // Badge count was successfully updated
+                              return
+                            }
+                            // Replace this with proper error handling
+                            print("Failed to reset badge count: \(error)")
+                          }
                     }
                 }
         }
