@@ -154,10 +154,10 @@ struct MapView: View {
                                 officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)
                                 
                                 // 버튼 비활성화
-//                                showButton = false
+                                showButton = false
                                 // coordinator.cameraLocation 값이 바뀌면
                             }) {
-//                                if showButton {
+                                if showButton {
                                     ZStack {
                                         Rectangle()
                                             .foregroundColor(.clear)
@@ -177,7 +177,7 @@ struct MapView: View {
                                         .padding()
                                         .foregroundColor(.blue)
                                     }
-//                                }
+                                }
                             }
                             Spacer()
                             
@@ -256,9 +256,9 @@ struct MapView: View {
             }
         }
         
-//        .onChange(of: coordinator.cameraLocation) { result in
-//            self.showButton = true
-//        }
+        .onChange(of: coordinator.cameraLocation) { result in
+            self.showButton = true
+        }
         
         //초기 화면이 열리 때 위치값을 불러온다.
         .onChange(of: locationManager.location) { newLocation in
