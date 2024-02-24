@@ -205,7 +205,7 @@ struct SideMenuView: View {
                 
                 Text("프로필 설정")
                     .font(.subheadline)
-                    .foregroundStyle(postieColors.dividerColor)
+                    .foregroundStyle(postieColors.tintColor)
                 
                 DividerView()
                     .padding(.bottom)
@@ -241,7 +241,7 @@ struct SideMenuView: View {
                 
                 Text("테마 설정")
                     .font(.subheadline)
-                    .foregroundStyle(postieColors.dividerColor)
+                    .foregroundStyle(postieColors.tintColor)
                 
                 DividerView()
                     .padding(.bottom)
@@ -252,7 +252,7 @@ struct SideMenuView: View {
                 
                 Text("앱 설정")
                     .font(.subheadline)
-                    .foregroundStyle(postieColors.dividerColor)
+                    .foregroundStyle(postieColors.tintColor)
                 
                 DividerView()
                     .padding(.bottom)
