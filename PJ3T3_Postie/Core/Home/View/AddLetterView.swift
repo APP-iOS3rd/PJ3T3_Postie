@@ -66,7 +66,7 @@ struct AddLetterView: View {
                         Image(systemName: "chevron.backward")
                             .bold()
 
-                        Text("Back")
+                        Text("뒤로")
                     }
                 }
             }
