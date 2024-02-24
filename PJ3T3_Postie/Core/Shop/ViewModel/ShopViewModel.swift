@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import OSLog
+
 import FirebaseFirestore
  
 class ShopViewModel: ObservableObject {
@@ -17,7 +19,7 @@ class ShopViewModel: ObservableObject {
     func fetchData() {
         db.collection("shops").addSnapshotListener { (querySnapshot, error) in
             guard let documents = querySnapshot?.documents else {
-                print("No documents")
+                Logger.firebase.info("No documents")
                 return
             }
              
