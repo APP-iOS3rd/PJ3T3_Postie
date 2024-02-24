@@ -201,6 +201,7 @@ struct SideMenuView: View {
                             .imageScale(.large)
                     }
                 }
+                .padding(.top, 5)
                 
                 Text("프로필 설정")
                     .font(.subheadline)
