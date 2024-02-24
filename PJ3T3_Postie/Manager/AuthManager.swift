@@ -5,6 +5,8 @@
 //  Created by Eunsu JEONG on 1/17/24.
 //
 
+import OSLog
+
 import FirebaseAuth
 import FirebaseFirestore
 
@@ -32,21 +34,20 @@ class AuthManager: ObservableObject {
     
     func checkAppLaunch() {
         let userDefaults = UserDefaults.standard
-        
-        print("UserDefault", userDefaults.value(forKey: "appFirstTimeOpend"))
-        
+
+        Logger.auth.info("UserDefault \(userDefaults.value(forKey: "appFirstTimeOpend").debugDescription)")
         //앱이 설치된 후 처음 실행 되는 것이라면 nil이다.
         if userDefaults.value(forKey: "appFirstTimeOpend") == nil {
             userDefaults.setValue(true, forKey: "appFirstTimeOpend")
             do {
                 try Auth.auth().signOut()
             } catch {
-                print("Failed to signOut")
+                Logger.auth.error("Failed to signOut")
                 self.userSession = nil
                 self.currentUser = nil
             }
         } else {
-            print("앱 설치 후 최초 실행이 아닙니다.")
+            Logger.auth.info("앱 설치 후 최초 실행이 아닙니다.")
         }
     }
     
@@ -68,30 +69,30 @@ class AuthManager: ObservableObject {
         DispatchQueue.main.async {
             //1. Authentication에 입력받은 계정이 존재하는지 확인한다.
             self.userSession = Auth.auth().currentUser
-            print(self.userSession)
+            Logger.auth.info("\(self.userSession)")
         }
         
         guard let uid = Auth.auth().currentUser?.uid else {
-            print(#function, "Returned since no userSession")
+            Logger.auth.error("\(#function) Returned since no userSession")
             return
         }
         
         DispatchQueue.main.async {
-            print(#function, "User uid updated: \(uid)")
+            Logger.auth.info("\(#function) User uid updated: \(uid)")
             self.userUid = uid
         }
         
         //2. 해당 계정의 uuid로 firestore에서 계정 정보를 불러온다.
         guard let snapshot = try? await Firestore.firestore().collection("users").document(uid).getDocument() else {
-            print(#function, "Failed to fetch user data from firestore")
+            Logger.auth.error("\(#function) Failed to fetch user data from firestore")
             return
         }
         
         DispatchQueue.main.async {
             //3. Firestore에서 받은 데이터를 User model에 맞는 형태로 변환(decoding)하여 currentUser에 값을 부여한다.
             self.currentUser = try? snapshot.data(as: PostieUser.self)
-            print(#function, "Current user is \(String(describing: self.currentUser))")
-            
+            Logger.auth.info("\(#function) Current user is \(String(describing: self.currentUser))")
+
             //hasAccount의 default는 ture로 로그인 과정에서 account가 있는지 확인하는 동안 ProgressView를 보여준다.
             //이 과정이 없을 경우 로그인 계정이 있음에도 NicknameView가 잠시 나타났다가 홈 뷰로 넘어가는 문제가 발생한다.
             if self.currentUser != nil {
@@ -102,9 +103,9 @@ class AuthManager: ObservableObject {
             
             //NicknameView에서 아무 이름도 입력하지 않은 경우를 판별한다. 필요 없을 경우 삭제할 예정
             if self.currentUser?.nickname != "" {
-                print(self.currentUser?.nickname)
+                Logger.auth.info("\(self.currentUser?.nickname ?? "")")
             } else {
-                print("This user is logged in without nickname")
+                Logger.auth.info("This user is logged in without nickname")
             }
         }
         
@@ -132,7 +133,7 @@ class AuthManager: ObservableObject {
             //userSession이 업데이트 됨에 따라 자동으로 Login 된 유저 뷰로 Navigate 되면, 업로드 된 Firestore의 데이터를 fetch해준다.
             await fetchUser()
         } catch {
-            print("DEBUG: Failed to create user with error \(error.localizedDescription)")
+            Logger.auth.error("DEBUG: Failed to create user with error \(error.localizedDescription)")
         }
     }
     
@@ -143,14 +144,14 @@ class AuthManager: ObservableObject {
             self.userSession = nil //userSession의 데이터가 사라지며 ContentView에서 Login하기 전 화면을 보여주게 된다.
             self.currentUser = nil //데이터 모델을 초기화시켜 현재 유저의 데이터를 지운다.
         } catch {
-            print("DEBUG: Failed to sign out with error \(error.localizedDescription)")
+            Logger.auth.error("DEBUG: Failed to sign out with error \(error.localizedDescription)")
         }
     }
     
     func deleteAccount() async throws {
         try await self.userSession?.delete()
         guard let userUid = self.userSession?.uid else {
-            print(#function, "Cannot get userUid from userSession")
+            Logger.auth.error("\(#function) Cannot get userUid from userSession")
             return
         }
         
@@ -165,7 +166,7 @@ class AuthManager: ObservableObject {
     
     func getProviders() {
         guard let providerData = Auth.auth().currentUser?.providerData else {
-            print(#function, "Failed to get provider")
+            Logger.auth.error("\(#function) Failed to get provider")
             return
         }
         
@@ -190,7 +191,7 @@ class AuthManager: ObservableObject {
         case .invalidCredential:
             throw AuthErrorCodeCase.invalidCredential
         default:
-            print(#function, "Failed to delete Google account AuthErrorCode: \(error)")
+            Logger.auth.error("\(#function) Failed to delete Google account AuthErrorCode: \(error)")
         }
     }
 }
@@ -233,7 +234,7 @@ extension AuthManager {
             } else if let _ = AuthErrorCode.Code(rawValue: error.code) {
                 try authErrorCodeConverter(error: error)
             } else {
-                print(#function, "Failed to delete Google account: \(error)")
+                Logger.auth.error("\(#function) Failed to delete Google account: \(error)")
             }
         }
     }
@@ -264,7 +265,7 @@ extension AuthManager {
             if let _ = AuthErrorCode.Code(rawValue: error.code) {
                 try authErrorCodeConverter(error: error)
             } else {
-                print(#function, "Failed to delete Apple account: \(error)")
+                Logger.auth.error("\(#function) Failed to delete Apple account: \(error)")
             }
         }
     }
@@ -282,7 +283,7 @@ extension AuthManager {
             try await Auth.auth().revokeToken(withAuthorizationCode: authCodeString)
             try await self.deleteAccount()
         } catch {
-            print(#function, "Failed to delete Apple account: \(error)")
+            Logger.auth.error("\(#function) Failed to delete Apple account: \(error)")
         }
     }
 }
@@ -296,7 +297,7 @@ extension AuthManager {
             //fetchUser가 uid로 firebase에서 데이터를 찾기 위해서는 반드시 signIn이 완료 된 다음 fetchUser 함수를 호출해야 한다.
             await fetchUser()
         } catch {
-            print("DEBUG: Failed to log in with error \(error.localizedDescription)")
+            Logger.auth.error("DEBUG: Failed to log in with error \(error.localizedDescription)")
         }
     }
 
@@ -309,7 +310,7 @@ extension AuthManager {
         do {
             try await changeRequest?.commitChanges()
         } catch {
-            print(#function, "Unable to update the user's displayname: \(error.localizedDescription)")
+            Logger.auth.error("\(#function) Unable to update the user's displayname: \(error.localizedDescription)")
         }
         
         try await createUser(authDataResult: authDataResult, nickname: nickname)
@@ -322,7 +323,7 @@ extension AuthManager {
             try await self.userSession?.reauthenticate(with: credential)
             try await self.deleteAccount()
         } catch {
-            print(#function, "Failed to reauth: \(error)")
+            Logger.auth.error("\(#function) Failed to reauth: \(error)")
         }
         
     }

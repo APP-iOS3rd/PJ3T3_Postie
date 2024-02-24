@@ -7,6 +7,7 @@
 
 import AuthenticationServices
 import CryptoKit
+import OSLog
 
 final class AppleSignInHelper: NSObject, ObservableObject {
     static let shared = AppleSignInHelper()
@@ -21,7 +22,7 @@ final class AppleSignInHelper: NSObject, ObservableObject {
         self.cryptoUtils = CryptoUtils()
         
         guard let cryptoUtils = cryptoUtils else {
-            print(#function, "Failed to ")
+            Logger.firebase.error("\(#function) Failed to ")
             return
         }
         
@@ -34,22 +35,22 @@ final class AppleSignInHelper: NSObject, ObservableObject {
         switch result {
         case .success(let user):
             guard let appleIDCredential = user.credential as? ASAuthorizationAppleIDCredential else {
-                print(#function, "Unable to retrieve AppleIDCredential")
+                Logger.firebase.error("\(#function) Unable to retrieve AppleIDCredential")
                 return
             }
             
             guard let appleIDToken = appleIDCredential.identityToken else {
-                print(#function, "Unable to fetch identity token")
+                Logger.firebase.error("\(#function) Unable to fetch identity token")
                 return
             }
             
             guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
-                print(#function, "Unable to serialize token string from data: \(appleIDToken.debugDescription)")
+                Logger.firebase.error("\(#function) Unable to serialize token string from data: \(appleIDToken.debugDescription)")
                 return
             }
             
             guard let fullName = appleIDCredential.fullName else {
-                print(#function, "Unalbe to get PersonNameComponents: \(appleIDToken.debugDescription)")
+                Logger.firebase.error("\(#function) Unalbe to get PersonNameComponents: \(appleIDToken.debugDescription)")
                 return
             }
             
@@ -57,7 +58,7 @@ final class AppleSignInHelper: NSObject, ObservableObject {
             
             AuthManager.shared.signInwithApple(user: appleUser)
         case .failure(let failure):
-            print(failure.localizedDescription)
+            Logger.firebase.error("\(failure.localizedDescription)")
         }
     }
     
@@ -68,7 +69,7 @@ final class AppleSignInHelper: NSObject, ObservableObject {
         self.cryptoUtils = CryptoUtils()
         
         guard let cryptoUtils = cryptoUtils else {
-            print(#function, "Failed to ")
+            Logger.firebase.error("\(#function) Failed to ")
             return
         }
         
@@ -85,7 +86,7 @@ final class AppleSignInHelper: NSObject, ObservableObject {
             authorizationController.presentationContextProvider = provider
         }
         
-        print(#function, "Credential Status: \(AuthManager.shared.credential)")
+        Logger.firebase.info("\(#function) Credential Status: \(AuthManager.shared.credential)")
         authorizationController.performRequests()
     }
 }
@@ -94,32 +95,32 @@ extension AppleSignInHelper: ASAuthorizationControllerDelegate {
     func authorizationController(controller: ASAuthorizationController,
                                  didCompleteWithAuthorization authorization: ASAuthorization) {
         guard let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential else {
-            print(#function, "Unable to retrieve AppleIDCredential")
+            Logger.firebase.error("\(#function) Unable to retrieve AppleIDCredential")
             return
         }
         
         guard let appleAuthCode = appleIDCredential.authorizationCode else {
-            print(#function, "Unable to fetch authorization code")
+            Logger.firebase.error("\(#function) Unable to fetch authorization code")
             return
         }
         
         guard let authCodeString = String(data: appleAuthCode, encoding: .utf8) else {
-            print(#function, "Unable to serialize auth code string from data: \(appleAuthCode.debugDescription)")
+            Logger.firebase.error("\(#function) Unable to serialize auth code string from data: \(appleAuthCode.debugDescription)")
             return
         }
         
         guard let appleIDToken = appleIDCredential.identityToken else {
-            print(#function, "Unable to fetch identity token")
+            Logger.firebase.error("\(#function) Unable to fetch identity token")
             return
         }
         
         guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
-            print(#function, "Unable to serialize token string from data: \(appleIDToken.debugDescription)")
+            Logger.firebase.error("\(#function) Unable to serialize token string from data: \(appleIDToken.debugDescription)")
             return
         }
         
         guard let fullName = appleIDCredential.fullName else {
-            print(#function, "Unalbe to get PersonNameComponents: \(appleIDToken.debugDescription)")
+            Logger.firebase.error("\(#function) Unalbe to get PersonNameComponents: \(appleIDToken.debugDescription)")
             return
         }
         
@@ -130,11 +131,11 @@ extension AppleSignInHelper: ASAuthorizationControllerDelegate {
                 await AuthManager.shared.deleteAppleAccount(user: appleUser, authCodeString: authCodeString)
             } else {
                 do {
-                    print("Called Reauth")
+                    Logger.firebase.info("Called Reauth")
                     try await AuthManager.shared.reAuthAppleAccount(user: appleUser)
                     isReAuth = false
                 } catch {
-                    print(#function, "Failed to re-auth Apple account: \(error)")
+                    Logger.firebase.error("\(#function) Failed to re-auth Apple account: \(error)")
                 }
             }
         }

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Foundation
+import OSLog
 
 import MapKit
 import CoreLocation
@@ -52,8 +53,9 @@ struct MapView: View {
                         
                         Spacer()
                     }
-                    .padding(.horizontal)
-                    
+                    .padding(.horizontal) // 옆에 리인 맞춤
+                    .padding(.top)
+
                     HStack(spacing: 10) {
                         ForEach(0...1, id: \.self) { index in
                             Button(action: {
@@ -71,14 +73,15 @@ struct MapView: View {
                                         .font(.caption)
                                         .fontWeight(selectedButtonIndex == index ? .bold : .regular)
                                         .multilineTextAlignment(.center)
-                                        .foregroundColor(selectedButtonIndex == index ? Color.postieWhite : Color.postieBlack)
+                                        .foregroundColor(selectedButtonIndex == index ? postieColors.receivedLetterColor : postieColors.tabBarTintColor)
                                         .frame(width: 60, alignment: .top)
                                 }
                             }
                         }
                         Spacer()
                     }
-                    .padding()
+                    .padding(EdgeInsets(top: 5, leading: 15, bottom: 10, trailing: 0)) 
+//                    .padding()
                     
                     HStack() {
                         Spacer(minLength: 10)
@@ -101,15 +104,15 @@ struct MapView: View {
                                         
                                         officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)
                                         
-                                        print("위경도 변환 성공\(coord)")
+                                        Logger.map.info("위경도 변환 성공\(coord.lat) \(coord.lng)")
                                     } else {
                                         //알럿창 띄우기
-                                        print("위치 정보를 가져오는데 실패했습니다.\(coord)")
+                                        Logger.map.error("위치 정보를 가져오는데 실패했습니다.\(coord.lat) \(coord.lng)")
                                         self.checkAlert.toggle()
                                     }
                                 }
                             }
-                            .alert("위치 정보가 잘못되었습니다.", isPresented: $checkAlert) {
+                            .alert("검색어 안내.", isPresented: $checkAlert) {
                                 Button("확인", role: .cancel) {
                                     
                                 }
@@ -144,11 +147,10 @@ struct MapView: View {
                         
                         VStack {
                             Button(action: {
-                                
-                                print("현재 위치에서 \(name[selectedButtonIndex]) 찾기 버튼 눌림")
-                                
+                                Logger.map.info("현재 위치에서 \(name[selectedButtonIndex]) 찾기 버튼 눌림")
+
                                 locationManager.stopUpdatingLocation() // 현재 위치 추적 금지
-                                
+
                                 coord = MyCoord(coordinator.cameraLocation?.lat ?? coord.lat, coordinator.cameraLocation?.lng ?? coord.lng)
                                 
                                 officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)
@@ -216,6 +218,7 @@ struct MapView: View {
                     }
                 }
                 Spacer()
+                    
             }
             .toolbar {
                 ToolbarItemGroup(placement: .keyboard) {
@@ -270,8 +273,9 @@ struct MapView: View {
             if let location = newLocation {
                 coord = MyCoord(location.coordinate.latitude, location.coordinate.longitude)
                 
-                // 위치 정보 업데이트 후 필요한 작업 수행
-                        handleLocationUpdate()
+                Logger.map.info("현재위치: \(coord.lat), \(coord.lng)")
+
+                handleLocationUpdate()
                 
                 locationManager.stopUpdatingLocation()
             }

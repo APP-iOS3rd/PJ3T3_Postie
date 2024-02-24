@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OSLog
 
 //struct TestView: View {
 //    var body: some View {
@@ -38,25 +39,25 @@ struct ContentView: View {
                         TabView(selection: $tabSelection.selectedTab) {
                             HomeView(tabSelection: tabSelection)
                                 .tabItem {
-                                    Image(systemName: "house")
+                                    Image(systemName: "tray")
                                     
-                                    Text("홈")
+                                    Text("보관함")
                                 }
                                 .tag(0)
-                            
-                            ShopView()
-                                .tabItem {
-                                    Image(systemName: "cart")
-                                    
-                                    Text("편지지")
-                                }
-                                .tag(1)
                             
                             MapView()
                                 .tabItem {
                                     Image(systemName: "map")
                                     
                                     Text("지도")
+                                }
+                                .tag(1)
+                            
+                            ShopView()
+                                .tabItem {
+                                    Image(systemName: "cart")
+                                    
+                                    Text("편지지")
                                 }
                                 .tag(2)
                             
@@ -96,9 +97,9 @@ struct ContentView: View {
             Task {
                 if await AppStoreUpdateChecker.isNewVersionAvailable() {
                     showUpdate = true
-                    print("신규 버전 있음, alert 띄우자")
+                    Logger.firebase.info("신규 버전 있음, alert 띄우자")
                 } else {
-                    print("신규 버전 없음")
+                    Logger.firebase.info("신규 버전 없음")
                 }
             }
         }

@@ -55,8 +55,22 @@ struct SlowPostBoxView: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden()
         .toolbarBackground(ThemeManager.themeColors[isThemeGroupButton].backGroundColor, for: .navigationBar)
         .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button {
+                    slowPostBoxViewModel.showDismissAlert()
+                } label: {
+                    HStack {
+                        Image(systemName: "chevron.backward")
+                            .bold()
+
+                        Text("Back")
+                    }
+                }
+            }
+
             ToolbarItemGroup(placement: .principal) {
                 Text("느린우체통")
                     .bold()
@@ -109,19 +123,6 @@ struct SlowPostBoxView: View {
         } message: {
             Text("문자 인식에 실패했습니다. 다시 시도해 주세요.")
         }
-        .alert("한 줄 요약", isPresented: $slowPostBoxViewModel.showingSummaryAlert) {
-            Button("직접 작성") {
-                slowPostBoxViewModel.showSummaryTextField()
-                focusField = .summary
-            }
-
-            Button("AI 완성") {
-                Task {
-                    await slowPostBoxViewModel.getSummary()
-                }
-                focusField = .summary
-            }
-        }
         .alert("편지 정보 부족", isPresented: $slowPostBoxViewModel.showingNotEnoughInfoAlert) {
 
         } message: {
@@ -136,6 +137,49 @@ struct SlowPostBoxView: View {
 
         } message: {
             Text("편지 요약에 실패했어요. 직접 요약해주세요.")
+        }
+        .alert("작성을 취소하실 건가요?", isPresented: $slowPostBoxViewModel.showingDismissAlert) {
+            Button("아니요", role: .cancel) {
+
+            }
+
+            Button("네", role: .destructive) {
+                dismiss()
+            }
+        } message: {
+            Text("변경된 내용이 저장되지 않아요!")
+        }
+        .confirmationDialog("편지 사진 가져오기", isPresented: $slowPostBoxViewModel.showingImageConfirmationDialog, titleVisibility: .visible) {
+            Button {
+                slowPostBoxViewModel.showUIImagePicker(sourceType: .photoLibrary)
+            } label: {
+                Label("사진 보관함", systemImage: "photo.on.rectangle")
+            }
+
+            Button {
+                slowPostBoxViewModel.showUIImagePicker(sourceType: .camera)
+            } label: {
+                HStack {
+                    Text("사진 찍기")
+
+                    Spacer()
+
+                    Image(systemName: "camera")
+                }
+            }
+        }
+        .confirmationDialog("편지 요약하기", isPresented: $slowPostBoxViewModel.showingSummaryConfirmationDialog, titleVisibility: .visible) {
+            Button("직접 작성") {
+                slowPostBoxViewModel.showSummaryTextField()
+                focusField = .summary
+            }
+
+            Button("AI 완성") {
+                Task {
+                    await slowPostBoxViewModel.getSummary()
+                }
+                focusField = .summary
+            }
         }
         .customOnChange(slowPostBoxViewModel.shouldDismiss) { shouldDismiss in
             if shouldDismiss {
@@ -188,30 +232,8 @@ extension SlowPostBoxView {
 
                 Spacer()
 
-                Menu {
-                    Button {
-                        slowPostBoxViewModel.showUIImagePicker(sourceType: .photoLibrary)
-                    } label: {
-                        HStack {
-                            Text("사진 보관함")
-
-                            Spacer()
-
-                            Image(systemName: "photo.on.rectangle")
-                        }
-                    }
-
-                    Button {
-                        slowPostBoxViewModel.showUIImagePicker(sourceType: .camera)
-                    } label: {
-                        HStack {
-                            Text("사진 찍기")
-
-                            Spacer()
-
-                            Image(systemName: "camera")
-                        }
-                    }
+                Button {
+                    slowPostBoxViewModel.showConfirmationDialog()
                 } label: {
                     Image(systemName: "plus")
                 }
@@ -223,6 +245,9 @@ extension SlowPostBoxView {
                     .frame(maxWidth: .infinity)
                     .frame(height: 100)
                     .frame(alignment: .center)
+                    .onTapGesture {
+                        slowPostBoxViewModel.showConfirmationDialog()
+                    }
             } else {
                 ScrollView(.horizontal) {
                     HStack(spacing: 8) {
@@ -300,7 +325,7 @@ extension SlowPostBoxView {
                 Spacer()
 
                 Button {
-                    slowPostBoxViewModel.showSummaryAlert()
+                    slowPostBoxViewModel.showSummaryConfirmationDialog()
                 } label: {
                     Image(systemName: "plus")
                 }
@@ -318,7 +343,9 @@ extension SlowPostBoxView {
                     .frame(maxWidth: .infinity)
                     .frame(height: 30)
                     .frame(alignment: .center)
-
+                    .onTapGesture {
+                        slowPostBoxViewModel.showSummaryConfirmationDialog()
+                    }
             }
         }
     }

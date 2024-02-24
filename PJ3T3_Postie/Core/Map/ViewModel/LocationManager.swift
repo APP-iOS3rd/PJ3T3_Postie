@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreLocation
+import OSLog
 
 class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     static let shared = LocationManager()
@@ -54,6 +55,6 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     
     // 오류 처리: 문제가 있으면 오류를 출력
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print(error)
+        Logger.map.error("\(error)")
     }
 }

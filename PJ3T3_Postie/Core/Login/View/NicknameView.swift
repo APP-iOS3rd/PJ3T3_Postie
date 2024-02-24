@@ -34,7 +34,7 @@ struct NicknameView: View {
                     .padding(.bottom, 20)
                 
                 VStack(alignment: .leading, spacing: 12) {
-                    Text("Nickname")
+                    Text("닉네임")
                         .foregroundStyle(postieColors.tintColor)
                         .fontWeight(.semibold)
                         .font(.footnote)
@@ -161,7 +161,7 @@ struct NicknameView: View {
                         }
                     }
                 } message: {
-                    Text(#"한 번 설정한 닉네임은 변경할 수 없으니 신중하게 선택해주세요! \#n "\#(nickname)"으로 시작하시겠습니까?"#)
+                    Text(#"한 번 설정한 닉네임은 변경할 수 없으니 신중하게 선택해주세요! \#n "\#(nickname)"으로 시작 해 볼까요?"#)
                 }
                 .alert("인증 실패", isPresented: $showFailureAlert) {
                     Button(role: .cancel) {

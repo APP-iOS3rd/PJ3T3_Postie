@@ -27,10 +27,10 @@ struct SplashScreenView: View {
                     .foregroundStyle(postieColors.tintColor)
                     .padding()
                 
-                Text("내 손안의 편지 보관함")
+                Text("손으로 쓴 감동")
                     .foregroundStyle(postieColors.dividerColor)
                 
-                Text("언제 어디서나")
+                Text("내 손 안의 편지 보관함")
                     .foregroundStyle(postieColors.dividerColor)
                 
                 Image(image[counter.value])
