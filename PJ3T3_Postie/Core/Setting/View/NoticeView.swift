@@ -17,8 +17,12 @@ struct NoticeView: View {
             postieColors.backGroundColor
                 .ignoresSafeArea()
             
-            ScrollView(showsIndicators: false) {
-                VStack(alignment: .leading) {
+            HStack {
+                Spacer()
+                
+                VStack {
+                    Spacer()
+                    
                     if firestoreNoticeManager.notices.isEmpty {
                         VStack {
                             Image(isThemeGroupButton == 4 ? "postyThinkingSketchWhite" : "postyThinkingSketch")
@@ -31,6 +35,14 @@ struct NoticeView: View {
                         }
                     }
                     
+                    Spacer()
+                }
+                
+                Spacer()
+            }
+            
+            ScrollView(showsIndicators: false) {
+                VStack(alignment: .leading) {
                     ForEach(firestoreNoticeManager.notices.sorted(by: { $0.date > $1.date }), id:\.self) { notice in
                         DisclosureGroup {
                             ZStack {
