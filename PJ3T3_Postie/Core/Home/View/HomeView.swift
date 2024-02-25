@@ -116,6 +116,7 @@ struct HomeView: View {
                                 .onAppear {
                                     tabSelection.resetViewAction = {
                                         withAnimation {
+                                            isSideMenuOpen = false
                                             value.scrollTo(0, anchor: .top)
                                         }
                                     }
