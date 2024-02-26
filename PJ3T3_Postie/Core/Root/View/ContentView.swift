@@ -77,6 +77,7 @@ struct ContentView: View {
                     } else {
                         if authViewModel.hasAccount {
                             LoadingView(text: "포스티 시작하는 중")
+                                .background(ClearBackground())
                         } else {
                             NicknameView()
                         }

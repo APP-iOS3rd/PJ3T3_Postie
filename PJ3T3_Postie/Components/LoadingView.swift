@@ -19,7 +19,6 @@ struct LoadingView: View {
         
         ZStack {
             Rectangle()
-                .background(.ultraThinMaterial)
                 .opacity(0.7)
                 .ignoresSafeArea()
             
