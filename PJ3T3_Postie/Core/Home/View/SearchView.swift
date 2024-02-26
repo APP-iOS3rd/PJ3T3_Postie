@@ -81,6 +81,31 @@ struct SearchView: View {
             $0.text.localizedCaseInsensitiveContains(searchQuery) ||
             $0.summary.localizedCaseInsensitiveContains(searchQuery)
         }
+        
+        filteredLetters = filteredLetters.filter {
+            $0.recipient == $0.writer ? compareDate(letterDate: $0.date) : true
+        }
+    }
+    
+    private func compareDate(letterDate: Date) -> Bool {
+        var letterDateComponent = Calendar.current.dateComponents([.year, .month, .day], from: letterDate)
+        letterDateComponent.hour = 9
+        letterDateComponent.minute = 00
+        
+        var isPast = false
+        
+        if let letterDate = Calendar.current.date(from: letterDateComponent) {
+            switch letterDate.compare(Date()) {
+            case .orderedSame: //같음
+                isPast = true
+            case .orderedDescending: //Date()보다 미래
+                isPast = false
+            case .orderedAscending: //Date()보다 과거
+                isPast = true
+            }
+        }
+        
+        return isPast
     }
     
     //name을 받아 query와 일치하는 부분만 font 색상을 변경한다. 현재 뷰에서는 사용되지 않고 있음
