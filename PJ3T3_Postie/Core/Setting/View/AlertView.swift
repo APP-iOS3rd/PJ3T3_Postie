@@ -6,11 +6,35 @@
 //
 
 import SwiftUI
+import UserNotifications
 
 struct AlertView: View {
     @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     @AppStorage("allAlert") private var allAlert: Bool = true
     @State private var slowAlert = true
+    
+    func moveToNotificationSetting() {
+        if let url = URL(string: UIApplication.openNotificationSettingsURLString) {
+            UIApplication.shared.open(url)
+        }
+    }
+
+    func checkNotificationPermission() async -> Bool {
+        let center = UNUserNotificationCenter.current()
+        let settings = await center.notificationSettings()
+        
+        switch settings.authorizationStatus {
+        case .authorized: return true
+        case .provisional: return true
+        case .ephemeral: return true
+        default: return false
+        }
+    }
+
+    func changeToggleState() async {
+        self.allAlert = await self.checkNotificationPermission()
+        self.slowAlert = await self.checkNotificationPermission()
+    }
     
     var body: some View {
         ZStack {
@@ -29,6 +53,14 @@ struct AlertView: View {
                                 .foregroundColor(postieColors.dividerColor)
                         }
                     }
+                    .onTapGesture {
+                        moveToNotificationSetting()
+                    }
+                    .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
+                        Task {
+                            await changeToggleState()
+                        }
+                    }
                     .padding(.bottom)
                     
                     DividerView()
@@ -44,8 +76,16 @@ struct AlertView: View {
                                 .foregroundColor(postieColors.dividerColor)
                         }
                     }
+                    .onTapGesture {
+                        moveToNotificationSetting()
+                    }
+                    .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
+                        Task {
+                            await changeToggleState()
+                        }
+                    }
                     .disabled(!allAlert)
-
+                    
                 }
                 .padding()
             }
