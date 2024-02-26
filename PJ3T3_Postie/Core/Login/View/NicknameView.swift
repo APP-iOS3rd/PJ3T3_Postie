@@ -39,7 +39,7 @@ struct NicknameView: View {
                         .fontWeight(.semibold)
                         .font(.footnote)
                     
-                    TextField("사용할 닉네임을 입력 해 주세요", text: $nickname)
+                    TextField("주고받은 편지에 표시될 닉네임을 입력해 주세요", text: $nickname)
                         .focused($focusField, equals: "nickname")
                         .autocorrectionDisabled()
                         .foregroundStyle(postieColors.tabBarTintColor)
