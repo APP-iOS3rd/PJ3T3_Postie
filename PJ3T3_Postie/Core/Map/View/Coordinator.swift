@@ -29,7 +29,8 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate {
     @Published var currentLocation: CLLocation?
     @Published var isUpdatingLocation: Bool = false
     @Published var cameraLocation: NMGLatLng?
-//    @Published var checkMyLocation: Bool = true
+    
+    var circleOverlay: NMFCircleOverlay?
     
     override init() {
         super.init()
@@ -67,7 +68,11 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate {
     }
     
     // 맵을 업데이트 -> 해당 위치에서 우체국 찾기 때 사용 예정
-    func updateMapView(coord: MyCoord) {
+    // 값을 변경 할때 마다 오버레이 설정 
+    func updateMapView(coord: MyCoord, overlay: Bool) {
+       
+        removeCircleOverlay()
+        
         self.coord = coord //클래스 속성인 coord를 함수 인자로 전달된 값으로 변경
         
         // NMGLatLng: 하나의 위경도 좌표를 나타내는 클래스
@@ -82,10 +87,20 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate {
         // 위치 오버레이
         setLocationOverlay(coord: updatecoord)
         
-        // 정보창과 연결된 마커를 추가
-        //        addMarkerAndInfoWindow(coord: coord,
-        //                               caption: self.coord.name,
-        //                               infoTitle: "정보 창 내용/마커를 탭하면 닫힘")
+        let center = NMGLatLng(lat: coord.lat, lng: coord.lng)
+        drawCircleOvelay(center: center, radius: 1000)
+    }
+    
+    func ButtonUpdateMapView(coord: MyCoord) {
+        self.coord = coord //클래스 속성인 coord를 함수 인자로 전달된 값으로 변경
+        
+        // NMGLatLng: 하나의 위경도 좌표를 나타내는 클래스
+        // https://navermaps.github.io/ios-map-sdk/guide-ko/2-2.html
+        let updatecoord = NMGLatLng(lat: coord.lat, lng: coord.lng)
+        
+        moveCamera(coord: updatecoord) //카메라 바로 이동
+        
+        removeAllMakers()
     }
     
     //이건 뭐야
@@ -126,13 +141,17 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate {
     
     // 내 위치 주변에 원 그리기
     func drawCircleOvelay(center: NMGLatLng, radius: Double) {
+
         let circleOverlay = NMFCircleOverlay()
         circleOverlay.center = center
         circleOverlay.radius = radius // 미터 단위
-        //        circleOverlay.fillColor = UIColor(red: 0, green: 0, blue: 1, alpha: 0.2) // 원의 내부 색상
-        circleOverlay.outlineWidth = 2 // 원의 외곽선 두께
+        circleOverlay.fillColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.6) // 원의 내부 색상
+        circleOverlay.outlineWidth = 1 // 원의 외곽선 두께
         circleOverlay.outlineColor = UIColor.blue // 원의 외곽선 색상
         circleOverlay.mapView = view.mapView
+        
+        self.circleOverlay = circleOverlay
+        
         let cameraUpdate = NMFCameraUpdate(fit: NMGLatLngBounds(southWest: NMGLatLng(lat: center.lat - 0.01, lng: center.lng - 0.01),
                                                                 northEast: NMGLatLng(lat: center.lat + 0.01, lng: center.lng + 0.01)))
         view.mapView.moveCamera(cameraUpdate)
@@ -140,6 +159,7 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate {
     
     // 마커 찍는 행위
     func addMarkerAndInfoWindow(latitude: Double, longitude: Double, caption: String, time: String, lunchtime: String) {
+        
         let marker = NMFMarker()
         
         marker.captionText = caption
@@ -160,5 +180,12 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate {
         }
         markers.removeAll()
     }
+    
+    func removeCircleOverlay() {
+            // circleOverlay가 nil이 아닌 경우에만 제거하도록 수정
+            if let circleOverlay = circleOverlay {
+                circleOverlay.mapView = nil
+            }
+        }
 }
 

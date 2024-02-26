@@ -7,6 +7,7 @@
 
 import SwiftUI
 import OSLog
+import CoreLocation
 
 //struct TestView: View {
 //    var body: some View {
@@ -51,6 +52,9 @@ struct ContentView: View {
                                     
                                     Text("지도")
                                 }
+                                .onTapGesture {
+                                    CLLocationManager().requestWhenInUseAuthorization()
+                                                }
                                 .tag(1)
                             
                             ShopView()
@@ -104,6 +108,9 @@ struct ContentView: View {
             }
         }
     }
+//    func requestLocationPermission() {
+//        locationManager.requestWhenInUseAuthorization()
+//    }
 }
 
 #Preview {

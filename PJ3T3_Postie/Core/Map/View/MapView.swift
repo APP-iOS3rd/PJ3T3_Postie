@@ -31,6 +31,7 @@ struct MapView: View {
     @State private var showButton = false
     @State private var checkMyLocation = false
     @State private var checkAlert = false
+    @State var overlay = true
     @State var coord: MyCoord = MyCoord(37.579081, 126.974375) //Dafult값 (서울역)
     
     @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
@@ -55,7 +56,7 @@ struct MapView: View {
                     }
                     .padding(.horizontal) // 옆에 리인 맞춤
                     .padding(.top)
-
+                    
                     HStack(spacing: 10) {
                         ForEach(0...1, id: \.self) { index in
                             Button(action: {
@@ -80,8 +81,8 @@ struct MapView: View {
                         }
                         Spacer()
                     }
-                    .padding(EdgeInsets(top: 5, leading: 15, bottom: 10, trailing: 0)) 
-//                    .padding()
+                    .padding(EdgeInsets(top: 5, leading: 15, bottom: 10, trailing: 0))
+                    //                    .padding()
                     
                     HStack() {
                         Spacer(minLength: 10)
@@ -98,7 +99,7 @@ struct MapView: View {
                                     
                                     if let latitude = latitude, let longitude = longitude {
                                         //위경도 값 저장
-                                        coordinator.updateMapView(coord: MyCoord(latitude,longitude))
+                                        coordinator.ButtonUpdateMapView(coord: MyCoord(latitude,longitude))
                                         
                                         self.coord = MyCoord(latitude, longitude)
                                         
@@ -132,12 +133,11 @@ struct MapView: View {
                         Spacer(minLength: 10)
                     }
                     .frame(height: 35)
-//                    .background(RoundedRectangle(cornerRadius: 8).stroke(Color.clear))
                     .background(Color.gray.opacity(0.1))
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                     .padding(.horizontal, 15)
                     .padding(.bottom, 15)
-                                        .onAppear (perform : UIApplication.shared.hideKeyboard)
+                    .onAppear (perform : UIApplication.shared.hideKeyboard)
                     //                    .background(Color(uiColor: .secondarySystemBackground))
                     //                    .textFieldStyle(.roundedBorder)
                     
@@ -148,9 +148,9 @@ struct MapView: View {
                         VStack {
                             Button(action: {
                                 Logger.map.info("현재 위치에서 \(name[selectedButtonIndex]) 찾기 버튼 눌림")
-
+                                
                                 locationManager.stopUpdatingLocation() // 현재 위치 추적 금지
-
+                                
                                 coord = MyCoord(coordinator.cameraLocation?.lat ?? coord.lat, coordinator.cameraLocation?.lng ?? coord.lng)
                                 
                                 officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)
@@ -191,7 +191,7 @@ struct MapView: View {
                                     coordinator.cameraLocation?.lat = (locationManager.location?.coordinate.latitude ?? coordinator.cameraLocation?.lat)!
                                     coordinator.cameraLocation?.lng = (locationManager.location?.coordinate.longitude ?? coordinator.cameraLocation?.lng)!
                                     
-                                    coordinator.updateMapView(coord: MyCoord(coordinator.cameraLocation!.lat, coordinator.cameraLocation!.lng))
+                                    coordinator.updateMapView(coord: MyCoord(coordinator.cameraLocation!.lat + 0.000001, coordinator.cameraLocation!.lng + 0.000001), overlay: true)
                                     
                                     checkMyLocation = false
                                 }) {
@@ -218,7 +218,7 @@ struct MapView: View {
                     }
                 }
                 Spacer()
-                    
+                
             }
             .toolbar {
                 ToolbarItemGroup(placement: .keyboard) {
@@ -247,10 +247,10 @@ struct MapView: View {
             officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)
             
             // 초기 데이터 로드
-                loadInitialData()
+            loadInitialData()
         }
         .onChange(of: officeInfoServiceAPI.infos) { newInfos in
-//            coordinator.removeAllMakers()
+            //            coordinator.removeAllMakers()
             
             for result in newInfos {
                 var lunchtime: String = ""
@@ -294,20 +294,20 @@ struct MapView: View {
         // 초기 데이터 로드
         fetchData()
     }
-
+    
     private func handleLocationUpdate() {
         // 위치 정보가 업데이트된 후 필요한 작업 수행
         // 예: 데이터 업데이트 등
         fetchData()
     }
-
+    
     private func updateLocation() {
         // 현재 위치 업데이트
         locationManager.startUpdatingLocation()
         // 처음 들어올 때 coord 업데이트
         coord = MyCoord(coordinator.cameraLocation?.lat ?? coord.lat, coordinator.cameraLocation?.lng ?? coord.lng)
     }
-
+    
     private func fetchData() {
         // 데이터 로드
         officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)

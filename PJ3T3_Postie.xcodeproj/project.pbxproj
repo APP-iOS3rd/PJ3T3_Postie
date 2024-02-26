@@ -1030,7 +1030,7 @@
 				INFOPLIST_FILE = "PJ3T3-Postie-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "포스티";
 				INFOPLIST_KEY_NSCameraUsageDescription = "편지 사진을 찍기 위해 카메라 권한이 필요합니다.";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "내 주변의 우체국/우체통 위치를 찾기 위해 권한이 필요합니다.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "$(MARKETING_VERSION)";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -1075,7 +1075,7 @@
 				INFOPLIST_FILE = "PJ3T3-Postie-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "포스티";
 				INFOPLIST_KEY_NSCameraUsageDescription = "편지 사진을 찍기 위해 카메라 권한이 필요합니다.";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "내 주변의 우체국/우체통 위치를 찾기 위해 권한이 필요합니다.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "$(MARKETING_VERSION)";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
