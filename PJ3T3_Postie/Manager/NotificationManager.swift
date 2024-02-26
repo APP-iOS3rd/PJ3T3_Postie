@@ -5,6 +5,7 @@
 //  Created by Eunsu JEONG on 2/19/24.
 //
 
+import OSLog
 import UserNotifications
 import UIKit
 
@@ -67,10 +68,10 @@ class NotificationManager {
             
             notificationCenter.add(request) { error in
                     guard error == nil else {
-                        print(#function, "Failed to schedule notification", error)
+                        Logger.notification.error("\(#function) Failed to schedule notification \(error)")
                         return
                     }
-                    print("Scheduling notification with id: \(notification.id)")
+                Logger.notification.info("Scheduling notification with id: \(notification.id)")
                 }
         }
     }
@@ -79,7 +80,7 @@ class NotificationManager {
     func checkPendingNotifications() {
         notificationCenter.getPendingNotificationRequests { requests in
             for request in requests {
-                print(#function, request.identifier)
+                Logger.notification.info("\(#function) \(request.identifier)")
             }
         }
     }

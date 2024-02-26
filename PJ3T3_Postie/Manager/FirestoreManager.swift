@@ -4,6 +4,7 @@
 //
 //  Created by Eunsu JEONG on 1/17/24.
 //
+import OSLog
 
 import FirebaseFirestore
 
@@ -54,8 +55,8 @@ class FirestoreManager: ObservableObject {
         let document = letterColRef.document() //새로운 document를 생성한다.
         let documentId = document.documentID //생성한 document의 id를 가져온다.
         self.docId = documentId
-        print(self.docId)
-        
+        Logger.firebase.info("\(self.docId)")
+
         //Letter model에 맞는 모양으로 document data를 생성한다.
         let docData: [String: Any] = [
             "id": documentId,
@@ -71,9 +72,9 @@ class FirestoreManager: ObservableObject {
         //생성한 데이터를 해당되는 경로에 새롭게 생성한다. merge false: overwrite a document or create it if it doesn't exist yet
         do {
             try await document.setData(docData, merge: false)
-            print("Success:", documentId)
+            Logger.firebase.info("Success: \(documentId)")
         } catch {
-            print("\(#function): \(error.localizedDescription)")
+            Logger.firebase.info("\(#function): \(error.localizedDescription)")
         }
     }
     
@@ -102,10 +103,10 @@ class FirestoreManager: ObservableObject {
         
         docRef.updateData(docData) { error in
             if let error = error {
-                print("Error writing document: ", error)
+                Logger.firebase.info("Error writing document: \(error)")
             } else {
-                print("\(documentId) merge success")
-                print(docData)
+                Logger.firebase.info("\(documentId) merge success")
+                Logger.firebase.info("\(docData)")
             }
         }
     }
@@ -138,9 +139,9 @@ class FirestoreManager: ObservableObject {
         
         docRef.updateData(docData) { error in
             if let error = error {
-                print("Failed to updating document: ", error)
+                Logger.firebase.info("Failed to updating document: \(error)")
             } else {
-                print("\(docId) merge success")
+                Logger.firebase.info("\(docId) merge success")
             }
         }
     }
@@ -180,9 +181,9 @@ class FirestoreManager: ObservableObject {
         docRef.updateData(["imageURLs": FieldValue.arrayRemove(urls),
                            "imageFullPaths": FieldValue.arrayRemove(fullPaths)]) { error in
             if let error = error {
-                print(#function, "Failed to update fullPath and url: ", error)
+                Logger.firebase.info("\(#function) Failed to update fullPath and url: \(error)")
             } else {
-                print("\(docId) merge success")
+                Logger.firebase.info("\(docId) merge success")
             }
         }
     }
@@ -213,7 +214,7 @@ class FirestoreManager: ObservableObject {
         //letterColRef(특정 user의 document의 letters라는 하위 컬렉션)에 있는 모든 document를 가져옴
         letterColRef.getDocuments { snapshot, error in
             guard error == nil else {
-                print(error?.localizedDescription ?? "Undefined error")
+                Logger.firebase.info("\(error?.localizedDescription ?? "")")
                 return
             }
             
@@ -221,7 +222,7 @@ class FirestoreManager: ObservableObject {
             self.letters.removeAll()
             
             guard let snapshot = snapshot else {
-                print("\(#function): No snapshot \(String(describing: error?.localizedDescription))")
+                Logger.firebase.info("\(#function): No snapshot \(String(describing: error?.localizedDescription))")
                 return
             }
             
@@ -232,22 +233,22 @@ class FirestoreManager: ObservableObject {
                     let letter = try document.data(as: Letter.self)
                     self.letters.append(letter)
                 } catch let DecodingError.dataCorrupted(context) {
-                    print(context)
+                    Logger.firebase.info("\(context.debugDescription)")
                 } catch let DecodingError.keyNotFound(key, context) {
-                    print("Key '\(key)' not found:", context.debugDescription)
-                    print("codingPath:", context.codingPath)
+                    Logger.firebase.info("Key '\(key.debugDescription)' not found: \(context.debugDescription)")
+                    Logger.firebase.info("codingPath: \(context.codingPath)")
                 } catch let DecodingError.valueNotFound(value, context) {
-                    print("Value '\(value)' not found:", context.debugDescription)
-                    print("codingPath:", context.codingPath)
+                    Logger.firebase.info("Value '\(value)' not found: \(context.debugDescription)")
+                    Logger.firebase.info("codingPath: \(context.codingPath)")
                 } catch let DecodingError.typeMismatch(type, context)  {
-                    print("Type '\(type)' mismatch:", context.debugDescription)
-                    print("codingPath:", context.codingPath)
+                    Logger.firebase.info("Type '\(type)' mismatch: \(context.debugDescription)")
+                    Logger.firebase.info("codingPath: \(context.codingPath)")
                 } catch {
-                    print("Undefined error: ", error)
+                    Logger.firebase.info("Undefined error: \(error)")
                 }
             }
             
-            print("Letter fetch success")
+            Logger.firebase.info("Letter fetch success")
         }
     }
 
@@ -271,9 +272,9 @@ class FirestoreManager: ObservableObject {
         
         docRef.delete() { error in
             if let error = error {
-                print(#function, "Error deleting document: ", error)
+                Logger.firebase.info("\(#function) Error deleting document: \(error)")
             } else {
-                print(#function, "\(documentId) delete success")
+                Logger.firebase.info("\(#function) \(documentId) delete success")
             }
         }
     }
@@ -294,13 +295,13 @@ class FirestoreManager: ObservableObject {
             letterQty += 1
         }
         
-        print("Deleted \(letterQty)letters")
+        Logger.firebase.info("Deleted \(letterQty)letters")
         
         userDocRef.delete { error in
             if let error = error {
-                print(#function, "Error deleting document: ", error)
+                Logger.firebase.info("\(#function) Error deleting document: \(error)")
             } else {
-                print(#function, "\(userUid) delete success")
+                Logger.firebase.info("\(#function) \(userUid) delete success")
             }
         }
     }

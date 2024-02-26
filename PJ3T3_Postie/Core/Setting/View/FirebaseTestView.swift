@@ -4,7 +4,7 @@
 //
 //  Created by Eunsu JEONG on 1/17/24.
 //
-
+import OSLog
 import SwiftUI
 import PhotosUI //Storage test를 위한 import로 이후 삭제 예정
 
@@ -85,7 +85,7 @@ struct FirebaseTestView: View {
                                     summary = try await APIClient.shared.postRequestToAPI(title: "", content: content)
                                 } catch {
                                     summary = "에러 발생"
-                                    print("에러 정보: \(error)")
+                                    Logger.firebase.info("에러 정보: \(error)")
                                 }
                             }}, label: {
                                 Text("요약하기")
@@ -182,11 +182,11 @@ struct AddDataSectionView: View {
                 selectedImages.append(uiImage)
                 let imgData = NSData(data: uiImage.jpegData(compressionQuality: 1)!)
                 var imageSize: Int = imgData.count
-                print("actual size of image in KB: %f ", Double(imageSize) / 1000.0)
-                print(selectedImages)
+                Logger.firebase.info("actual size of image in KB: %f \(Double(imageSize) / 1000.0)")
+                Logger.firebase.info("\(selectedImages)")
             } else {
                 //alert 구현 필요
-                print("\(#function): 이미지를 array에 추가하는데 실패했습니다.")
+                Logger.firebase.info("\(#function): 이미지를 array에 추가하는데 실패했습니다.")
                 return
             }
         }
@@ -206,7 +206,7 @@ struct AddDataSectionView: View {
                     newImageFullPaths.append(fullPath)
                     newImageURLs.append(url)
                 } catch {
-                    print(#function, "Failed to upload image with: \(error)")
+                    Logger.firebase.info("\(#function) Failed to upload image with: \(error)")
                 }
             }
             do {
@@ -224,7 +224,7 @@ struct AddDataSectionView: View {
                 try await firestoreManager.addLetter(docId: docId, letter: newLetter)
                 firestoreManager.letters.append(newLetter) //fetch 생략 가능
             } catch {
-                print(#function, "Failed to upload document with: \(error)")
+                Logger.firebase.info("\(#function) Failed to upload document with: \(error)")
             }
         }
     }
@@ -412,7 +412,7 @@ struct TestDetailView: View {
                 currentFullPathAndURLs.append([currentFullPaths[i], currentUrls[i]])
             }
         } else {
-            print("현재 letter는 Image url의 개수와 fullPath의 개수가 다릅니다.")
+            Logger.firebase.info("현재 letter는 Image url의 개수와 fullPath의 개수가 다릅니다.")
         }
     }
     
@@ -425,11 +425,11 @@ struct TestDetailView: View {
                 selectedImages.append(uiImage)
                 let imgData = NSData(data: uiImage.jpegData(compressionQuality: 1)!)
                 let imageSize: Int = imgData.count
-                print("actual size of image in KB: %f ", Double(imageSize) / 1000.0)
-                print(selectedImages)
+                Logger.firebase.info("actual size of image in KB: \(Double(imageSize) / 1000.0)")
+                Logger.firebase.info("\(selectedImages)")
             } else {
                 //alert 구현 필요
-                print("\(#function): 이미지를 array에 추가하는데 실패했습니다.")
+                Logger.firebase.info("\(#function): 이미지를 array에 추가하는데 실패했습니다.")
                 return
             }
         }
@@ -448,7 +448,7 @@ struct TestDetailView: View {
                     newImageFullPaths.append(fullPath)
                     newImageURLs.append(url)
                 } catch {
-                    print(#function, "Failed to upload image with: \(error)")
+                    Logger.firebase.info("\(#function) Failed to upload image with: \(error)")
                 }
             }
             
@@ -456,7 +456,7 @@ struct TestDetailView: View {
                 storageManager.deleteItem(fullPath: deleteFullPath)
             }
             
-            print(newImageURLs, newImageFullPaths)
+            Logger.firebase.info("\(newImageURLs), \(newImageFullPaths)")
             
             firestoreManager.removeFullPathsAndURLs(docId: docId, fullPaths: deleteFullPaths, urls: deleteURLs)
             firestoreManager.updateLetter(docId: docId,

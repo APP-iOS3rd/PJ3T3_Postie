@@ -5,6 +5,7 @@
 //  Created by Eunsu JEONG on 1/22/24.
 //
 
+import OSLog
 import UIKit
 
 import FirebaseStorage
@@ -32,24 +33,24 @@ final class StorageManager: ObservableObject {
             let imageName = "\(UUID().uuidString).jpeg"
             let fileReference = userReference.child(docId).child(imageName)
             
-            print("업로드 시작")
-            
+            Logger.firebase.info("업로드 시작")
+
             //compressionQuality: 1 => 100%를 의미해 압축 없음
             //이미지가 너무 클 경우 직접 compress하거나 firebase extension 중 resize images(유료)를 사용
             //이미지 타입이 png라면 data = image.png()
             guard let data = image.jpegData(compressionQuality: 0.5) else {
-                print(#function, "Failed to compress image")
+                Logger.firebase.info("\(#function) Failed to compress image")
                 throw URLError(.badURL)
             }
 
             let returnedMetaData = try await fileReference.putDataAsync(data, metadata: meta)
 
             guard let imageFullPath = returnedMetaData.path else {
-                print(#function, "Failed to get image full path")
+                Logger.firebase.info("\(#function) Failed to get image full path")
                 throw URLError(.badURL)
             }
 
-            print("업로드 종료")
+            Logger.firebase.info("업로드 종료")
             return imageFullPath
         }
     
@@ -82,7 +83,7 @@ final class StorageManager: ObservableObject {
             let imageName = "\(UUID().uuidString).jpeg"
             let fileReference = userReference.child(docId).child(imageName)
             
-            print("업로드 시작 \(currentImageNo)/\(totalImages)")
+            Logger.firebase.info("업로드 시작 \(currentImageNo)/\(totalImages)")
             
             //compressionQuality: 1 => 100%를 의미해 압축 없음
             //이미지가 너무 클 경우 직접 compress하거나 firebase extension 중 resize images(유료)를 사용
@@ -93,15 +94,15 @@ final class StorageManager: ObservableObject {
             
             let returnedMetaData = try await fileReference.putDataAsync(data, metadata: meta)
             guard let testFullPath = returnedMetaData.path else {
-                print("Failed to get image full path")
+                Logger.firebase.info("Failed to get image full path")
                 return
             }
             
             currentImageNo += 1
         }
         
-        print("업로드 종료")
-        print("함수를 uploadUIImage로 교체해 사용 해 주세요!")
+        Logger.firebase.info("업로드 종료")
+        Logger.firebase.info("함수를 uploadUIImage로 교체해 사용 해 주세요!")
     }
     
     @available(*, deprecated, message: "이 함수는 더이상 사용하지 않습니다. String을 return하는 requestImageURL 함수를 사용 해 주세요. 뷰에서 더이상 사용하는 곳이 없다면 함수를 삭제 해 주세요.")
@@ -121,7 +122,7 @@ final class StorageManager: ObservableObject {
         
         folderRef.listAll { result, error in
             guard let result = result, error == nil else {
-                print("Error while getting list of file: ", error ?? "Undefined error")
+                Logger.firebase.info("Error while getting list of file: \(error)")
                 return
             }
             
@@ -130,7 +131,7 @@ final class StorageManager: ObservableObject {
                 item.getData(maxSize: 10 * 1024 * 1024) { data, error in
                     //UIImage타입으로 데이터를 저장 할 필요가 없다면 error 부분 제외하고 모두 삭제 필요
                     guard let data = data, let image = UIImage(data: data), error == nil else {
-                        print("\(#function): \(String(describing: error?.localizedDescription))")
+                        Logger.firebase.info("\(#function): \(String(describing: error?.localizedDescription))")
                         return
                     }
                     
@@ -152,7 +153,7 @@ final class StorageManager: ObservableObject {
         
         item.delete { error in
             guard error == nil else {
-                print("Error deleting item. \(String(describing: error?.localizedDescription))")
+                Logger.firebase.info("Error deleting item. \(String(describing: error?.localizedDescription))")
                 return
             }
             
@@ -160,7 +161,7 @@ final class StorageManager: ObservableObject {
                 self.images.remove(at: index)
             }
             
-            print(#function, "Success deleting images: \(fullPath)")
+            Logger.firebase.info("\(#function) Success deleting images: \(fullPath)")
         }
     }
 
@@ -178,11 +179,11 @@ final class StorageManager: ObservableObject {
         
         folderRef.listAll { result, error in
             guard let result = result, error == nil else {
-                print("Error while getting list of file: ", error ?? "Undefined error")
+                Logger.firebase.info("Error while getting list of file: \(error)")
                 return
             }
             
-            print("Total items in list: \(String(describing: result.items.count))")
+            Logger.firebase.info("Total items in list: \(String(describing: result.items.count))")
             
             result.items.forEach { item in
                 deleteDataGroup.enter()

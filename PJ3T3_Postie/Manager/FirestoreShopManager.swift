@@ -5,6 +5,8 @@
 //  Created by Eunsu JEONG on 2/15/24.
 //
 
+import OSLog
+
 import FirebaseFirestore
 
 final class FirestoreShopManager: ObservableObject {
@@ -20,14 +22,14 @@ final class FirestoreShopManager: ObservableObject {
         
         docRef.getDocuments { snapshot, error in
             guard error == nil else {
-                print(error?.localizedDescription ?? "Undefined error")
+                Logger.firebase.info("\(error?.localizedDescription ?? "")")
                 return
             }
             
             self.shops.removeAll()
             
             guard let snapshot = snapshot else {
-                print("\(#function): No snapshot \(String(describing: error?.localizedDescription))")
+                Logger.firebase.info("\(#function): No snapshot \(String(describing: error?.localizedDescription))")
                 return
             }
             
@@ -37,11 +39,11 @@ final class FirestoreShopManager: ObservableObject {
                     
                     self.shops.append(data)
                 } catch {
-                    print(#function, error.localizedDescription)
+                    Logger.firebase.info("\(#function) \(error.localizedDescription)")
                 }
             }
             
-            print("Shop fetch success")
+            Logger.firebase.info("Shop fetch success")
         }
     }
 }
