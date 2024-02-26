@@ -31,6 +31,7 @@ struct MapView: View {
     @State private var showButton = false
     @State private var checkMyLocation = false
     @State private var checkAlert = false
+    @State private var checkAllow = false
     @State var overlay = true
     @State var coord: MyCoord = MyCoord(37.579081, 126.974375) //Dafult값 (서울역)
     
@@ -185,15 +186,30 @@ struct MapView: View {
                             
                             HStack {
                                 Button( action: {
-                                    // 내 위치
-                                    locationManager.startUpdatingLocation()
-                                    
-                                    coordinator.cameraLocation?.lat = (locationManager.location?.coordinate.latitude ?? coordinator.cameraLocation?.lat)!
-                                    coordinator.cameraLocation?.lng = (locationManager.location?.coordinate.longitude ?? coordinator.cameraLocation?.lng)!
-                                    
-                                    coordinator.updateMapView(coord: MyCoord(coordinator.cameraLocation!.lat + 0.000001, coordinator.cameraLocation!.lng + 0.000001), overlay: true)
-                                    
-                                    checkMyLocation = false
+                                    let status = CLLocationManager.authorizationStatus()
+                                    switch status {
+                                    case .notDetermined: break
+                                        // 위치 접근 권한을 요청
+//                                        locationManager.requestWhenInUseAuthorization()
+                                    case .restricted, .denied:
+                                        // 위치 접근 권한이 거부됨
+                                        // 사용자에게 알림 표시
+                                        checkAllow.toggle()
+                                    case .authorizedAlways, .authorizedWhenInUse:
+                                        // 위치 권한이 허용됨
+                                        locationManager.startUpdatingLocation()
+                                        if let coordinate = locationManager.location?.coordinate {
+                                            // 현재 위치 업데이트
+                                            coordinator.cameraLocation?.lat = coordinate.latitude
+                                            coordinator.cameraLocation?.lng = coordinate.longitude
+                                            // 지도 업데이트
+                                            coordinator.updateMapView(coord: MyCoord(coordinate.latitude + 0.000001, coordinate.longitude + 0.000001), overlay: true)
+                                            checkMyLocation = false
+                                        }
+                                    @unknown default:
+                                        break
+                                    }
+
                                 }) {
                                     ZStack {
                                         RoundedRectangle(cornerRadius: 6)
@@ -209,7 +225,10 @@ struct MapView: View {
                                     }
                                 }
                                 .disabled(!checkMyLocation)
-                                
+                                .alert("위치 접근 권한이 필요합니다", isPresented: $checkAllow) {
+                                    Button("확인", role: .cancel) {}
+                                        .tint(Color.blue)
+                                }
                                 Spacer()
                             }
                             .padding(.bottom, 25)
