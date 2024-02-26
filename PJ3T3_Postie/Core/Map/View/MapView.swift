@@ -186,7 +186,7 @@ struct MapView: View {
                             
                             HStack {
                                 Button( action: {
-                                    let status = CLLocationManager.authorizationStatus()
+                                    let status = CLLocationManager().authorizationStatus
                                     switch status {
                                     case .notDetermined: break
                                         // 위치 접근 권한을 요청
