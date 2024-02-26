@@ -12,6 +12,8 @@ struct SearchView: View {
     @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     @State var searchQuery = ""
     @State var filteredLetters: [Letter] = []
+    @State private var showAlert = false
+    @State private var activeLink: String?
     
     var body: some View {
         ZStack {
@@ -40,15 +42,34 @@ struct SearchView: View {
             } else {
                 ScrollView {
                     ForEach(filteredLetters) { letter in
-                        NavigationLink {
-                            LetterDetailView(letter: letter)
-                        } label: {
+                        let nineAMToday = dateAtNineAM(from: letter.date)
+                        
+                        Button(action: {
+                            if nineAMToday > Date.nowInKorea && letter.writer == letter.recipient {
+                                self.showAlert = true
+                            } else {
+                                self.activeLink = letter.id
+                            }
+                        }) {
                             LetterItemView(letter: letter)
                         }
+                        .alert(isPresented: $showAlert) {
+                            Alert(
+                                title: Text("아직 편지가 배송중이에요!"),
+                                message: Text("도착하지 못한 편지는 열어 볼 수 없어요... 편지가 도착할 때까지 기다려 주세요!"),
+                                dismissButton: .default(Text("확인"))
+                            )
+                        }
+                        .background(
+                            NavigationLink(destination: LetterDetailView(letter: letter), tag: letter.id, selection: $activeLink) {
+                                EmptyView()
+                            }
+                                .hidden()
+                        )
                     }
                     
                     Rectangle()
-                        .frame(height: 70)
+                        .frame(height: 80)
                         .foregroundStyle(Color.postieBlack.opacity(0))
                 }
                 .scrollContentBackground(.hidden)
@@ -81,6 +102,31 @@ struct SearchView: View {
             $0.text.localizedCaseInsensitiveContains(searchQuery) ||
             $0.summary.localizedCaseInsensitiveContains(searchQuery)
         }
+        
+        filteredLetters = filteredLetters.filter {
+            $0.recipient == $0.writer ? compareDate(letterDate: $0.date) : true
+        }
+    }
+    
+    private func compareDate(letterDate: Date) -> Bool {
+        var letterDateComponent = Calendar.current.dateComponents([.year, .month, .day], from: letterDate)
+        letterDateComponent.hour = 9
+        letterDateComponent.minute = 00
+        
+        var isPast = false
+        
+        if let letterDate = Calendar.current.date(from: letterDateComponent) {
+            switch letterDate.compare(Date()) {
+            case .orderedSame: //같음
+                isPast = true
+            case .orderedDescending: //Date()보다 미래
+                isPast = false
+            case .orderedAscending: //Date()보다 과거
+                isPast = true
+            }
+        }
+        
+        return isPast
     }
     
     //name을 받아 query와 일치하는 부분만 font 색상을 변경한다. 현재 뷰에서는 사용되지 않고 있음

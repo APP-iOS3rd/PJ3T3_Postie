@@ -116,6 +116,7 @@ struct HomeView: View {
                                 .onAppear {
                                     tabSelection.resetViewAction = {
                                         withAnimation {
+                                            isSideMenuOpen = false
                                             value.scrollTo(0, anchor: .top)
                                         }
                                     }
@@ -201,10 +202,11 @@ struct SideMenuView: View {
                             .imageScale(.large)
                     }
                 }
+                .padding(.top, 5)
                 
                 Text("프로필 설정")
                     .font(.subheadline)
-                    .foregroundStyle(postieColors.dividerColor)
+                    .foregroundStyle(postieColors.tintColor)
                 
                 DividerView()
                     .padding(.bottom)
@@ -240,7 +242,7 @@ struct SideMenuView: View {
                 
                 Text("테마 설정")
                     .font(.subheadline)
-                    .foregroundStyle(postieColors.dividerColor)
+                    .foregroundStyle(postieColors.tintColor)
                 
                 DividerView()
                     .padding(.bottom)
@@ -251,7 +253,7 @@ struct SideMenuView: View {
                 
                 Text("앱 설정")
                     .font(.subheadline)
-                    .foregroundStyle(postieColors.dividerColor)
+                    .foregroundStyle(postieColors.tintColor)
                 
                 DividerView()
                     .padding(.bottom)

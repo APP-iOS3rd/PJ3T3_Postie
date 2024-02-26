@@ -11,7 +11,7 @@ import UIKit
 class SlowPostBoxViewModel: ObservableObject {
     @Published var sender: String = ""
     @Published var receiver: String = ""
-    @Published var date: Date = .now
+    @Published var date: Date = Calendar.current.date(byAdding: .day, value: 1, to: Date()) ?? Date()
     @Published var text: String = ""
     @Published var summary: String = ""
     @Published var images: [UIImage] = []

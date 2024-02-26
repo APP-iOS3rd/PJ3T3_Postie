@@ -5,6 +5,7 @@
 //  Created by kwon ji won on 1/23/24.
 //
 
+import OSLog
 import SwiftUI
 import UIKit
 import CoreLocation
@@ -135,7 +136,7 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate {
 //                self.checkMyLocation = false
             }
         
-        print("움직인다 움직여 \(coord)")
+        Logger.map.info("움직인다 움직여 \(self.coord.lat) \(self.coord.lng)")
         view.mapView.moveCamera(cameraUpdate)
     }
     
