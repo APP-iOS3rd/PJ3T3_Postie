@@ -31,15 +31,14 @@ struct MapView: View {
     @State private var showButton = false
     @State private var checkMyLocation = false
     @State private var checkAlert = false
+    @State private var checkAllow = false
+    @State var overlay = true
     @State var coord: MyCoord = MyCoord(37.579081, 126.974375) //Dafult값 (서울역)
-    
-    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
     @FocusState private var isSearchFocused: Bool
     
     var body: some View {
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
-        
+ 
         NavigationView {
             ZStack {
                 postieColors.backGroundColor
@@ -55,7 +54,7 @@ struct MapView: View {
                     }
                     .padding(.horizontal) // 옆에 리인 맞춤
                     .padding(.top)
-
+                    
                     HStack(spacing: 10) {
                         ForEach(0...1, id: \.self) { index in
                             Button(action: {
@@ -80,8 +79,7 @@ struct MapView: View {
                         }
                         Spacer()
                     }
-                    .padding(EdgeInsets(top: 5, leading: 15, bottom: 10, trailing: 0)) 
-//                    .padding()
+                    .padding(EdgeInsets(top: 5, leading: 15, bottom: 10, trailing: 0))
                     
                     HStack() {
                         Spacer(minLength: 10)
@@ -91,19 +89,18 @@ struct MapView: View {
                         TextField("장소 검색(서초구, 서초동)", text: $searchText)
                             .foregroundColor(.primary)
                             .disableAutocorrection(true)
-                            .focused($isSearchFocused)
                             .onSubmit {
                                 naverGeocodeAPI.fetchLocationForPostalCode(searchText) { latitude, longitude in
                                     locationManager.stopUpdatingLocation()
                                     
                                     if let latitude = latitude, let longitude = longitude {
                                         //위경도 값 저장
-                                        coordinator.updateMapView(coord: MyCoord(latitude,longitude))
+                                        coordinator.ButtonUpdateMapView(coord: MyCoord(latitude,longitude))
                                         
                                         self.coord = MyCoord(latitude, longitude)
                                         
                                         officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)
-                                        
+
                                         Logger.map.info("위경도 변환 성공\(coord.lat) \(coord.lng)")
                                     } else {
                                         //알럿창 띄우기
@@ -132,12 +129,11 @@ struct MapView: View {
                         Spacer(minLength: 10)
                     }
                     .frame(height: 35)
-//                    .background(RoundedRectangle(cornerRadius: 8).stroke(Color.clear))
                     .background(Color.gray.opacity(0.1))
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                     .padding(.horizontal, 15)
                     .padding(.bottom, 15)
-                                        .onAppear (perform : UIApplication.shared.hideKeyboard)
+                    .onAppear (perform : UIApplication.shared.hideKeyboard)
                     //                    .background(Color(uiColor: .secondarySystemBackground))
                     //                    .textFieldStyle(.roundedBorder)
                     
@@ -148,10 +144,12 @@ struct MapView: View {
                         VStack {
                             Button(action: {
                                 Logger.map.info("현재 위치에서 \(name[selectedButtonIndex]) 찾기 버튼 눌림")
-
+                                
                                 locationManager.stopUpdatingLocation() // 현재 위치 추적 금지
-
+                                
                                 coord = MyCoord(coordinator.cameraLocation?.lat ?? coord.lat, coordinator.cameraLocation?.lng ?? coord.lng)
+                                
+                                coordinator.updateMapView(coord: coord, overlay: false)
                                 
                                 officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)
                                 
@@ -185,15 +183,30 @@ struct MapView: View {
                             
                             HStack {
                                 Button( action: {
-                                    // 내 위치
-                                    locationManager.startUpdatingLocation()
-                                    
-                                    coordinator.cameraLocation?.lat = (locationManager.location?.coordinate.latitude ?? coordinator.cameraLocation?.lat)!
-                                    coordinator.cameraLocation?.lng = (locationManager.location?.coordinate.longitude ?? coordinator.cameraLocation?.lng)!
-                                    
-                                    coordinator.updateMapView(coord: MyCoord(coordinator.cameraLocation!.lat, coordinator.cameraLocation!.lng))
-                                    
-                                    checkMyLocation = false
+                                    let status = CLLocationManager().authorizationStatus
+                                    switch status {
+                                    case .notDetermined: break
+                                        // 위치 접근 권한을 요청
+//                                        locationManager.requestWhenInUseAuthorization()
+                                    case .restricted, .denied:
+                                        // 위치 접근 권한이 거부됨
+                                        // 사용자에게 알림 표시
+                                        checkAllow.toggle()
+                                    case .authorizedAlways, .authorizedWhenInUse:
+                                        // 위치 권한이 허용됨
+                                        locationManager.startUpdatingLocation()
+                                        if let coordinate = locationManager.location?.coordinate {
+                                            // 현재 위치 업데이트
+                                            coordinator.cameraLocation?.lat = coordinate.latitude
+                                            coordinator.cameraLocation?.lng = coordinate.longitude
+                                            // 지도 업데이트
+                                            coordinator.updateMapView(coord: MyCoord(coordinate.latitude + 0.000001, coordinate.longitude + 0.000001), overlay: true)
+                                            checkMyLocation = false
+                                        }
+                                    @unknown default:
+                                        break
+                                    }
+
                                 }) {
                                     ZStack {
                                         RoundedRectangle(cornerRadius: 6)
@@ -209,7 +222,15 @@ struct MapView: View {
                                     }
                                 }
                                 .disabled(!checkMyLocation)
-                                
+                                .alert("위치 접근 권한이 필요합니다", isPresented: $checkAllow) {
+                                    Button("설정") {
+                                        if let appSetting = URL(string: UIApplication.openSettingsURLString) {
+                                            UIApplication.shared.open(appSetting)
+                                        }
+                                    }
+                                    Button("취소", role: .cancel) {}
+                                        .foregroundColor(.red)
+                                }
                                 Spacer()
                             }
                             .padding(.bottom, 25)
@@ -218,7 +239,7 @@ struct MapView: View {
                     }
                 }
                 Spacer()
-                    
+                
             }
             .toolbar {
                 ToolbarItemGroup(placement: .keyboard) {
@@ -244,14 +265,11 @@ struct MapView: View {
         .onAppear() {
             CLLocationManager().requestWhenInUseAuthorization()
             
-            officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)
-            
             // 초기 데이터 로드
-                loadInitialData()
+            loadInitialData()
         }
         .onChange(of: officeInfoServiceAPI.infos) { newInfos in
-//            coordinator.removeAllMakers()
-            
+
             for result in newInfos {
                 var lunchtime: String = ""
                 if result.lunchTime == "null" {
@@ -294,27 +312,26 @@ struct MapView: View {
         // 초기 데이터 로드
         fetchData()
     }
-
+    
     private func handleLocationUpdate() {
         // 위치 정보가 업데이트된 후 필요한 작업 수행
         // 예: 데이터 업데이트 등
         fetchData()
     }
-
+    
     private func updateLocation() {
         // 현재 위치 업데이트
         locationManager.startUpdatingLocation()
         // 처음 들어올 때 coord 업데이트
         coord = MyCoord(coordinator.cameraLocation?.lat ?? coord.lat, coordinator.cameraLocation?.lng ?? coord.lng)
     }
-
+    
     private func fetchData() {
         // 데이터 로드
         officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)
+        coordinator.updateMapView(coord: coord, overlay: true)
     }
 }
-
-
 
 extension UIApplication {
     func hideKeyboard() {
