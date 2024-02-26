@@ -68,7 +68,7 @@ struct LoginView: View {
                                 if isLoginProcessing {
                                     ProgressView()
                                 } else {
-                                    Image("GoogleSignIn")
+                                    Image("GoogleSignInKor")
                                         .resizable()
                                         .scaledToFit()
                                 }

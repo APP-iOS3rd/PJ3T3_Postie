@@ -14,7 +14,7 @@ struct NicknameView: View {
     @State private var showSuccessAlert = false
     @State private var showFailureAlert = false
     @State private var isReAuthing = false
-    @State private var isDialogPresented = false
+    @State private var showReAuthAlert = false
     @State private var showLoading = false
     @State private var loadingText = ""
     @State private var failureAlertMessage = ""
@@ -39,7 +39,7 @@ struct NicknameView: View {
                         .fontWeight(.semibold)
                         .font(.footnote)
                     
-                    TextField("사용할 닉네임을 입력 해 주세요", text: $nickname)
+                    TextField("주고받은 편지에 표시될 닉네임을 입력해 주세요", text: $nickname)
                         .focused($focusField, equals: "nickname")
                         .autocorrectionDisabled()
                         .foregroundStyle(postieColors.tabBarTintColor)
@@ -105,7 +105,7 @@ struct NicknameView: View {
                     guard authManager.authDataResult != nil else {
                         hideKeyboard()
                         isReAuthing = true
-                        isDialogPresented = true
+                        showReAuthAlert = true
                         return
                     }
                     
@@ -134,7 +134,7 @@ struct NicknameView: View {
                 .shadow(radius: 3, x: 3, y: 3)
                 .padding(.bottom, 10)
                 .disabled(!isTappable)
-                .onChange(of: nickname) { newValue in
+                .customOnChange(nickname) { newValue in
                     if !newValue.isEmpty && newValue.count < 13 {
                         isTappable = true
                     } else {
@@ -150,7 +150,7 @@ struct NicknameView: View {
                     Button("좋아요") {
                         Task {
                             guard let authDataResult = authManager.authDataResult else {
-                                isDialogPresented = true
+                                showReAuthAlert = true
                                 isReAuthing = true
                                 return
                             }
@@ -173,18 +173,25 @@ struct NicknameView: View {
                 } message: {
                     Text(failureAlertMessage)
                 }
+                .alert("계정 정보를 가져오는데 실패했습니다.", isPresented: $showReAuthAlert) {
+                    ReAuthButtonView(showFailureAlert: $showFailureAlert, showSuccessAlert: $showSuccessAlert, alertBody: $failureAlertMessage)
+                    
+                    Button(role: .cancel) {
+                        isReAuthing = false
+                        isTappable = true
+                    } label: {
+                        Text("취소")
+                    }
+                } message: {
+                    Text("계정 생성을 위해 재인증이 필요합니다.")
+                        .multilineTextAlignment(.center)
+                }
             }
             .padding(.horizontal, 32)
             .padding(.bottom, 100)
         }
         .onTapGesture {
             hideKeyboard()
-        }
-        .confirmationDialog("계정 정보를 가져오는데 실패했습니다.", isPresented: $isDialogPresented, titleVisibility: .visible) {
-            ReAuthButtonView(showFailureAlert: $showFailureAlert, showSuccessAlert: $showSuccessAlert, alertBody: $failureAlertMessage)
-        } message: {
-            Text("계정 생성을 위해 재인증이 필요합니다. 재인증이 완료 되면 버튼을 다시 한 번 눌러주세요.")
-                .multilineTextAlignment(.center)
         }
         .fullScreenCover(isPresented: $showLoading) {
             LoadingView(text: loadingText)
