@@ -28,7 +28,7 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate {
     var coord: MyCoord = MyCoord(0.0,0.0) // 내 위치값 초기 설정
     
     @Published var currentLocation: CLLocation?
-    @Published var isUpdatingLocation: Bool = false
+    @Published var isUpdatingLocation: Bool = true
     @Published var cameraLocation: NMGLatLng?
     
     var circleOverlay: NMFCircleOverlay?
@@ -86,7 +86,10 @@ class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate {
         removeAllMakers()
         
         // 위치 오버레이
-        setLocationOverlay(coord: updatecoord)
+//        setLocationOverlay(coord: updatecoord)
+        if overlay {
+                    setLocationOverlay(coord: updatecoord)
+                }
         
         let center = NMGLatLng(lat: coord.lat, lng: coord.lng)
         drawCircleOvelay(center: center, radius: 1000)

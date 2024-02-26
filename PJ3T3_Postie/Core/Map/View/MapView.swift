@@ -35,13 +35,10 @@ struct MapView: View {
     @State var overlay = true
     @State var coord: MyCoord = MyCoord(37.579081, 126.974375) //Dafult값 (서울역)
     
-    @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
-    
     @FocusState private var isSearchFocused: Bool
     
     var body: some View {
-        let postieColors = ThemeManager.themeColors[isThemeGroupButton]
-        
+ 
         NavigationView {
             ZStack {
                 postieColors.backGroundColor
@@ -83,7 +80,6 @@ struct MapView: View {
                         Spacer()
                     }
                     .padding(EdgeInsets(top: 5, leading: 15, bottom: 10, trailing: 0))
-                    //                    .padding()
                     
                     HStack() {
                         Spacer(minLength: 10)
@@ -93,7 +89,6 @@ struct MapView: View {
                         TextField("장소 검색(서초구, 서초동)", text: $searchText)
                             .foregroundColor(.primary)
                             .disableAutocorrection(true)
-                            .focused($isSearchFocused)
                             .onSubmit {
                                 naverGeocodeAPI.fetchLocationForPostalCode(searchText) { latitude, longitude in
                                     locationManager.stopUpdatingLocation()
@@ -105,7 +100,7 @@ struct MapView: View {
                                         self.coord = MyCoord(latitude, longitude)
                                         
                                         officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)
-                                        
+
                                         Logger.map.info("위경도 변환 성공\(coord.lat) \(coord.lng)")
                                     } else {
                                         //알럿창 띄우기
@@ -153,6 +148,8 @@ struct MapView: View {
                                 locationManager.stopUpdatingLocation() // 현재 위치 추적 금지
                                 
                                 coord = MyCoord(coordinator.cameraLocation?.lat ?? coord.lat, coordinator.cameraLocation?.lng ?? coord.lng)
+                                
+                                coordinator.updateMapView(coord: coord, overlay: false)
                                 
                                 officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)
                                 
@@ -268,14 +265,11 @@ struct MapView: View {
         .onAppear() {
             CLLocationManager().requestWhenInUseAuthorization()
             
-            officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)
-            
             // 초기 데이터 로드
             loadInitialData()
         }
         .onChange(of: officeInfoServiceAPI.infos) { newInfos in
-            //            coordinator.removeAllMakers()
-            
+
             for result in newInfos {
                 var lunchtime: String = ""
                 if result.lunchTime == "null" {
@@ -335,10 +329,9 @@ struct MapView: View {
     private func fetchData() {
         // 데이터 로드
         officeInfoServiceAPI.fetchData(postDivType: selectedButtonIndex + 1, postLatitude: coord.lat, postLongitude: coord.lng)
+        coordinator.updateMapView(coord: coord, overlay: true)
     }
 }
-
-
 
 extension UIApplication {
     func hideKeyboard() {

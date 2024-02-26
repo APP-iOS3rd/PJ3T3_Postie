@@ -22,6 +22,6 @@ struct NaverMap: UIViewRepresentable {
     
     func updateUIView(_ uiView: NMFNaverMapView, context: Context) {
         //위치 입력?
-        context.coordinator.updateMapView(coord: coord, overlay: true)
+        context.coordinator.updateMapView(coord: coord, overlay: false)
     }
 }
