@@ -226,16 +226,13 @@ struct MapView: View {
                                 }
                                 .disabled(!checkMyLocation)
                                 .alert("위치 접근 권한이 필요합니다", isPresented: $checkAllow) {
-//                                    Button("확인", role: .cancel) {}
-//                                        .tint(Color.blue)
-                                    VStack {
-//                                            NavigationLink(destination: ShopView()) {
-//                                                Text("설정으로 이동")
-//                                                    .foregroundColor(.blue)
-//                                            }
-                                            Button("취소", role: .cancel) {}
-                                                .foregroundColor(.red)
+                                    Button("설정") {
+                                        if let appSetting = URL(string: UIApplication.openSettingsURLString) {
+                                            UIApplication.shared.open(appSetting)
                                         }
+                                    }
+                                    Button("취소", role: .cancel) {}
+                                        .foregroundColor(.red)
                                 }
                                 Spacer()
                             }
