@@ -16,8 +16,10 @@ struct ListLetterView: View {
     
     var body: some View {
         ForEach(firestoreManager.letters.sorted(by: { $0.date < $1.date }), id: \.self) { letter in
+            let nineAMToday = dateAtNineAM(from: letter.date)
+            
             Button(action: {
-                if letter.date > Date() && letter.writer == letter.recipient {
+                if nineAMToday > Date.nowInKorea && letter.writer == letter.recipient {
                     self.showAlert = true
                 } else {
                     self.activeLink = letter.id
@@ -39,7 +41,6 @@ struct ListLetterView: View {
                     .hidden()
             )
         }
-        
     }
 }
 
@@ -49,6 +50,8 @@ struct LetterItemView: View {
     var letter: Letter
     
     var body: some View {
+        let nineAMToday = dateAtNineAM(from: letter.date)
+        
         HStack {
             if !letter.isReceived {
                 Spacer()
@@ -81,15 +84,6 @@ struct LetterItemView: View {
                                 .scaledToFit()
                                 .frame(width: 30, height: 30)
                         }
-//                        ZStack {
-//                            Image(systemName: "water.waves")
-//                                .font(.headline)
-//                                .offset(x: 18)
-//                            
-//                            Image(systemName: "sleep.circle")
-//                                .font(.largeTitle)
-//                        }
-//                        .foregroundStyle(postieColors.dividerColor)
                     }
                     
                     Spacer()
@@ -97,14 +91,14 @@ struct LetterItemView: View {
                     HStack {
                         Spacer()
                         
-                        if letter.recipient == letter.writer && Date() < letter.date {
+                        if letter.recipient == letter.writer && nineAMToday > Date.nowInKorea { // 나의 느린 우체통 && 도착 안한거 -> 잠금
                             Image(systemName: "lock")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(height: 30)
                                 .offset(y: -10)
                                 .foregroundStyle(postieColors.tabBarTintColor)
-                        } else if !letter.summary.isEmpty && letter.recipient != letter.writer && Date() < letter.date {
+                        } else if !letter.summary.isEmpty && letter.recipient != letter.writer && nineAMToday > Date.nowInKorea { // 요약 있는 일반 편지 && 미래로 설정한거 -> 요약 보여주기
                             Text("“")
                                 .font(.custom("SairaStencilOne-Regular", size: 30))
                                 .foregroundStyle(postieColors.tabBarTintColor)
@@ -115,7 +109,7 @@ struct LetterItemView: View {
                             Text("”")
                                 .font(.custom("SairaStencilOne-Regular", size: 30))
                                 .foregroundStyle(postieColors.tabBarTintColor)
-                        } else if !letter.summary.isEmpty && Date() > letter.date {
+                        } else if !letter.summary.isEmpty && nineAMToday < Date.nowInKorea { // 요약 있는 나머지 편지 && 과거로 설정한거 -> 요약 보여주기
                             Text("“")
                                 .font(.custom("SairaStencilOne-Regular", size: 30))
                                 .foregroundStyle(postieColors.tabBarTintColor)
@@ -126,7 +120,7 @@ struct LetterItemView: View {
                             Text("”")
                                 .font(.custom("SairaStencilOne-Regular", size: 30))
                                 .foregroundStyle(postieColors.tabBarTintColor)
-                        }
+                        } // 나머지 편지(요약 없는거) -> 요약 안보여주기 : 나눈 이유? -> 요약 없을때는 "" 만 나와서 조건 줘서 나눔
                         
                         Spacer()
                         

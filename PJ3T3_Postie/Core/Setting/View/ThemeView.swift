@@ -13,12 +13,13 @@ struct ThemeView: View {
     @AppStorage("isSplitLayout") private var isSplitLayout: Bool = true
     @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
     
-    @State private var selectedThemeButton: Bool = true
+    @State private var selectedThemeButton: Int = 0
     @Binding var currentColorPage: Int
     @Binding var isTabGroupButton: Bool
     @Binding var currentGroupPage: Int
     
     var body: some View {
+        let name = ["테마 설정", "나열 변경"]
         let items = ["포스티 오렌지", "포스티 옐로우", "포스티 그린", "포스티 블루", "포스티 블랙"]
         let listImages = ["postieListOrange", "postieListYellow", "postieListGreen", "postieListBlue", "postieListBlack"]
         let groupImages = ["postieGroupOrange", "postieGroupYellow", "postieGroupGreen", "postieGroupBlue", "postieGroupBlack"]
@@ -35,67 +36,31 @@ struct ThemeView: View {
                 
                 VStack {
                     HStack(spacing: 10) {
-                        ZStack(alignment: .center) {
-                            Rectangle()
-                                .foregroundColor(.clear)
-                                .frame(width: 70, height: 30)
-                                .background(selectedThemeButton ? postieColors.tintColor : postieColors.receivedLetterColor)
-                                .cornerRadius(20)
-                                .shadow(color: Color.postieBlack.opacity(0.1), radius: 3, x: 2, y: 2)
-                            
+                        ForEach(0...1, id: \.self) { index in
                             Button(action: {
-                                selectedThemeButton = true
+                                selectedThemeButton = index
                             }) {
-                                if isThemeGroupButton == 4 {
-                                    Text("테마 설정")
+                                ZStack {
+                                    Rectangle()
+                                        .foregroundColor(.clear)
+                                        .frame(width: 72, height: 30)
+                                        .background(selectedThemeButton == index ? postieColors.tintColor : postieColors.receivedLetterColor)
+                                        .cornerRadius(20)
+                                        .shadow(color: Color.postieBlack.opacity(0.1), radius: 3, x: 2, y: 2)
+                                    
+                                    Text(name[index])
                                         .font(.caption)
-                                        .bold(selectedThemeButton)
+                                        .fontWeight(selectedThemeButton == index ? .bold : .regular)
                                         .multilineTextAlignment(.center)
-                                        .foregroundColor(selectedThemeButton ? Color.postieBlack : Color.postieWhite)
-                                        .frame(width: 70, alignment: .top)
-                                } else {
-                                    Text("테마 설정")
-                                        .font(.caption)
-                                        .bold(selectedThemeButton)
-                                        .multilineTextAlignment(.center)
-                                        .foregroundColor(selectedThemeButton ? Color.postieWhite : Color.postieBlack)
-                                        .frame(width: 70, alignment: .top)
-                                }
-                            }
-                        }
-                        
-                        ZStack(alignment: .center) {
-                            Rectangle()
-                                .foregroundColor(.clear)
-                                .frame(width: 70, height: 30)
-                                .background(selectedThemeButton ? postieColors.receivedLetterColor : postieColors.tintColor)
-                                .cornerRadius(20)
-                                .shadow(color: Color.postieBlack.opacity(0.1), radius: 3, x: 2, y: 2)
-                            
-                            Button(action: {
-                                selectedThemeButton = false
-                            }) {
-                                if isThemeGroupButton == 4 {
-                                    Text("나열 변경")
-                                        .font(.caption)
-                                        .multilineTextAlignment(.center)
-                                        .bold(!selectedThemeButton)
-                                        .foregroundColor(selectedThemeButton ? Color.postieWhite : Color.postieBlack)
-                                        .frame(width: 70, alignment: .top)
-                                } else {
-                                    Text("나열 변경")
-                                        .font(.caption)
-                                        .multilineTextAlignment(.center)
-                                        .bold(!selectedThemeButton)
-                                        .foregroundColor(selectedThemeButton ? Color.postieBlack : Color.postieWhite)
-                                        .frame(width: 70, alignment: .top)
+                                        .foregroundColor(selectedThemeButton == index ? postieColors.receivedLetterColor : postieColors.tabBarTintColor)
+                                        .frame(width: 60, alignment: .top)
                                 }
                             }
                         }
                         
                         Spacer()
                         
-                        if selectedThemeButton {
+                        if selectedThemeButton == 0 {
                             Menu {
                                 Button(action: {
                                     selectedLayoutMode = 0
@@ -177,7 +142,7 @@ struct ThemeView: View {
                     
                     Spacer()
                     
-                    if selectedThemeButton {
+                    if selectedThemeButton == 0 {
                         if selectedLayoutMode == 0 {
                             TabView(selection: $currentColorPage) {
                                 ForEach(Array(zip(items.indices, items)), id: \.0) { index, item in

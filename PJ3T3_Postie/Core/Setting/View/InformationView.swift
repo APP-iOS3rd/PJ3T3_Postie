@@ -27,7 +27,7 @@ struct InformationView: View {
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading) {
                     Text("앱 정보")
-                        .foregroundStyle(postieColors.dividerColor)
+                        .foregroundStyle(postieColors.tintColor)
                     
                     DividerView()
                         .padding(.bottom, 5)
@@ -44,7 +44,7 @@ struct InformationView: View {
                     .padding(.bottom)
                     
                     Text("법률 조항")
-                        .foregroundStyle(postieColors.dividerColor)
+                        .foregroundStyle(postieColors.tintColor)
                     
                     DividerView()
                         .padding(.bottom, 5)
@@ -76,7 +76,7 @@ struct InformationView: View {
                     }
                     
                     Text("함께하신 분들")
-                        .foregroundStyle(postieColors.dividerColor)
+                        .foregroundStyle(postieColors.tintColor)
                     
                     DividerView()
                         .padding(.bottom, 5)
@@ -91,7 +91,7 @@ struct InformationView: View {
                     .padding(.bottom)
                     
                     Text("도움주신 분들")
-                        .foregroundStyle(postieColors.dividerColor)
+                        .foregroundStyle(postieColors.tintColor)
                     
                     DividerView()
                         .padding(.bottom, 5)
