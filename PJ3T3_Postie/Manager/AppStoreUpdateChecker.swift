@@ -24,9 +24,9 @@ struct AppStoreUpdateChecker {
 
         do {
             let appleID = 6478052812
-            let data = try Data(contentsOf: url)
             
             guard let url = URL(string: "https://itunes.apple.com/lookup?id=\(appleID)&country=kr"),
+                  let data = try? Data(contentsOf: url),
                   let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any],
                   let results = json["results"] as? [[String: Any]],
                   let appStoreVersionNumber = results[0]["version"] as? String else {

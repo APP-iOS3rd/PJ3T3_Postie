@@ -90,11 +90,12 @@ struct ContentView: View {
             }
         }
         .alert("업데이트 알림", isPresented: $showUpdate) {
-//                    Button("나중에") {}
             let appleID = 6478052812 //테스트용 멜론 앱으로 연결: 415597317
             if let url = URL(string: "itms-apps://itunes.apple.com/app/apple-store/\(appleID)") {
                 Link("업데이트", destination: url)
             }
+            
+//            Button("나중에", role: .cancel) {}
         } message: {
             Text("새로운 버전 업데이트가 있어요! 더 나은 서비스를 위해 포스티를 업데이트 해 주세요.")
         }
