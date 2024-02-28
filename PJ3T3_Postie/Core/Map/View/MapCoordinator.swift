@@ -5,6 +5,8 @@
 //  Created by Eunsu JEONG on 1/17/24.
 //
 
+import UIKit
+import NMapsMap
 import SwiftUI
 
 struct MapCoordinator: View {
@@ -13,6 +15,4 @@ struct MapCoordinator: View {
     }
 }
 
-#Preview {
-    MapCoordinator()
-}
+
