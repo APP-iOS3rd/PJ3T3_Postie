@@ -19,11 +19,11 @@
 편지 내용과 편지지, 편지 봉투까지 저장해 언제, 어디서나 앱에서 꺼내 보세요<br>
 
 ### ✉️ 앱 스토어([링크](https://apps.apple.com/kr/app/%ED%8F%AC%EC%8A%A4%ED%8B%B0-postie/id6478052812))
-<img width="170" alt="앱스토어 이미지1" src="https://github.com/APP-iOS3rd/PJ3T3_Postie/assets/106911494/18e3bfb6-110c-4a2a-b2f5-456009448ffc">
-<img width="170" alt="앱스토어 이미지2" src="https://github.com/APP-iOS3rd/PJ3T3_Postie/assets/106911494/25c0dcc7-bf7e-48ce-8291-a0790082df26">
-<img width="170" alt="앱스토어 이미지3" src="https://github.com/APP-iOS3rd/PJ3T3_Postie/assets/106911494/332a439c-ece3-479b-b357-401021f41dfb">
-<img width="170" alt="앱스토어 이미지4" src="https://github.com/APP-iOS3rd/PJ3T3_Postie/assets/106911494/35f7929c-bc6f-4045-8d57-e87ef96dc744">
-<img width="170" alt="앱스토어 이미지5" src="https://github.com/APP-iOS3rd/PJ3T3_Postie/assets/106911494/ad8d1a6c-e1fd-4de1-9da3-0b5703c7abae">
+<img width="165" alt="앱스토어 이미지1" src="https://github.com/APP-iOS3rd/PJ3T3_Postie/assets/106911494/18e3bfb6-110c-4a2a-b2f5-456009448ffc">
+<img width="165" alt="앱스토어 이미지2" src="https://github.com/APP-iOS3rd/PJ3T3_Postie/assets/106911494/25c0dcc7-bf7e-48ce-8291-a0790082df26">
+<img width="165" alt="앱스토어 이미지3" src="https://github.com/APP-iOS3rd/PJ3T3_Postie/assets/106911494/332a439c-ece3-479b-b357-401021f41dfb">
+<img width="165" alt="앱스토어 이미지4" src="https://github.com/APP-iOS3rd/PJ3T3_Postie/assets/106911494/35f7929c-bc6f-4045-8d57-e87ef96dc744">
+<img width="165" alt="앱스토어 이미지5" src="https://github.com/APP-iOS3rd/PJ3T3_Postie/assets/106911494/ad8d1a6c-e1fd-4de1-9da3-0b5703c7abae">
 
 
 ### ✉️ 팀원 소개
