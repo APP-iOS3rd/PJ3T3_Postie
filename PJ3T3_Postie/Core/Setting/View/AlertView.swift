@@ -10,8 +10,8 @@ import UserNotifications
 
 struct AlertView: View {
     @AppStorage("isThemeGroupButton") private var isThemeGroupButton: Int = 0
-    @AppStorage("allAlert") private var allAlert: Bool = true
-    @State private var slowAlert = true
+    @AppStorage("allAlert") private var allAlert: Bool = false
+    @AppStorage("slowAlert") private var slowAlert: Bool = false
     
     func moveToNotificationSetting() {
         if let url = URL(string: UIApplication.openNotificationSettingsURLString) {
