@@ -5,7 +5,7 @@
 //  Created by Eunsu JEONG on 2/1/24.
 //
 
-import FirebaseAuth
+import Foundation
 
 struct PostieUser: Identifiable, Codable {
     let id: String
