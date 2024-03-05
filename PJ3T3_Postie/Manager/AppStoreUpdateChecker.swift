@@ -42,16 +42,16 @@ struct AppStoreUpdateChecker {
             let splitCurrentVersion = currentVersionNumber.split(separator: ".").map { $0 }
             
             if splitLatestVersion[0] > splitCurrentVersion[0] {
-                print("----> 최신 버전 첫째자리:", splitLatestVersion[0])
-                print("----> 현재 버전 첫째자리:", splitCurrentVersion[0])
+                Logger.version.info("----> 최신 버전 첫째자리: \(splitLatestVersion[0])")
+                Logger.version.info("----> 현재 버전 첫째자리: \(splitCurrentVersion[0])")
                 return true
             } else if splitLatestVersion[1] > splitCurrentVersion[1] {
-                print("----> 최신 버전 둘째자리:", splitLatestVersion[1])
-                print("----> 현재 버전 둘째자리:", splitCurrentVersion[1])
+                Logger.version.info("----> 최신 버전 둘째자리: \(splitLatestVersion[1])")
+                Logger.version.info("----> 현재 버전 둘째자리: \(splitCurrentVersion[1])")
                 return true
             } else if splitLatestVersion[2] > splitCurrentVersion[2] {
-                print("----> 최신 버전 셋째자리:", splitLatestVersion[2])
-                print("----> 현재 버전 셋째자리:", splitCurrentVersion[2])
+                Logger.version.info("----> 최신 버전 셋째자리: \(splitLatestVersion[2])")
+                Logger.version.info("----> 현재 버전 셋째자리: \(splitCurrentVersion[2])")
                 return true
             }
             
