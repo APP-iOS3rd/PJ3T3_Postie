@@ -95,11 +95,7 @@ class AuthManager: ObservableObject {
 
             //hasAccount의 default는 ture로 로그인 과정에서 account가 있는지 확인하는 동안 ProgressView를 보여준다.
             //이 과정이 없을 경우 로그인 계정이 있음에도 NicknameView가 잠시 나타났다가 홈 뷰로 넘어가는 문제가 발생한다.
-            if self.currentUser != nil {
-                self.hasAccount = true
-            } else {
-                self.hasAccount = false
-            }
+            self.hasAccount = self.currentUser != nil
         }
         
         self.getProviders()
