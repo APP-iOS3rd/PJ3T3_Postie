@@ -100,13 +100,6 @@ class AuthManager: ObservableObject {
             } else {
                 self.hasAccount = false
             }
-            
-            //NicknameView에서 아무 이름도 입력하지 않은 경우를 판별한다. 필요 없을 경우 삭제할 예정
-            if self.currentUser?.nickname != "" {
-                Logger.auth.info("\(self.currentUser?.nickname ?? "")")
-            } else {
-                Logger.auth.info("This user is logged in without nickname")
-            }
         }
         
         self.getProviders()
