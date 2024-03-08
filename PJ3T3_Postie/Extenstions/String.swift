@@ -14,8 +14,7 @@ extension String {
     func chunks(size: Int) -> [String] {
         return stride(from: 0, to: count, by: size).map { index in
             let startIndex = self.index(self.startIndex, offsetBy: index)
-            let endIndex = self.index(startIndex, offsetBy: size,
-                                      limitedBy: self.endIndex) ?? self.endIndex
+            let endIndex = self.index(startIndex, offsetBy: size, limitedBy: self.endIndex) ?? self.endIndex
             return String(self[startIndex..<endIndex])
         }
     }
