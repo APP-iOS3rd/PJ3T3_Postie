@@ -41,25 +41,36 @@ struct AppStoreUpdateChecker {
             let splitLatestVersion = appStoreVersionNumber.split(separator: ".").map { $0 }
             let splitCurrentVersion = currentVersionNumber.split(separator: ".").map { $0 }
             
-            if splitLatestVersion[0] > splitCurrentVersion[0] {
+            //최신버전 첫째자리와 현재 버전 첫째자리 비교
+            if splitLatestVersion[0] == splitCurrentVersion[0] {
+                //최신버전 둘째자리와 현재 버전 둘째자리 비교
+                if splitLatestVersion[1] == splitCurrentVersion[1] {
+                    //최신버전 셋째자리와 현재 버전 셋째자리 비교
+                    if splitLatestVersion[2] <= splitCurrentVersion[2] {
+                        return false
+                    } else {
+                        Logger.version.info("----> 최신 버전 셋째자리: \(splitLatestVersion[2])")
+                        Logger.version.info("----> 현재 버전 셋째자리: \(splitCurrentVersion[2])")
+                        return true
+                    }
+                }
+                
+                if splitLatestVersion[1] < splitCurrentVersion[1] {
+                    return false
+                } else {
+                    Logger.version.info("----> 최신 버전 둘째자리: \(splitLatestVersion[1])")
+                    Logger.version.info("----> 현재 버전 둘째자리: \(splitCurrentVersion[1])")
+                    return true
+                }
+            }
+            
+            if splitLatestVersion[0] < splitCurrentVersion[0] {
+                return false
+            } else {
                 Logger.version.info("----> 최신 버전 첫째자리: \(splitLatestVersion[0])")
                 Logger.version.info("----> 현재 버전 첫째자리: \(splitCurrentVersion[0])")
                 return true
-            } else if splitLatestVersion[1] > splitCurrentVersion[1] {
-                Logger.version.info("----> 최신 버전 둘째자리: \(splitLatestVersion[1])")
-                Logger.version.info("----> 현재 버전 둘째자리: \(splitCurrentVersion[1])")
-                return true
-            } else if splitLatestVersion[2] > splitCurrentVersion[2] {
-                Logger.version.info("----> 최신 버전 셋째자리: \(splitLatestVersion[2])")
-                Logger.version.info("----> 현재 버전 셋째자리: \(splitCurrentVersion[2])")
-                return true
             }
-            
-            Logger.version.info("----> 최신 버전: \(appStoreVersionNumber)")
-            Logger.version.info("----> 현재 버전: \(currentVersionNumber)")
-            
-            // Checks if there's a mismatch in version numbers
-            return false
         } catch {
             Logger.version.error("버전 찾지 못함: \(error)")
             return false
