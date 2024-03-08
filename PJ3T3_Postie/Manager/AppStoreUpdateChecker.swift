@@ -10,19 +10,8 @@ import OSLog
 
 struct AppStoreUpdateChecker {
     static func isNewVersionAvailable() async -> Bool {
-//        let bundleID = "com.iloen.iphonemelon" //코드 테스트시 12행 활성화, 14행은 주석처리
-//        guard
-//            let bundleID = Bundle.main.bundleIdentifier,
-//            let countryCode = Locale.current.language.region?.identifier,
-//            let url = URL(string: "https://itunes.apple.com/lookup?bundleId=\(bundleID)&country=\(countryCode)"),
-//            let currentVersionNumber = Bundle.main.releaseVersionNumber
-//        else {
-//            Logger.version.error("bunldeID 또는 countryCode 찾지 못함")
-//            return false
-//        }
-
         do {
-            let appleID = 6478052812 //415597317
+            let appleID = 6478052812 //테스트용 다른 앱 아이디: 415597317
             
             guard let currentVersionNumber = Bundle.main.releaseVersionNumber,
                   let url = URL(string: "https://itunes.apple.com/lookup?id=\(appleID)&country=kr"),
@@ -34,10 +23,9 @@ struct AppStoreUpdateChecker {
                 return false
             }
             
-            Logger.version.info("---> url: \(url)")
+            Logger.version.info("----> 최신 버전: \(appStoreVersionNumber)")
+            Logger.version.info("----> 현재 버전: \(currentVersionNumber)")
             
-            /*버전 1.1.0부터는 셋쩨자리를 비교해서 업데이트 하도록 하면 좋을 것 같아 작성한 코드입니다.
-             지금은 모든 패치가 중요할 수 있어 우선 모든 업데이트마다 알림을 뜨게 하였습니다. */
             let splitLatestVersion = appStoreVersionNumber.split(separator: ".").map { $0 }
             let splitCurrentVersion = currentVersionNumber.split(separator: ".").map { $0 }
             
